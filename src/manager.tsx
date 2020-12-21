@@ -16,7 +16,6 @@ export const Manager: FC<{ manifestUrl: string; type: 'webpub' }> = ({
 
   // setup the client
   React.useEffect(() => {
-    console.log('fetching manifest');
     WebpubClient.init(manifestUrl).then((client) => setClient(client));
   }, [manifestUrl]);
 
