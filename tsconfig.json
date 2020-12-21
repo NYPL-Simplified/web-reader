@@ -3,6 +3,8 @@
   "include": ["src", "types"],
   "compilerOptions": {
     "module": "esnext",
+    // set target to es5 so we can use class get/set
+    "target": "es5",
     "lib": ["dom", "esnext"],
     "importHelpers": true,
     // output .d.ts declaration files for consumers

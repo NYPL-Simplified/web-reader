@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import WebpubClient from './WebpubClient';
 
 /**
  * The responsibilities of the manager:
@@ -8,40 +9,26 @@ import React, { FC } from 'react';
  *  - Render the reader using apropriate renderer
  */
 
-async function fetchManifest(url: string) {
-  const result = await fetch(url);
-  if (!result.ok) throw new Error('Failed to fetch manifest at url: ' + url);
-  return await result.json();
-}
-
-type WebpubManifest = {
-  metadata: {
-    title: string;
-    author: string;
-  };
-  spine: { href: string; type: 'text/html'; title: string }[];
-};
-
 export const Manager: FC<{ manifestUrl: string; type: 'webpub' }> = ({
   manifestUrl,
 }) => {
-  const [manifest, setManifest] = React.useState<WebpubManifest | null>(null);
+  const [client, setClient] = React.useState<WebpubClient | null>(null);
 
-  // fetch the manifest
+  // setup the client
   React.useEffect(() => {
     console.log('fetching manifest');
-    fetchManifest(manifestUrl).then((manifest) => setManifest(manifest));
+    WebpubClient.init(manifestUrl).then((client) => setClient(client));
   }, [manifestUrl]);
 
-  if (!manifest) return <div>Loading...</div>;
+  if (!client) return <div>Loading...</div>;
 
-  const startPath = manifest.spine[0].href;
-  const startUrl = new URL(startPath, manifestUrl).href;
-  console.log('manifest', startUrl);
   // use the correct renderer depending on type
   return (
     <div style={{ height: '100vh', overflow: 'hidden' }}>
-      <WebPubRenderer src={startUrl} />
+      <nav>
+        <div>{client.metadata.title}</div>
+      </nav>
+      <WebPubRenderer src={client.startUrl} />
     </div>
   );
 };
