@@ -1,15 +1,14 @@
-import React, { FC, HTMLAttributes, ReactChild } from 'react';
+import React, { FC, HTMLAttributes } from 'react';
+import { Manager } from './manager';
 
-export interface Props extends HTMLAttributes<HTMLDivElement> {
-  /** custom content, defaults to 'the snozzberries taste like snozzberries' */
-  children?: ReactChild;
+export interface WebReaderProps extends HTMLAttributes<HTMLDivElement> {
+  manifestUrl: string;
+  type: 'webpub';
 }
 
-// Please do not use types off of a default export module or else Storybook Docs will suffer.
-// see: https://github.com/storybookjs/storybook/issues/9556
 /**
- * A custom Thing component. Neat!
+ *  Our WebReader
  */
-export const Thing: FC<Props> = ({ children }) => {
-  return <div>{children || `the snozzberries taste like snozzberries`}</div>;
+export const WebReader: FC<WebReaderProps> = ({ manifestUrl, type }) => {
+  return <Manager manifestUrl={manifestUrl} type={type} />;
 };
