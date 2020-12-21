@@ -1,9 +1,10 @@
 import React, { FC, HTMLAttributes } from 'react';
 import { Manager } from './manager';
+import { Format } from './types';
 
 export interface WebReaderProps extends HTMLAttributes<HTMLDivElement> {
   manifestUrl: string;
-  type: 'webpub';
+  type: Format;
 }
 
 /**

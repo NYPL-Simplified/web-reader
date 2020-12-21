@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { Format } from './types';
 import WebpubClient from './WebpubClient';
 
 /**
@@ -9,7 +10,7 @@ import WebpubClient from './WebpubClient';
  *  - Render the reader using apropriate renderer
  */
 
-export const Manager: FC<{ manifestUrl: string; type: 'webpub' }> = ({
+export const Manager: FC<{ manifestUrl: string; type: Format }> = ({
   manifestUrl,
 }) => {
   const [client, setClient] = React.useState<WebpubClient | null>(null);
@@ -32,11 +33,11 @@ export const Manager: FC<{ manifestUrl: string; type: 'webpub' }> = ({
   );
 };
 
-type WebpubRenererProps = {
+type WebpubRendererProps = {
   src: string;
 };
 
-export const WebPubRenderer: FC<WebpubRenererProps> = ({ src }) => {
+export const WebPubRenderer: FC<WebpubRendererProps> = ({ src }) => {
   return (
     <iframe
       src={src}
