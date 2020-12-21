@@ -1,5 +1,8 @@
 /* eslint-disable no-restricted-globals */
-/* Simple prototype for a Web App for Web Publications based on an iframe. */
+
+/**
+ * CODE FROM HADRIEN GARNEUR PROOF OF CONCEPT FOR REFERENCE
+ */
 
 (function () {
   if (navigator.serviceWorker) {
