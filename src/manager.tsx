@@ -24,7 +24,13 @@ export const Manager: FC<{ manifestUrl: string; type: Format }> = ({
 
   // use the correct renderer depending on type
   return (
-    <div style={{ height: '100vh', overflow: 'hidden' }}>
+    <div
+      style={{
+        height: '100vh',
+        overflow: 'hidden',
+        backgroundColor: 'mistyrose',
+      }}
+    >
       <nav>
         <div>{client.metadata.title}</div>
       </nav>
@@ -42,7 +48,12 @@ export const WebPubRenderer: FC<WebpubRendererProps> = ({ src }) => {
     <iframe
       src={src}
       title="Hi"
-      style={{ width: '100%', height: '100%', border: 'none' }}
+      style={{
+        width: '100%',
+        height: '100%',
+        border: 'none',
+        backgroundColor: 'white',
+      }}
     />
   );
 };

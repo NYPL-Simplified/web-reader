@@ -25,6 +25,11 @@ export default class WebpubClient extends ReaderClient<WebpubManifest> {
     return this.manifest.metadata;
   }
 
+  /**
+   * Take a url relative to the iframe root and turn it into
+   * an absolute url including the domain and everything
+   * ie. "/next-page.html" -> https://host.com/this-book/next-page.html
+   */
   private makeUrl(relativeUrl: string): string {
     return new URL(relativeUrl, this.manifestUrl).href;
   }
