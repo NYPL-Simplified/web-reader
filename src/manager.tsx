@@ -93,6 +93,7 @@ type WebpubRendererProps = {
 export const WebPubRenderer: FC<WebpubRendererProps> = ({ src }) => {
   return (
     <iframe
+      sandbox=""
       src={src}
       title="Hi"
       style={{
@@ -107,6 +108,7 @@ export const WebPubRenderer: FC<WebpubRendererProps> = ({ src }) => {
 export const PdfRenderer: FC<WebpubRendererProps> = ({ src }) => {
   return (
     <iframe
+      sandbox=""
       src={src}
       title="Hi"
       style={{
