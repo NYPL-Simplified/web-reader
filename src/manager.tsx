@@ -11,15 +11,13 @@ import { WebpubClient, PdfClient } from './clients';
  */
 
 function isPdfManifest(manifest: AnyManifest): manifest is PdfManifest {
-  return manifest['@context'] === 'http://readium.org/webpub/default.jsonld';
+  return manifest['@context'] === 'pdf';
 }
 
 export const Manager: FC<{ manifest: AnyManifest }> = ({ manifest }) => {
   const client = isPdfManifest(manifest)
     ? new PdfClient(manifest)
     : new WebpubClient(manifest);
-
-  if (!client) return <div>Loading...</div>;
 
   // use the correct renderer depending on type
   return (
@@ -28,12 +26,28 @@ export const Manager: FC<{ manifest: AnyManifest }> = ({ manifest }) => {
         height: '100vh',
         overflow: 'hidden',
         backgroundColor: 'mistyrose',
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
-      <nav>
-        <div>{client.metadata.title}</div>
+      <nav
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: 8,
+        }}
+      >
+        <h1>{client.metadata.title}</h1>
+        <button>settings</button>
       </nav>
       <WebPubRenderer src={client.startUrl} />
+      <div
+        style={{ padding: 8, display: 'flex', justifyContent: 'space-between' }}
+      >
+        <button> {`<`} Prev</button>
+        <button>Next {`>`}</button>
+      </div>
     </div>
   );
 };
@@ -48,8 +62,7 @@ export const WebPubRenderer: FC<WebpubRendererProps> = ({ src }) => {
       src={src}
       title="Hi"
       style={{
-        width: '100%',
-        height: '100%',
+        flex: 1,
         border: 'none',
         backgroundColor: 'white',
       }}

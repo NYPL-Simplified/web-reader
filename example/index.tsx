@@ -4,44 +4,12 @@ import * as ReactDOM from 'react-dom';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 import { WebReader, PdfManifest, WebpubManifest } from '../.';
 
-const MOBY_DICK_MANIFEST =
-  'https://hadriengardeur.github.io/webpub-manifest/examples/MobyDick/manifest.json';
-
-const App = () => {
-  return (
-    <BrowserRouter>
-      <Switch>
-        <Route path="/pdf">
-          <h1>PDF Example</h1>
-          <WebReader manifest={pdfManifest} />
-        </Route>
-        <Route path="/webpub">
-          <WebReader manifest={webpubManifest} />
-        </Route>
-        <Route path="/">
-          <h1>Web Reader Proof of Concept</h1>
-          <ul>
-            <li>
-              <Link to="/pdf">Pdf Example</Link>
-            </li>
-            <li>
-              <Link to="/webpub">Webpub Example</Link>
-            </li>
-          </ul>
-        </Route>
-      </Switch>
-    </BrowserRouter>
-  );
-};
-
-ReactDOM.render(<App />, document.getElementById('root'));
-
 const webpubManifest: WebpubManifest = {
   '@context': 'http://readium.org/webpub/default.jsonld',
 
   metadata: {
     '@type': 'http://schema.org/Book',
-    title: 'Moby-Dick',
+    title: 'Moby-Dick (webpub)',
     author: 'Herman Melville',
     identifier:
       'https://hadriengardeur.github.io/webpub-manifest/examples/MobyDick/',
@@ -138,3 +106,31 @@ const pdfManifest: PdfManifest = {
     },
   ],
 };
+
+const App = () => {
+  return (
+    <BrowserRouter>
+      <Switch>
+        <Route path="/pdf">
+          <WebReader manifest={pdfManifest} />
+        </Route>
+        <Route path="/webpub">
+          <WebReader manifest={webpubManifest} />
+        </Route>
+        <Route path="/">
+          <h1>Web Reader Proof of Concept</h1>
+          <ul>
+            <li>
+              <Link to="/pdf">Pdf Example</Link>
+            </li>
+            <li>
+              <Link to="/webpub">Webpub Example</Link>
+            </li>
+          </ul>
+        </Route>
+      </Switch>
+    </BrowserRouter>
+  );
+};
+
+ReactDOM.render(<App />, document.getElementById('root'));
