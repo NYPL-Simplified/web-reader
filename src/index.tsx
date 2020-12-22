@@ -1,15 +1,14 @@
 import React, { FC, HTMLAttributes } from 'react';
 import { Manager } from './manager';
-import { Format } from './types';
+import { AnyManifest } from './types';
 
 export interface WebReaderProps extends HTMLAttributes<HTMLDivElement> {
-  manifestUrl: string;
-  type: Format;
+  manifest: AnyManifest;
 }
 
 /**
  *  Our WebReader
  */
-export const WebReader: FC<WebReaderProps> = ({ manifestUrl, type }) => {
-  return <Manager manifestUrl={manifestUrl} type={type} />;
+export const WebReader: FC<WebReaderProps> = ({ manifest }) => {
+  return <Manager manifest={manifest} />;
 };

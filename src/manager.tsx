@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
-import { Format } from './types';
-import WebpubClient from './WebpubClient';
+import { AnyManifest, PdfManifest } from './types';
+import { WebpubClient, PdfClient } from './clients';
 
 /**
  * The responsibilities of the manager:
@@ -10,15 +10,14 @@ import WebpubClient from './WebpubClient';
  *  - Render the reader using apropriate renderer
  */
 
-export const Manager: FC<{ manifestUrl: string; type: Format }> = ({
-  manifestUrl,
-}) => {
-  const [client, setClient] = React.useState<WebpubClient | null>(null);
+function isPdfManifest(manifest: AnyManifest): manifest is PdfManifest {
+  return manifest['@context'] === 'http://readium.org/webpub/default.jsonld';
+}
 
-  // setup the client
-  React.useEffect(() => {
-    WebpubClient.init(manifestUrl).then((client) => setClient(client));
-  }, [manifestUrl]);
+export const Manager: FC<{ manifest: AnyManifest }> = ({ manifest }) => {
+  const client = isPdfManifest(manifest)
+    ? new PdfClient(manifest)
+    : new WebpubClient(manifest);
 
   if (!client) return <div>Loading...</div>;
 
