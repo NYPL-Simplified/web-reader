@@ -10,13 +10,15 @@ export type ManifestMetadata = {
 export type WebpubManifest = {
   '@context': 'http://readium.org/webpub/default.jsonld';
   metadata: ManifestMetadata;
-  spine: { href: string; type: 'text/html'; title: string }[];
+  spine: Spine<'text/html'>;
 };
+
+export type Spine<TFormat> = { href: string; type: TFormat; title: string }[];
 
 export type PdfManifest = {
   '@context': 'pdf';
   metadata: ManifestMetadata;
-  spine: { href: string; type: 'application/pdf'; title: string }[];
+  spine: Spine<'application/pdf'>;
 };
 
 export type AnyManifest = PdfManifest | WebpubManifest;

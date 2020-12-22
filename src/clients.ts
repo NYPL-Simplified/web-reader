@@ -1,4 +1,4 @@
-import { ManifestMetadata, PdfManifest, WebpubManifest } from './types';
+import { ManifestMetadata, PdfManifest, Spine, WebpubManifest } from './types';
 
 abstract class ReaderClient<TManifest> {
   constructor(readonly manifest: TManifest) {}
@@ -15,6 +15,14 @@ export class WebpubClient extends ReaderClient<WebpubManifest> {
 
   get metadata(): ManifestMetadata {
     return this.manifest.metadata;
+  }
+  get spine(): Spine<'text/html'> {
+    return this.manifest.spine;
+  }
+  contentFor(chapter: number): string {
+    const ch = this.manifest.spine[chapter];
+    if (!ch) throw new Error(`No Chapter ${chapter}`);
+    return this.makeUrl(ch.href);
   }
 
   /**
@@ -34,5 +42,13 @@ export class PdfClient extends ReaderClient<PdfManifest> {
 
   get metadata(): ManifestMetadata {
     return this.manifest.metadata;
+  }
+  get spine(): Spine<'application/pdf'> {
+    return this.manifest.spine;
+  }
+  contentFor(chapter: number): string {
+    const ch = this.manifest.spine[chapter];
+    if (!ch) throw new Error(`No Chapter ${chapter}`);
+    return ch.href;
   }
 }
