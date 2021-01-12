@@ -2,13 +2,13 @@ import React from 'react';
 import { PdfClient, EpubClient } from './clients';
 import EpubRenderer from './EpubRenderer';
 import PdfRenderer from './PdfRenderer';
-import { AnyManifest, AnyMimeType, PdfManifest } from './types';
+import { AnyManifest, AnyFormat, PdfManifest } from './types';
 
 function isPdfManifest(
   manifest: AnyManifest,
-  type: AnyMimeType
+  format: AnyFormat
 ): manifest is PdfManifest {
-  return type === 'application/pdf';
+  return format === 'application/pdf';
 }
 
 export type UseWebReaderReturn = {
@@ -22,17 +22,19 @@ export type UseWebReaderReturn = {
   handlePrevChapter: () => void;
 };
 
+type UseWebReaderProps = {
+  manifest: AnyManifest;
+  format: AnyFormat;
+};
+
 export default function useWebReader({
   manifest,
-  type,
-}: {
-  manifest: AnyManifest;
-  type: AnyMimeType;
-}): UseWebReaderReturn {
-  const client = isPdfManifest(manifest, type)
+  format,
+}: UseWebReaderProps): UseWebReaderReturn {
+  const client = isPdfManifest(manifest, format)
     ? new PdfClient(manifest)
     : new EpubClient(manifest);
-  const Renderer = isPdfManifest(manifest, type) ? PdfRenderer : EpubRenderer;
+  const Renderer = isPdfManifest(manifest, format) ? PdfRenderer : EpubRenderer;
 
   const [chapter, setChapter] = React.useState(0);
   const [page, setPage] = React.useState(0);

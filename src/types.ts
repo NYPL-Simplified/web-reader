@@ -1,7 +1,7 @@
 export const EpubMimeType = 'application/epub';
 export const PdfMimeType = 'application/pdf';
 
-export type AnyMimeType = typeof EpubMimeType | typeof PdfMimeType;
+export type AnyFormat = typeof EpubMimeType | typeof PdfMimeType;
 
 export type ManifestMetadata = {
   title: string;
@@ -12,10 +12,12 @@ export type ManifestMetadata = {
   modified?: string;
 };
 
-export type WebpubManifest = {
+export type EpubManifest = {
   '@context': 'http://readium.org/webpub/default.jsonld';
   metadata: ManifestMetadata;
   spine: Spine<'text/html'>;
+  links: any[];
+  resources: any[];
 };
 
 export type Spine<TFormat> = { href: string; type: TFormat; title: string }[];
@@ -23,10 +25,7 @@ export type Spine<TFormat> = { href: string; type: TFormat; title: string }[];
 export type PdfManifest = {
   '@context': 'pdf';
   metadata: ManifestMetadata;
-  spine: Spine<'application/pdf'>;
+  spine: Spine<typeof PdfMimeType>;
 };
 
-export type AnyManifest = PdfManifest | WebpubManifest;
-
-// we will change these to actual media types in the future.
-export type Format = 'webpub' | 'pdf';
+export type AnyManifest = PdfManifest | EpubManifest;

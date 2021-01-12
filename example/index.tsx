@@ -2,9 +2,10 @@ import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
-import { WebReader, PdfManifest, WebpubManifest } from '../.';
+import { PdfManifest, EpubManifest } from '../src/types';
+import WebReader from '../src';
 
-const webpubManifest: WebpubManifest = {
+const webpubManifest: EpubManifest = {
   '@context': 'http://readium.org/webpub/default.jsonld',
 
   metadata: {

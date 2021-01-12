@@ -1,4 +1,4 @@
-import { ManifestMetadata, PdfManifest, Spine, WebpubManifest } from './types';
+import { ManifestMetadata, PdfManifest, Spine, EpubManifest } from './types';
 
 abstract class ReaderClient<TManifest> {
   constructor(readonly manifest: TManifest) {}
@@ -7,7 +7,7 @@ abstract class ReaderClient<TManifest> {
   abstract get metadata(): ManifestMetadata;
 }
 
-export class EpubClient extends ReaderClient<WebpubManifest> {
+export class EpubClient extends ReaderClient<EpubManifest> {
   get startUrl(): string {
     const startPath = this.manifest.spine[0].href;
     return this.makeUrl(startPath);
