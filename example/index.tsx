@@ -5,7 +5,7 @@ import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 import { PdfManifest, EpubManifest } from '../src/types';
 import WebReader from '../src';
 
-const webpubManifest: EpubManifest = {
+const epubManifest: EpubManifest = {
   '@context': 'http://readium.org/webpub/default.jsonld',
 
   metadata: {
@@ -113,10 +113,10 @@ const App = () => {
     <BrowserRouter>
       <Switch>
         <Route path="/pdf">
-          <WebReader manifest={pdfManifest} />
+          <WebReader manifest={pdfManifest} format="application/pdf" />
         </Route>
         <Route path="/webpub">
-          <WebReader manifest={webpubManifest} />
+          <WebReader manifest={epubManifest} format="application/epub" />
         </Route>
         <Route path="/">
           <h1>Web Reader Proof of Concept</h1>
