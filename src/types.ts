@@ -1,3 +1,8 @@
+export const EpubMimeType = 'application/epub';
+export const PdfMimeType = 'application/pdf';
+
+export type AnyMimeType = typeof EpubMimeType | typeof PdfMimeType;
+
 export type ManifestMetadata = {
   title: string;
   author: string;

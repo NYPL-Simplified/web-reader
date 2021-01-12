@@ -7,7 +7,7 @@ abstract class ReaderClient<TManifest> {
   abstract get metadata(): ManifestMetadata;
 }
 
-export class WebpubClient extends ReaderClient<WebpubManifest> {
+export class EpubClient extends ReaderClient<WebpubManifest> {
   get startUrl(): string {
     const startPath = this.manifest.spine[0].href;
     return this.makeUrl(startPath);

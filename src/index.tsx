@@ -1,14 +1,18 @@
-import React, { FC, HTMLAttributes } from 'react';
-import { Manager } from './manager';
-import { AnyManifest } from './types';
+import React, { FC } from 'react';
+import ManagerUI from './manager';
+import { AnyManifest, AnyMimeType } from './types';
+import useWebReader from './useWebReader';
 
-export interface WebReaderProps extends HTMLAttributes<HTMLDivElement> {
+export type WebReaderProps = {
   manifest: AnyManifest;
-}
+  type: AnyMimeType;
+};
 
 /**
  *  Our WebReader
  */
-export const WebReader: FC<WebReaderProps> = ({ manifest }) => {
-  return <Manager manifest={manifest} />;
+export const WebReader: FC<WebReaderProps> = ({ manifest, type }) => {
+  const webReader = useWebReader({ manifest, type });
+
+  return <ManagerUI {...webReader} />;
 };
