@@ -2,7 +2,7 @@
 
 This project is a new web reader to be used by NYPL and others to read ePub, PDF, and image based book collections. We will eventually add Webpub and Axis360 AxisNow support as well. You can find more details in the [architecture proposal](https://docs.google.com/document/d/1k1XemnCnRrMvzOOc3h6lX274EOomGrGjF_F28dTzo1k/edit?ts=5ff749f2#).
 
-The project is bootstrapped with [TSDX](https://tsdx.io). It uses Typescript, React, Jest and Rollup, and features both a Storybook development environment and an example application under `/example`. 
+The project is bootstrapped with [TSDX](https://tsdx.io). It uses Typescript, React, Jest and Rollup, and features both a Storybook development environment and an example application under `/example`. The example is deployed here: https://nypl-web-reader.vercel.app
 
 ## Commands
 
