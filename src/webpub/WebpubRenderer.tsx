@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 
-export type EpubRendererProps = {
+export type WebpubRendererProps = {
   src: string;
 };
 
-const EpubRenderer: FC<EpubRendererProps> = ({ src }) => {
+const WebpubRenderer: FC<WebpubRendererProps> = ({ src }) => {
   const iframeElement = React.useRef<HTMLIFrameElement>(null);
 
   /**
@@ -37,4 +37,4 @@ const EpubRenderer: FC<EpubRendererProps> = ({ src }) => {
   );
 };
 
-export default EpubRenderer;
+export default WebpubRenderer;

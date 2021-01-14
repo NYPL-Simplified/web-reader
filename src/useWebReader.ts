@@ -1,8 +1,10 @@
 import React from 'react';
-import { PdfClient, EpubClient } from './clients';
-import EpubRenderer from './EpubRenderer';
-import PdfRenderer from './PdfRenderer';
+import EpubClient from './epub/EpubClient';
+import EpubRenderer from './epub/EpubRenderer';
+import PdfClient from './pdf/PdfClient';
+import PdfRenderer from './pdf/PdfRenderer';
 import { AnyManifest, AnyFormat, PdfManifest } from './types';
+import { WebpubClient } from './webpub/WebpubClient';
 
 function isPdfManifest(
   manifest: AnyManifest,
@@ -16,7 +18,7 @@ export type UseWebReaderReturn = {
   chapter: number;
   totalChapters: number;
   page: number;
-  client: PdfClient | EpubClient;
+  client: PdfClient | EpubClient | WebpubClient;
   Renderer: typeof EpubRenderer | typeof PdfRenderer;
   handleNextChapter: () => void;
   handlePrevChapter: () => void;

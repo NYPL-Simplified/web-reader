@@ -12,7 +12,7 @@ export type ManifestMetadata = {
   modified?: string;
 };
 
-export type EpubManifest = {
+export type WebpubManifest = {
   '@context': 'http://readium.org/webpub/default.jsonld';
   metadata: ManifestMetadata;
   spine: Spine<'text/html'>;
@@ -28,4 +28,6 @@ export type PdfManifest = {
   spine: Spine<typeof PdfMimeType>;
 };
 
-export type AnyManifest = PdfManifest | EpubManifest;
+export type EpubManifest = {};
+
+export type AnyManifest = PdfManifest | EpubManifest | WebpubManifest;

@@ -1,13 +1,7 @@
-import { ManifestMetadata, PdfManifest, Spine, EpubManifest } from './types';
+import ReaderClient from '../ReaderClient';
+import { WebpubManifest, ManifestMetadata, Spine } from '../types';
 
-abstract class ReaderClient<TManifest> {
-  constructor(readonly manifest: TManifest) {}
-
-  abstract get startUrl(): string;
-  abstract get metadata(): ManifestMetadata;
-}
-
-export class EpubClient extends ReaderClient<EpubManifest> {
+export class WebpubClient extends ReaderClient<WebpubManifest> {
   get startUrl(): string {
     const startPath = this.manifest.spine[0].href;
     return this.makeUrl(startPath);
@@ -32,23 +26,5 @@ export class EpubClient extends ReaderClient<EpubManifest> {
    */
   private makeUrl(relativeUrl: string): string {
     return new URL(relativeUrl, this.metadata.identifier).href;
-  }
-}
-
-export class PdfClient extends ReaderClient<PdfManifest> {
-  get startUrl(): string {
-    return this.manifest.spine[0].href;
-  }
-
-  get metadata(): ManifestMetadata {
-    return this.manifest.metadata;
-  }
-  get spine(): Spine<'application/pdf'> {
-    return this.manifest.spine;
-  }
-  contentFor(chapter: number): string {
-    const ch = this.manifest.spine[chapter];
-    if (!ch) throw new Error(`No Chapter ${chapter}`);
-    return ch.href;
   }
 }
