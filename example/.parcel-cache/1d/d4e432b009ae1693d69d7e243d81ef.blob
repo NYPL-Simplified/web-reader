@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style data-parcel-key="34974844a50068167ff82fb09e445130">
+      body {
+        margin: 0;
+      }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Playground</title>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script src="b5b177099a593133a9bdc12394da2234"></script>
+  </body>
+</html>

@@ -1,0 +1,89 @@
+"use strict";
+
+var helpers = require("../example/node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = useWebReader;
+
+  var _react = _interopRequireDefault(require("react"));
+
+  var _EpubClient = _interopRequireDefault(require("./epub/EpubClient"));
+
+  var _PdfClient = _interopRequireDefault(require("./pdf/PdfClient"));
+
+  var _types = require("./types");
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  function useWebReader({
+    entrypoint,
+    format
+  }) {
+    const [client, setClient] = _react.default.useState(null);
+
+    const [chapter, setChapter] = _react.default.useState(0);
+
+    const [page, setPage] = _react.default.useState(0);
+
+    _react.default.useEffect(() => {
+      switch (format) {
+        case _types.PdfMimeType:
+          _PdfClient.default.init(entrypoint).then(setClient);
+
+          break;
+
+        case _types.EpubMimeType:
+          _EpubClient.default.init(entrypoint).then(setClient);
+
+          break;
+
+        default:
+          throw new Error('Unimplemented format: ' + format);
+      }
+    }, [format, entrypoint]);
+
+    const handleNextChapter = () => {
+      setChapter(ch => {
+        if (!client) return ch;
+
+        if (client.totalChapters === ch) {
+          console.warn(`You're on the last chapter.`);
+          return ch;
+        }
+
+        return ch + 1;
+      });
+    };
+
+    const handlePrevChapter = () => {
+      setChapter(ch => {
+        if (ch === 0) {
+          console.warn(`You're on the first chapter.`);
+          return ch;
+        }
+
+        return ch - 1;
+      });
+    };
+
+    return {
+      client,
+      chapter,
+      page,
+      handleNextChapter,
+      handlePrevChapter
+    };
+  }
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}

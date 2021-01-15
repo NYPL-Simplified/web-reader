@@ -1,0 +1,46 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _epubjs = _interopRequireDefault(require("epubjs"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+class EpubClient {
+  constructor(url) {
+    this.book = (0, _epubjs.default)(url);
+  }
+
+  static async init(url) {
+    return new EpubClient(url);
+  }
+
+  get startUrl() {
+    return 'unimplemented';
+  } // metadata
+
+
+  get title() {
+    return 'Unimplemented';
+  }
+
+  get author() {
+    return 'Unimplemented';
+  } // chapters
+
+
+  get totalChapters() {
+    return 0;
+  } // content
+
+
+  contentFor(chapter) {
+    return 'unimplemented';
+  }
+
+}
+
+exports.default = EpubClient;

@@ -1,0 +1,49 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _fetch = require("../fetch");
+
+class PdfClient {
+  constructor(manifest) {
+    this.manifest = manifest;
+  } // an async constructor function that fetches the manifest and then
+  // returns a new client using it
+
+
+  static async init(entrypoint) {
+    const manifest = await (0, _fetch.fetchJson)(entrypoint);
+    return new PdfClient(manifest);
+  }
+
+  get startUrl() {
+    return this.manifest.spine[0].href;
+  } // metadata
+
+
+  get title() {
+    return this.manifest.metadata.title;
+  }
+
+  get author() {
+    return this.manifest.metadata.author;
+  } // chapters
+
+
+  get totalChapters() {
+    return this.manifest.spine.length - 1;
+  } // content
+
+
+  contentFor(chapter) {
+    const ch = this.manifest.spine[chapter];
+    if (!ch) throw new Error(`No Chapter ${chapter}`);
+    return ch.href;
+  }
+
+}
+
+exports.default = PdfClient;

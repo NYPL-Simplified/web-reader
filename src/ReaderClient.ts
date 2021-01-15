@@ -1,8 +1,9 @@
-import { ManifestMetadata, PdfManifest, Spine, WebpubManifest } from './types';
+export default interface ReaderClient {
+  // abstract init(entrypoint: string): Promise<ReaderClient>;
 
-export default abstract class ReaderClient<TManifest> {
-  constructor(readonly manifest: TManifest) {}
+  startUrl: string;
+  title: string;
+  author: string;
 
-  abstract get startUrl(): string;
-  abstract get metadata(): ManifestMetadata;
+  totalChapters: number;
 }

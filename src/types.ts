@@ -1,7 +1,11 @@
 export const EpubMimeType = 'application/epub';
-export const PdfMimeType = 'application/pdf';
+export const PdfMimeType = 'application/pdf+json';
+export const WebpubMimeType = 'application/webpub';
 
-export type AnyFormat = typeof EpubMimeType | typeof PdfMimeType;
+export type AnyFormat =
+  | typeof EpubMimeType
+  | typeof PdfMimeType
+  | typeof WebpubMimeType;
 
 export type ManifestMetadata = {
   title: string;
@@ -28,6 +32,4 @@ export type PdfManifest = {
   spine: Spine<typeof PdfMimeType>;
 };
 
-export type EpubManifest = {};
-
-export type AnyManifest = PdfManifest | EpubManifest | WebpubManifest;
+export type AnyManifest = PdfManifest | WebpubManifest;

@@ -1,18 +1,18 @@
 import React, { FC } from 'react';
 import ManagerUI from './manager';
-import { AnyManifest, AnyFormat } from './types';
+import { AnyFormat } from './types';
 import useWebReader from './useWebReader';
 
 export type WebReaderProps = {
-  manifest: AnyManifest;
+  entrypoint: string;
   format: AnyFormat;
 };
 
 /**
  *  Our WebReader
  */
-const WebReader: FC<WebReaderProps> = ({ manifest, format }) => {
-  const webReader = useWebReader({ manifest, format });
+const WebReader: FC<WebReaderProps> = ({ entrypoint, format }) => {
+  const webReader = useWebReader({ entrypoint, format });
 
   return <ManagerUI {...webReader} />;
 };

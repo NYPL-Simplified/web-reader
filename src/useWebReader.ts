@@ -1,49 +1,47 @@
 import React from 'react';
 import EpubClient from './epub/EpubClient';
-import EpubRenderer from './epub/EpubRenderer';
 import PdfClient from './pdf/PdfClient';
-import PdfRenderer from './pdf/PdfRenderer';
-import { AnyManifest, AnyFormat, PdfManifest } from './types';
-import { WebpubClient } from './webpub/WebpubClient';
-
-function isPdfManifest(
-  manifest: AnyManifest,
-  format: AnyFormat
-): manifest is PdfManifest {
-  return format === 'application/pdf';
-}
+import ReaderClient from './ReaderClient';
+import { AnyFormat, PdfMimeType, EpubMimeType } from './types';
 
 export type UseWebReaderReturn = {
-  title: string;
   chapter: number;
-  totalChapters: number;
   page: number;
-  client: PdfClient | EpubClient | WebpubClient;
-  Renderer: typeof EpubRenderer | typeof PdfRenderer;
+  client: ReaderClient | null;
   handleNextChapter: () => void;
   handlePrevChapter: () => void;
 };
 
 type UseWebReaderProps = {
-  manifest: AnyManifest;
+  entrypoint: string;
   format: AnyFormat;
 };
 
 export default function useWebReader({
-  manifest,
+  entrypoint,
   format,
 }: UseWebReaderProps): UseWebReaderReturn {
-  const client = isPdfManifest(manifest, format)
-    ? new PdfClient(manifest)
-    : new EpubClient(manifest);
-  const Renderer = isPdfManifest(manifest, format) ? PdfRenderer : EpubRenderer;
-
+  const [client, setClient] = React.useState<ReaderClient | null>(null);
   const [chapter, setChapter] = React.useState(0);
   const [page, setPage] = React.useState(0);
 
+  React.useEffect(() => {
+    switch (format) {
+      case PdfMimeType:
+        PdfClient.init(entrypoint).then(setClient);
+        break;
+      case EpubMimeType:
+        EpubClient.init(entrypoint).then(setClient);
+        break;
+      default:
+        throw new Error('Unimplemented format: ' + format);
+    }
+  }, [format, entrypoint]);
+
   const handleNextChapter = () => {
     setChapter((ch) => {
-      if (client.spine.length - 1 === ch) {
+      if (!client) return ch;
+      if (client.totalChapters === ch) {
         console.warn(`You're on the last chapter.`);
         return ch;
       }
@@ -61,11 +59,8 @@ export default function useWebReader({
   };
 
   return {
-    title: client.metadata.title,
     client,
-    Renderer,
     chapter,
-    totalChapters: client.spine.length,
     page,
     handleNextChapter,
     handlePrevChapter,

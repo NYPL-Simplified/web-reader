@@ -1,30 +1,35 @@
 import ReaderClient from '../ReaderClient';
-import { EpubManifest, ManifestMetadata, Spine } from '../types';
+import ePub, { Book } from 'epubjs';
 
-export default class EpubClient extends ReaderClient<EpubManifest> {
+export default class EpubClient implements ReaderClient {
+  private readonly book: Book;
+
+  private constructor(url: string) {
+    this.book = ePub(url);
+  }
+  static async init(url: string): Promise<EpubClient> {
+    return new EpubClient(url);
+  }
+
   get startUrl(): string {
-    const startPath = this.manifest.spine[0].href;
-    return this.makeUrl(startPath);
+    return 'unimplemented';
   }
 
-  get metadata(): ManifestMetadata {
-    return this.manifest.metadata;
+  // metadata
+  get title(): string {
+    return 'Unimplemented';
   }
-  get spine(): Spine<'text/html'> {
-    return this.manifest.spine;
+  get author(): string {
+    return 'Unimplemented';
   }
+
+  // chapters
+  get totalChapters(): number {
+    return 0;
+  }
+
+  // content
   contentFor(chapter: number): string {
-    const ch = this.manifest.spine[chapter];
-    if (!ch) throw new Error(`No Chapter ${chapter}`);
-    return this.makeUrl(ch.href);
-  }
-
-  /**
-   * Take a url relative to the iframe root and turn it into
-   * an absolute url including the domain and everything
-   * ie. "/next-page.html" -> https://host.com/this-book/next-page.html
-   */
-  private makeUrl(relativeUrl: string): string {
-    return new URL(relativeUrl, this.metadata.identifier).href;
+    return 'unimplemented';
   }
 }

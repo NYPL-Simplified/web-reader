@@ -7,14 +7,14 @@ import { UseWebReaderReturn } from './useWebReader';
  * It takes the return value of useWebReader as props
  */
 const ManagerUI: FC<UseWebReaderReturn> = ({
-  title,
+  client,
   chapter,
-  totalChapters,
   handlePrevChapter,
   handleNextChapter,
   children,
 }) => {
   // use the correct renderer depending on type
+  if (!client) return <div>Loading...</div>;
   return (
     <div
       style={{
@@ -33,7 +33,7 @@ const ManagerUI: FC<UseWebReaderReturn> = ({
           padding: 8,
         }}
       >
-        <h1>{title}</h1>
+        <h1>{client.title}</h1>
         <button>settings</button>
       </nav>
       {children}
@@ -45,7 +45,7 @@ const ManagerUI: FC<UseWebReaderReturn> = ({
           <button> {`<`} page</button>
         </div>
         <div>
-          Capter: {chapter + 1} / {totalChapters}
+          Capter: {chapter + 1} / {client.totalChapters}
         </div>
         <div style={{ display: 'flex' }}>
           <button>page {`>`}</button>

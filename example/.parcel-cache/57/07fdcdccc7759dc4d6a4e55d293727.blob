@@ -1,0 +1,1 @@
+require('./bundle-manifest').register(JSON.parse("{\"9d04553e29bb11f8\":\"example.38b3b50e.js\",\"41cb7d84a0299b4d\":\"moby.ccfceccd.epub\"}"));
