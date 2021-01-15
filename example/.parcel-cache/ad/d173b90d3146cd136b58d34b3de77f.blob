@@ -1,1 +1,0 @@
-module.exports = JSON.parse("{\"@context\":\"pdf\",\"metadata\":{\"author\":\"Herman Melville\",\"title\":\"Moby Dick (pdf)\"},\"spine\":[{\"href\":\"https://onemorelibrary.com/index.php/en/?option=com_djclassifieds&format=raw&view=download&task=download&fid=16720\",\"type\":\"application/pdf\",\"title\":\"Full PDF\"}]}");

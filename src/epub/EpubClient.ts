@@ -1,31 +1,35 @@
 import ReaderClient from '../ReaderClient';
 import ePub, { Book } from 'epubjs';
 
-export default class EpubClient implements ReaderClient {
-  private readonly book: Book;
+export default class EpubClient implements ReaderClient<string> {
+  title: string;
+  author: string;
+  totalChapters: number;
+  startLocation: string;
 
-  private constructor(url: string) {
-    this.book = ePub(url);
+  private constructor(
+    private readonly book: Book,
+    title: string,
+    author: string,
+    totalChapters: number
+  ) {
+    this.title = title;
+    this.author = author;
+    this.totalChapters = totalChapters;
+    this.startLocation = 'blah';
   }
+
+  // an async constructor to make our sync client
   static async init(url: string): Promise<EpubClient> {
-    return new EpubClient(url);
+    const book = ePub(url);
+    const metadata = await book.loaded.metadata;
+    const { title, creator: author } = metadata;
+
+    return new EpubClient(book, title, author, 0);
   }
 
   get startUrl(): string {
     return 'unimplemented';
-  }
-
-  // metadata
-  get title(): string {
-    return 'Unimplemented';
-  }
-  get author(): string {
-    return 'Unimplemented';
-  }
-
-  // chapters
-  get totalChapters(): number {
-    return 0;
   }
 
   // content

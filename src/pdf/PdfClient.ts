@@ -2,7 +2,7 @@ import { fetchJson } from '../fetch';
 import ReaderClient from '../ReaderClient';
 import { PdfManifest } from '../types';
 
-export default class PdfClient implements ReaderClient {
+export default class PdfClient implements ReaderClient<string> {
   private constructor(readonly manifest: PdfManifest) {}
 
   // an async constructor function that fetches the manifest and then
@@ -12,7 +12,7 @@ export default class PdfClient implements ReaderClient {
     return new PdfClient(manifest);
   }
 
-  get startUrl(): string {
+  get startLocation(): string {
     return this.manifest.spine[0].href;
   }
 

@@ -1,13 +1,18 @@
 import React from 'react';
 import EpubClient from './epub/EpubClient';
 import PdfClient from './pdf/PdfClient';
-import ReaderClient from './ReaderClient';
 import { AnyFormat, PdfMimeType, EpubMimeType } from './types';
+
+/**
+ * Current problem:
+ *  We need the useLocation to use a generic location associated with the client type
+ *  but I'm not sure how to extract it out of there
+ */
 
 export type UseWebReaderReturn = {
   chapter: number;
   page: number;
-  client: ReaderClient | null;
+  client: PdfClient | EpubClient | null;
   handleNextChapter: () => void;
   handlePrevChapter: () => void;
 };
@@ -21,7 +26,10 @@ export default function useWebReader({
   entrypoint,
   format,
 }: UseWebReaderProps): UseWebReaderReturn {
-  const [client, setClient] = React.useState<ReaderClient | null>(null);
+  const [client, setClient] = React.useState<PdfClient | EpubClient | null>(
+    null
+  );
+  const [location, setLocation] = React.useState<any>(null);
   const [chapter, setChapter] = React.useState(0);
   const [page, setPage] = React.useState(0);
 
