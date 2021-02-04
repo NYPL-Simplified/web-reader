@@ -1,8 +1,10 @@
 import { fetchJson } from '../fetch';
 import ReaderClient from '../ReaderClient';
 import { PdfManifest } from '../types';
+import PdfRenderer from './PdfRenderer';
 
-export default class PdfClient implements ReaderClient<string> {
+export default class PdfClient implements ReaderClient<number> {
+  readonly Renderer = PdfRenderer;
   private constructor(readonly manifest: PdfManifest) {}
 
   // an async constructor function that fetches the manifest and then
@@ -12,8 +14,9 @@ export default class PdfClient implements ReaderClient<string> {
     return new PdfClient(manifest);
   }
 
-  get startLocation(): string {
-    return this.manifest.spine[0].href;
+  get startLocation(): number {
+    return 0;
+    // return this.manifest.spine[0].href;
   }
 
   // metadata

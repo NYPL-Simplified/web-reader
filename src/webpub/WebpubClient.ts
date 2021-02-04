@@ -1,21 +1,39 @@
+import { fetchJson } from '../fetch';
 import ReaderClient from '../ReaderClient';
-import { WebpubManifest, ManifestMetadata, Spine } from '../types';
+import { WebpubManifest } from '../types';
+import WebpubRenderer from './WebpubRenderer';
 
-export class WebpubClient extends ReaderClient<WebpubManifest> {
-  get startUrl(): string {
-    const startPath = this.manifest.spine[0].href;
-    return this.makeUrl(startPath);
+export class WebpubClient implements ReaderClient<number> {
+  readonly Renderer = WebpubRenderer;
+  private constructor(readonly manifest: WebpubManifest) {}
+
+  static async init(entrypoint: string): Promise<WebpubClient> {
+    const manifest = await fetchJson(entrypoint);
+    return new WebpubClient(manifest);
   }
 
-  get metadata(): ManifestMetadata {
-    return this.manifest.metadata;
+  // content
+  get startLocation(): number {
+    return 0;
+    // const startPath = this.manifest.spine[0].href;
+    // return this.makeUrl(startPath);
   }
-  get spine(): Spine<'text/html'> {
-    return this.manifest.spine;
+
+  // metadata
+  get title(): string {
+    return 'unimplemented webpub';
   }
-  contentFor(chapter: number): string {
-    const ch = this.manifest.spine[chapter];
-    if (!ch) throw new Error(`No Chapter ${chapter}`);
+  get author(): string {
+    return 'unimplemented author';
+  }
+
+  get totalChapters(): number {
+    return 666;
+  }
+
+  contentFor(location: number): string {
+    const ch = this.manifest.spine[location];
+    if (!ch) throw new Error(`No Chapter ${location}`);
     return this.makeUrl(ch.href);
   }
 
@@ -25,6 +43,6 @@ export class WebpubClient extends ReaderClient<WebpubManifest> {
    * ie. "/next-page.html" -> https://host.com/this-book/next-page.html
    */
   private makeUrl(relativeUrl: string): string {
-    return new URL(relativeUrl, this.metadata.identifier).href;
+    return new URL(relativeUrl, this.manifest.metadata.identifier).href;
   }
 }

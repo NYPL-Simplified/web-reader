@@ -1,17 +1,28 @@
 import React, { FC } from 'react';
+import { WebReaderProps } from '..';
+import ReaderClient from '../ReaderClient';
+import { EpubLocation } from '../types';
+import { UseWebReaderReturn } from '../useWebReader';
+import EpubClient from './EpubClient';
 
-export type EpubRendererProps = {
-  src: string;
-};
+type RendererProps<TClient> = Omit<
+  UseWebReaderReturn<TClient, unknown>,
+  'Renderer'
+>;
 
-const EpubRenderer: FC<EpubRendererProps> = ({ src }) => {
+const EpubRenderer: FC<RendererProps<EpubClient>> = ({ client }) => {
+  // display the book
+  React.useEffect(() => {
+    client?.rendition.display();
+  }, [client]);
+
   return (
-    <iframe
-      // sandbox="allow-same-origin"
-      src={src}
-      title="Hi"
+    <div
+      id={EpubClient.EPUB_JS_WRAPPER_ID}
       style={{
         flex: 1,
+        overflow: 'hidden',
+        position: 'relative',
         border: 'none',
         backgroundColor: 'white',
       }}

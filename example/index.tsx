@@ -3,28 +3,27 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 import WebReader from '../src';
-import pdfManifestUrl from 'url:./samples/pdfManifest.json';
-import webpubManifestUrl from 'url:./samples/webpubManifest.json';
-import epubUrl from 'url:./samples/moby.epub';
+import EpubComponent from '../src/EpubComponent';
 
 const App = () => {
+  // return <EpubComponent entrypoint="/moby.epub" />;
   return (
     <BrowserRouter>
       <Switch>
         <Route path="/pdf">
           <WebReader
-            entrypoint={pdfManifestUrl}
+            entrypoint="/pdfManifest.json"
             format="application/pdf+json"
           />
         </Route>
         <Route path="/webpub">
           <WebReader
-            entrypoint={webpubManifestUrl}
+            entrypoint="/webpubManifest.json"
             format="application/webpub"
           />
         </Route>
         <Route path="/epub">
-          <WebReader entrypoint={epubUrl} format="application/epub" />
+          <WebReader entrypoint="/moby.epub" format="application/epub" />
         </Route>
         <Route path="/">
           <h1>Web Reader Proof of Concept</h1>

@@ -1,11 +1,11 @@
+import { Location } from 'epubjs';
+
 export const EpubMimeType = 'application/epub';
 export const PdfMimeType = 'application/pdf+json';
 export const WebpubMimeType = 'application/webpub';
 
-export type AnyFormat =
-  | typeof EpubMimeType
-  | typeof PdfMimeType
-  | typeof WebpubMimeType;
+export type AnyFormat = typeof EpubMimeType | typeof PdfMimeType;
+// | typeof WebpubMimeType;
 
 export type ManifestMetadata = {
   title: string;
@@ -33,3 +33,9 @@ export type PdfManifest = {
 };
 
 export type AnyManifest = PdfManifest | WebpubManifest;
+
+export type EpubLocation = Location | undefined;
+export type PdfLocation = number;
+export type WebpubLocation = number;
+
+export type AnyLocation = EpubLocation | PdfLocation | WebpubLocation;

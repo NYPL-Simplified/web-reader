@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 
 export type WebpubRendererProps = {
-  src: string;
+  content: string;
 };
 
-const WebpubRenderer: FC<WebpubRendererProps> = ({ src }) => {
+const WebpubRenderer: FC<WebpubRendererProps> = ({ content }) => {
   const iframeElement = React.useRef<HTMLIFrameElement>(null);
 
   /**
@@ -26,7 +26,7 @@ const WebpubRenderer: FC<WebpubRendererProps> = ({ src }) => {
     <iframe
       ref={iframeElement}
       // sandbox="allow-same-origin"
-      src={src}
+      src={content}
       title="Hi"
       style={{
         flex: 1,

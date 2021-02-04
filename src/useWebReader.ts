@@ -1,6 +1,8 @@
 import React from 'react';
 import EpubClient from './epub/EpubClient';
+import EpubRenderer from './epub/EpubRenderer';
 import PdfClient from './pdf/PdfClient';
+import PdfRenderer from './pdf/PdfRenderer';
 import { AnyFormat, PdfMimeType, EpubMimeType } from './types';
 
 /**
@@ -9,29 +11,37 @@ import { AnyFormat, PdfMimeType, EpubMimeType } from './types';
  *  but I'm not sure how to extract it out of there
  */
 
-export type UseWebReaderReturn = {
+export type UseWebReaderReturn<TClient, TRenderer> = {
   chapter: number;
   page: number;
-  client: PdfClient | EpubClient | null;
+  client: TClient | null;
+  Renderer: TRenderer;
   handleNextChapter: () => void;
   handlePrevChapter: () => void;
 };
 
-type UseWebReaderProps = {
-  entrypoint: string;
-  format: AnyFormat;
-};
+type ClientForFormat<T extends AnyFormat> = T extends 'application/epub'
+  ? EpubClient
+  : PdfClient;
 
-export default function useWebReader({
-  entrypoint,
-  format,
-}: UseWebReaderProps): UseWebReaderReturn {
-  const [client, setClient] = React.useState<PdfClient | EpubClient | null>(
-    null
-  );
-  const [location, setLocation] = React.useState<any>(null);
+export default function useWebReader(
+  format: 'application/epub',
+  entrypoint: string
+): UseWebReaderReturn<EpubClient, typeof EpubRenderer>;
+export default function useWebReader(
+  format: 'application/pdf+json',
+  entrypoint: string
+): UseWebReaderReturn<PdfClient, typeof PdfRenderer>;
+export default function useWebReader(
+  format: AnyFormat,
+  entrypoint: string
+):
+  | UseWebReaderReturn<EpubClient, typeof EpubRenderer>
+  | UseWebReaderReturn<PdfClient, typeof PdfRenderer> {
+  const [client, setClient] = React.useState<ClientForFormat<
+    typeof format
+  > | null>(null);
   const [chapter, setChapter] = React.useState(0);
-  const [page, setPage] = React.useState(0);
 
   React.useEffect(() => {
     switch (format) {
@@ -66,10 +76,22 @@ export default function useWebReader({
     });
   };
 
+  // we have to use casting to refine the client type sadly
+  if (format === 'application/epub') {
+    return {
+      client: client as EpubClient,
+      Renderer: EpubRenderer,
+      chapter,
+      page: 0,
+      handleNextChapter,
+      handlePrevChapter,
+    };
+  }
   return {
-    client,
+    client: client as PdfClient,
+    Renderer: PdfRenderer,
     chapter,
-    page,
+    page: 0,
     handleNextChapter,
     handlePrevChapter,
   };
