@@ -1,6 +1,6 @@
 import ReaderClient from '../ReaderClient';
 import ePub, { Book, Location, Rendition } from 'epubjs';
-import { EpubLocation } from '../types';
+import { EpubLocation, SetLocation } from '../types';
 import EpubRenderer from './EpubRenderer';
 
 export default class EpubClient implements ReaderClient<EpubLocation> {
@@ -17,7 +17,7 @@ export default class EpubClient implements ReaderClient<EpubLocation> {
   locationSplit: number = 150;
 
   private constructor(
-    setLocation: (location: EpubLocation) => void,
+    setLocation: SetLocation<EpubLocation>,
     book: Book,
     rendition: Rendition,
     title: string,
@@ -33,7 +33,7 @@ export default class EpubClient implements ReaderClient<EpubLocation> {
   // an async constructor to make our client.
   static async init(
     url: string,
-    setLocation: (location: EpubLocation) => void
+    setLocation: SetLocation<EpubLocation>
   ): Promise<EpubClient> {
     const book = ePub(url);
 
@@ -74,24 +74,20 @@ export default class EpubClient implements ReaderClient<EpubLocation> {
     return undefined;
   }
 
-  get totalSections(): number {
-    return this.book.navigation.toc.length;
-  }
-
   async nextPage() {
     await this.rendition.next();
     // the loc is actually a Location not a DisplayedLocation
-    const loc = (await this.rendition.currentLocation()) as Location;
+    // const loc = (await this.rendition.currentLocation()) as Location;
     // this.setLocation(loc.start.cfi);
-    return loc.start.cfi;
+    // return loc.start.cfi;
   }
 
   async prevPage() {
     console.log('calling prev');
     await this.rendition.prev();
     // the loc is actually a Location not a DisplayedLocation
-    const loc = (await this.rendition.currentLocation()) as Location;
+    // const loc = (await this.rendition.currentLocation()) as Location;
     // this.setLocation(loc.start.cfi);
-    return loc.start.cfi;
+    // return loc.start.cfi;
   }
 }

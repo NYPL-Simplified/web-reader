@@ -1,5 +1,8 @@
 import { Location } from 'epubjs';
 import { DisplayedLocation } from 'epubjs/types/rendition';
+import { SetStateAction } from 'react';
+import EpubClient from './epub/EpubClient';
+import PdfClient from './pdf/PdfClient';
 
 export const EpubMimeType = 'application/epub';
 export const PdfMimeType = 'application/pdf+json';
@@ -37,7 +40,10 @@ export type AnyManifest = PdfManifest | WebpubManifest;
 
 // we use a CFI for the epub location
 export type EpubLocation = string | undefined;
-export type PdfLocation = number;
-export type WebpubLocation = number;
+export type PdfLocation = number | undefined;
+export type WebpubLocation = number | undefined;
 
 export type AnyLocation = EpubLocation | PdfLocation | WebpubLocation;
+export type AnyClient = EpubClient | PdfClient;
+
+export type SetLocation<T> = React.Dispatch<SetStateAction<T>>;

@@ -16,6 +16,6 @@ export default interface ReaderClient<TLocation> {
    * returns either current and total sections or a percent.
    */
 
-  nextPage: () => Promise<TLocation>;
-  prevPage: () => Promise<TLocation>;
+  nextPage: () => Promise<void>;
+  prevPage: () => Promise<void>;
 }

@@ -4,7 +4,14 @@ import EpubRenderer from './epub/EpubRenderer';
 import PdfClient from './pdf/PdfClient';
 import PdfRenderer from './pdf/PdfRenderer';
 import ReaderClient from './ReaderClient';
-import { AnyFormat, PdfMimeType, EpubMimeType, EpubLocation } from './types';
+import {
+  AnyFormat,
+  PdfMimeType,
+  EpubMimeType,
+  EpubLocation,
+  PdfLocation,
+  AnyClient,
+} from './types';
 
 /**
  * Current problem:
@@ -12,10 +19,10 @@ import { AnyFormat, PdfMimeType, EpubMimeType, EpubLocation } from './types';
  *  given time, but the type is determined by the format...
  */
 
-export type UseWebReaderReturn<TClient, TRenderer> = {
+export type UseWebReaderReturn<TClient extends AnyClient, TRenderer> = {
   section: number;
   page: number;
-  location: any;
+  location: LocationForClient<TClient>;
   client: TClient | null;
   Renderer: TRenderer;
   handleNextChapter: () => void;
@@ -23,6 +30,10 @@ export type UseWebReaderReturn<TClient, TRenderer> = {
   handleNextPage: () => void;
   handlePrevPage: () => void;
 };
+
+type LocationForClient<
+  TClient extends PdfClient | EpubClient
+> = TClient extends PdfClient ? PdfLocation : EpubLocation;
 
 type ClientForFormat<T extends AnyFormat> = T extends 'application/epub'
   ? EpubClient
@@ -36,7 +47,7 @@ export default function useWebReader(
   format: 'application/pdf+json',
   entrypoint: string
 ): UseWebReaderReturn<PdfClient, typeof PdfRenderer>;
-export default function useWebReader(
+export default function useWebReader<TClient extends AnyClient>(
   format: AnyFormat,
   entrypoint: string
 ):
@@ -85,8 +96,8 @@ export default function useWebReader(
   async function handleNextPage() {
     await client?.nextPage();
   }
-  function handlePrevPage() {
-    console.log('prev page');
+  async function handlePrevPage() {
+    await client?.prevPage();
   }
 
   // console.log(location);
@@ -97,7 +108,7 @@ export default function useWebReader(
       Renderer: EpubRenderer,
       section: 11,
       page: 0,
-      location,
+      location: location as LocationForClient<EpubClient>,
       handleNextChapter,
       handlePrevChapter,
       handleNextPage,
@@ -109,7 +120,7 @@ export default function useWebReader(
     Renderer: PdfRenderer,
     section: 11,
     page: 0,
-    location,
+    location: location as LocationForClient<PdfClient>,
     handleNextChapter,
     handlePrevChapter,
     handleNextPage,
