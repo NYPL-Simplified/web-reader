@@ -1,7 +1,4 @@
 import React, { FC } from 'react';
-import { WebReaderProps } from '..';
-import ReaderClient from '../ReaderClient';
-import { EpubLocation } from '../types';
 import { UseWebReaderReturn } from '../useWebReader';
 import EpubClient from './EpubClient';
 
@@ -10,12 +7,7 @@ type RendererProps<TClient> = Omit<
   'Renderer'
 >;
 
-const EpubRenderer: FC<RendererProps<EpubClient>> = ({ client }) => {
-  // display the book
-  React.useEffect(() => {
-    client?.rendition.display();
-  }, [client]);
-
+const EpubRenderer: FC<RendererProps<EpubClient>> = ({ client, location }) => {
   return (
     <div
       id={EpubClient.EPUB_JS_WRAPPER_ID}

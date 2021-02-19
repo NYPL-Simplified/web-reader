@@ -1,4 +1,3 @@
-import * as React from 'react';
 import ReaderClient from '../ReaderClient';
 import ePub, { Book, Location, Rendition } from 'epubjs';
 import { EpubLocation } from '../types';
@@ -6,6 +5,7 @@ import EpubRenderer from './EpubRenderer';
 
 export default class EpubClient implements ReaderClient<EpubLocation> {
   static readonly EPUB_JS_WRAPPER_ID = 'epub-js-wrapper';
+  private readonly setLocation: (location: EpubLocation) => void;
   readonly Renderer = EpubRenderer;
   private readonly book: Book;
   readonly rendition: Rendition;
@@ -17,11 +17,13 @@ export default class EpubClient implements ReaderClient<EpubLocation> {
   locationSplit: number = 150;
 
   private constructor(
+    setLocation: (location: EpubLocation) => void,
     book: Book,
     rendition: Rendition,
     title: string,
     author: string
   ) {
+    this.setLocation = setLocation;
     this.book = book;
     this.rendition = rendition;
     this.title = title;
@@ -29,7 +31,10 @@ export default class EpubClient implements ReaderClient<EpubLocation> {
   }
 
   // an async constructor to make our client.
-  static async init(url: string): Promise<EpubClient> {
+  static async init(
+    url: string,
+    setLocation: (location: EpubLocation) => void
+  ): Promise<EpubClient> {
     const book = ePub(url);
 
     // metadata
@@ -49,10 +54,18 @@ export default class EpubClient implements ReaderClient<EpubLocation> {
     // wait for the rendition to be "started", whatever that means
     await rendition.started;
 
-    // here we could possibly set up our location change listeners
-    // and update the state if we pass it in?
+    // here set up a listener to keep the useWebReader hook state
+    // up to date whenever the location changes. This doesn't
+    // technically do anything in this case since he state is really
+    // managed by epub.js, but we're going to keep it up to date anyway
+    rendition.on('relocated', (loc: Location) => {
+      setLocation(loc.start.cfi);
+    });
 
-    return new EpubClient(book, rendition, title, author);
+    // display the book
+    rendition.display();
+
+    return new EpubClient(setLocation, book, rendition, title, author);
   }
 
   // passing undefined to rendition.display() will show the
@@ -61,7 +74,24 @@ export default class EpubClient implements ReaderClient<EpubLocation> {
     return undefined;
   }
 
-  get totalChapters(): number {
+  get totalSections(): number {
     return this.book.navigation.toc.length;
+  }
+
+  async nextPage() {
+    await this.rendition.next();
+    // the loc is actually a Location not a DisplayedLocation
+    const loc = (await this.rendition.currentLocation()) as Location;
+    // this.setLocation(loc.start.cfi);
+    return loc.start.cfi;
+  }
+
+  async prevPage() {
+    console.log('calling prev');
+    await this.rendition.prev();
+    // the loc is actually a Location not a DisplayedLocation
+    const loc = (await this.rendition.currentLocation()) as Location;
+    // this.setLocation(loc.start.cfi);
+    return loc.start.cfi;
   }
 }

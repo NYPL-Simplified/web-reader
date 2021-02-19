@@ -1,4 +1,5 @@
 import { Location } from 'epubjs';
+import { DisplayedLocation } from 'epubjs/types/rendition';
 
 export const EpubMimeType = 'application/epub';
 export const PdfMimeType = 'application/pdf+json';
@@ -34,7 +35,8 @@ export type PdfManifest = {
 
 export type AnyManifest = PdfManifest | WebpubManifest;
 
-export type EpubLocation = Location | undefined;
+// we use a CFI for the epub location
+export type EpubLocation = string | undefined;
 export type PdfLocation = number;
 export type WebpubLocation = number;
 

@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import ReaderClient from './ReaderClient';
 import { UseWebReaderReturn } from './useWebReader';
 
 /**
@@ -6,11 +7,18 @@ import { UseWebReaderReturn } from './useWebReader';
  * that can be imported and used separately or in a customized setup.
  * It takes the return value of useWebReader as props
  */
-const ManagerUI: FC<UseWebReaderReturn> = ({
+
+type ManagerProps = Omit<
+  UseWebReaderReturn<any, any>,
+  'Renderer' | 'client'
+> & { client: ReaderClient<unknown> | null };
+const ManagerUI: FC<ManagerProps> = ({
   client,
-  chapter,
+  section,
   handlePrevChapter,
   handleNextChapter,
+  handleNextPage,
+  handlePrevPage,
   children,
 }) => {
   // use the correct renderer depending on type
@@ -42,13 +50,13 @@ const ManagerUI: FC<UseWebReaderReturn> = ({
       >
         <div style={{ display: 'flex' }}>
           <button onClick={handlePrevChapter}> {`<<`} chapter</button>
-          <button> {`<`} page</button>
+          <button onClick={handlePrevPage}> {`<`} page</button>
         </div>
         <div>
-          Capter: {chapter + 1} / {client.totalChapters}
+          Chapter: {section + 1} / {client.totalSections}
         </div>
         <div style={{ display: 'flex' }}>
-          <button>page {`>`}</button>
+          <button onClick={handleNextPage}>page {`>`}</button>
           <button onClick={handleNextChapter}>chapter {`>>`}</button>
         </div>
       </div>

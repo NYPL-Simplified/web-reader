@@ -16,7 +16,6 @@ export default class PdfClient implements ReaderClient<number> {
 
   get startLocation(): number {
     return 0;
-    // return this.manifest.spine[0].href;
   }
 
   // metadata
@@ -37,5 +36,9 @@ export default class PdfClient implements ReaderClient<number> {
     const ch = this.manifest.spine[chapter];
     if (!ch) throw new Error(`No Chapter ${chapter}`);
     return ch.href;
+  }
+
+  async getNextPage(): Promise<number> {
+    return 1;
   }
 }

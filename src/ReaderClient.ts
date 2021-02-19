@@ -1,7 +1,3 @@
-import EpubClient from './epub/EpubClient';
-import PdfClient from './pdf/PdfClient';
-import { UseWebReaderReturn } from './useWebReader';
-
 export default interface ReaderClient<TLocation> {
   // cant define a static property on an interface :(
   // abstract init(entrypoint: string): Promise<ReaderClient>;
@@ -19,7 +15,7 @@ export default interface ReaderClient<TLocation> {
    * We could have just a relativeLocation property, which
    * returns either current and total sections or a percent.
    */
-  // currentSection: number;
-  // totalSections: number;
-  // percentage: number;
+
+  nextPage: () => Promise<TLocation>;
+  prevPage: () => Promise<TLocation>;
 }

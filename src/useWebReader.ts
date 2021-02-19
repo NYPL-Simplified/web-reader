@@ -3,21 +3,25 @@ import EpubClient from './epub/EpubClient';
 import EpubRenderer from './epub/EpubRenderer';
 import PdfClient from './pdf/PdfClient';
 import PdfRenderer from './pdf/PdfRenderer';
-import { AnyFormat, PdfMimeType, EpubMimeType } from './types';
+import ReaderClient from './ReaderClient';
+import { AnyFormat, PdfMimeType, EpubMimeType, EpubLocation } from './types';
 
 /**
  * Current problem:
- *  We need the useLocation to use a generic location associated with the client type
- *  but I'm not sure how to extract it out of there
+ *  We need useWebReader to know what type the client is at any
+ *  given time, but the type is determined by the format...
  */
 
 export type UseWebReaderReturn<TClient, TRenderer> = {
-  chapter: number;
+  section: number;
   page: number;
+  location: any;
   client: TClient | null;
   Renderer: TRenderer;
   handleNextChapter: () => void;
   handlePrevChapter: () => void;
+  handleNextPage: () => void;
+  handlePrevPage: () => void;
 };
 
 type ClientForFormat<T extends AnyFormat> = T extends 'application/epub'
@@ -38,18 +42,18 @@ export default function useWebReader(
 ):
   | UseWebReaderReturn<EpubClient, typeof EpubRenderer>
   | UseWebReaderReturn<PdfClient, typeof PdfRenderer> {
-  const [client, setClient] = React.useState<ClientForFormat<
-    typeof format
-  > | null>(null);
-  const [chapter, setChapter] = React.useState(0);
+  const [client, setClient] = React.useState<ReaderClient<unknown> | null>(
+    null
+  );
+  const [location, setLocation] = React.useState<unknown>(undefined);
 
   React.useEffect(() => {
     switch (format) {
       case PdfMimeType:
-        PdfClient.init(entrypoint).then(setClient);
+        PdfClient.init(entrypoint, setLocation).then(setClient);
         break;
       case EpubMimeType:
-        EpubClient.init(entrypoint).then(setClient);
+        EpubClient.init(entrypoint, setLocation).then(setClient);
         break;
       default:
         throw new Error('Unimplemented format: ' + format);
@@ -57,42 +61,58 @@ export default function useWebReader(
   }, [format, entrypoint]);
 
   const handleNextChapter = () => {
-    setChapter((ch) => {
-      if (!client) return ch;
-      if (client.totalChapters === ch) {
-        console.warn(`You're on the last chapter.`);
-        return ch;
-      }
-      return ch + 1;
-    });
+    console.log('next chapt');
+    // setChapter((ch) => {
+    //   if (!client) return ch;
+    //   if (client.totalChapters === ch) {
+    //     console.warn(`You're on the last chapter.`);
+    //     return ch;
+    //   }
+    //   return ch + 1;
+    // });
   };
   const handlePrevChapter = () => {
-    setChapter((ch) => {
-      if (ch === 0) {
-        console.warn(`You're on the first chapter.`);
-        return ch;
-      }
-      return ch - 1;
-    });
+    console.log('prev chapt');
+    // setChapter((ch) => {
+    //   if (ch === 0) {
+    //     console.warn(`You're on the first chapter.`);
+    //     return ch;
+    //   }
+    //   return ch - 1;
+    // });
   };
 
+  async function handleNextPage() {
+    await client?.nextPage();
+  }
+  function handlePrevPage() {
+    console.log('prev page');
+  }
+
+  // console.log(location);
   // we have to use casting to refine the client type sadly
   if (format === 'application/epub') {
     return {
-      client: client as EpubClient,
+      client: client as EpubClient | null,
       Renderer: EpubRenderer,
-      chapter,
+      section: 11,
       page: 0,
+      location,
       handleNextChapter,
       handlePrevChapter,
+      handleNextPage,
+      handlePrevPage,
     };
   }
   return {
-    client: client as PdfClient,
+    client: client as PdfClient | null,
     Renderer: PdfRenderer,
-    chapter,
+    section: 11,
     page: 0,
+    location,
     handleNextChapter,
     handlePrevChapter,
+    handleNextPage,
+    handlePrevPage,
   };
 }
