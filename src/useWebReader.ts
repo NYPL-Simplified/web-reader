@@ -100,7 +100,6 @@ export default function useWebReader<TClient extends AnyClient>(
     await client?.prevPage();
   }
 
-  // console.log(location);
   // we have to use casting to refine the client type sadly
   if (format === 'application/epub') {
     return {
