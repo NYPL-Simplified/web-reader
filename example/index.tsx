@@ -17,10 +17,11 @@ const App = () => {
           />
         </Route>
         <Route path="/webpub">
-          <WebReader
+          TBD
+          {/* <WebReader
             entrypoint="/webpubManifest.json"
             format="application/webpub"
-          />
+          /> */}
         </Route>
         <Route path="/epub">
           <WebReader entrypoint="/moby.epub" format="application/epub" />
