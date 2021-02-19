@@ -15,8 +15,6 @@ type ManagerProps = Omit<
 const ManagerUI: FC<ManagerProps> = ({
   client,
   section,
-  handlePrevChapter,
-  handleNextChapter,
   handleNextPage,
   handlePrevPage,
   children,
@@ -49,15 +47,10 @@ const ManagerUI: FC<ManagerProps> = ({
         style={{ padding: 8, display: 'flex', justifyContent: 'space-between' }}
       >
         <div style={{ display: 'flex' }}>
-          <button onClick={handlePrevChapter}> {`<<`} chapter</button>
           <button onClick={handlePrevPage}> {`<`} page</button>
-        </div>
-        <div>
-          Chapter: {section + 1} / {client.totalSections}
         </div>
         <div style={{ display: 'flex' }}>
           <button onClick={handleNextPage}>page {`>`}</button>
-          <button onClick={handleNextChapter}>chapter {`>>`}</button>
         </div>
       </div>
     </div>

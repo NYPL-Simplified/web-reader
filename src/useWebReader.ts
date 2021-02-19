@@ -25,8 +25,6 @@ export type UseWebReaderReturn<TClient extends AnyClient, TRenderer> = {
   location: LocationForClient<TClient>;
   client: TClient | null;
   Renderer: TRenderer;
-  handleNextChapter: () => void;
-  handlePrevChapter: () => void;
   handleNextPage: () => void;
   handlePrevPage: () => void;
 };
@@ -71,28 +69,6 @@ export default function useWebReader<TClient extends AnyClient>(
     }
   }, [format, entrypoint]);
 
-  const handleNextChapter = () => {
-    console.log('next chapt');
-    // setChapter((ch) => {
-    //   if (!client) return ch;
-    //   if (client.totalChapters === ch) {
-    //     console.warn(`You're on the last chapter.`);
-    //     return ch;
-    //   }
-    //   return ch + 1;
-    // });
-  };
-  const handlePrevChapter = () => {
-    console.log('prev chapt');
-    // setChapter((ch) => {
-    //   if (ch === 0) {
-    //     console.warn(`You're on the first chapter.`);
-    //     return ch;
-    //   }
-    //   return ch - 1;
-    // });
-  };
-
   async function handleNextPage() {
     await client?.nextPage();
   }
@@ -108,8 +84,6 @@ export default function useWebReader<TClient extends AnyClient>(
       section: 11,
       page: 0,
       location: location as LocationForClient<EpubClient>,
-      handleNextChapter,
-      handlePrevChapter,
       handleNextPage,
       handlePrevPage,
     };
@@ -120,8 +94,6 @@ export default function useWebReader<TClient extends AnyClient>(
     section: 11,
     page: 0,
     location: location as LocationForClient<PdfClient>,
-    handleNextChapter,
-    handlePrevChapter,
     handleNextPage,
     handlePrevPage,
   };

@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
+import { AnyClient } from '../types';
 import { UseWebReaderReturn } from '../useWebReader';
 import EpubClient from './EpubClient';
 
-type RendererProps<TClient> = Omit<
+type RendererProps<TClient extends AnyClient> = Omit<
   UseWebReaderReturn<TClient, unknown>,
   'Renderer'
 >;
