@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import ReaderClient from './ReaderClient';
 import { UseWebReaderReturn } from './useWebReader';
 
 /**
@@ -15,7 +14,6 @@ const ManagerUI: FC<UseWebReaderReturn> = ({
   handlePrevPage,
   children,
 }) => {
-  if (!isLoading) return <div>Loading...</div>;
   return (
     <div
       style={{

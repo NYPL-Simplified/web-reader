@@ -23,7 +23,7 @@ export default function useWebReader(
   const [location, setLocation] = React.useState<unknown>(undefined);
 
   // Computed values
-  const isLoading = !!client;
+  const isLoading = !client;
   const title = client?.title ?? null;
 
   /**
