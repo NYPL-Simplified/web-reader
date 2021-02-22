@@ -5,12 +5,6 @@ import PdfClient from './pdf/PdfClient';
 import PdfRenderer from './pdf/PdfRenderer';
 import { AnyFormat, PdfMimeType, EpubMimeType, PdfLocation } from './types';
 
-/**
- * Current problem:
- *  We need useWebReader to know what type the client is at any
- *  given time, but the type is determined by the format...
- */
-
 export type UseWebReaderReturn = {
   title: string | null;
   isLoading: boolean;
@@ -28,9 +22,14 @@ export default function useWebReader(
   );
   const [location, setLocation] = React.useState<unknown>(undefined);
 
+  // Computed values
   const isLoading = !!client;
   const title = client?.title ?? null;
 
+  /**
+   * Initialize the client, which has to be asynchronously initialized
+   * because it might need to fetch the manifest or otherwise.
+   */
   React.useEffect(() => {
     switch (format) {
       case PdfMimeType:
@@ -44,6 +43,7 @@ export default function useWebReader(
     }
   }, [format, entrypoint]);
 
+  // Handlers
   async function handleNextPage() {
     await client?.nextPage();
   }
