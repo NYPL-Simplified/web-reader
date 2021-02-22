@@ -3,13 +3,7 @@ import EpubClient from './epub/EpubClient';
 import EpubRenderer from './epub/EpubRenderer';
 import PdfClient from './pdf/PdfClient';
 import PdfRenderer from './pdf/PdfRenderer';
-import {
-  AnyFormat,
-  PdfMimeType,
-  EpubMimeType,
-  EpubLocation,
-  PdfLocation,
-} from './types';
+import { AnyFormat, PdfMimeType, EpubMimeType, PdfLocation } from './types';
 
 /**
  * Current problem:
@@ -25,10 +19,6 @@ export type UseWebReaderReturn = {
   handlePrevPage: () => void;
 };
 
-type LocationForClient<
-  TClient extends PdfClient | EpubClient
-> = TClient extends PdfClient ? PdfLocation : EpubLocation;
-
 export default function useWebReader(
   format: AnyFormat,
   entrypoint: string
@@ -38,7 +28,7 @@ export default function useWebReader(
   );
   const [location, setLocation] = React.useState<unknown>(undefined);
 
-  const isLoading = !client;
+  const isLoading = !!client;
   const title = client?.title ?? null;
 
   React.useEffect(() => {

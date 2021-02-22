@@ -1,7 +1,5 @@
 import React, { FC } from 'react';
-import EpubRenderer from './epub/EpubRenderer';
 import ManagerUI from './manager';
-import PdfRenderer from './pdf/PdfRenderer';
 import { AnyFormat } from './types';
 import useWebReader from './useWebReader';
 

@@ -3,7 +3,6 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 import WebReader from '../src';
-import EpubComponent from '../src/EpubComponent';
 
 const App = () => {
   // return <EpubComponent entrypoint="/moby.epub" />;

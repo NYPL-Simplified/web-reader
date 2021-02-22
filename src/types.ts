@@ -1,5 +1,3 @@
-import { Location } from 'epubjs';
-import { DisplayedLocation } from 'epubjs/types/rendition';
 import { SetStateAction } from 'react';
 import EpubClient from './epub/EpubClient';
 import PdfClient from './pdf/PdfClient';
@@ -9,7 +7,6 @@ export const PdfMimeType = 'application/pdf+json';
 export const WebpubMimeType = 'application/webpub';
 
 export type AnyFormat = typeof EpubMimeType | typeof PdfMimeType;
-// | typeof WebpubMimeType;
 
 export type ManifestMetadata = {
   title: string;
