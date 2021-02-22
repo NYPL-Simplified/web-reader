@@ -1,5 +1,5 @@
 import ReaderClient from '../ReaderClient';
-import ePub, { Book, Location, Rendition } from 'epubjs';
+import ePub, { Book, Location, NavItem, Rendition } from 'epubjs';
 import { EpubLocation, SetLocation, TocItem } from '../types';
 import EpubRenderer from './EpubRenderer';
 
@@ -60,7 +60,7 @@ export default class EpubClient implements ReaderClient<EpubLocation> {
     await rendition.started;
 
     // once it is started, we can get the toc
-    const toc = book.navigation.toc;
+    const toc = makeToc(book.navigation.toc);
 
     // here set up a listener to keep the useWebReader hook state
     // up to date whenever the location changes. This doesn't
@@ -99,4 +99,15 @@ export default class EpubClient implements ReaderClient<EpubLocation> {
     // the href
     await this.rendition.display(location);
   }
+}
+
+/**
+ * Builds our internal TOC representation from the Epub one.
+ */
+function makeToc(epubToc: NavItem[]): TocItem[] {
+  return epubToc.map((item) => ({
+    href: item.href,
+    title: item.label,
+    children: item.subitems ? makeToc(item.subitems) : undefined,
+  }));
 }

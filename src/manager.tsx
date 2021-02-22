@@ -47,7 +47,7 @@ const ManagerUI: FC<UseWebReaderReturn> = ({
           <select onChange={handleTocChange}>
             {toc?.map((sect) => (
               <option value={sect.href} key={sect.href}>
-                {sect.label}
+                {sect.title}
               </option>
             ))}
           </select>
