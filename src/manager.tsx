@@ -8,10 +8,11 @@ import { UseWebReaderReturn } from './useWebReader';
  */
 
 const ManagerUI: FC<UseWebReaderReturn> = ({
-  isLoading,
+  toc,
   title,
   handleNextPage,
   handlePrevPage,
+  handleTocChange,
   children,
 }) => {
   return (
@@ -41,6 +42,15 @@ const ManagerUI: FC<UseWebReaderReturn> = ({
       >
         <div style={{ display: 'flex' }}>
           <button onClick={handlePrevPage}> {`<`} page</button>
+        </div>
+        <div style={{ display: 'flex' }}>
+          <select onChange={handleTocChange}>
+            {toc?.map((sect) => (
+              <option value={sect.href} key={sect.href}>
+                {sect.label}
+              </option>
+            ))}
+          </select>
         </div>
         <div style={{ display: 'flex' }}>
           <button onClick={handleNextPage}>page {`>`}</button>

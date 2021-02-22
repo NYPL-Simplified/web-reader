@@ -1,3 +1,5 @@
+import { NavItem } from 'epubjs';
+
 export default interface ReaderClient<TLocation> {
   // cant define a static property on an interface :(
   // abstract init(entrypoint: string): Promise<ReaderClient>;
@@ -18,4 +20,6 @@ export default interface ReaderClient<TLocation> {
 
   nextPage: () => Promise<void>;
   prevPage: () => Promise<void>;
+
+  toc: NavItem[] | undefined;
 }

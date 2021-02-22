@@ -1,3 +1,4 @@
+import { NavItem } from 'epubjs';
 import { fetchJson } from '../fetch';
 import ReaderClient from '../ReaderClient';
 import { PdfLocation, PdfManifest, SetLocation } from '../types';
@@ -6,7 +7,8 @@ export default class PdfClient implements ReaderClient<PdfLocation> {
   readonly Renderer = PdfRenderer;
   private constructor(
     readonly manifest: PdfManifest,
-    private readonly setLocation: SetLocation<PdfLocation>
+    private readonly setLocation: SetLocation<PdfLocation>,
+    readonly toc: NavItem[] | undefined
   ) {}
 
   // an async constructor function that fetches the manifest and then
@@ -16,7 +18,7 @@ export default class PdfClient implements ReaderClient<PdfLocation> {
     setLocation: SetLocation<PdfLocation>
   ): Promise<PdfClient> {
     const manifest = await fetchJson(entrypoint);
-    return new PdfClient(manifest, setLocation);
+    return new PdfClient(manifest, setLocation, undefined);
   }
 
   get startLocation(): number {

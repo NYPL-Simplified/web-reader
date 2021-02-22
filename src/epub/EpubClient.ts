@@ -1,5 +1,5 @@
 import ReaderClient from '../ReaderClient';
-import ePub, { Book, Location, Rendition } from 'epubjs';
+import ePub, { Book, Location, NavItem, Rendition } from 'epubjs';
 import { EpubLocation, SetLocation } from '../types';
 import EpubRenderer from './EpubRenderer';
 
@@ -12,6 +12,10 @@ export default class EpubClient implements ReaderClient<EpubLocation> {
   title: string;
   author: string;
 
+  // passing undefined to rendition.display() will show the
+  // first page.
+  readonly startLocation = undefined;
+
   // we use this when generating locations for the book, it is the
   // number of chars to break sections by. 150 was the Epub.js default.
   locationSplit: number = 150;
@@ -21,7 +25,8 @@ export default class EpubClient implements ReaderClient<EpubLocation> {
     book: Book,
     rendition: Rendition,
     title: string,
-    author: string
+    author: string,
+    readonly toc: NavItem[]
   ) {
     this.setLocation = setLocation;
     this.book = book;
@@ -54,6 +59,9 @@ export default class EpubClient implements ReaderClient<EpubLocation> {
     // wait for the rendition to be "started", whatever that means
     await rendition.started;
 
+    // once it is started, we can get the toc
+    const toc = book.navigation.toc;
+
     // here set up a listener to keep the useWebReader hook state
     // up to date whenever the location changes. This doesn't
     // technically do anything in this case since he state is really
@@ -65,13 +73,7 @@ export default class EpubClient implements ReaderClient<EpubLocation> {
     // display the book
     rendition.display();
 
-    return new EpubClient(setLocation, book, rendition, title, author);
-  }
-
-  // passing undefined to rendition.display() will show the
-  // first page.
-  get startLocation() {
-    return undefined;
+    return new EpubClient(setLocation, book, rendition, title, author, toc);
   }
 
   async nextPage() {
@@ -83,11 +85,18 @@ export default class EpubClient implements ReaderClient<EpubLocation> {
   }
 
   async prevPage() {
-    console.log('calling prev');
     await this.rendition.prev();
     // the loc is actually a Location not a DisplayedLocation
     // const loc = (await this.rendition.currentLocation()) as Location;
     // this.setLocation(loc.start.cfi);
     // return loc.start.cfi;
+  }
+
+  async goTo(location: string) {
+    // when you navigate via the toc, you will pass in an href
+    // from the NavItem. We don't have a way to convert that to a
+    // CFI which we use for out "Location", but display will accept
+    // the href
+    await this.rendition.display(location);
   }
 }

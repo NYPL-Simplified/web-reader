@@ -10,10 +10,10 @@ export type WebReaderProps = {
 
 const WebReader: FC<WebReaderProps> = ({ entrypoint, format }) => {
   const webReader = useWebReader(format, entrypoint);
-  const { isLoading, renderer } = webReader;
+  const { isLoading, content } = webReader;
 
   if (isLoading) return <div>Loading...</div>;
 
-  return <ManagerUI {...webReader}>{renderer}</ManagerUI>;
+  return <ManagerUI {...webReader}>{content}</ManagerUI>;
 };
 export default WebReader;

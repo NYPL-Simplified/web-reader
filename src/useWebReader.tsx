@@ -1,3 +1,4 @@
+import { NavItem } from 'epubjs';
 import React from 'react';
 import EpubClient from './epub/EpubClient';
 import EpubRenderer from './epub/EpubRenderer';
@@ -14,6 +15,8 @@ export type UseWebReaderReturn = {
   content: JSX.Element;
   handleNextPage: () => void;
   handlePrevPage: () => void;
+  handleTocChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  toc: NavItem[] | undefined;
 };
 
 export default function useWebReader(
@@ -28,6 +31,7 @@ export default function useWebReader(
   // Computed values
   const isLoading = !client;
   const title = client?.title ?? null;
+  const toc = client?.toc;
 
   /**
    * Initialize the client, which has to be asynchronously initialized
@@ -53,6 +57,9 @@ export default function useWebReader(
   async function handlePrevPage() {
     await client?.prevPage();
   }
+  async function handleTocChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    if (client && 'goTo' in client) client.goTo(e.target.value);
+  }
 
   /**
    * We sadly have to do these checks because typescript can't narrow the type
@@ -61,15 +68,18 @@ export default function useWebReader(
   if (format === 'application/epub') {
     return {
       isLoading,
+      toc,
       title,
       content: <EpubRenderer />,
       handleNextPage,
       handlePrevPage,
+      handleTocChange,
     };
   }
   if (format === 'application/pdf+json') {
     return {
       isLoading,
+      toc: undefined,
       title,
       content: (
         <PdfRenderer
@@ -78,6 +88,7 @@ export default function useWebReader(
       ),
       handleNextPage,
       handlePrevPage,
+      handleTocChange,
     };
   }
   throw new Error(
