@@ -8,7 +8,10 @@ import { AnyFormat, PdfMimeType, EpubMimeType, PdfLocation } from './types';
 export type UseWebReaderReturn = {
   title: string | null;
   isLoading: boolean;
-  renderer: JSX.Element;
+  // we return fully formed JSX elements so the consumer doesn't need to know
+  // how to instantiate them or what to pass to them, that's the responsibility
+  // of this hook. The consumer just places it within their UI.
+  content: JSX.Element;
   handleNextPage: () => void;
   handlePrevPage: () => void;
 };
@@ -59,7 +62,7 @@ export default function useWebReader(
     return {
       isLoading,
       title,
-      renderer: <EpubRenderer />,
+      content: <EpubRenderer />,
       handleNextPage,
       handlePrevPage,
     };
@@ -68,9 +71,9 @@ export default function useWebReader(
     return {
       isLoading,
       title,
-      renderer: (
+      content: (
         <PdfRenderer
-          content={(client as PdfClient)?.contentFor(location as PdfLocation)}
+          src={(client as PdfClient)?.contentFor(location as PdfLocation)}
         />
       ),
       handleNextPage,
