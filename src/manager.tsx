@@ -8,19 +8,14 @@ import { UseWebReaderReturn } from './useWebReader';
  * It takes the return value of useWebReader as props
  */
 
-type ManagerProps = Omit<
-  UseWebReaderReturn<any, any>,
-  'Renderer' | 'client'
-> & { client: ReaderClient<unknown> | null };
-const ManagerUI: FC<ManagerProps> = ({
-  client,
-  section,
+const ManagerUI: FC<UseWebReaderReturn> = ({
+  isLoading,
+  title,
   handleNextPage,
   handlePrevPage,
   children,
 }) => {
-  // use the correct renderer depending on type
-  if (!client) return <div>Loading...</div>;
+  if (!isLoading) return <div>Loading...</div>;
   return (
     <div
       style={{
@@ -39,7 +34,7 @@ const ManagerUI: FC<ManagerProps> = ({
           padding: 8,
         }}
       >
-        <h1>{client.title}</h1>
+        <h1>{title}</h1>
         <button>settings</button>
       </nav>
       {children}

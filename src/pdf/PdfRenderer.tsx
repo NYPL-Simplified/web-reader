@@ -1,17 +1,10 @@
 import React, { FC } from 'react';
-import { UseWebReaderReturn } from '../useWebReader';
-import PdfClient from './PdfClient';
 
-const PdfRenderer: FC<UseWebReaderReturn<PdfClient, any>> = ({
-  client,
-  location,
-}) => {
-  console.log('wha', location);
-  // return <div>hi pdf</div>;
+const PdfRenderer: FC<{ content: string }> = ({ content }) => {
   return (
     <iframe
       // sandbox="all"
-      src={client?.contentFor(location)}
+      src={content}
       title="Hi"
       style={{
         flex: 1,

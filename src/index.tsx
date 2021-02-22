@@ -15,21 +15,17 @@ export type WebReaderProps = {
  */
 const WebReader: FC<WebReaderProps> = ({ entrypoint, format }) => {
   const webReader = useWebReader(format, entrypoint);
-  const { client, Renderer } = webReader;
+  const { isLoading, renderer } = webReader;
 
-  if (!client) return <div>Loading...</div>;
+  if (!isLoading) return <div>Loading...</div>;
 
-  return (
-    <ManagerUI {...webReader}>
-      <Renderer {...webReader} />
-    </ManagerUI>
-  );
+  return <ManagerUI {...webReader}>{renderer}</ManagerUI>;
 };
 export default WebReader;
 
 /**
- * The underlying problem here is that each Client and Renderer
- * work with their own Location type, but once you've abstracted them
- * to a general Client/Renderer, you no longer know that the
- * Location works with it.
+ * The problem in this case is that the format type is the union of the two types,
+ * but what we want is strictly one type or the other, which will tell us what
+ * we get out of the hook. But we shouldn't actually care what we get out
+ * anymore.
  */
