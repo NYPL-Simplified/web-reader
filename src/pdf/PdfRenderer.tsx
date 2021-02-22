@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 
-const PdfRenderer: FC<{ content: string }> = ({ content }) => {
+const PdfRenderer: FC<{ src: string }> = ({ src }) => {
   return (
     <iframe
       // sandbox="all"
-      src={content}
+      src={src}
       title="Hi"
       style={{
         flex: 1,
