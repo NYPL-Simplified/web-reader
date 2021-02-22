@@ -44,3 +44,9 @@ export type AnyLocation = EpubLocation | PdfLocation | WebpubLocation;
 export type AnyClient = EpubClient | PdfClient;
 
 export type SetLocation<T> = React.Dispatch<SetStateAction<T>>;
+
+export type TocItem = {
+  href: string;
+  title: string;
+  children?: TocItem[];
+};

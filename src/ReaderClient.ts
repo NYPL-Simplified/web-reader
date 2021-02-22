@@ -1,4 +1,4 @@
-import { NavItem } from 'epubjs';
+import { TocItem } from './types';
 
 export default interface ReaderClient<TLocation> {
   // cant define a static property on an interface :(
@@ -21,5 +21,5 @@ export default interface ReaderClient<TLocation> {
   nextPage: () => Promise<void>;
   prevPage: () => Promise<void>;
 
-  toc: NavItem[] | undefined;
+  toc: TocItem[] | undefined;
 }

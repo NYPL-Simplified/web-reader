@@ -1,14 +1,13 @@
-import { NavItem } from 'epubjs';
 import { fetchJson } from '../fetch';
 import ReaderClient from '../ReaderClient';
-import { PdfLocation, PdfManifest, SetLocation } from '../types';
+import { PdfLocation, PdfManifest, SetLocation, TocItem } from '../types';
 import PdfRenderer from './PdfRenderer';
 export default class PdfClient implements ReaderClient<PdfLocation> {
   readonly Renderer = PdfRenderer;
   private constructor(
     readonly manifest: PdfManifest,
     private readonly setLocation: SetLocation<PdfLocation>,
-    readonly toc: NavItem[] | undefined
+    readonly toc: TocItem[] | undefined
   ) {}
 
   // an async constructor function that fetches the manifest and then

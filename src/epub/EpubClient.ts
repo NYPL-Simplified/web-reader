@@ -1,6 +1,6 @@
 import ReaderClient from '../ReaderClient';
-import ePub, { Book, Location, NavItem, Rendition } from 'epubjs';
-import { EpubLocation, SetLocation } from '../types';
+import ePub, { Book, Location, Rendition } from 'epubjs';
+import { EpubLocation, SetLocation, TocItem } from '../types';
 import EpubRenderer from './EpubRenderer';
 
 export default class EpubClient implements ReaderClient<EpubLocation> {
@@ -26,7 +26,7 @@ export default class EpubClient implements ReaderClient<EpubLocation> {
     rendition: Rendition,
     title: string,
     author: string,
-    readonly toc: NavItem[]
+    readonly toc: TocItem[]
   ) {
     this.setLocation = setLocation;
     this.book = book;
@@ -94,7 +94,7 @@ export default class EpubClient implements ReaderClient<EpubLocation> {
 
   async goTo(location: string) {
     // when you navigate via the toc, you will pass in an href
-    // from the NavItem. We don't have a way to convert that to a
+    // from the TocItem. We don't have a way to convert that to a
     // CFI which we use for out "Location", but display will accept
     // the href
     await this.rendition.display(location);

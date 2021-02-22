@@ -1,10 +1,15 @@
-import { NavItem } from 'epubjs';
 import React from 'react';
 import EpubClient from './epub/EpubClient';
 import EpubRenderer from './epub/EpubRenderer';
 import PdfClient from './pdf/PdfClient';
 import PdfRenderer from './pdf/PdfRenderer';
-import { AnyFormat, PdfMimeType, EpubMimeType, PdfLocation } from './types';
+import {
+  AnyFormat,
+  PdfMimeType,
+  EpubMimeType,
+  PdfLocation,
+  TocItem,
+} from './types';
 
 export type UseWebReaderReturn = {
   title: string | null;
@@ -16,7 +21,7 @@ export type UseWebReaderReturn = {
   handleNextPage: () => void;
   handlePrevPage: () => void;
   handleTocChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  toc: NavItem[] | undefined;
+  toc: TocItem[] | undefined;
 };
 
 export default function useWebReader(
