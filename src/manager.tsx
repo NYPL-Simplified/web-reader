@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { TocItem } from './types';
 import { UseWebReaderReturn } from './useWebReader';
 
 /**
@@ -45,10 +46,8 @@ const ManagerUI: FC<UseWebReaderReturn> = ({
         </div>
         <div style={{ display: 'flex' }}>
           <select onChange={handleTocChange}>
-            {toc?.map((sect) => (
-              <option value={sect.href} key={sect.href}>
-                {sect.title}
-              </option>
+            {toc?.map((item) => (
+              <Option item={item} key={item.href} level={0} />
             ))}
           </select>
         </div>
@@ -57,6 +56,24 @@ const ManagerUI: FC<UseWebReaderReturn> = ({
         </div>
       </div>
     </div>
+  );
+};
+
+const Option: React.FC<{ item: TocItem; level: number }> = ({
+  item,
+  level = 0,
+}) => {
+  const indents = '\u00A0'.repeat(level * 2);
+  return (
+    <>
+      <option value={item.href} style={{ paddingLeft: 2 * level }}>
+        {indents}
+        {item.title}
+      </option>
+      {item.children?.map((child) => (
+        <Option item={child} level={level + 1} />
+      ))}
+    </>
   );
 };
 

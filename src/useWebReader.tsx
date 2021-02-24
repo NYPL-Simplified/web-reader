@@ -84,7 +84,7 @@ export default function useWebReader(
   if (format === 'application/pdf+json') {
     return {
       isLoading,
-      toc: undefined,
+      toc,
       title,
       content: (
         <PdfRenderer

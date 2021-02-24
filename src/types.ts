@@ -27,11 +27,29 @@ export type WebpubManifest = {
 
 export type Spine<TFormat> = { href: string; type: TFormat; title: string }[];
 
+// see pdf manifest description:
+// https://docs.google.com/document/d/1k1XemnCnRrMvzOOc3h6lX274EOomGrGjF_F28dTzo1k
 export type PdfManifest = {
+  meda_type: 'application/pdf+json';
   '@context': 'pdf';
   metadata: ManifestMetadata;
-  spine: Spine<typeof PdfMimeType>;
+  // the pieces of the publication in order of display
+  components: PdfComponent[];
+  // for display
+  table_of_contents?: PdfToc;
 };
+export type PdfComponent = {
+  href: string;
+  title?: string;
+  startPage?: number;
+  endPage?: number;
+};
+export type PdfToc = {
+  href: string;
+  title: string;
+  pages: string;
+  children?: PdfToc;
+}[];
 
 export type AnyManifest = PdfManifest | WebpubManifest;
 

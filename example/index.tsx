@@ -11,7 +11,8 @@ const App = () => {
       <Switch>
         <Route path="/pdf">
           <WebReader
-            entrypoint="/pdfManifest.json"
+            // entrypoint="/pdfManifest.json"
+            entrypoint="https://sfr-files-development.s3.amazonaws.com/manifests/muse/muse13454.json"
             format="application/pdf+json"
           />
         </Route>

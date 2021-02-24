@@ -17,7 +17,7 @@ export default class PdfClient implements ReaderClient<PdfLocation> {
     setLocation: SetLocation<PdfLocation>
   ): Promise<PdfClient> {
     const manifest = await fetchJson(entrypoint);
-    return new PdfClient(manifest, setLocation, undefined);
+    return new PdfClient(manifest, setLocation, manifest.table_of_contents);
   }
 
   get startLocation(): number {
@@ -36,7 +36,7 @@ export default class PdfClient implements ReaderClient<PdfLocation> {
     this.setLocation((current) => {
       if (typeof current !== 'number') return 0;
       // detect end
-      if (current >= this.manifest.spine.length - 1) return current;
+      if (current >= this.manifest.components.length - 1) return current;
       return current + 1;
     });
   }
@@ -50,7 +50,7 @@ export default class PdfClient implements ReaderClient<PdfLocation> {
   // content
   contentFor(location: PdfLocation): string {
     const realLoc = location === undefined ? 0 : location;
-    const ch = this.manifest.spine[realLoc];
+    const ch = this.manifest.components[realLoc];
     if (!ch) throw new Error(`No Chapter ${realLoc}`);
     return ch.href;
   }
