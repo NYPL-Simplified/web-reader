@@ -55,7 +55,7 @@ export type AnyManifest = PdfManifest | WebpubManifest;
 
 // we use a CFI for the epub location
 export type EpubLocation = string | undefined;
-export type PdfLocation = number | undefined;
+export type PdfLocation = string;
 export type WebpubLocation = number | undefined;
 
 export type AnyLocation = EpubLocation | PdfLocation | WebpubLocation;

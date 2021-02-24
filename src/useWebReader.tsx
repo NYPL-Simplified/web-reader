@@ -86,11 +86,7 @@ export default function useWebReader(
       isLoading,
       toc,
       title,
-      content: (
-        <PdfRenderer
-          src={(client as PdfClient)?.contentFor(location as PdfLocation)}
-        />
-      ),
+      content: <PdfRenderer src={location as string} />,
       handleNextPage,
       handlePrevPage,
       handleTocChange,

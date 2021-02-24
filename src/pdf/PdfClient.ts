@@ -17,11 +17,12 @@ export default class PdfClient implements ReaderClient<PdfLocation> {
     setLocation: SetLocation<PdfLocation>
   ): Promise<PdfClient> {
     const manifest = await fetchJson(entrypoint);
+    setLocation(manifest.components[0].href);
     return new PdfClient(manifest, setLocation, manifest.table_of_contents);
   }
 
-  get startLocation(): number {
-    return 0;
+  get startLocation(): string {
+    return this.manifest.components[0].href;
   }
 
   // metadata
@@ -33,25 +34,13 @@ export default class PdfClient implements ReaderClient<PdfLocation> {
   }
 
   async nextPage() {
-    this.setLocation((current) => {
-      if (typeof current !== 'number') return 0;
-      // detect end
-      if (current >= this.manifest.components.length - 1) return current;
-      return current + 1;
-    });
+    console.warn('nextPage not built for pdfs yet');
   }
   async prevPage() {
-    this.setLocation((current) => {
-      if (typeof current !== 'number') return 0;
-      if (current === 0) return current;
-      return current - 1;
-    });
+    console.warn('prevPage not built for pdfs yet');
   }
-  // content
-  contentFor(location: PdfLocation): string {
-    const realLoc = location === undefined ? 0 : location;
-    const ch = this.manifest.components[realLoc];
-    if (!ch) throw new Error(`No Chapter ${realLoc}`);
-    return ch.href;
+
+  async goTo(href: string) {
+    this.setLocation(href);
   }
 }
