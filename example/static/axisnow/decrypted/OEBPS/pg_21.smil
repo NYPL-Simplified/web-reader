@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<smil xmlns="http://www.w3.org/ns/SMIL" xmlns:epub="http://www.idpf.org/2007/ops" version="3.0">
+  <body>
+    <par id="pg_21_id0">
+      <text src="pg_21.xhtml#p21-1"/>
+      <audio clipBegin="00:00:00.000" clipEnd="00:00:00.417" src="audio/whispering_town19.m4a"/>
+    </par>
+    <par id="pg_21_id1">
+      <text src="pg_21.xhtml#p21-2"/>
+      <audio clipBegin="00:00:00.417" clipEnd="00:00:00.627" src="audio/whispering_town19.m4a"/>
+    </par>
+    <par id="pg_21_id2">
+      <text src="pg_21.xhtml#p21-3"/>
+      <audio clipBegin="00:00:00.627" clipEnd="00:00:00.758" src="audio/whispering_town19.m4a"/>
+    </par>
+    <par id="pg_21_id3">
+      <text src="pg_21.xhtml#p21-4"/>
+      <audio clipBegin="00:00:00.758" clipEnd="00:00:01.034" src="audio/whispering_town19.m4a"/>
+    </par>
+    <par id="pg_21_id4">
+      <text src="pg_21.xhtml#p21-5"/>
+      <audio clipBegin="00:00:02.064" clipEnd="00:00:02.271" src="audio/whispering_town19.m4a"/>
+    </par>
+    <par id="pg_21_id5">
+      <text src="pg_21.xhtml#p21-6"/>
+      <audio clipBegin="00:00:02.271" clipEnd="00:00:02.612" src="audio/whispering_town19.m4a"/>
+    </par>
+    <par id="pg_21_id6">
+      <text src="pg_21.xhtml#p21-7"/>
+      <audio clipBegin="00:00:02.612" clipEnd="00:00:02.815" src="audio/whispering_town19.m4a"/>
+    </par>
+    <par id="pg_21_id7">
+      <text src="pg_21.xhtml#p21-8"/>
+      <audio clipBegin="00:00:02.815" clipEnd="00:00:02.927" src="audio/whispering_town19.m4a"/>
+    </par>
+    <par id="pg_21_id8">
+      <text src="pg_21.xhtml#p21-9"/>
+      <audio clipBegin="00:00:02.927" clipEnd="00:00:03.163" src="audio/whispering_town19.m4a"/>
+    </par>
+    <par id="pg_21_id9">
+      <text src="pg_21.xhtml#p21-10"/>
+      <audio clipBegin="00:00:03.163" clipEnd="00:00:03.562" src="audio/whispering_town19.m4a"/>
+    </par>
+    <par id="pg_21_id10">
+      <text src="pg_21.xhtml#p21-11"/>
+      <audio clipBegin="00:00:03.562" clipEnd="00:00:03.660" src="audio/whispering_town19.m4a"/>
+    </par>
+    <par id="pg_21_id11">
+      <text src="pg_21.xhtml#p21-12"/>
+      <audio clipBegin="00:00:03.660" clipEnd="00:00:03.965" src="audio/whispering_town19.m4a"/>
+    </par>
+    <par id="pg_21_id12">
+      <text src="pg_21.xhtml#p21-13"/>
+      <audio clipBegin="00:00:03.965" clipEnd="00:00:04.172" src="audio/whispering_town19.m4a"/>
+    </par>
+    <par id="pg_21_id13">
+      <text src="pg_21.xhtml#p21-14"/>
+      <audio clipBegin="00:00:04.172" clipEnd="00:00:04.364" src="audio/whispering_town19.m4a"/>
+    </par>
+    <par id="pg_21_id14">
+      <text src="pg_21.xhtml#p21-15"/>
+      <audio clipBegin="00:00:04.364" clipEnd="00:00:04.618" src="audio/whispering_town19.m4a"/>
+    </par>
+    <par id="pg_21_id15">
+      <text src="pg_21.xhtml#p21-16"/>
+      <audio clipBegin="00:00:04.618" clipEnd="00:00:04.727" src="audio/whispering_town19.m4a"/>
+    </par>
+    <par id="pg_21_id16">
+      <text src="pg_21.xhtml#p21-17"/>
+      <audio clipBegin="00:00:04.727" clipEnd="00:00:04.847" src="audio/whispering_town19.m4a"/>
+    </par>
+    <par id="pg_21_id17">
+      <text src="pg_21.xhtml#p21-18"/>
+      <audio clipBegin="00:00:04.847" clipEnd="00:00:05.228" src="audio/whispering_town19.m4a"/>
+    </par>
+    <par id="pg_21_id18">
+      <text src="pg_21.xhtml#p21-19"/>
+      <audio clipBegin="00:00:05.344" clipEnd="00:00:05.453" src="audio/whispering_town19.m4a"/>
+    </par>
+    <par id="pg_21_id19">
+      <text src="pg_21.xhtml#p21-20"/>
+      <audio clipBegin="00:00:05.453" clipEnd="00:00:05.804" src="audio/whispering_town19.m4a"/>
+    </par>
+    <par id="pg_21_id20">
+      <text src="pg_21.xhtml#p21-21"/>
+      <audio clipBegin="00:00:06.693" clipEnd="00:00:06.926" src="audio/whispering_town19.m4a"/>
+    </par>
+    <par id="pg_21_id21">
+      <text src="pg_21.xhtml#p21-22"/>
+      <audio clipBegin="00:00:07.121" clipEnd="00:00:07.891" src="audio/whispering_town19.m4a"/>
+    </par>
+    <par id="pg_21_id22">
+      <text src="pg_21.xhtml#p21-23"/>
+      <audio clipBegin="00:00:08.054" clipEnd="00:00:08.214" src="audio/whispering_town19.m4a"/>
+    </par>
+    <par id="pg_21_id23">
+      <text src="pg_21.xhtml#p21-24"/>
+      <audio clipBegin="00:00:08.214" clipEnd="00:00:08.584" src="audio/whispering_town19.m4a"/>
+    </par>
+  </body>
+</smil>

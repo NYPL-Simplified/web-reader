@@ -3,6 +3,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 import WebReader from '../src';
+import R2Reader from '../src/R2dComponent';
 
 const App = () => {
   // return <EpubComponent entrypoint="/moby.epub" />;
@@ -15,6 +16,9 @@ const App = () => {
             entrypoint="https://sfr-files-development.s3.amazonaws.com/manifests/muse/muse13454.json"
             format="application/pdf+json"
           />
+        </Route>
+        <Route path="/R2">
+          <R2Reader />
         </Route>
         <Route path="/webpub">
           TBD
@@ -29,6 +33,9 @@ const App = () => {
         <Route path="/">
           <h1>Web Reader Proof of Concept</h1>
           <ul>
+            <li>
+              <Link to="/R2">R2 Example</Link>
+            </li>
             <li>
               <Link to="/epub">Epub Example</Link>
             </li>

@@ -8,6 +8,7 @@
     "build": "parcel build index.html"
   },
   "dependencies": {
+    "@d-i-t-a/reader": "^1.7.1",
     "react-app-polyfill": "^1.0.0",
     "react-router-dom": "^5.2.0"
   },
