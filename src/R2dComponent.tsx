@@ -1,22 +1,33 @@
 import * as React from 'react';
 // this is a hacky thing to do we shouldn't rely on in the future
 import 'regenerator-runtime/runtime';
-import D2Reader from '@d-i-t-a/reader/dist/reader';
+import D2Reader from '@d-i-t-a/reader';
 import '@d-i-t-a/reader/dist/reader.css';
+import manifest from '../example/static/axisnow-webpub/manifest.json';
+import { ReaderConfig } from '../../R2D2BC/dist/navigator/IFrameNavigator';
+
+async function getContent(href: string): Promise<string> {
+  // the href is the readingOrder href, which we use to know which
+  // resource we need to fetch and decrypt
+  console.log('hello!', href);
+  console.log('manifest', manifest);
+  return '<div>hello world</div>';
+}
 
 const R2Reader = () => {
   React.useEffect(() => {
-    const url = new URL(
-      'https://raw.githubusercontent.com/fieldguides/guide03/master/docs/en/manifest.json'
-    );
+    const url = new URL('http://localhost:1234/axisnow-webpub/manifest.json');
     D2Reader.load({
       url: url,
       injectables: injectables,
+      api: {
+        getContent,
+      },
     })
-      .then((instance) => {
+      .then((instance: D2Reader) => {
         console.log('D2Reader loaded ', instance);
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.error('error.message ', error.message);
       });
   });

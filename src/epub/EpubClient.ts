@@ -1,12 +1,12 @@
 import ReaderClient from '../ReaderClient';
 import ePub, { Book, Location, NavItem, Rendition } from 'epubjs';
 import { EpubLocation, SetLocation, TocItem } from '../types';
-import EpubRenderer from './EpubRenderer';
+// import EpubRenderer from './EpubRenderer';
 
 export default class EpubClient implements ReaderClient<EpubLocation> {
   static readonly EPUB_JS_WRAPPER_ID = 'epub-js-wrapper';
   private readonly setLocation: (location: EpubLocation) => void;
-  readonly Renderer = EpubRenderer;
+  // readonly Renderer = EpubRenderer;
   private readonly book: Book;
   readonly rendition: Rendition;
   title: string;
