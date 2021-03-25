@@ -1,5 +1,4 @@
-import React, { FC } from 'react';
-import { TocItem } from './types';
+import * as React from 'react';
 import { UseWebReaderReturn } from './useWebReader';
 
 /**
@@ -8,14 +7,7 @@ import { UseWebReaderReturn } from './useWebReader';
  * It takes the return value of useWebReader as props
  */
 
-const ManagerUI: FC<UseWebReaderReturn> = ({
-  toc,
-  title,
-  handleNextPage,
-  handlePrevPage,
-  handleTocChange,
-  children,
-}) => {
+const ManagerUI: React.FC<UseWebReaderReturn> = ({ children }) => {
   return (
     <div
       style={{
@@ -34,7 +26,7 @@ const ManagerUI: FC<UseWebReaderReturn> = ({
           padding: 8,
         }}
       >
-        <h1>{title}</h1>
+        <h1>Title</h1>
         <button>settings</button>
       </nav>
       {children}
@@ -42,39 +34,39 @@ const ManagerUI: FC<UseWebReaderReturn> = ({
         style={{ padding: 8, display: 'flex', justifyContent: 'space-between' }}
       >
         <div style={{ display: 'flex' }}>
-          <button onClick={handlePrevPage}> {`<`} page</button>
+          <button> {`<`} page</button>
         </div>
-        <div style={{ display: 'flex' }}>
+        {/* <div style={{ display: 'flex' }}>
           <select onChange={handleTocChange}>
             {toc?.map((item) => (
               <Option item={item} key={item.href} level={0} />
             ))}
           </select>
-        </div>
+        </div> */}
         <div style={{ display: 'flex' }}>
-          <button onClick={handleNextPage}>page {`>`}</button>
+          <button>page {`>`}</button>
         </div>
       </div>
     </div>
   );
 };
 
-const Option: React.FC<{ item: TocItem; level: number }> = ({
-  item,
-  level = 0,
-}) => {
-  const indents = '\u00A0'.repeat(level * 2);
-  return (
-    <>
-      <option value={item.href} style={{ paddingLeft: 2 * level }}>
-        {indents}
-        {item.title}
-      </option>
-      {item.children?.map((child) => (
-        <Option item={child} level={level + 1} />
-      ))}
-    </>
-  );
-};
+// const Option: React.FC<{ item: TocItem; level: number }> = ({
+//   item,
+//   level = 0,
+// }) => {
+//   const indents = '\u00A0'.repeat(level * 2);
+//   return (
+//     <>
+//       <option value={item.href} style={{ paddingLeft: 2 * level }}>
+//         {indents}
+//         {item.title}
+//       </option>
+//       {item.children?.map((child) => (
+//         <Option item={child} level={level + 1} />
+//       ))}
+//     </>
+//   );
+// };
 
 export default ManagerUI;

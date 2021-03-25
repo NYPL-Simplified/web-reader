@@ -1,40 +1,10 @@
 import * as React from 'react';
-// this is a hacky thing to do we shouldn't rely on in the future
-import 'regenerator-runtime/runtime';
 import D2Reader from '@d-i-t-a/reader';
-// import '@d-i-t-a/reader/dist/reader.css';
-import Decryptor from '@nypl-simplified-packages/axisnow-access-control-web';
-import { makeGetContent, initDecryptor } from './decrypt';
+import { GetContent } from './types';
 
-const R2Reader = () => {
-  React.useEffect(() => {
-    const url = new URL('http://localhost:1234/axisnow-webpub/manifest.json');
-    initDecryptor().then((decryptor) => {
-      const getContent = makeGetContent(decryptor);
-      D2Reader.load({
-        url: url,
-        injectables: injectables,
-        api: {
-          getContent,
-        },
-      })
-        .then((instance: D2Reader) => {
-          console.log('D2Reader loaded ', instance);
-        })
-        .catch((error: any) => {
-          console.error('error.message ', error.message);
-        });
-    });
-  });
-
+const EpubContent = () => {
   return (
     <div>
-      <header>
-        <button onClick={() => D2Reader.previousPage()}>Prev Page</button>
-        <button onClick={() => D2Reader.nextPage()}>Next Page</button>
-        <button onClick={() => D2Reader.scroll(true)}>Scroll true</button>
-        <button onClick={() => D2Reader.scroll(false)}>Scroll false</button>
-      </header>
       <div id="root">
         <div
           id="D2Reader-Container"
@@ -159,6 +129,52 @@ const R2Reader = () => {
   );
 };
 
+export default class EpubNavigator {
+  static content = EpubContent;
+
+  private constructor(
+    // apparently we don't need the instance for anything
+    // but we should probably change that for the future.
+    readonly readerInstance: any
+  ) {}
+
+  static async init(
+    webpubManifestUrl: string,
+    getContent?: GetContent
+  ): Promise<EpubNavigator> {
+    const url = new URL(webpubManifestUrl);
+    const reader = await D2Reader.load({
+      url,
+      injectables: injectables as any,
+      api: {
+        getContent,
+      },
+      // all of these were required
+      userSettings: undefined,
+      initialAnnotations: undefined,
+      lastReadingPosition: undefined,
+      upLinkUrl: undefined,
+      material: {
+        settings: {
+          fontOverride: false,
+          advancedSettings: false,
+          pageMargins: false,
+          lineHeight: false,
+        },
+      },
+      rights: {},
+      tts: undefined,
+      search: { color: 'red', current: 'blah' },
+      annotations: { initialAnnotationColor: 'blue' },
+      highlighter: { selectionMenuItems: [] },
+      useLocalStorage: false,
+      attributes: { margin: 2 },
+    });
+
+    return new EpubNavigator(reader);
+  }
+}
+
 const injectables = [
   {
     type: 'style',
@@ -218,5 +234,3 @@ const injectables = [
     url: 'http://localhost:1234/viewer/injectables/style/style.css',
   },
 ];
-
-export default R2Reader;

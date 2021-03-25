@@ -56,7 +56,7 @@
     "@storybook/addon-links": "^6.1.11",
     "@storybook/addons": "^6.1.11",
     "@storybook/react": "^6.1.11",
-    "@types/react": "^17.0.0",
+    "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.0",
     "babel-loader": "^8.2.2",
     "husky": "^4.3.6",
@@ -71,6 +71,7 @@
   },
   "dependencies": {
     "@d-i-t-a/reader": "^1.7.2",
+    "@nypl-simplified-packages/axisnow-access-control-web": "^1.0.3",
     "epubjs": "^0.3.88",
     "node-fetch": "^2.6.1"
   }
