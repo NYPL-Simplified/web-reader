@@ -130,7 +130,7 @@ const EpubContent = () => {
 };
 
 export default class EpubNavigator {
-  static content = EpubContent;
+  static Content = EpubContent;
 
   private constructor(
     // apparently we don't need the instance for anything
@@ -149,6 +149,7 @@ export default class EpubNavigator {
       api: {
         getContent,
       },
+
       // all of these were required
       userSettings: undefined,
       initialAnnotations: undefined,
@@ -162,7 +163,9 @@ export default class EpubNavigator {
           lineHeight: false,
         },
       },
-      rights: {},
+      rights: {
+        autoGeneratePositions: false,
+      },
       tts: undefined,
       search: { color: 'red', current: 'blah' },
       annotations: { initialAnnotationColor: 'blue' },

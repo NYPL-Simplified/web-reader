@@ -8,23 +8,18 @@ import { makeGetContent, initDecryptor } from './decrypt';
 
 const R2Reader = () => {
   React.useEffect(() => {
-    const url = new URL('http://localhost:1234/axisnow-webpub/manifest.json');
-    initDecryptor().then((decryptor) => {
-      const getContent = makeGetContent(decryptor);
-      D2Reader.load({
-        url: url,
-        injectables: injectables,
-        api: {
-          getContent,
-        },
+    const url = new URL('https://alice.dita.digital/manifest.json');
+    D2Reader.load({
+      url: url,
+      injectables: injectables,
+      api: {},
+    })
+      .then((instance: D2Reader) => {
+        console.log('D2Reader loaded ', instance);
       })
-        .then((instance: D2Reader) => {
-          console.log('D2Reader loaded ', instance);
-        })
-        .catch((error: any) => {
-          console.error('error.message ', error.message);
-        });
-    });
+      .catch((error: any) => {
+        console.error('error.message ', error.message);
+      });
   });
 
   return (

@@ -1,6 +1,11 @@
 import React from 'react';
 import EpubNavigator from './EpubNavigator';
-import { AnyFormat, AxisNowEpubMimeType, GetContent } from './types';
+import {
+  AnyFormat,
+  AxisNowEpubMimeType,
+  GetContent,
+  WebpubMimeType,
+} from './types';
 
 export type UseWebReaderReturn = {
   isLoading: boolean;
@@ -30,12 +35,14 @@ export default function useWebReader(
    * because it might need to fetch the manifest or otherwise.
    */
   React.useEffect(() => {
-    console.log('running', format);
     switch (format) {
       case AxisNowEpubMimeType:
         // When we initialize this, the content of the EpubNavigator needs to have already been rendered,
         // otherwise the navigator will fail to initialize and we will get an error.
         EpubNavigator.init(webpubManifestUrl, getContent).then(setNavigator);
+        break;
+      case WebpubMimeType:
+        EpubNavigator.init(webpubManifestUrl).then(setNavigator);
         break;
       // case PdfMimeType:
       //   PdfClient.init(entrypoint, setLocation).then(setClient);
@@ -50,9 +57,11 @@ export default function useWebReader(
 
   const content =
     format === 'application/webpub+axisnow+epub' ? (
-      <EpubNavigator.content />
+      <EpubNavigator.Content />
+    ) : format === 'application/webpub' ? (
+      <EpubNavigator.Content />
     ) : (
-      'Not supported'
+      <div>Not Supported</div>
     );
 
   return {

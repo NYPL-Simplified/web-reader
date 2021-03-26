@@ -1,10 +1,13 @@
 export const EpubMimeType = 'application/epub';
 export const PdfMimeType = 'application/pdf+json';
 export const WebpubMimeType = 'application/webpub';
+// we need to fix this. Normally we will just get a webpub and then will
+// have to detect decryption from within it.
 export const AxisNowEpubMimeType = 'application/webpub+axisnow+epub';
 
 export type AnyFormat =
   | typeof EpubMimeType
+  | typeof WebpubMimeType
   | typeof PdfMimeType
   | typeof AxisNowEpubMimeType;
 

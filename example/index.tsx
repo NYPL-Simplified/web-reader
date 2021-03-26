@@ -33,6 +33,9 @@ const App = () => {
   return (
     <BrowserRouter>
       <Switch>
+        <Route path="/r2">
+          <R2Reader />
+        </Route>
         <Route path="/pdf">
           <WebReader
             // entrypoint="/pdfManifest.json"
@@ -40,18 +43,14 @@ const App = () => {
             format="application/pdf+json"
           />
         </Route>
-        <Route path="/R2">
-          <R2Reader />
-        </Route>
-        <Route path="/epub">
+        <Route path="/axisnow-epub">
           <AxisNowEpub />
         </Route>
-        <Route path="/webpub">
-          TBD
-          {/* <WebReader
-            entrypoint="/webpubManifest.json"
+        <Route path="/streamed-epub">
+          <WebReader
+            webpubManifestUrl="https://alice.dita.digital/manifest.json"
             format="application/webpub"
-          /> */}
+          />
         </Route>
         <Route path="/epub">
           <WebReader webpubManifestUrl="/moby.epub" format="application/epub" />
@@ -60,19 +59,13 @@ const App = () => {
           <h1>Web Reader Proof of Concept</h1>
           <ul>
             <li>
-              <Link to="/R2">R2 Example</Link>
+              <Link to="/axisnow-epub">Encrypted ePub Example</Link>
             </li>
             <li>
-              <Link to="/epub">ePub Navigator (using R2)</Link>
-            </li>
-            <li>
-              <Link to="/epub">Epub Example</Link>
+              <Link to="/streamed-epub">Streamed ePub Example</Link>
             </li>
             <li>
               <Link to="/pdf">Pdf Example</Link>
-            </li>
-            <li>
-              <Link to="/webpub">Webpub Example</Link>
             </li>
           </ul>
         </Route>
