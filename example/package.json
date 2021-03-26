@@ -7,6 +7,9 @@
     "start": "parcel index.html --no-cache",
     "build": "parcel build index.html"
   },
+  "browserslist": [
+    "last 1 Chrome version"
+  ],
   "dependencies": {
     "react-app-polyfill": "^1.0.0",
     "react-router-dom": "^5.2.0"
