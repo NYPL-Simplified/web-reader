@@ -1,6 +1,8 @@
 import * as React from 'react';
 import D2Reader from '@d-i-t-a/reader';
 import { GetContent } from './types';
+import { VisualNavigator } from './Navigator';
+import { Locator, ReadingPosition } from '@d-i-t-a/reader/dist/model/Locator';
 
 const EpubContent = () => {
   return (
@@ -129,7 +131,7 @@ const EpubContent = () => {
   );
 };
 
-export default class EpubNavigator {
+export default class EpubNavigator implements VisualNavigator {
   static Content = EpubContent;
 
   private constructor(
@@ -175,6 +177,40 @@ export default class EpubNavigator {
     });
 
     return new EpubNavigator(reader);
+  }
+
+  get readingProgression(): ReadingPosition {
+    return {
+      created: new Date(),
+      href: '/blah',
+      locations: {},
+    };
+  }
+
+  async goTo(locator: Locator) {
+    D2Reader.goTo(locator);
+  }
+  async goForward() {
+    try {
+      await D2Reader.nextPage();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  async goBackward() {
+    try {
+      await D2Reader.previousPage();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  async goLeft() {
+    return this.goBackward();
+  }
+  async goRight() {
+    return this.goForward();
   }
 }
 
