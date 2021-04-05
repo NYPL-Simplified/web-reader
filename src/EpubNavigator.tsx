@@ -1,12 +1,12 @@
 import * as React from 'react';
 import D2Reader from '@d-i-t-a/reader';
-import { GetContent } from './types';
-import { VisualNavigator } from './Navigator';
+import { NavigatorArguments, VisualNavigator } from './Navigator';
 import { Locator, ReadingPosition } from '@d-i-t-a/reader/dist/model/Locator';
+import '@d-i-t-a/reader/dist/reader.css';
 
 const EpubContent = () => {
   return (
-    <div>
+    <div style={{ height: '100%', overflow: 'hidden' }}>
       <div id="root">
         <div
           id="D2Reader-Container"
@@ -140,10 +140,10 @@ export default class EpubNavigator implements VisualNavigator {
     readonly readerInstance: any
   ) {}
 
-  static async init(
-    webpubManifestUrl: string,
-    getContent?: GetContent
-  ): Promise<EpubNavigator> {
+  static async init({
+    webpubManifestUrl,
+    getContent,
+  }: NavigatorArguments): Promise<EpubNavigator> {
     const url = new URL(webpubManifestUrl);
     const reader = await D2Reader.load({
       url,
@@ -187,8 +187,17 @@ export default class EpubNavigator implements VisualNavigator {
     };
   }
 
+  get currentLocation() {
+    return D2Reader.currentLocator();
+  }
+
   async goTo(locator: Locator) {
-    D2Reader.goTo(locator);
+    try {
+      await D2Reader.goTo(locator);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
   async goForward() {
     try {

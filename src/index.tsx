@@ -1,7 +1,6 @@
-import { GetContent } from '@d-i-t-a/reader/dist/navigator/IFrameNavigator';
 import React, { FC } from 'react';
 import ManagerUI from './manager';
-import { AnyFormat } from './types';
+import { AnyFormat, GetContent } from './types';
 import useWebReader from './useWebReader';
 
 export type WebReaderProps = {

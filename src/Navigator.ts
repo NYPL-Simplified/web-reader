@@ -13,14 +13,25 @@
 
 import { Locator, ReadingPosition } from '@d-i-t-a/reader/dist/model/Locator';
 import { Link } from '@d-i-t-a/reader/dist/model/Publication';
+import { GetContent } from './types';
 
-type NavigatorOptions = {
-  initialLocation: Locator;
+// used for initializer, but unfortunately can't be typed on the
+// interface
+export type NavigatorArguments = {
+  webpubManifestUrl: string;
+  getContent?: GetContent;
+  initialLocation?: Locator;
 };
 
 interface Navigator {
-  init(options: NavigatorOptions): Promise<Navigator>;
-  currentLocation: Locator;
+  /**
+   * we can't type the init function because it needs to be static:
+   * https://github.com/microsoft/TypeScript/issues/34516
+   * */
+
+  // init(options: NavigatorOptions): Promise<Navigator>;
+
+  currentLocation: Promise<Locator>;
 
   // change location
   goTo(link: Link): Promise<boolean>;
@@ -33,6 +44,8 @@ export interface VisualNavigator extends Navigator {
   readingProgression: ReadingPosition;
 
   // change location
+  // these do the same thing as forward and back, but depend
+  // on reading direction
   goLeft(): Promise<boolean>;
   goRight(): Promise<boolean>;
 }

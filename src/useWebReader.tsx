@@ -39,10 +39,12 @@ export default function useWebReader(
       case AxisNowEpubMimeType:
         // When we initialize this, the content of the EpubNavigator needs to have already been rendered,
         // otherwise the navigator will fail to initialize and we will get an error.
-        EpubNavigator.init(webpubManifestUrl, getContent).then(setNavigator);
+        EpubNavigator.init({ webpubManifestUrl, getContent }).then(
+          setNavigator
+        );
         break;
       case WebpubMimeType:
-        EpubNavigator.init(webpubManifestUrl).then(setNavigator);
+        EpubNavigator.init({ webpubManifestUrl }).then(setNavigator);
         break;
       // case PdfMimeType:
       //   PdfClient.init(entrypoint, setLocation).then(setClient);
