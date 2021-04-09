@@ -34,7 +34,8 @@ const App = () => {
     <BrowserRouter>
       <Switch>
         <Route path="/r2">
-          <R2Reader />
+          {/* <R2Reader /> */}
+          "unimplemented"
         </Route>
         <Route path="/pdf">
           <WebReader

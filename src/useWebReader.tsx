@@ -1,19 +1,32 @@
 import React from 'react';
-import EpubNavigator from './EpubNavigator';
+import EpubNavigator from './epub/EpubNavigator';
+import { fetchJson } from './fetch';
+import { VisualNavigator } from './Navigator';
 import {
   AnyFormat,
   AxisNowEpubMimeType,
   GetContent,
+  WebpubManifest,
   WebpubMimeType,
 } from './types';
 
-export type UseWebReaderReturn = {
-  isLoading: boolean;
-  // we return fully formed JSX elements so the consumer doesn't need to know
-  // how to instantiate them or what to pass to them, that's the responsibility
-  // of this hook. The consumer just places it within their UI.
+// we return fully formed JSX elements so the consumer doesn't need to know
+// how to instantiate them or what to pass to them, that's the responsibility
+// of this hook. The consumer just places it within their UI.
+type LoadedWebReader = {
+  isLoading: false;
   content: JSX.Element;
+  navigator: VisualNavigator;
+  manifest: WebpubManifest;
 };
+type LoadingWebReader = {
+  isLoading: true;
+  content: JSX.Element;
+  navigator: null;
+  manifest: null;
+};
+
+export type UseWebReaderReturn = LoadedWebReader | LoadingWebReader;
 
 type UseWebReaderOptions = {
   getContent?: GetContent;
@@ -26,9 +39,9 @@ export default function useWebReader(
 ): UseWebReaderReturn {
   const { getContent } = options;
   const [navigator, setNavigator] = React.useState<null | EpubNavigator>(null);
-
-  // Computed values
-  const isLoading = !navigator;
+  // we will replace this with a Publication instance once we
+  // can install it from readium/web
+  const [manifest, setManifest] = React.useState<WebpubManifest | null>(null);
 
   /**
    * Initialize the client, which has to be asynchronously initialized
@@ -57,6 +70,13 @@ export default function useWebReader(
     }
   }, [format, webpubManifestUrl, getContent]);
 
+  // fetch and store the manifest
+  React.useEffect(() => {
+    fetchJson<WebpubManifest>(webpubManifestUrl).then((manifest) => {
+      setManifest(manifest);
+    });
+  }, [webpubManifestUrl]);
+
   const content =
     format === 'application/webpub+axisnow+epub' ? (
       <EpubNavigator.Content />
@@ -66,8 +86,18 @@ export default function useWebReader(
       <div>Not Supported</div>
     );
 
+  if (!navigator || !manifest) {
+    return {
+      isLoading: true,
+      content,
+      navigator: null,
+      manifest: null,
+    };
+  }
   return {
-    isLoading,
+    isLoading: false,
+    navigator,
     content,
+    manifest,
   };
 }

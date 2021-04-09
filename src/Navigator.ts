@@ -36,8 +36,12 @@ interface Navigator {
   // change location
   goTo(link: Link): Promise<boolean>;
   goTo(locator: Locator): Promise<boolean>;
+  // for navigating one unit, unit depends on the format
   goForward(): Promise<boolean>;
   goBackward(): Promise<boolean>;
+  // for navigating by section
+  nextSection(): Promise<boolean>;
+  previousSection(): Promise<boolean>;
 }
 
 export interface VisualNavigator extends Navigator {
@@ -48,4 +52,8 @@ export interface VisualNavigator extends Navigator {
   // on reading direction
   goLeft(): Promise<boolean>;
   goRight(): Promise<boolean>;
+
+  // settings
+  scroll(): void;
+  paginate(): void;
 }

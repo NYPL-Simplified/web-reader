@@ -7,7 +7,11 @@ import { UseWebReaderReturn } from './useWebReader';
  * It takes the return value of useWebReader as props
  */
 
-const ManagerUI: React.FC<UseWebReaderReturn> = ({ children }) => {
+const ManagerUI: React.FC<UseWebReaderReturn> = ({
+  children,
+  navigator,
+  manifest,
+}) => {
   return (
     <div
       style={{
@@ -26,15 +30,25 @@ const ManagerUI: React.FC<UseWebReaderReturn> = ({ children }) => {
           padding: 8,
         }}
       >
-        <h1>Title</h1>
-        <button>settings</button>
+        <h1>{manifest?.metadata.title}</h1>
+        <div>
+          <button style={{ margin: 4 }} onClick={navigator?.scroll}>
+            scroll
+          </button>
+          <button style={{ margin: 4 }} onClick={navigator?.paginate}>
+            paginate
+          </button>
+        </div>
       </nav>
       {children}
       <div
         style={{ padding: 8, display: 'flex', justifyContent: 'space-between' }}
       >
         <div style={{ display: 'flex' }}>
-          <button> {`<`} page</button>
+          <button style={{ marginRight: 4 }} onClick={navigator?.goBackward}>
+            {`<`} page
+          </button>
+          <button onClick={navigator?.previousSection}> {`<<`} section</button>
         </div>
         {/* <div style={{ display: 'flex' }}>
           <select onChange={handleTocChange}>
@@ -44,7 +58,10 @@ const ManagerUI: React.FC<UseWebReaderReturn> = ({ children }) => {
           </select>
         </div> */}
         <div style={{ display: 'flex' }}>
-          <button>page {`>`}</button>
+          <button style={{ marginRight: 4 }} onClick={navigator?.nextSection}>
+            section {`>>`}
+          </button>
+          <button onClick={navigator?.goForward}>page {`>`}</button>
         </div>
       </div>
     </div>
