@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { UseWebReaderReturn } from './useWebReader';
+import { UseWebReaderReturn } from '../useWebReader';
 
 /**
  * The default Manager UI. This will be broken into individual components

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import ManagerUI from './manager';
+import ManagerUI from './ui/manager';
 import { GetContent } from './types';
 import useWebReader from './useWebReader';
 
