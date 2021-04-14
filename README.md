@@ -89,9 +89,9 @@ Finally, to use in a vanilla Javascript app:
 ## Architecture
 
 Main things to note:
-- There is one Navigator media-type (PDF, HTML, Image, etc). We currently only have dreams for HTML and PDF.
-- We always start from a Webpub Manifest. This means other formats need to be processed into a manifest before they get to us. This can be done with a Readium Streamer, or some other way.
-- The main API for the reader is the `useWebReader` hook. This allows consumers to build their own UI.
+- There is one Navigator per media-type (PDF, HTML, Image, etc). We currently only have dreams for HTML and PDF.
+- We always start from a Webpub Manifest. This means other formats need to be processed into a manifest before they get to us. This can be done with a Readium Streamer, or some other way. For example, DRB is pre-generating PDF manifests from web-scraped content.
+- The main API for the reader is the `useWebReader` hook. This provides everything you need to build the reader into your app.
 - We provide our own default UI components as well that consumers can use individually or already put together by simply rendering the `<WebReader>` component.
 
 This is the folder structure:
@@ -104,7 +104,7 @@ This is the folder structure:
   /HtmlNavigator    # the HTML Navigator used for ePub or any other HTML content
   /PdfNavigator     # a stub for the coming PDF Navigator
   /ui               # the react components for our default UI
-    manager.tsx     # the default react component
+    manager.tsx     # the fully-formed default UI
   /utils          
   index.tsx         # exports the main React Component <WebReader />
   Navigator.ts      # the Navigator interface without an implementation
