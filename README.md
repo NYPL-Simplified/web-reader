@@ -118,7 +118,7 @@ This is the folder structure:
 
 ## Commands
 
-TSDX scaffolds your new library inside `/src`, and also sets up a [Parcel-based](https://parceljs.org) playground for it inside `/example`.
+TSDX scaffolds our library inside `/src`, sets up a [Parcel-based](https://parceljs.org) playground for it inside `/example`, and a storybook app with stories in `/stories`.
 
 Before getting started, be sure to run `npm install`.
 
