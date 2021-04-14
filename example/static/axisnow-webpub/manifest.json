@@ -17,7 +17,8 @@
     "subject": "Subject",
     "dcterms:modified": "2014-02-04T13:29:07Z",
     "cover": "cover-image",
-    "media:duration": "00:00:16.631"
+    "media:duration": "00:00:16.631",
+    "conformsTo": "stub/webpub+axisnow"
   },
   "readingOrder": [
     {

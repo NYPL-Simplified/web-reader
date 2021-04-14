@@ -1,3 +1,7 @@
+/**
+ * Utilities for fetching specific types
+ */
+
 export async function fetchJson<ExpectedResponse extends any = any>(
   url: string
 ) {

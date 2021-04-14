@@ -2,11 +2,15 @@ import D2Reader from '@d-i-t-a/reader/dist/reader.js';
 import { NavigatorArguments, VisualNavigator } from '../Navigator';
 import { Locator, ReadingPosition } from '@d-i-t-a/reader/dist/model/Locator';
 import '@d-i-t-a/reader/dist/reader.css';
-import EpubContent from './EpubContent';
+import EpubContent from './HtmlNavigatorContent';
 import { WebpubManifest } from '../types';
-import { fetchJson } from '../fetch';
+import { fetchJson } from '../utils/fetch';
 
-export default class EpubNavigator implements VisualNavigator {
+/**
+ * This Navigator is meant to work with any HTML based webpub. So an ePub
+ * or a Mobi, or even just html pages packaged into a collection.
+ */
+export default class HtmlNavigator implements VisualNavigator {
   static Content = EpubContent;
 
   private constructor(
@@ -18,7 +22,7 @@ export default class EpubNavigator implements VisualNavigator {
   static async init({
     webpubManifestUrl,
     getContent,
-  }: NavigatorArguments): Promise<EpubNavigator> {
+  }: NavigatorArguments): Promise<HtmlNavigator> {
     const url = new URL(webpubManifestUrl);
     const reader = await D2Reader.load({
       url,
@@ -53,7 +57,7 @@ export default class EpubNavigator implements VisualNavigator {
       attributes: { margin: 2 },
     });
 
-    return new EpubNavigator(reader);
+    return new HtmlNavigator(reader);
   }
 
   // get isScrolling(): boolean {

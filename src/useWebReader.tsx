@@ -1,22 +1,28 @@
+/**
+ * The React hook that exposes the main API into the reader.
+ */
+
 import React from 'react';
-import EpubNavigator from './epub/EpubNavigator';
-import { fetchJson } from './fetch';
+import { fetchJson } from './utils/fetch';
+import HtmlNavigator from './HtmlNavigator';
 import { VisualNavigator } from './Navigator';
 import {
-  AnyFormat,
-  AxisNowEpubMimeType,
+  AxisNowEpubConformsTo,
   GetContent,
   WebpubManifest,
-  WebpubMimeType,
+  WebpubPdfConformsTo,
 } from './types';
 
-// we return fully formed JSX elements so the consumer doesn't need to know
-// how to instantiate them or what to pass to them, that's the responsibility
-// of this hook. The consumer just places it within their UI.
 type LoadedWebReader = {
   isLoading: false;
+  // we return fully formed JSX elements so the consumer doesn't need to know
+  // how to instantiate them or what to pass to them, that's the responsibility
+  // of this hook. The consumer just places it within their UI.
   content: JSX.Element;
   navigator: VisualNavigator;
+  // we will replace this with a full Publication instance once we
+  // can install it from readium/web. For now we will read things
+  // directly from the manifest
   manifest: WebpubManifest;
 };
 type LoadingWebReader = {
@@ -29,62 +35,44 @@ type LoadingWebReader = {
 export type UseWebReaderReturn = LoadedWebReader | LoadingWebReader;
 
 type UseWebReaderOptions = {
+  // a function to fetch / decrypt content
   getContent?: GetContent;
 };
 export default function useWebReader(
-  format: AnyFormat,
   webpubManifestUrl: string,
-  // a function to fetch / decrypt content
   options: UseWebReaderOptions = {}
 ): UseWebReaderReturn {
   const { getContent } = options;
-  const [navigator, setNavigator] = React.useState<null | EpubNavigator>(null);
-  // we will replace this with a Publication instance once we
-  // can install it from readium/web
+  const [navigator, setNavigator] = React.useState<null | HtmlNavigator>(null);
   const [manifest, setManifest] = React.useState<WebpubManifest | null>(null);
 
-  /**
-   * Initialize the client, which has to be asynchronously initialized
-   * because it might need to fetch the manifest or otherwise.
-   */
+  // Asynchronously initialize the client
   React.useEffect(() => {
-    switch (format) {
-      case AxisNowEpubMimeType:
-        // When we initialize this, the content of the EpubNavigator needs to have already been rendered,
-        // otherwise the navigator will fail to initialize and we will get an error.
-        EpubNavigator.init({ webpubManifestUrl, getContent }).then(
-          setNavigator
-        );
-        break;
-      case WebpubMimeType:
-        EpubNavigator.init({ webpubManifestUrl }).then(setNavigator);
-        break;
-      // case PdfMimeType:
-      //   PdfClient.init(entrypoint, setLocation).then(setClient);
-      //   break;
-      // case EpubMimeType:
-      //   EpubClient.init(entrypoint, setLocation).then(setClient);
-      //   break;
-      default:
-        throw new Error('Unimplemented format: ' + format);
-    }
-  }, [format, webpubManifestUrl, getContent]);
-
-  // fetch and store the manifest
-  React.useEffect(() => {
+    // fetch the manifest
     fetchJson<WebpubManifest>(webpubManifestUrl).then((manifest) => {
       setManifest(manifest);
-    });
-  }, [webpubManifestUrl]);
 
-  const content =
-    format === 'application/webpub+axisnow+epub' ? (
-      <EpubNavigator.Content />
-    ) : format === 'application/webpub' ? (
-      <EpubNavigator.Content />
-    ) : (
-      <div>Not Supported</div>
-    );
+      const conformsTo = manifest.metadata?.conformsTo;
+
+      switch (conformsTo) {
+        case WebpubPdfConformsTo:
+          // initialize a PDF Navigator
+          throw new Error('Unimplemented PDF Manifest');
+        /**
+         * The default navigator is HTML, like we use for ePubs and
+         * AxisNow encrypted ePubs
+         */
+        case undefined:
+        case AxisNowEpubConformsTo:
+          HtmlNavigator.init({ webpubManifestUrl, getContent }).then(
+            setNavigator
+          );
+      }
+    });
+  }, [webpubManifestUrl, getContent]);
+
+  // here we will need to switch based on what the manifest conforms to
+  const content = <HtmlNavigator.Content />;
 
   if (!navigator || !manifest) {
     return {

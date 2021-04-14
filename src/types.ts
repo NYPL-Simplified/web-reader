@@ -1,15 +1,23 @@
+// the MimeType for a packaged epub
 export const EpubMimeType = 'application/epub';
-export const PdfMimeType = 'application/pdf+json';
+// the Mimetype for a generic webpub
 export const WebpubMimeType = 'application/webpub';
-// we need to fix this. Normally we will just get a webpub and then will
-// have to detect decryption from within it.
-export const AxisNowEpubMimeType = 'application/webpub+axisnow+epub';
 
-export type AnyFormat =
-  | typeof EpubMimeType
-  | typeof WebpubMimeType
-  | typeof PdfMimeType
-  | typeof AxisNowEpubMimeType;
+/**
+ * WebPubs can indicate that they conform to a specific
+ * structure, like a collection of PDFs of an AxisNow encrypted
+ * ePub.
+ *
+ * THE FOLLOWING TWO TYPES ARE MADE UP STUBS
+ */
+// a webpub pdf collection
+export const WebpubPdfConformsTo = 'stub/webpub+pdf';
+// a webpub of axisnow content
+export const AxisNowEpubConformsTo = 'stub/webpub+axisnow';
+
+export type AnyConformsTo =
+  | typeof WebpubPdfConformsTo
+  | typeof AxisNowEpubConformsTo;
 
 export type ManifestMetadata = {
   title: string;
@@ -18,6 +26,7 @@ export type ManifestMetadata = {
   identifier?: string;
   language?: string;
   modified?: string;
+  conformsTo?: AnyConformsTo;
 };
 
 export type WebpubManifest = {

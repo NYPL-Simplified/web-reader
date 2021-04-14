@@ -1,20 +1,19 @@
 import React, { FC } from 'react';
 import ManagerUI from './manager';
-import { AnyFormat, GetContent } from './types';
+import { GetContent } from './types';
 import useWebReader from './useWebReader';
+
+/**
+ * The main React component export.
+ */
 
 export type WebReaderProps = {
   webpubManifestUrl: string;
-  format: AnyFormat;
   getContent?: GetContent;
 };
 
-const WebReader: FC<WebReaderProps> = ({
-  webpubManifestUrl,
-  format,
-  getContent,
-}) => {
-  const webReader = useWebReader(format, webpubManifestUrl, {
+const WebReader: FC<WebReaderProps> = ({ webpubManifestUrl, getContent }) => {
+  const webReader = useWebReader(webpubManifestUrl, {
     getContent,
   });
   const { content } = webReader;

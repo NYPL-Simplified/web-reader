@@ -1,6 +1,13 @@
 import Decryptor from '@nypl-simplified-packages/axisnow-access-control-web';
-import { GetContent } from './types';
+import { GetContent } from '../types';
 
+/**
+ * Utilities to decrypt AxisNow documents. Eventually this should be passed in
+ * by the consuming application - Open eBooks in this case. For testing though,
+ * we have them here for now.
+ */
+
+// hardcoded with a specific isbn and vault id for now.
 export async function initDecryptor(): Promise<Decryptor> {
   const params = {
     book_vault_uuid: 'F58373FB-6574-45E6-B50E-6D73523AFD01',

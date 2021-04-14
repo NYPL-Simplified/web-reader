@@ -1,5 +1,5 @@
 /**
- * Defines the Navigator API
+ * Defines the Navigator API and a more specific VisualNavigator API.
     - Set Reading Order & Resources
     - Get Current Location
     - Go Forward
@@ -14,14 +14,6 @@
 import { Locator, ReadingPosition } from '@d-i-t-a/reader/dist/model/Locator';
 import { Link } from '@d-i-t-a/reader/dist/model/Publication';
 import { GetContent } from './types';
-
-// used for initializer, but unfortunately can't be typed on the
-// interface
-export type NavigatorArguments = {
-  webpubManifestUrl: string;
-  getContent?: GetContent;
-  initialLocation?: Locator;
-};
 
 interface Navigator {
   /**
@@ -44,6 +36,13 @@ interface Navigator {
   previousSection(): Promise<boolean>;
 }
 
+// used for initializer, but unfortunately can't be typed on the
+// interface
+export type NavigatorArguments = {
+  webpubManifestUrl: string;
+  getContent?: GetContent;
+  initialLocation?: Locator;
+};
 export interface VisualNavigator extends Navigator {
   readingProgression: ReadingPosition;
 

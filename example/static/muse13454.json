@@ -5,7 +5,8 @@
     "@type":"https://schema.org/Book",
     "title":"Mrs. Ramsay's Knee",
     "author":"Anderson, Idris",
-    "identifier":"urn:isbn:9780874217209"
+    "identifier":"urn:isbn:9780874217209",
+    "conformsTo": "application/webpub+pdf"
   },
   "links":{
     "self":{
