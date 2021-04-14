@@ -161,6 +161,11 @@ The example imports and live reloads.
 ## Code Quality
 
 Code quality enforcement is set up with `prettier`, `husky`, and `lint-staged`. Run `npm run lint` to lint the code, or have you editor do it. 
+
+## Styling / CSS
+
+We have not yet made a firm decision on styles, but we will probably use css modules for the UI components we ship with the package.
+
 ## Continuous Integration
 
 ### GitHub Actions
@@ -200,10 +205,6 @@ The Playground is just a simple [Parcel](https://parceljs.org) app, you can depl
 cd example # if not already in the example folder
 npm run build # builds to dist
 ```
-
-## Styles
-
-We have not yet made a firm decision on styles, but we will probably use css modules for the UI components we ship with the package.
 
 ## Publishing to NPM
 
