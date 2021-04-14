@@ -88,11 +88,34 @@ Finally, to use in a vanilla Javascript app:
 # Development
 ## Architecture
 
-Main things to note:
-- There is one Navigator per media-type (PDF, HTML, Image, etc). We currently only have dreams for HTML and PDF.
-- We always start from a Webpub Manifest. This means other formats need to be processed into a manifest before they get to us. This can be done with a Readium Streamer, or some other way. For example, DRB is pre-generating PDF manifests from web-scraped content.
-- The main API for the reader is the `useWebReader` hook. This provides everything you need to build the reader into your app.
-- We provide our own default UI components as well that consumers can use individually or already put together by simply rendering the `<WebReader>` component.
+### Overview
+
+We always start with a Webpub Manifest, which gives us metadata and the structure of the publication with links to the content. Depending on the `metadata.conformsTo` field, we know what type of `Navigator` to use to render the publication. The `Navigator`s provide all the functionality we need to interact with the various publication types. 
+
+**Notes:**
+- There is one `Navigator` per _media-type_ (PDF, HTML, Image, etc), not per _format_. As in, ePub and Mobi books are different formats that use the same media type (HTML). Audiobooks and PDF collections use different media types. We currently only have plans for HTML and PDF, but other Navigators are welcome and should fit right in.
+- We always start from a Webpub Manifest. This means other formats (like ePub) need to be processed before they get to us. This can be done with a Readium Streamer, or some other way. 
+  - For example, DRB is pre-generating PDF manifests from web-scraped content.
+  - ePubs are generally run through a Streamer, which is a piece that fetches the full compressed ePub, generates a manifest for it, and then serves the individual pieces separately. 
+  - AxisNow encrypted ePubs are served uncompressed. We will generate the manifest for them on the client before instantiating the reader.
+
+### Pieces of the architecture:
+
+1. **useWebReader hook**
+  - Takes in the Webpub Manifest and instantiates the proper Navigator for it.
+  - Instructs the Navigator to render to the appropriate HTML element.
+  - Returns the current state to be displayed, and a set of functions to interact with the Navigator.
+  - It can also take in an initial state to be used when initializing the Navigator, for example a current page or user settings.
+2. **Navigators**
+  - Provide a unified interface into a variety of media types. Follows the [Readium Navigator API](https://github.com/readium/architecture/blob/master/navigator/public-api.md)
+  - Our HTML Navigator will use [@d-i-t-a/R2D2BC](https://github.com/d-i-t-a/R2D2BC) to render ePubs.
+  - Our PDF Navigator will probably use PDF.js internally.
+3. **Reader UI Components**
+  - Accepts the state and methods returned from the useWebReader hook.
+  - Renders the React UI
+    - Header, controls, table of contents, etc
+  - Exports both a default `WebReader` component, and individual components that the consuming application can use and style themselves: `ReaderNav`, `ReaderFooter`, `PreviousButton`, etc.
+
 
 This is the folder structure:
 
