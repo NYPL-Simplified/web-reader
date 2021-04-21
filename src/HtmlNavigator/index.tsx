@@ -1,4 +1,4 @@
-import D2Reader from '@d-i-t-a/reader/dist/reader.js';
+import D2Reader from '@d-i-t-a/reader';
 import { NavigatorArguments, VisualNavigator } from '../Navigator';
 import { Locator, ReadingPosition } from '@d-i-t-a/reader/dist/model/Locator';
 import '@d-i-t-a/reader/dist/reader.css';
@@ -55,7 +55,8 @@ export default class HtmlNavigator implements VisualNavigator {
       highlighter: { selectionMenuItems: [] },
       useLocalStorage: false,
       attributes: { margin: 2 },
-    });
+      // TODO: Fix this any assertion
+    } as any);
 
     return new HtmlNavigator(reader);
   }
