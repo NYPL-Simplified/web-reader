@@ -42,7 +42,11 @@ const ManagerUI: React.FC<UseWebReaderReturn> = ({
       </nav>
       {children}
       <div
-        style={{ padding: 8, display: 'flex', justifyContent: 'space-between' }}
+        style={{
+          padding: 8,
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
       >
         <div style={{ display: 'flex' }}>
           <button style={{ marginRight: 4 }} onClick={navigator?.goBackward}>
