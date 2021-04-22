@@ -26,7 +26,7 @@ const ButtonStyle = {
  ** Hovered
  */
 function variantSolid(props: any) {
-  const { colorScheme, isSelected } = props;
+  const { colorScheme, isChecked } = props;
 
   switch (colorScheme) {
     // case 'sepia':
@@ -56,10 +56,10 @@ function variantSolid(props: any) {
     default:
       // default is 'light'
       return {
-        bg: isSelected ? 'green.500' : '#fff',
-        color: isSelected ? 'white' : `gray.500`,
+        bg: isChecked ? 'green.500' : '#fff',
+        color: isChecked ? 'white' : `gray.500`,
         _hover: {
-          bg: isSelected ? 'green.500' : `gray.200`,
+          bg: isChecked ? 'green.500' : `gray.200`,
           // _disabled: {
           //   bg: `gray.100`,
           // },
