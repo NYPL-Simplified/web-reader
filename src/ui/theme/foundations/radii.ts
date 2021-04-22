@@ -1,6 +1,4 @@
-import { Theme } from '@chakra-ui/react';
-
-const radii: Pick<Theme, 'radii'> = {
+const radii = {
   // none: '0',
   sm: '0.125rem',
   base: '0.25rem',

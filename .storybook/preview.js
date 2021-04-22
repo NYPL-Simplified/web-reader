@@ -12,7 +12,7 @@ export const parameters = {
 
 const withChakra = (StoryFn: Function, context: StoryContext) => {
   return (
-    <ChakraProvider >
+    <ChakraProvider theme={theme} >
         <StoryFn />
     </ChakraProvider>
   )
