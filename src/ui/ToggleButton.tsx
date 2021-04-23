@@ -2,10 +2,16 @@ import React from 'react';
 import { Box as ChakraBox, useRadio } from '@chakra-ui/react';
 import { Icon, IconNames } from '@nypl/design-system-react-components';
 
-import Button from './Button';
+import Button, { ButtonProps } from './Button';
 
-function ToggleButton(props: any) {
-  const { isChecked = false } = props;
+export interface ToggleButtonProps
+  extends React.ComponentPropsWithRef<typeof ChakraBox> {
+  isChecked?: false;
+  optionProps?: {};
+}
+
+function ToggleButton(props: React.PropsWithChildren<ToggleButtonProps>) {
+  const { isChecked, children, optionProps } = props;
   const { getInputProps, getCheckboxProps } = useRadio(props);
 
   const input = getInputProps();
@@ -14,8 +20,8 @@ function ToggleButton(props: any) {
   return (
     <ChakraBox as="label">
       <input {...input} />
-      <Button as="div" isChecked={isChecked} {...checkbox} {...props}>
-        {props.children}
+      <Button as="div" isChecked={isChecked} {...checkbox} {...optionProps}>
+        {children}
         {isChecked ? <Icon decorative name={IconNames.check} /> : null}
       </Button>
     </ChakraBox>

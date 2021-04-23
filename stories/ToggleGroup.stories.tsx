@@ -18,7 +18,23 @@ export const ToggleGroup = () => {
         options={['Publisher', 'Serif', 'Sans-Serif', 'Dyslexia-Friendly']}
         defaultValue="Publisher"
       />
-      <Toggle options={['Day', 'Sepia', 'Night']} defaultValue="Day" />
+      <Toggle
+        options={[
+          {
+            value: 'Day',
+            colorScheme: 'light',
+          },
+          {
+            value: 'Sepia',
+            colorScheme: 'sepia',
+          },
+          {
+            value: 'Night',
+            colorScheme: 'dark',
+          },
+        ]}
+        defaultValue="Day"
+      />
       <Toggle options={['Paginated', 'Scrolling']} defaultValue="Paginated" />
     </div>
   );

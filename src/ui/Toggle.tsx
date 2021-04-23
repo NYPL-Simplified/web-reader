@@ -1,10 +1,15 @@
 import React from 'react';
 import { useRadioGroup } from '@chakra-ui/react';
 
-import ToggleButton from './ToggleButton';
+import ToggleButton, { ToggleButtonProps } from './ToggleButton';
+
+type optionProps = {
+  colorScheme: string;
+  value: string;
+};
 
 const Toggle = (props: {
-  options: string[];
+  options: Array<optionProps | string>;
   defaultValue?: string;
   name?: string;
 }) => {
@@ -19,10 +24,19 @@ const Toggle = (props: {
 
   return (
     <div {...group}>
-      {options.map((value: string) => {
+      {options.map((option: string | optionProps) => {
+        if (typeof option === 'string') {
+          const radio = getRadioProps({ value: option });
+          return (
+            <ToggleButton key={option} {...radio}>
+              {option}
+            </ToggleButton>
+          );
+        }
+        const { value, ...rest } = option;
         const radio = getRadioProps({ value });
         return (
-          <ToggleButton key={value} {...radio}>
+          <ToggleButton key={value} optionProps={rest} {...radio}>
             {value}
           </ToggleButton>
         );

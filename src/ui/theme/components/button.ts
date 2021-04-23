@@ -28,19 +28,24 @@ const ButtonStyle = {
 function variantSolid(props: any) {
   const { colorScheme, isChecked } = props;
   const common = {
-    _hover: {
-      bg: isChecked ? 'green.500' : 'gray.200',
+    _focus: {
+      'z-index': 1,
     },
   };
+
+  const toggleButtonBg = (uncheckedColor: string) =>
+    isChecked ? 'green.500' : uncheckedColor;
+  const toggleButtonColor = (uncheckedColor: string) =>
+    isChecked ? 'white' : uncheckedColor;
 
   switch (colorScheme) {
     case 'sepia':
       return {
         ...common,
-        bg: 'rgb(246, 236, 217)',
-        color: 'rgb(17, 17, 17)',
+        bg: toggleButtonBg('rgb(246, 236, 217)'),
+        color: toggleButtonColor('rgb(17, 17, 17)'),
         _hover: {
-          bg: 'rgb(246, 236, 217)',
+          bg: toggleButtonBg('rgb(246, 236, 217)'),
           _disabled: {
             bg: 'rgb(17, 17, 17)',
           },
@@ -50,10 +55,10 @@ function variantSolid(props: any) {
     case 'dark':
       return {
         ...common,
-        bg: 'rgb(17, 17, 17)',
-        color: 'rgb(255, 255, 255)',
+        bg: toggleButtonBg('rgb(17, 17, 17)'),
+        color: 'white',
         _hover: {
-          bg: 'rgb(17, 17, 17)',
+          bg: toggleButtonBg('rgb(17, 17, 17)'),
           _disabled: {
             bg: 'rgb(255, 255, 255)',
           },
@@ -66,16 +71,13 @@ function variantSolid(props: any) {
       // default is 'light'
       return {
         ...common,
-        bg: isChecked ? 'green.500' : '#fff',
+        bg: toggleButtonBg('#fff'),
         color: isChecked ? 'white' : `gray.500`,
         _active: {
           bg: `gray.300`,
         },
         _disabled: {
           bg: `gray.100`,
-        },
-        _focus: {
-          'z-index': 1,
         },
       };
   }
