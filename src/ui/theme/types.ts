@@ -1,1 +1,1 @@
-export type Dict<T = any> = { [key: string]: T };
+export type Dict<T = any> = Record<string, T>;

@@ -1,6 +1,7 @@
 /**
  * A comprehensive spacin scale based on NYPL Design System,
- * with intermediate values interpolated.
+ * with intermediate values interpolated. Those marked with comments
+ * are directly from the NYPL DS.
  *
  * 1 spacing unit is 4px or 0.25rem.
  *
