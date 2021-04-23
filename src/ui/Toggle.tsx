@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRadioGroup } from '@chakra-ui/react';
 
-import ToggleButton, { ToggleButtonProps } from './ToggleButton';
+import ToggleButton from './ToggleButton';
 
 type optionProps = {
   colorScheme: string;

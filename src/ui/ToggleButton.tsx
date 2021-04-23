@@ -2,7 +2,7 @@ import React from 'react';
 import { Box as ChakraBox, useRadio } from '@chakra-ui/react';
 import { Icon, IconNames } from '@nypl/design-system-react-components';
 
-import Button, { ButtonProps } from './Button';
+import Button from './Button';
 
 export interface ToggleButtonProps
   extends React.ComponentPropsWithRef<typeof ChakraBox> {
