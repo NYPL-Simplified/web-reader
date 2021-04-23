@@ -11,6 +11,12 @@ const meta: Meta = {
         type: 'text',
       },
     },
+    colorScheme: {
+      control: {
+        type: 'select',
+        options: ['light', 'sepia', 'dark'],
+      },
+    },
   },
   parameters: {
     controls: { expanded: true },
@@ -23,31 +29,16 @@ const Template: Story<React.ComponentPropsWithRef<typeof ToggleButton>> = (
   args
 ) => <ToggleButton {...args} />;
 
-export const Light = Template.bind({});
+export const Default = Template.bind({});
 
-Light.args = {
+Default.args = {
   children: 'Hello world',
-  colorScheme: 'light',
   isChecked: false,
 };
 
-export const LightChecked = Template.bind({});
+export const Checked = Template.bind({});
 
-LightChecked.args = {
-  ...Light.args,
+Checked.args = {
+  ...Default.args,
   isChecked: true,
 };
-//
-// export const DarkSelected = Template.bind({});
-//
-// DarkSelected.args = {
-//   ...Dark.args,
-//   isSelected: true,
-// };
-//
-// export const SepiaSelected = Template.bind({});
-//
-// SepiaSelected.args = {
-//   ...Sepia.args,
-//   isSelected: true,
-// };

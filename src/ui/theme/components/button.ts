@@ -27,43 +27,47 @@ const ButtonStyle = {
  */
 function variantSolid(props: any) {
   const { colorScheme, isChecked } = props;
+  const common = {
+    _hover: {
+      bg: isChecked ? 'green.500' : 'gray.200',
+    },
+  };
 
   switch (colorScheme) {
-    // case 'sepia':
-    //   return {
-    //     bg: background,
-    //     color: mode(color, `gray.800`)(props),
-    //     _hover: {
-    //       bg: mode(hoverBg, `${colorScheme}.300`)(props),
-    //       _disabled: {
-    //         bg: background,
-    //       },
-    //     },
-    //     _active: { bg: mode(activeBg, `${colorScheme}.400`)(props) },
-    //   }
-    // case 'dark':
-    //   return {
-    //     bg: background,
-    //     color: mode(color, `gray.800`)(props),
-    //     _hover: {
-    //       bg: mode(hoverBg, `${colorScheme}.300`)(props),
-    //       _disabled: {
-    //         bg: background,
-    //       },
-    //     },
-    //     _active: { bg: mode(activeBg, `${colorScheme}.400`)(props) },
-    //   }
+    case 'sepia':
+      return {
+        ...common,
+        bg: 'rgb(246, 236, 217)',
+        color: 'rgb(17, 17, 17)',
+        _hover: {
+          bg: 'rgb(246, 236, 217)',
+          _disabled: {
+            bg: 'rgb(17, 17, 17)',
+          },
+        },
+        _active: { bg: 'rgb(17, 17, 17)' },
+      };
+    case 'dark':
+      return {
+        ...common,
+        bg: 'rgb(17, 17, 17)',
+        color: 'rgb(255, 255, 255)',
+        _hover: {
+          bg: 'rgb(17, 17, 17)',
+          _disabled: {
+            bg: 'rgb(255, 255, 255)',
+          },
+        },
+        _active: {
+          bg: `gray.300`,
+        },
+      };
     default:
       // default is 'light'
       return {
+        ...common,
         bg: isChecked ? 'green.500' : '#fff',
         color: isChecked ? 'white' : `gray.500`,
-        _hover: {
-          bg: isChecked ? 'green.500' : `gray.200`,
-          // _disabled: {
-          //   bg: `gray.100`,
-          // },
-        },
         _active: {
           bg: `gray.300`,
         },

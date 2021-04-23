@@ -14,7 +14,7 @@ function ToggleButton(props: any) {
   return (
     <ChakraBox as="label">
       <input {...input} />
-      <Button as="div" {...checkbox} isChecked={isChecked} onChange={() => {}}>
+      <Button as="div" isChecked={isChecked} {...checkbox} {...props}>
         {props.children}
         {isChecked ? <Icon decorative name={IconNames.check} /> : null}
       </Button>
