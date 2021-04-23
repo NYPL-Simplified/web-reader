@@ -70,6 +70,9 @@ function variantSolid(props: any) {
         _disabled: {
           bg: `gray.100`,
         },
+        _focus: {
+          'z-index': 1,
+        },
       };
   }
 }
