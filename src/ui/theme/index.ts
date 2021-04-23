@@ -16,7 +16,10 @@ const theme = extendTheme({
   colors,
   ...typography,
   space: spacing,
-  // styles,
+  /**
+   * Chakra documentation on component styles:
+   * https://chakra-ui.com/docs/theming/component-style
+   */
   components: {
     Button,
   },
