@@ -8,6 +8,11 @@ The project is bootstrapped with [TSDX](https://tsdx.io). It uses Typescript, Re
 
 A big thanks to [R2D2BC](https://github.com/d-i-t-a/R2D2BC) for providing the underlying HTML navigator capabilities.
 
+## Demo
+
+- [Example reader app](https://nypl-web-reader.vercel.app)
+- [Storybook deployment](https://web-reader-storybook.vercel.app)
+
 ## Example
 
 Basic usage within a React app, using the default UI:
