@@ -1,9 +1,10 @@
 import React from 'react';
 import { Meta, Story } from '@storybook/react';
-import Toggle from '../src/ui/Toggle';
+import ToggleGroup from '../src/ui/ToggleGroup';
 
 const meta: Meta = {
   title: 'ToggleGroup',
+  component: ToggleGroup,
   parameters: {
     controls: { expanded: true },
   },
@@ -11,31 +12,15 @@ const meta: Meta = {
 
 export default meta;
 
-export const ToggleGroup = () => {
-  return (
-    <div>
-      <Toggle
-        options={['Publisher', 'Serif', 'Sans-Serif', 'Dyslexia-Friendly']}
-        defaultValue="Publisher"
-      />
-      <Toggle
-        options={[
-          {
-            value: 'Day',
-            colorScheme: 'light',
-          },
-          {
-            value: 'Sepia',
-            colorScheme: 'sepia',
-          },
-          {
-            value: 'Night',
-            colorScheme: 'dark',
-          },
-        ]}
-        defaultValue="Day"
-      />
-      <Toggle options={['Paginated', 'Scrolling']} defaultValue="Paginated" />
-    </div>
-  );
+const Template: Story<React.ComponentPropsWithRef<typeof ToggleGroup>> = (args) => (
+  <ToggleGroup {...args} />
+);
+
+export const Light = Template.bind({});
+
+Light.args = {
+  options: ['Sedona', 'Santa Fe', 'Las Cruces'],
+  colorScheme: 'light',
+  name: 'southwest',
+  defaultValue: 'Sedona',
 };

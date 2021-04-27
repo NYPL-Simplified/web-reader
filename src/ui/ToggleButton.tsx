@@ -17,12 +17,31 @@ function ToggleButton(props: React.PropsWithChildren<ToggleButtonProps>) {
   const input = getInputProps();
   const checkbox = getCheckboxProps();
 
+  const checked = isChecked
+    ? {
+        color: 'white',
+        bg: 'green.500',
+        _hover: {
+          color: 'white',
+          bg: 'green.500',
+        },
+      }
+    : {};
+
   return (
     <ChakraBox as="label">
       <input {...input} />
-      <Button as="div" isChecked={isChecked} {...checkbox} {...optionProps}>
+      <Button
+        as="div"
+        isChecked={isChecked}
+        {...checked}
+        rightIcon={
+          isChecked ? <Icon decorative name={IconNames.check} /> : null
+        }
+        {...checkbox}
+        {...optionProps}
+      >
         {children}
-        {isChecked ? <Icon decorative name={IconNames.check} /> : null}
       </Button>
     </ChakraBox>
   );
