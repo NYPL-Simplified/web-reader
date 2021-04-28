@@ -7,11 +7,11 @@ import Button from './Button';
 export interface ToggleButtonProps
   extends React.ComponentPropsWithRef<typeof ChakraBox> {
   isChecked?: false;
-  optionProps?: {};
+  value: string;
 }
 
 function ToggleButton(props: React.PropsWithChildren<ToggleButtonProps>) {
-  const { isChecked, children, optionProps } = props;
+  const { isChecked, children, ...rest } = props;
   const { getInputProps, getCheckboxProps } = useRadio(props);
 
   const input = getInputProps();
@@ -39,7 +39,7 @@ function ToggleButton(props: React.PropsWithChildren<ToggleButtonProps>) {
           isChecked ? <Icon decorative name={IconNames.check} /> : null
         }
         {...checkbox}
-        {...optionProps}
+        {...rest}
       >
         {children}
       </Button>
