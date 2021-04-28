@@ -55,6 +55,7 @@
     "@storybook/addon-essentials": "^6.2.8",
     "@storybook/addon-info": "^5.3.21",
     "@storybook/addon-links": "^6.2.8",
+    "@storybook/addon-storyshots": "^6.2.9",
     "@storybook/addons": "^6.2.8",
     "@storybook/react": "^6.2.8",
     "@types/react": "^17.0.3",
