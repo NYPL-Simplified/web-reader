@@ -10,7 +10,7 @@ export interface ToggleButtonProps
   value: string;
 }
 
-function ToggleButton(props: React.PropsWithChildren<ToggleButtonProps>) {
+function ToggleButton(props: React.PropsWithoutRef<ToggleButtonProps>) {
   const { isChecked, children, ...rest } = props;
   const { getInputProps, getCheckboxProps } = useRadio(props);
 
