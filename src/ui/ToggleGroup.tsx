@@ -19,9 +19,16 @@ const ToggleGroup = (props: {
 
   return (
     <div {...group}>
-      {React.Children.toArray(children).map((element) => {
-        const radio = getRadioProps({ value: element.props.value });
-        return React.cloneElement(element, radio);
+      {React.Children.map(children, (element) => {
+        try {
+          const value = (element as any).props.value;
+          const radio = getRadioProps({ value });
+          return React.cloneElement(element as any, radio);
+        } catch (e) {
+          throw new Error(
+            'ToggleGroup expects ToggleButton children with `value` props.'
+          );
+        }
       })}
     </div>
   );
