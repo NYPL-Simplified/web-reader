@@ -6,3 +6,5 @@ dist
 
 example/.parcel-cache
 example/.cache
+
+storybook-static
