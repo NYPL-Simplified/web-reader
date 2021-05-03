@@ -14,9 +14,6 @@ const typography: Typography = {
     heading: '-apple-system, BlinkMacSystemFont, system-ui, sans-seri',
     mono: `Courier,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace`,
   },
-  /**
-   * Is this how we should name the fontSizes?
-   */
   fontSizes: {
     '-2': '0.75rem',
     '-1': '0.875rem',
