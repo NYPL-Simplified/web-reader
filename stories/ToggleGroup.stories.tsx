@@ -1,9 +1,11 @@
 import React from 'react';
 import { Meta, Story } from '@storybook/react';
-import Toggle from '../src/ui/Toggle';
+import ToggleGroup from '../src/ui/ToggleGroup';
+import ToggleButton from '../src/ui/ToggleButton';
 
 const meta: Meta = {
   title: 'ToggleGroup',
+  component: ToggleGroup,
   parameters: {
     controls: { expanded: true },
   },
@@ -11,31 +13,28 @@ const meta: Meta = {
 
 export default meta;
 
-export const ToggleGroup = () => {
-  return (
-    <div>
-      <Toggle
-        options={['Publisher', 'Serif', 'Sans-Serif', 'Dyslexia-Friendly']}
-        defaultValue="Publisher"
-      />
-      <Toggle
-        options={[
-          {
-            value: 'Day',
-            colorScheme: 'light',
-          },
-          {
-            value: 'Sepia',
-            colorScheme: 'sepia',
-          },
-          {
-            value: 'Night',
-            colorScheme: 'dark',
-          },
-        ]}
-        defaultValue="Day"
-      />
-      <Toggle options={['Paginated', 'Scrolling']} defaultValue="Paginated" />
-    </div>
-  );
+const Template: Story<React.ComponentPropsWithRef<typeof ToggleGroup>> = (
+  args
+) => <ToggleGroup {...args} />;
+
+export const Light = Template.bind({});
+
+Light.args = {
+  children: [
+    <ToggleButton value="sedona">Sedona</ToggleButton>,
+    <ToggleButton value="santa_fe">Santa Fe</ToggleButton>,
+    <ToggleButton value="las_cruces">Las Cruces</ToggleButton>,
+  ],
+  colorScheme: 'light',
+  name: 'southwest',
+  defaultValue: 'sedona',
+};
+
+export const OneOption = Template.bind({});
+
+OneOption.args = {
+  children: <ToggleButton value="sedona">Sedona</ToggleButton>,
+  colorScheme: 'light',
+  name: 'southwest',
+  defaultValue: 'Sedona',
 };
