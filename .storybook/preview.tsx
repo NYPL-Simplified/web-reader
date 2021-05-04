@@ -1,7 +1,7 @@
 import React from 'react';
-import { ChakraProvider, extendTheme } from "@chakra-ui/react"
+import { ChakraProvider} from "@chakra-ui/react"
 import theme from "../src/ui/theme"
-
+import { StoryContext } from '@storybook/react';
 import '@nypl/design-system-react-components/dist/styles.css'
 
 // https://storybook.js.org/docs/react/writing-stories/parameters#global-parameters
@@ -10,7 +10,7 @@ export const parameters = {
   actions: { argTypesRegex: '^on.*' },
 };
 
-const withChakra = (StoryFn: Function, context: StoryContext) => {
+const withChakra = (StoryFn: Function, _context: StoryContext) => {
   return (
     <ChakraProvider theme={theme} >
         <StoryFn />
