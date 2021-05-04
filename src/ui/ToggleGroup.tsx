@@ -1,8 +1,6 @@
 import React from 'react';
 import { useRadioGroup } from '@chakra-ui/react';
 
-import ToggleButton from './ToggleButton';
-
 type ToggleGroupProps = {
   defaultValue?: string;
   name?: string;
