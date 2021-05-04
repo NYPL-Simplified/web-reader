@@ -3,12 +3,16 @@ import { useRadioGroup } from '@chakra-ui/react';
 
 import ToggleButton from './ToggleButton';
 
-const ToggleGroup = (props: {
+type ToggleGroupProps = {
   defaultValue?: string;
   name?: string;
-  children: typeof ToggleButton | Array<typeof ToggleButton>;
+};
+
+const ToggleGroup: React.FC<ToggleGroupProps> = ({
+  name,
+  defaultValue,
+  children,
 }) => {
-  const { name, defaultValue, children } = props;
   const { getRootProps, getRadioProps } = useRadioGroup({
     name,
     defaultValue,
