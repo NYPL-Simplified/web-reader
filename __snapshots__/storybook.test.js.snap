@@ -1,0 +1,817 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Button Dark 1`] = `
+Array [
+  <button
+    className="chakra-button css-7k237y"
+  >
+    Hello world
+  </button>,
+  <span />,
+]
+`;
+
+exports[`Storyshots Button Dark Disabled 1`] = `
+Array [
+  <button
+    className="chakra-button css-7k237y"
+    disabled={true}
+  >
+    Hello world
+  </button>,
+  <span />,
+]
+`;
+
+exports[`Storyshots Button Light 1`] = `
+Array [
+  <button
+    className="chakra-button css-i57k30"
+  >
+    Hello world
+  </button>,
+  <span />,
+]
+`;
+
+exports[`Storyshots Button Light Disabled 1`] = `
+Array [
+  <button
+    className="chakra-button css-i57k30"
+    disabled={true}
+  >
+    Hello world
+  </button>,
+  <span />,
+]
+`;
+
+exports[`Storyshots Button Sepia 1`] = `
+Array [
+  <button
+    className="chakra-button css-7u148p"
+  >
+    Hello world
+  </button>,
+  <span />,
+]
+`;
+
+exports[`Storyshots Button Sepia Disable 1`] = `
+Array [
+  <button
+    className="chakra-button css-7u148p"
+    disabled={true}
+  >
+    Hello world
+  </button>,
+  <span />,
+]
+`;
+
+exports[`Storyshots SettingsCard Settings Card 1`] = `
+Array [
+  <div>
+    <div
+      role="radiogroup"
+    >
+      <label
+        className="css-0"
+      >
+        <input
+          checked={true}
+          name="radio-1"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          style={
+            Object {
+              "border": "0px",
+              "clip": "rect(0px, 0px, 0px, 0px)",
+              "height": "1px",
+              "margin": "-1px",
+              "overflow": "hidden",
+              "padding": "0px",
+              "position": "absolute",
+              "whiteSpace": "nowrap",
+              "width": "1px",
+            }
+          }
+          type="radio"
+          value="publisher"
+        />
+        <div
+          aria-hidden={true}
+          className="chakra-button css-5m872m"
+          data-checked=""
+          isChecked={true}
+          name="radio-1"
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          value="publisher"
+        >
+          Publisher
+          <span
+            className="chakra-button__icon css-1hzyiq5"
+          >
+            <span
+              aria-hidden={true}
+              className="icon "
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<svg viewBox=\\"0 0 24 24\\" xmlns=\\"http://www.w3.org/2000/svg\\"><path d=\\"M8.795 15.875l-4.17-4.17-1.42 1.41 5.59 5.59 12-12-1.41-1.41-10.59 10.58z\\"></path></svg>",
+                }
+              }
+              role="img"
+            />
+          </span>
+        </div>
+      </label>
+      <label
+        className="css-0"
+      >
+        <input
+          checked={false}
+          name="radio-1"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          style={
+            Object {
+              "border": "0px",
+              "clip": "rect(0px, 0px, 0px, 0px)",
+              "height": "1px",
+              "margin": "-1px",
+              "overflow": "hidden",
+              "padding": "0px",
+              "position": "absolute",
+              "whiteSpace": "nowrap",
+              "width": "1px",
+            }
+          }
+          type="radio"
+          value="serif"
+        />
+        <div
+          aria-hidden={true}
+          className="chakra-button css-i57k30"
+          isChecked={false}
+          name="radio-1"
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          value="serif"
+        >
+          Serif
+        </div>
+      </label>
+      <label
+        className="css-0"
+      >
+        <input
+          checked={false}
+          name="radio-1"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          style={
+            Object {
+              "border": "0px",
+              "clip": "rect(0px, 0px, 0px, 0px)",
+              "height": "1px",
+              "margin": "-1px",
+              "overflow": "hidden",
+              "padding": "0px",
+              "position": "absolute",
+              "whiteSpace": "nowrap",
+              "width": "1px",
+            }
+          }
+          type="radio"
+          value="sans-serif"
+        />
+        <div
+          aria-hidden={true}
+          className="chakra-button css-i57k30"
+          isChecked={false}
+          name="radio-1"
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          value="sans-serif"
+        >
+          Sans-Serif
+        </div>
+      </label>
+      <label
+        className="css-0"
+      >
+        <input
+          checked={false}
+          name="radio-1"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          style={
+            Object {
+              "border": "0px",
+              "clip": "rect(0px, 0px, 0px, 0px)",
+              "height": "1px",
+              "margin": "-1px",
+              "overflow": "hidden",
+              "padding": "0px",
+              "position": "absolute",
+              "whiteSpace": "nowrap",
+              "width": "1px",
+            }
+          }
+          type="radio"
+          value="dyslexia-friendly"
+        />
+        <div
+          aria-hidden={true}
+          className="chakra-button css-i57k30"
+          isChecked={false}
+          name="radio-1"
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          value="dyslexia-friendly"
+        >
+          Dyslexia-Friendly
+        </div>
+      </label>
+    </div>
+    <div
+      role="radiogroup"
+    >
+      <label
+        className="css-0"
+      >
+        <input
+          checked={true}
+          name="radio-2"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          style={
+            Object {
+              "border": "0px",
+              "clip": "rect(0px, 0px, 0px, 0px)",
+              "height": "1px",
+              "margin": "-1px",
+              "overflow": "hidden",
+              "padding": "0px",
+              "position": "absolute",
+              "whiteSpace": "nowrap",
+              "width": "1px",
+            }
+          }
+          type="radio"
+          value="day"
+        />
+        <div
+          aria-hidden={true}
+          className="chakra-button css-5m872m"
+          data-checked=""
+          isChecked={true}
+          name="radio-2"
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          value="day"
+        >
+          Day
+          <span
+            className="chakra-button__icon css-1hzyiq5"
+          >
+            <span
+              aria-hidden={true}
+              className="icon "
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<svg viewBox=\\"0 0 24 24\\" xmlns=\\"http://www.w3.org/2000/svg\\"><path d=\\"M8.795 15.875l-4.17-4.17-1.42 1.41 5.59 5.59 12-12-1.41-1.41-10.59 10.58z\\"></path></svg>",
+                }
+              }
+              role="img"
+            />
+          </span>
+        </div>
+      </label>
+      <label
+        className="css-0"
+      >
+        <input
+          checked={false}
+          name="radio-2"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          style={
+            Object {
+              "border": "0px",
+              "clip": "rect(0px, 0px, 0px, 0px)",
+              "height": "1px",
+              "margin": "-1px",
+              "overflow": "hidden",
+              "padding": "0px",
+              "position": "absolute",
+              "whiteSpace": "nowrap",
+              "width": "1px",
+            }
+          }
+          type="radio"
+          value="sepia"
+        />
+        <div
+          aria-hidden={true}
+          className="chakra-button css-7u148p"
+          isChecked={false}
+          name="radio-2"
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          value="sepia"
+        >
+          Sepia
+        </div>
+      </label>
+      <label
+        className="css-0"
+      >
+        <input
+          checked={false}
+          name="radio-2"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          style={
+            Object {
+              "border": "0px",
+              "clip": "rect(0px, 0px, 0px, 0px)",
+              "height": "1px",
+              "margin": "-1px",
+              "overflow": "hidden",
+              "padding": "0px",
+              "position": "absolute",
+              "whiteSpace": "nowrap",
+              "width": "1px",
+            }
+          }
+          type="radio"
+          value="night"
+        />
+        <div
+          aria-hidden={true}
+          className="chakra-button css-7k237y"
+          isChecked={false}
+          name="radio-2"
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          value="night"
+        >
+          Night
+        </div>
+      </label>
+    </div>
+    <div
+      role="radiogroup"
+    >
+      <label
+        className="css-0"
+      >
+        <input
+          checked={true}
+          name="radio-3"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          style={
+            Object {
+              "border": "0px",
+              "clip": "rect(0px, 0px, 0px, 0px)",
+              "height": "1px",
+              "margin": "-1px",
+              "overflow": "hidden",
+              "padding": "0px",
+              "position": "absolute",
+              "whiteSpace": "nowrap",
+              "width": "1px",
+            }
+          }
+          type="radio"
+          value="paginated"
+        />
+        <div
+          aria-hidden={true}
+          className="chakra-button css-5m872m"
+          data-checked=""
+          isChecked={true}
+          name="radio-3"
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          value="paginated"
+        >
+          Paginated
+          <span
+            className="chakra-button__icon css-1hzyiq5"
+          >
+            <span
+              aria-hidden={true}
+              className="icon "
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<svg viewBox=\\"0 0 24 24\\" xmlns=\\"http://www.w3.org/2000/svg\\"><path d=\\"M8.795 15.875l-4.17-4.17-1.42 1.41 5.59 5.59 12-12-1.41-1.41-10.59 10.58z\\"></path></svg>",
+                }
+              }
+              role="img"
+            />
+          </span>
+        </div>
+      </label>
+      <label
+        className="css-0"
+      >
+        <input
+          checked={false}
+          name="radio-3"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          style={
+            Object {
+              "border": "0px",
+              "clip": "rect(0px, 0px, 0px, 0px)",
+              "height": "1px",
+              "margin": "-1px",
+              "overflow": "hidden",
+              "padding": "0px",
+              "position": "absolute",
+              "whiteSpace": "nowrap",
+              "width": "1px",
+            }
+          }
+          type="radio"
+          value="scrolling"
+        />
+        <div
+          aria-hidden={true}
+          className="chakra-button css-i57k30"
+          isChecked={false}
+          name="radio-3"
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          value="scrolling"
+        >
+          Scrolling
+        </div>
+      </label>
+    </div>
+  </div>,
+  <span />,
+]
+`;
+
+exports[`Storyshots ToggleButton Checked 1`] = `
+Array [
+  <label
+    className="css-0"
+  >
+    <input
+      checked={true}
+      onBlur={[Function]}
+      onChange={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      style={
+        Object {
+          "border": "0px",
+          "clip": "rect(0px, 0px, 0px, 0px)",
+          "height": "1px",
+          "margin": "-1px",
+          "overflow": "hidden",
+          "padding": "0px",
+          "position": "absolute",
+          "whiteSpace": "nowrap",
+          "width": "1px",
+        }
+      }
+      type="radio"
+    />
+    <div
+      aria-hidden={true}
+      className="chakra-button css-5m872m"
+      data-checked=""
+      isChecked={true}
+      onMouseDown={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+    >
+      Hello world
+      <span
+        className="chakra-button__icon css-1hzyiq5"
+      >
+        <span
+          aria-hidden={true}
+          className="icon "
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "<svg viewBox=\\"0 0 24 24\\" xmlns=\\"http://www.w3.org/2000/svg\\"><path d=\\"M8.795 15.875l-4.17-4.17-1.42 1.41 5.59 5.59 12-12-1.41-1.41-10.59 10.58z\\"></path></svg>",
+            }
+          }
+          role="img"
+        />
+      </span>
+    </div>
+  </label>,
+  <span />,
+]
+`;
+
+exports[`Storyshots ToggleButton Default 1`] = `
+Array [
+  <label
+    className="css-0"
+  >
+    <input
+      checked={false}
+      onBlur={[Function]}
+      onChange={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      style={
+        Object {
+          "border": "0px",
+          "clip": "rect(0px, 0px, 0px, 0px)",
+          "height": "1px",
+          "margin": "-1px",
+          "overflow": "hidden",
+          "padding": "0px",
+          "position": "absolute",
+          "whiteSpace": "nowrap",
+          "width": "1px",
+        }
+      }
+      type="radio"
+    />
+    <div
+      aria-hidden={true}
+      className="chakra-button css-i57k30"
+      isChecked={false}
+      onMouseDown={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+    >
+      Hello world
+    </div>
+  </label>,
+  <span />,
+]
+`;
+
+exports[`Storyshots ToggleGroup Light 1`] = `
+Array [
+  <div
+    role="radiogroup"
+  >
+    <label
+      className="css-0"
+    >
+      <input
+        checked={true}
+        name="southwest"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        style={
+          Object {
+            "border": "0px",
+            "clip": "rect(0px, 0px, 0px, 0px)",
+            "height": "1px",
+            "margin": "-1px",
+            "overflow": "hidden",
+            "padding": "0px",
+            "position": "absolute",
+            "whiteSpace": "nowrap",
+            "width": "1px",
+          }
+        }
+        type="radio"
+        value="sedona"
+      />
+      <div
+        aria-hidden={true}
+        className="chakra-button css-5m872m"
+        data-checked=""
+        isChecked={true}
+        name="southwest"
+        onChange={[Function]}
+        onMouseDown={[Function]}
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        value="sedona"
+      >
+        Sedona
+        <span
+          className="chakra-button__icon css-1hzyiq5"
+        >
+          <span
+            aria-hidden={true}
+            className="icon "
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "<svg viewBox=\\"0 0 24 24\\" xmlns=\\"http://www.w3.org/2000/svg\\"><path d=\\"M8.795 15.875l-4.17-4.17-1.42 1.41 5.59 5.59 12-12-1.41-1.41-10.59 10.58z\\"></path></svg>",
+              }
+            }
+            role="img"
+          />
+        </span>
+      </div>
+    </label>
+    <label
+      className="css-0"
+    >
+      <input
+        checked={false}
+        name="southwest"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        style={
+          Object {
+            "border": "0px",
+            "clip": "rect(0px, 0px, 0px, 0px)",
+            "height": "1px",
+            "margin": "-1px",
+            "overflow": "hidden",
+            "padding": "0px",
+            "position": "absolute",
+            "whiteSpace": "nowrap",
+            "width": "1px",
+          }
+        }
+        type="radio"
+        value="santa_fe"
+      />
+      <div
+        aria-hidden={true}
+        className="chakra-button css-i57k30"
+        isChecked={false}
+        name="southwest"
+        onChange={[Function]}
+        onMouseDown={[Function]}
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        value="santa_fe"
+      >
+        Santa Fe
+      </div>
+    </label>
+    <label
+      className="css-0"
+    >
+      <input
+        checked={false}
+        name="southwest"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        style={
+          Object {
+            "border": "0px",
+            "clip": "rect(0px, 0px, 0px, 0px)",
+            "height": "1px",
+            "margin": "-1px",
+            "overflow": "hidden",
+            "padding": "0px",
+            "position": "absolute",
+            "whiteSpace": "nowrap",
+            "width": "1px",
+          }
+        }
+        type="radio"
+        value="las_cruces"
+      />
+      <div
+        aria-hidden={true}
+        className="chakra-button css-i57k30"
+        isChecked={false}
+        name="southwest"
+        onChange={[Function]}
+        onMouseDown={[Function]}
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        value="las_cruces"
+      >
+        Las Cruces
+      </div>
+    </label>
+  </div>,
+  <span />,
+]
+`;
+
+exports[`Storyshots ToggleGroup One Option 1`] = `
+Array [
+  <div
+    role="radiogroup"
+  >
+    <label
+      className="css-0"
+    >
+      <input
+        checked={false}
+        name="southwest"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        style={
+          Object {
+            "border": "0px",
+            "clip": "rect(0px, 0px, 0px, 0px)",
+            "height": "1px",
+            "margin": "-1px",
+            "overflow": "hidden",
+            "padding": "0px",
+            "position": "absolute",
+            "whiteSpace": "nowrap",
+            "width": "1px",
+          }
+        }
+        type="radio"
+        value="sedona"
+      />
+      <div
+        aria-hidden={true}
+        className="chakra-button css-i57k30"
+        isChecked={false}
+        name="southwest"
+        onChange={[Function]}
+        onMouseDown={[Function]}
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        value="sedona"
+      >
+        Sedona
+      </div>
+    </label>
+  </div>,
+  <span />,
+]
+`;
