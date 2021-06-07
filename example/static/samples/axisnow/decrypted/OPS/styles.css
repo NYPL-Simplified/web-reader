@@ -1,0 +1,87 @@
+body, .back, .text { width: 738px; height: 877px; margin:0; padding:0; overflow:hidden}
+
+.back, .text { position:absolute; }
+div {font-size:1px;}
+span { color: #000000 }
+
+
+.media-overlay-active, .media-overlay-active text, .media-overlay-active tspan, .media-overlay-active div, .media-overlay-active span {
+   /* HTML */
+   color: red !important;
+   text-shadow: 0 0 20px #FFFFFF;
+   /* SVG */
+   fill: red !important;
+}
+
+#word1.-epub-media-overlay-active, #word2.-epub-media-overlay-active {
+	color: #d52a46 !important;
+}
+
+.read-aloud {
+	font: bold 40px  "TimesNewRomanPSMT" ;
+	text-transform: uppercase;
+	text-shadow: 0px 1px 2px #fff;
+	color: #d52a46;
+}
+.backgroundAudio {
+    position: absolute;
+    top: -30px;
+}
+
+#karben a:nth-of-type(1) {top: 444px; left: 481px; position: absolute; color:transparent; height: 23px; width: 151px;}
+
+@font-face {
+	font-family: 'CoventryITCStd-Heavy';
+	src: url('Fonts/CoventryITCStd-Heavy.otf');
+}
+
+@font-face {
+	font-family: 'AvenirLTStd-Black';
+	src: url('Fonts/AvenirLTStd-Black.otf');
+}
+
+@font-face {
+	font-family: 'Yellabelly';
+	src: url('Fonts/Yellabelly.ttf');
+}
+
+@font-face {
+	font-family: 'BlackadderITCStd';
+	src: url('Fonts/BlackadderITCStd.otf');
+}
+
+@font-face {
+	font-family: 'AvenirLTStd-Roman';
+	src: url('Fonts/AvenirLTStd-Roman.otf');
+}
+
+@font-face {
+	font-family: 'SackersGothicStd-Medium';
+	src: url('Fonts/SackersGothicStd-Medium.otf');
+}
+
+@font-face {
+	font-family: 'AvenirLTStd-Medium';
+	src: url('Fonts/AvenirLTStd-Medium.otf');
+}
+
+@font-face {
+	font-family: 'CoventryITCStd-Thin';
+	src: url('Fonts/CoventryITCStd-Thin.otf');
+}
+
+@font-face {
+	font-family: 'AndradePro';
+	src: url('Fonts/AndradePro.otf');
+}
+
+@font-face {
+	font-family: 'AvenirLTStd-Heavy';
+	src: url('Fonts/AvenirLTStd-Heavy.otf');
+}
+
+@font-face {
+	font-family: 'AvenirLTStd-Light';
+	src: url('Fonts/AvenirLTStd-Light.otf');
+}
+

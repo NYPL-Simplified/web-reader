@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<smil xmlns="http://www.w3.org/ns/SMIL" xmlns:epub="http://www.idpf.org/2007/ops" version="3.0">
+  <body>
+    <par id="pg_2_id0">
+      <text src="pg_2.xhtml"/>
+      <audio clipBegin="00:00:00.000" clipEnd="00:00:11.243" src="audio/tagline_muisc1_renee.m4a"/>
+    </par>
+  </body>
+</smil>

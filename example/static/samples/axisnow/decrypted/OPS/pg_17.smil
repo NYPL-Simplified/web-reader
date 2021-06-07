@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<smil xmlns="http://www.w3.org/ns/SMIL" xmlns:epub="http://www.idpf.org/2007/ops" version="3.0">
+  <body>
+    <par id="pg_17_id0">
+      <text src="pg_17.xhtml#p17-1"/>
+      <audio clipBegin="00:00:00.000" clipEnd="00:00:00.293" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id1">
+      <text src="pg_17.xhtml#p17-2"/>
+      <audio clipBegin="00:00:00.293" clipEnd="00:00:00.453" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id2">
+      <text src="pg_17.xhtml#p17-3"/>
+      <audio clipBegin="00:00:00.453" clipEnd="00:00:00.627" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id3">
+      <text src="pg_17.xhtml#p17-4"/>
+      <audio clipBegin="00:00:00.627" clipEnd="00:00:00.761" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id4">
+      <text src="pg_17.xhtml#p17-5"/>
+      <audio clipBegin="00:00:00.761" clipEnd="00:00:01.135" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id5">
+      <text src="pg_17.xhtml#p17-6"/>
+      <audio clipBegin="00:00:01.135" clipEnd="00:00:01.545" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id6">
+      <text src="pg_17.xhtml#p17-7"/>
+      <audio clipBegin="00:00:01.687" clipEnd="00:00:01.861" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id7">
+      <text src="pg_17.xhtml#p17-8"/>
+      <audio clipBegin="00:00:01.861" clipEnd="00:00:02.209" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id8">
+      <text src="pg_17.xhtml#p17-9"/>
+      <audio clipBegin="00:00:02.369" clipEnd="00:00:02.735" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id9">
+      <text src="pg_17.xhtml#p17-10"/>
+      <audio clipBegin="00:00:02.735" clipEnd="00:00:03.065" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id10">
+      <text src="pg_17.xhtml#p17-11"/>
+      <audio clipBegin="00:00:03.065" clipEnd="00:00:03.265" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id11">
+      <text src="pg_17.xhtml#p17-12"/>
+      <audio clipBegin="00:00:03.265" clipEnd="00:00:03.834" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id12">
+      <text src="pg_17.xhtml#p17-13"/>
+      <audio clipBegin="00:00:03.834" clipEnd="00:00:04.248" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id13">
+      <text src="pg_17.xhtml#p17-14"/>
+      <audio clipBegin="00:00:05.086" clipEnd="00:00:05.224" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id14">
+      <text src="pg_17.xhtml#p17-15"/>
+      <audio clipBegin="00:00:05.224" clipEnd="00:00:05.405" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id15">
+      <text src="pg_17.xhtml#p17-16"/>
+      <audio clipBegin="00:00:05.445" clipEnd="00:00:05.590" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id16">
+      <text src="pg_17.xhtml#p17-17"/>
+      <audio clipBegin="00:00:05.590" clipEnd="00:00:05.717" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id17">
+      <text src="pg_17.xhtml#p17-18"/>
+      <audio clipBegin="00:00:05.717" clipEnd="00:00:06.283" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id18">
+      <text src="pg_17.xhtml#p17-19"/>
+      <audio clipBegin="00:00:06.926" clipEnd="00:00:07.136" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id19">
+      <text src="pg_17.xhtml#p17-20"/>
+      <audio clipBegin="00:00:07.136" clipEnd="00:00:07.444" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id20">
+      <text src="pg_17.xhtml#p17-21"/>
+      <audio clipBegin="00:00:07.444" clipEnd="00:00:07.669" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id21">
+      <text src="pg_17.xhtml#p17-22"/>
+      <audio clipBegin="00:00:07.669" clipEnd="00:00:08.050" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id22">
+      <text src="pg_17.xhtml#p17-23"/>
+      <audio clipBegin="00:00:09.284" clipEnd="00:00:09.799" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id23">
+      <text src="pg_17.xhtml#p17-24"/>
+      <audio clipBegin="00:00:10.057" clipEnd="00:00:10.234" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id24">
+      <text src="pg_17.xhtml#p17-25"/>
+      <audio clipBegin="00:00:10.234" clipEnd="00:00:10.459" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id25">
+      <text src="pg_17.xhtml#p17-26"/>
+      <audio clipBegin="00:00:10.459" clipEnd="00:00:10.728" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id26">
+      <text src="pg_17.xhtml#p17-27"/>
+      <audio clipBegin="00:00:10.728" clipEnd="00:00:11.200" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id27">
+      <text src="pg_17.xhtml#p17-28"/>
+      <audio clipBegin="00:00:11.414" clipEnd="00:00:11.566" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id28">
+      <text src="pg_17.xhtml#p17-29"/>
+      <audio clipBegin="00:00:11.566" clipEnd="00:00:11.871" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id29">
+      <text src="pg_17.xhtml#p17-30"/>
+      <audio clipBegin="00:00:11.871" clipEnd="00:00:11.972" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id30">
+      <text src="pg_17.xhtml#p17-31"/>
+      <audio clipBegin="00:00:11.972" clipEnd="00:00:12.146" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id31">
+      <text src="pg_17.xhtml#p17-32"/>
+      <audio clipBegin="00:00:12.146" clipEnd="00:00:12.364" src="audio/whispering_town15.m4a"/>
+    </par>
+    <par id="pg_17_id32">
+      <text src="pg_17.xhtml#p17-33"/>
+      <audio clipBegin="00:00:12.364" clipEnd="00:00:13.086" src="audio/whispering_town15.m4a"/>
+    </par>
+  </body>
+</smil>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<smil xmlns="http://www.w3.org/ns/SMIL" xmlns:epub="http://www.idpf.org/2007/ops" version="3.0">
+  <body>
+    <par id="pg_5_id0">
+      <text src="pg_5.xhtml"/>
+      <audio clipBegin="00:00:00.000" clipEnd="00:00:08.491" src="audio/whispering_town_title2.m4a"/>
+    </par>
+  </body>
+</smil>

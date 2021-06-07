@@ -1,0 +1,31 @@
+@charset "utf-8";
+body, body.tei.tei-text {
+    color: black;
+    background-color: white;
+    margin: 0.5em;
+    width: auto;
+    border: 0;
+    padding: 0
+    }
+div, p, pre, h1, h2, h3, h4, h5, h6 {
+    margin-left: 0;
+    margin-right: 0;
+    display: block
+    }
+div.pgebub-root-div {
+    margin: 0
+    }
+h2 {
+    page-break-before: always;
+    padding-top: 1em
+    }
+div.figcenter span.caption {
+    display: block
+    }
+.pgmonospaced {
+    font-family: monospace;
+    font-size: 0.9em
+    }
+a.pgkilled {
+    text-decoration: none
+    }
