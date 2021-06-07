@@ -36,6 +36,9 @@ const App = () => {
         <Route path="/axisnow-epub">
           <AxisNowEpub />
         </Route>
+        <Route path="/moby-epub2">
+          <WebReader webpubManifestUrl="http://localhost:1234/samples/moby-epub2-exploded/manifest.json" />
+        </Route>
         <Route path="/streamed-epub">
           <WebReader webpubManifestUrl="https://alice.dita.digital/manifest.json" />
         </Route>
@@ -44,6 +47,9 @@ const App = () => {
           <ul>
             <li>
               <Link to="/axisnow-epub">Encrypted ePub Example</Link>
+            </li>
+            <li>
+              <Link to="/moby-epub2">Moby EPUB2-based Webpub</Link>
             </li>
             <li>
               <Link to="/streamed-epub">Regular (streamed) ePub Example</Link>
