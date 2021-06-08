@@ -51,7 +51,6 @@ export default function useWebReader(
     // fetch the manifest
     fetchJson<WebpubManifest>(webpubManifestUrl).then((manifest) => {
       setManifest(manifest);
-      console.log('eyyy');
 
       const conformsTo = manifest.metadata?.conformsTo;
 
@@ -83,7 +82,6 @@ export default function useWebReader(
       manifest: null,
     };
   }
-  console.log('nope', manifest);
   return {
     isLoading: false,
     navigator,
