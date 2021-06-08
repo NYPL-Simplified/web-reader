@@ -11,6 +11,7 @@
     "node": ">=10"
   },
   "scripts": {
+    "example:build": "parcel build example/index.html",
     "example": "parcel example/index.html",
     "start": "tsdx watch",
     "build": "tsdx build",
