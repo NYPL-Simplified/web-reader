@@ -23,12 +23,28 @@ const AxisNowEpub = () => {
   );
 };
 
+const SWTest = () => {
+  const [value, setValue] = React.useState<null | string>(null);
+  React.useEffect(() => {
+    fetch('http://localhost:1234/samples/muse13454.json').then((res) => {
+      res.text().then((text) => {
+        setValue(text);
+      });
+    });
+  });
+
+  return <div>{value}</div>;
+};
+
 const App = () => {
   return (
     <BrowserRouter>
       <Switch>
         <Route path="/pdf">
-          <WebReader webpubManifestUrl="/muse13454.json" />
+          <WebReader webpubManifestUrl="samples/muse13454.json" />
+        </Route>
+        <Route path="/swtest">
+          <SWTest />
         </Route>
         <Route path="/axisnow-encrypted">
           <AxisNowEpub />
@@ -47,6 +63,9 @@ const App = () => {
           <ul>
             <li>
               <Link to="/axisnow-encrypted">Encrypted EPUB Example</Link>
+            </li>
+            <li>
+              <Link to="/swtest">SW Test</Link>
             </li>
             <li>
               <Link to="/axisnow-decrypted">Manually Decrypted EPUB</Link>

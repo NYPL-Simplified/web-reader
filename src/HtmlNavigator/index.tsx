@@ -24,7 +24,6 @@ export default class HtmlNavigator implements VisualNavigator {
     getContent,
   }: NavigatorArguments): Promise<HtmlNavigator> {
     const url = new URL(webpubManifestUrl);
-    console.log('URL', url);
     const reader = await D2Reader.load({
       url,
       injectables: injectables as any,
