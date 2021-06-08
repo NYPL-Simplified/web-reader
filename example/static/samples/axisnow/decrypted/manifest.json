@@ -7,719 +7,670 @@
   },
   "resources": [
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_1.jpg",
+      "href": "OPS/images/graphics_1.jpg",
       "type": "image/jpeg",
       "id": "img_1"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_2.jpg",
+      "href": "OPS/images/graphics_2.jpg",
       "type": "image/jpeg",
       "id": "img_2"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_3.jpg",
+      "href": "OPS/images/graphics_3.jpg",
       "type": "image/jpeg",
       "id": "img_3"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_4.jpg",
+      "href": "OPS/images/graphics_4.jpg",
       "type": "image/jpeg",
       "id": "img_4"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_5.jpg",
+      "href": "OPS/images/graphics_5.jpg",
       "type": "image/jpeg",
       "id": "img_5"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_6.jpg",
+      "href": "OPS/images/graphics_6.jpg",
       "type": "image/jpeg",
       "id": "img_6"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_7.jpg",
+      "href": "OPS/images/graphics_7.jpg",
       "type": "image/jpeg",
       "id": "img_7"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_8.jpg",
+      "href": "OPS/images/graphics_8.jpg",
       "type": "image/jpeg",
       "id": "img_8"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_9.jpg",
+      "href": "OPS/images/graphics_9.jpg",
       "type": "image/jpeg",
       "id": "img_9"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_10.jpg",
+      "href": "OPS/images/graphics_10.jpg",
       "type": "image/jpeg",
       "id": "img_10"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_11.jpg",
+      "href": "OPS/images/graphics_11.jpg",
       "type": "image/jpeg",
       "id": "img_11"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_12.jpg",
+      "href": "OPS/images/graphics_12.jpg",
       "type": "image/jpeg",
       "id": "img_12"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_13.jpg",
+      "href": "OPS/images/graphics_13.jpg",
       "type": "image/jpeg",
       "id": "img_13"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_14.jpg",
+      "href": "OPS/images/graphics_14.jpg",
       "type": "image/jpeg",
       "id": "img_14"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_15.jpg",
+      "href": "OPS/images/graphics_15.jpg",
       "type": "image/jpeg",
       "id": "img_15"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_16.jpg",
+      "href": "OPS/images/graphics_16.jpg",
       "type": "image/jpeg",
       "id": "img_16"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_17.jpg",
+      "href": "OPS/images/graphics_17.jpg",
       "type": "image/jpeg",
       "id": "img_17"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_18.jpg",
+      "href": "OPS/images/graphics_18.jpg",
       "type": "image/jpeg",
       "id": "img_18"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_19.jpg",
+      "href": "OPS/images/graphics_19.jpg",
       "type": "image/jpeg",
       "id": "img_19"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_20.jpg",
+      "href": "OPS/images/graphics_20.jpg",
       "type": "image/jpeg",
       "id": "img_20"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_21.jpg",
+      "href": "OPS/images/graphics_21.jpg",
       "type": "image/jpeg",
       "id": "img_21"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_22.jpg",
+      "href": "OPS/images/graphics_22.jpg",
       "type": "image/jpeg",
       "id": "img_22"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_23.jpg",
+      "href": "OPS/images/graphics_23.jpg",
       "type": "image/jpeg",
       "id": "img_23"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_24.jpg",
+      "href": "OPS/images/graphics_24.jpg",
       "type": "image/jpeg",
       "id": "img_24"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_25.jpg",
+      "href": "OPS/images/graphics_25.jpg",
       "type": "image/jpeg",
       "id": "img_25"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_26.jpg",
+      "href": "OPS/images/graphics_26.jpg",
       "type": "image/jpeg",
       "id": "img_26"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_27.jpg",
+      "href": "OPS/images/graphics_27.jpg",
       "type": "image/jpeg",
       "id": "img_27"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_28.jpg",
+      "href": "OPS/images/graphics_28.jpg",
       "type": "image/jpeg",
       "id": "img_28"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_29.jpg",
+      "href": "OPS/images/graphics_29.jpg",
       "type": "image/jpeg",
       "id": "img_29"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_30.jpg",
+      "href": "OPS/images/graphics_30.jpg",
       "type": "image/jpeg",
       "id": "img_30"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_31.jpg",
+      "href": "OPS/images/graphics_31.jpg",
       "type": "image/jpeg",
       "id": "img_31"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_32.jpg",
+      "href": "OPS/images/graphics_32.jpg",
       "type": "image/jpeg",
       "id": "img_32"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_33.jpg",
+      "href": "OPS/images/graphics_33.jpg",
       "type": "image/jpeg",
       "id": "img_33"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_34.jpg",
+      "href": "OPS/images/graphics_34.jpg",
       "type": "image/jpeg",
       "id": "img_34"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_36.jpg",
+      "href": "OPS/images/graphics_36.jpg",
       "type": "image/jpeg",
       "id": "img_36"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/graphics_37.jpg",
+      "href": "OPS/images/graphics_37.jpg",
       "type": "image/jpeg",
       "id": "img_37"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/images/cover.jpg",
+      "href": "OPS/images/cover.jpg",
       "type": "image/jpeg",
       "id": "cover-image"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/Fonts/CoventryITCStd-Heavy.otf",
+      "href": "OPS/Fonts/CoventryITCStd-Heavy.otf",
       "type": "font/opentype",
       "id": "font_CoventryITCStd-Heavy_otf"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/Fonts/AvenirLTStd-Black.otf",
+      "href": "OPS/Fonts/AvenirLTStd-Black.otf",
       "type": "font/opentype",
       "id": "font_AvenirLTStd-Black_otf"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/Fonts/Yellabelly.ttf",
+      "href": "OPS/Fonts/Yellabelly.ttf",
       "type": "application/x-font-ttf",
       "id": "font_Yellabelly_ttf"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/Fonts/BlackadderITCStd.otf",
+      "href": "OPS/Fonts/BlackadderITCStd.otf",
       "type": "font/opentype",
       "id": "font_BlackadderITCStd_otf"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/Fonts/AvenirLTStd-Roman.otf",
+      "href": "OPS/Fonts/AvenirLTStd-Roman.otf",
       "type": "font/opentype",
       "id": "font_AvenirLTStd-Roman_otf"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/Fonts/SackersGothicStd-Medium.otf",
+      "href": "OPS/Fonts/SackersGothicStd-Medium.otf",
       "type": "font/opentype",
       "id": "font_SackersGothicStd-Medium_otf"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/Fonts/AvenirLTStd-Medium.otf",
+      "href": "OPS/Fonts/AvenirLTStd-Medium.otf",
       "type": "font/opentype",
       "id": "font_AvenirLTStd-Medium_otf"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/Fonts/CoventryITCStd-Thin.otf",
+      "href": "OPS/Fonts/CoventryITCStd-Thin.otf",
       "type": "font/opentype",
       "id": "font_CoventryITCStd-Thin_otf"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/Fonts/AndradePro.otf",
+      "href": "OPS/Fonts/AndradePro.otf",
       "type": "font/opentype",
       "id": "font_AndradePro_otf"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/Fonts/AvenirLTStd-Heavy.otf",
+      "href": "OPS/Fonts/AvenirLTStd-Heavy.otf",
       "type": "font/opentype",
       "id": "font_AvenirLTStd-Heavy_otf"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/Fonts/AvenirLTStd-Light.otf",
+      "href": "OPS/Fonts/AvenirLTStd-Light.otf",
       "type": "font/opentype",
       "id": "font_AvenirLTStd-Light_otf"
     },
+    { "href": "OPS/styles.css", "type": "text/css", "id": "styles" },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/styles.css",
-      "type": "text/css",
-      "id": "styles"
-    },
-    {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/customstyles.css",
+      "href": "OPS/customstyles.css",
       "type": "text/css",
       "id": "customstyles"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_2.smil",
+      "href": "OPS/pg_2.smil",
       "type": "application/smil+xml",
       "id": "pg_2_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_5.smil",
+      "href": "OPS/pg_5.smil",
       "type": "application/smil+xml",
       "id": "pg_5_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_7.smil",
+      "href": "OPS/pg_7.smil",
       "type": "application/smil+xml",
       "id": "pg_7_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_8.smil",
+      "href": "OPS/pg_8.smil",
       "type": "application/smil+xml",
       "id": "pg_8_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_9.smil",
+      "href": "OPS/pg_9.smil",
       "type": "application/smil+xml",
       "id": "pg_9_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_10.smil",
+      "href": "OPS/pg_10.smil",
       "type": "application/smil+xml",
       "id": "pg_10_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_12.smil",
+      "href": "OPS/pg_12.smil",
       "type": "application/smil+xml",
       "id": "pg_12_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_13.smil",
+      "href": "OPS/pg_13.smil",
       "type": "application/smil+xml",
       "id": "pg_13_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_14.smil",
+      "href": "OPS/pg_14.smil",
       "type": "application/smil+xml",
       "id": "pg_14_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_15.smil",
+      "href": "OPS/pg_15.smil",
       "type": "application/smil+xml",
       "id": "pg_15_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_16.smil",
+      "href": "OPS/pg_16.smil",
       "type": "application/smil+xml",
       "id": "pg_16_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_17.smil",
+      "href": "OPS/pg_17.smil",
       "type": "application/smil+xml",
       "id": "pg_17_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_18.smil",
+      "href": "OPS/pg_18.smil",
       "type": "application/smil+xml",
       "id": "pg_18_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_19.smil",
+      "href": "OPS/pg_19.smil",
       "type": "application/smil+xml",
       "id": "pg_19_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_20.smil",
+      "href": "OPS/pg_20.smil",
       "type": "application/smil+xml",
       "id": "pg_20_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_21.smil",
+      "href": "OPS/pg_21.smil",
       "type": "application/smil+xml",
       "id": "pg_21_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_22.smil",
+      "href": "OPS/pg_22.smil",
       "type": "application/smil+xml",
       "id": "pg_22_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_23.smil",
+      "href": "OPS/pg_23.smil",
       "type": "application/smil+xml",
       "id": "pg_23_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_24.smil",
+      "href": "OPS/pg_24.smil",
       "type": "application/smil+xml",
       "id": "pg_24_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_25.smil",
+      "href": "OPS/pg_25.smil",
       "type": "application/smil+xml",
       "id": "pg_25_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_26.smil",
+      "href": "OPS/pg_26.smil",
       "type": "application/smil+xml",
       "id": "pg_26_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_28.smil",
+      "href": "OPS/pg_28.smil",
       "type": "application/smil+xml",
       "id": "pg_28_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_30.smil",
+      "href": "OPS/pg_30.smil",
       "type": "application/smil+xml",
       "id": "pg_30_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_32.smil",
+      "href": "OPS/pg_32.smil",
       "type": "application/smil+xml",
       "id": "pg_32_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_33.smil",
+      "href": "OPS/pg_33.smil",
       "type": "application/smil+xml",
       "id": "pg_33_smil"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_37.xhtml",
+      "href": "OPS/pg_37.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_37"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/silence10.m4a",
+      "href": "OPS/audio/silence10.m4a",
       "type": "audio/mpeg",
       "id": "audio_1"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/silence10_r.m4a",
+      "href": "OPS/audio/silence10_r.m4a",
       "type": "audio/mpeg",
       "id": "audio_2"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town05.m4a",
+      "href": "OPS/audio/whispering_town05.m4a",
       "type": "audio/mpeg",
       "id": "audio_3"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town06.m4a",
+      "href": "OPS/audio/whispering_town06.m4a",
       "type": "audio/mpeg",
       "id": "audio_4"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town07.m4a",
+      "href": "OPS/audio/whispering_town07.m4a",
       "type": "audio/mpeg",
       "id": "audio_5"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town08.m4a",
+      "href": "OPS/audio/whispering_town08.m4a",
       "type": "audio/mpeg",
       "id": "audio_6"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town10.m4a",
+      "href": "OPS/audio/whispering_town10.m4a",
       "type": "audio/mpeg",
       "id": "audio_7"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town11.m4a",
+      "href": "OPS/audio/whispering_town11.m4a",
       "type": "audio/mpeg",
       "id": "audio_8"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town12.m4a",
+      "href": "OPS/audio/whispering_town12.m4a",
       "type": "audio/mpeg",
       "id": "audio_9"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town13.m4a",
+      "href": "OPS/audio/whispering_town13.m4a",
       "type": "audio/mpeg",
       "id": "audio_10"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town14.m4a",
+      "href": "OPS/audio/whispering_town14.m4a",
       "type": "audio/mpeg",
       "id": "audio_11"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town15.m4a",
+      "href": "OPS/audio/whispering_town15.m4a",
       "type": "audio/mpeg",
       "id": "audio_12"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town16.m4a",
+      "href": "OPS/audio/whispering_town16.m4a",
       "type": "audio/mpeg",
       "id": "audio_13"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town17.m4a",
+      "href": "OPS/audio/whispering_town17.m4a",
       "type": "audio/mpeg",
       "id": "audio_14"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town18.m4a",
+      "href": "OPS/audio/whispering_town18.m4a",
       "type": "audio/mpeg",
       "id": "audio_15"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town19.m4a",
+      "href": "OPS/audio/whispering_town19.m4a",
       "type": "audio/mpeg",
       "id": "audio_16"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town20.m4a",
+      "href": "OPS/audio/whispering_town20.m4a",
       "type": "audio/mpeg",
       "id": "audio_17"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town21.m4a",
+      "href": "OPS/audio/whispering_town21.m4a",
       "type": "audio/mpeg",
       "id": "audio_18"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town22.m4a",
+      "href": "OPS/audio/whispering_town22.m4a",
       "type": "audio/mpeg",
       "id": "audio_19"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town23.m4a",
+      "href": "OPS/audio/whispering_town23.m4a",
       "type": "audio/mpeg",
       "id": "audio_20"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town24.m4a",
+      "href": "OPS/audio/whispering_town24.m4a",
       "type": "audio/mpeg",
       "id": "audio_21"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town26.m4a",
+      "href": "OPS/audio/whispering_town26.m4a",
       "type": "audio/mpeg",
       "id": "audio_22"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town28.m4a",
+      "href": "OPS/audio/whispering_town28.m4a",
       "type": "audio/mpeg",
       "id": "audio_23"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town30.m4a",
+      "href": "OPS/audio/whispering_town30.m4a",
       "type": "audio/mpeg",
       "id": "audio_24"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town31.m4a",
+      "href": "OPS/audio/whispering_town31.m4a",
       "type": "audio/mpeg",
       "id": "audio_25"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/whispering_town_title2.m4a",
+      "href": "OPS/audio/whispering_town_title2.m4a",
       "type": "audio/mpeg",
       "id": "audio_26"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/audio/tagline_muisc1_renee.m4a",
+      "href": "OPS/audio/tagline_muisc1_renee.m4a",
       "type": "audio/mpeg",
       "id": "audio_27"
     },
+    { "href": "OPS/toc.ncx", "type": "application/x-dtbncx+xml", "id": "ncx" },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/toc.ncx",
-      "type": "application/x-dtbncx+xml",
-      "id": "ncx"
-    },
-    {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/nav.xhtml",
+      "href": "OPS/nav.xhtml",
       "type": "application/xhtml+xml",
       "id": "nav",
       "rel": "contents"
     }
   ],
   "readingOrder": [
+    { "href": "OPS/pg_1.xhtml", "type": "application/xhtml+xml", "id": "pg_1" },
+    { "href": "OPS/pg_2.xhtml", "type": "application/xhtml+xml", "id": "pg_2" },
+    { "href": "OPS/pg_3.xhtml", "type": "application/xhtml+xml", "id": "pg_3" },
+    { "href": "OPS/pg_4.xhtml", "type": "application/xhtml+xml", "id": "pg_4" },
+    { "href": "OPS/pg_5.xhtml", "type": "application/xhtml+xml", "id": "pg_5" },
+    { "href": "OPS/pg_6.xhtml", "type": "application/xhtml+xml", "id": "pg_6" },
+    { "href": "OPS/pg_7.xhtml", "type": "application/xhtml+xml", "id": "pg_7" },
+    { "href": "OPS/pg_8.xhtml", "type": "application/xhtml+xml", "id": "pg_8" },
+    { "href": "OPS/pg_9.xhtml", "type": "application/xhtml+xml", "id": "pg_9" },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_1.xhtml",
-      "type": "application/xhtml+xml",
-      "id": "pg_1"
-    },
-    {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_2.xhtml",
-      "type": "application/xhtml+xml",
-      "id": "pg_2"
-    },
-    {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_3.xhtml",
-      "type": "application/xhtml+xml",
-      "id": "pg_3"
-    },
-    {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_4.xhtml",
-      "type": "application/xhtml+xml",
-      "id": "pg_4"
-    },
-    {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_5.xhtml",
-      "type": "application/xhtml+xml",
-      "id": "pg_5"
-    },
-    {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_6.xhtml",
-      "type": "application/xhtml+xml",
-      "id": "pg_6"
-    },
-    {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_7.xhtml",
-      "type": "application/xhtml+xml",
-      "id": "pg_7"
-    },
-    {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_8.xhtml",
-      "type": "application/xhtml+xml",
-      "id": "pg_8"
-    },
-    {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_9.xhtml",
-      "type": "application/xhtml+xml",
-      "id": "pg_9"
-    },
-    {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_10.xhtml",
+      "href": "OPS/pg_10.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_10"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_11.xhtml",
+      "href": "OPS/pg_11.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_11"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_12.xhtml",
+      "href": "OPS/pg_12.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_12"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_13.xhtml",
+      "href": "OPS/pg_13.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_13"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_14.xhtml",
+      "href": "OPS/pg_14.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_14"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_15.xhtml",
+      "href": "OPS/pg_15.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_15"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_16.xhtml",
+      "href": "OPS/pg_16.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_16"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_17.xhtml",
+      "href": "OPS/pg_17.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_17"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_18.xhtml",
+      "href": "OPS/pg_18.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_18"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_19.xhtml",
+      "href": "OPS/pg_19.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_19"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_20.xhtml",
+      "href": "OPS/pg_20.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_20"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_21.xhtml",
+      "href": "OPS/pg_21.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_21"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_22.xhtml",
+      "href": "OPS/pg_22.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_22"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_23.xhtml",
+      "href": "OPS/pg_23.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_23"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_24.xhtml",
+      "href": "OPS/pg_24.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_24"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_25.xhtml",
+      "href": "OPS/pg_25.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_25"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_26.xhtml",
+      "href": "OPS/pg_26.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_26"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_27.xhtml",
+      "href": "OPS/pg_27.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_27"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_28.xhtml",
+      "href": "OPS/pg_28.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_28"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_29.xhtml",
+      "href": "OPS/pg_29.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_29"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_30.xhtml",
+      "href": "OPS/pg_30.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_30"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_31.xhtml",
+      "href": "OPS/pg_31.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_31"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_32.xhtml",
+      "href": "OPS/pg_32.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_32"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_33.xhtml",
+      "href": "OPS/pg_33.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_33"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_34.xhtml",
+      "href": "OPS/pg_34.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_34"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_35.xhtml",
+      "href": "OPS/pg_35.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_35"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_36.xhtml",
+      "href": "OPS/pg_36.xhtml",
       "type": "application/xhtml+xml",
       "id": "pg_36"
     }
   ],
-  "toc": [
-    {
-      "title": "cover",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/axisnow/decrypted/OPS/pg_1.xhtml"
-    }
-  ],
+  "toc": [{ "title": "cover", "href": "OPS/pg_1.xhtml" }],
   "links": []
 }

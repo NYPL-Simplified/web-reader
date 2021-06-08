@@ -7,1332 +7,1082 @@
   },
   "resources": [
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/fonts/STIXGeneral.otf",
+      "href": "OPS/fonts/STIXGeneral.otf",
       "type": "application/vnd.ms-opentype",
       "id": "font.stix.regular"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/fonts/STIXGeneralItalic.otf",
+      "href": "OPS/fonts/STIXGeneralItalic.otf",
       "type": "application/vnd.ms-opentype",
       "id": "font.stix.italic"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/fonts/STIXGeneralBol.otf",
+      "href": "OPS/fonts/STIXGeneralBol.otf",
       "type": "application/vnd.ms-opentype",
       "id": "font.stix.bold"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/fonts/STIXGeneralBolIta.otf",
+      "href": "OPS/fonts/STIXGeneralBolIta.otf",
       "type": "application/vnd.ms-opentype",
       "id": "font.stix.bold.italic"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/toc.xhtml",
+      "href": "OPS/toc.xhtml",
       "type": "application/xhtml+xml",
       "id": "toc",
       "rel": "contents"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/cover.xhtml",
+      "href": "OPS/cover.xhtml",
       "type": "application/xhtml+xml",
       "id": "cover"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/images/9780316000000.jpg",
+      "href": "OPS/images/9780316000000.jpg",
       "type": "image/jpeg",
       "id": "cover-image",
       "rel": "cover",
       "width": 646,
       "height": 902
     },
+    { "href": "OPS/css/stylesheet.css", "type": "text/css", "id": "style" },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/css/stylesheet.css",
-      "type": "text/css",
-      "id": "style"
-    },
-    {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/images/Moby-Dick_FE_title_page.jpg",
+      "href": "OPS/images/Moby-Dick_FE_title_page.jpg",
       "type": "image/jpeg",
       "id": "aMoby-Dick_FE_title_page"
     }
   ],
   "readingOrder": [
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/titlepage.xhtml",
+      "href": "OPS/titlepage.xhtml",
       "type": "application/xhtml+xml",
       "id": "titlepage"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/toc-short.xhtml",
+      "href": "OPS/toc-short.xhtml",
       "type": "application/xhtml+xml",
       "id": "brief-toc"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/preface_001.xhtml",
+      "href": "OPS/preface_001.xhtml",
       "type": "application/xhtml+xml",
       "id": "xpreface_001"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/introduction_001.xhtml",
+      "href": "OPS/introduction_001.xhtml",
       "type": "application/xhtml+xml",
       "id": "xintroduction_001"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/epigraph_001.xhtml",
+      "href": "OPS/epigraph_001.xhtml",
       "type": "application/xhtml+xml",
       "id": "xepigraph_001"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_001.xhtml",
+      "href": "OPS/chapter_001.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_001"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_002.xhtml",
+      "href": "OPS/chapter_002.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_002"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_003.xhtml",
+      "href": "OPS/chapter_003.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_003"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_004.xhtml",
+      "href": "OPS/chapter_004.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_004"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_005.xhtml",
+      "href": "OPS/chapter_005.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_005"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_006.xhtml",
+      "href": "OPS/chapter_006.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_006"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_007.xhtml",
+      "href": "OPS/chapter_007.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_007"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_008.xhtml",
+      "href": "OPS/chapter_008.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_008"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_009.xhtml",
+      "href": "OPS/chapter_009.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_009"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_010.xhtml",
+      "href": "OPS/chapter_010.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_010"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_011.xhtml",
+      "href": "OPS/chapter_011.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_011"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_012.xhtml",
+      "href": "OPS/chapter_012.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_012"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_013.xhtml",
+      "href": "OPS/chapter_013.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_013"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_014.xhtml",
+      "href": "OPS/chapter_014.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_014"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_015.xhtml",
+      "href": "OPS/chapter_015.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_015"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_016.xhtml",
+      "href": "OPS/chapter_016.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_016"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_017.xhtml",
+      "href": "OPS/chapter_017.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_017"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_018.xhtml",
+      "href": "OPS/chapter_018.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_018"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_019.xhtml",
+      "href": "OPS/chapter_019.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_019"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_020.xhtml",
+      "href": "OPS/chapter_020.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_020"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_021.xhtml",
+      "href": "OPS/chapter_021.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_021"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_022.xhtml",
+      "href": "OPS/chapter_022.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_022"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_023.xhtml",
+      "href": "OPS/chapter_023.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_023"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_024.xhtml",
+      "href": "OPS/chapter_024.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_024"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_025.xhtml",
+      "href": "OPS/chapter_025.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_025"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_026.xhtml",
+      "href": "OPS/chapter_026.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_026"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_027.xhtml",
+      "href": "OPS/chapter_027.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_027"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_028.xhtml",
+      "href": "OPS/chapter_028.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_028"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_029.xhtml",
+      "href": "OPS/chapter_029.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_029"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_030.xhtml",
+      "href": "OPS/chapter_030.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_030"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_031.xhtml",
+      "href": "OPS/chapter_031.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_031"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_032.xhtml",
+      "href": "OPS/chapter_032.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_032"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_033.xhtml",
+      "href": "OPS/chapter_033.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_033"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_034.xhtml",
+      "href": "OPS/chapter_034.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_034"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_035.xhtml",
+      "href": "OPS/chapter_035.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_035"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_036.xhtml",
+      "href": "OPS/chapter_036.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_036"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_037.xhtml",
+      "href": "OPS/chapter_037.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_037"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_038.xhtml",
+      "href": "OPS/chapter_038.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_038"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_039.xhtml",
+      "href": "OPS/chapter_039.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_039"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_040.xhtml",
+      "href": "OPS/chapter_040.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_040"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_041.xhtml",
+      "href": "OPS/chapter_041.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_041"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_042.xhtml",
+      "href": "OPS/chapter_042.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_042"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_043.xhtml",
+      "href": "OPS/chapter_043.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_043"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_044.xhtml",
+      "href": "OPS/chapter_044.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_044"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_045.xhtml",
+      "href": "OPS/chapter_045.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_045"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_046.xhtml",
+      "href": "OPS/chapter_046.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_046"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_047.xhtml",
+      "href": "OPS/chapter_047.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_047"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_048.xhtml",
+      "href": "OPS/chapter_048.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_048"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_049.xhtml",
+      "href": "OPS/chapter_049.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_049"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_050.xhtml",
+      "href": "OPS/chapter_050.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_050"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_051.xhtml",
+      "href": "OPS/chapter_051.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_051"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_052.xhtml",
+      "href": "OPS/chapter_052.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_052"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_053.xhtml",
+      "href": "OPS/chapter_053.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_053"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_054.xhtml",
+      "href": "OPS/chapter_054.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_054"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_055.xhtml",
+      "href": "OPS/chapter_055.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_055"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_056.xhtml",
+      "href": "OPS/chapter_056.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_056"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_057.xhtml",
+      "href": "OPS/chapter_057.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_057"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_058.xhtml",
+      "href": "OPS/chapter_058.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_058"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_059.xhtml",
+      "href": "OPS/chapter_059.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_059"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_060.xhtml",
+      "href": "OPS/chapter_060.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_060"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_061.xhtml",
+      "href": "OPS/chapter_061.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_061"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_062.xhtml",
+      "href": "OPS/chapter_062.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_062"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_063.xhtml",
+      "href": "OPS/chapter_063.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_063"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_064.xhtml",
+      "href": "OPS/chapter_064.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_064"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_065.xhtml",
+      "href": "OPS/chapter_065.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_065"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_066.xhtml",
+      "href": "OPS/chapter_066.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_066"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_067.xhtml",
+      "href": "OPS/chapter_067.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_067"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_068.xhtml",
+      "href": "OPS/chapter_068.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_068"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_069.xhtml",
+      "href": "OPS/chapter_069.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_069"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_070.xhtml",
+      "href": "OPS/chapter_070.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_070"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_071.xhtml",
+      "href": "OPS/chapter_071.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_071"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_072.xhtml",
+      "href": "OPS/chapter_072.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_072"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_073.xhtml",
+      "href": "OPS/chapter_073.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_073"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_074.xhtml",
+      "href": "OPS/chapter_074.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_074"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_075.xhtml",
+      "href": "OPS/chapter_075.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_075"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_076.xhtml",
+      "href": "OPS/chapter_076.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_076"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_077.xhtml",
+      "href": "OPS/chapter_077.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_077"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_078.xhtml",
+      "href": "OPS/chapter_078.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_078"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_079.xhtml",
+      "href": "OPS/chapter_079.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_079"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_080.xhtml",
+      "href": "OPS/chapter_080.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_080"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_081.xhtml",
+      "href": "OPS/chapter_081.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_081"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_082.xhtml",
+      "href": "OPS/chapter_082.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_082"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_083.xhtml",
+      "href": "OPS/chapter_083.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_083"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_084.xhtml",
+      "href": "OPS/chapter_084.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_084"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_085.xhtml",
+      "href": "OPS/chapter_085.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_085"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_086.xhtml",
+      "href": "OPS/chapter_086.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_086"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_087.xhtml",
+      "href": "OPS/chapter_087.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_087"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_088.xhtml",
+      "href": "OPS/chapter_088.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_088"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_089.xhtml",
+      "href": "OPS/chapter_089.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_089"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_090.xhtml",
+      "href": "OPS/chapter_090.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_090"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_091.xhtml",
+      "href": "OPS/chapter_091.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_091"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_092.xhtml",
+      "href": "OPS/chapter_092.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_092"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_093.xhtml",
+      "href": "OPS/chapter_093.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_093"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_094.xhtml",
+      "href": "OPS/chapter_094.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_094"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_095.xhtml",
+      "href": "OPS/chapter_095.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_095"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_096.xhtml",
+      "href": "OPS/chapter_096.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_096"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_097.xhtml",
+      "href": "OPS/chapter_097.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_097"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_098.xhtml",
+      "href": "OPS/chapter_098.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_098"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_099.xhtml",
+      "href": "OPS/chapter_099.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_099"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_100.xhtml",
+      "href": "OPS/chapter_100.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_100"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_101.xhtml",
+      "href": "OPS/chapter_101.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_101"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_102.xhtml",
+      "href": "OPS/chapter_102.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_102"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_103.xhtml",
+      "href": "OPS/chapter_103.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_103"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_104.xhtml",
+      "href": "OPS/chapter_104.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_104"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_105.xhtml",
+      "href": "OPS/chapter_105.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_105"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_106.xhtml",
+      "href": "OPS/chapter_106.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_106"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_107.xhtml",
+      "href": "OPS/chapter_107.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_107"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_108.xhtml",
+      "href": "OPS/chapter_108.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_108"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_109.xhtml",
+      "href": "OPS/chapter_109.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_109"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_110.xhtml",
+      "href": "OPS/chapter_110.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_110"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_111.xhtml",
+      "href": "OPS/chapter_111.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_111"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_112.xhtml",
+      "href": "OPS/chapter_112.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_112"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_113.xhtml",
+      "href": "OPS/chapter_113.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_113"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_114.xhtml",
+      "href": "OPS/chapter_114.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_114"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_115.xhtml",
+      "href": "OPS/chapter_115.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_115"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_116.xhtml",
+      "href": "OPS/chapter_116.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_116"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_117.xhtml",
+      "href": "OPS/chapter_117.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_117"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_118.xhtml",
+      "href": "OPS/chapter_118.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_118"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_119.xhtml",
+      "href": "OPS/chapter_119.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_119"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_120.xhtml",
+      "href": "OPS/chapter_120.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_120"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_121.xhtml",
+      "href": "OPS/chapter_121.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_121"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_122.xhtml",
+      "href": "OPS/chapter_122.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_122"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_123.xhtml",
+      "href": "OPS/chapter_123.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_123"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_124.xhtml",
+      "href": "OPS/chapter_124.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_124"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_125.xhtml",
+      "href": "OPS/chapter_125.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_125"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_126.xhtml",
+      "href": "OPS/chapter_126.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_126"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_127.xhtml",
+      "href": "OPS/chapter_127.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_127"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_128.xhtml",
+      "href": "OPS/chapter_128.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_128"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_129.xhtml",
+      "href": "OPS/chapter_129.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_129"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_130.xhtml",
+      "href": "OPS/chapter_130.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_130"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_131.xhtml",
+      "href": "OPS/chapter_131.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_131"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_132.xhtml",
+      "href": "OPS/chapter_132.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_132"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_133.xhtml",
+      "href": "OPS/chapter_133.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_133"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_134.xhtml",
+      "href": "OPS/chapter_134.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_134"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_135.xhtml",
+      "href": "OPS/chapter_135.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_135"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_136.xhtml",
+      "href": "OPS/chapter_136.xhtml",
       "type": "application/xhtml+xml",
       "id": "xchapter_136"
     },
     {
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/copyright.xhtml",
+      "href": "OPS/copyright.xhtml",
       "type": "application/xhtml+xml",
       "id": "copyright"
     }
   ],
   "toc": [
-    {
-      "title": "Moby-Dick",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/titlepage.xhtml"
-    },
+    { "title": "Moby-Dick", "href": "OPS/titlepage.xhtml" },
     {
       "title": "Original Transcriber’s Notes:",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/preface_001.xhtml"
+      "href": "OPS/preface_001.xhtml"
     },
-    {
-      "title": "ETYMOLOGY.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/introduction_001.xhtml"
-    },
+    { "title": "ETYMOLOGY.", "href": "OPS/introduction_001.xhtml" },
     {
       "title": "EXTRACTS (Supplied by a Sub-Sub-Librarian).",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/epigraph_001.xhtml"
+      "href": "OPS/epigraph_001.xhtml"
     },
-    {
-      "title": "Chapter 1. Loomings.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_001.xhtml"
-    },
-    {
-      "title": "Chapter 2. The Carpet-Bag.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_002.xhtml"
-    },
-    {
-      "title": "Chapter 3. The Spouter-Inn.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_003.xhtml"
-    },
-    {
-      "title": "Chapter 4. The Counterpane.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_004.xhtml"
-    },
-    {
-      "title": "Chapter 5. Breakfast.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_005.xhtml"
-    },
-    {
-      "title": "Chapter 6. The Street.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_006.xhtml"
-    },
-    {
-      "title": "Chapter 7. The Chapel.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_007.xhtml"
-    },
-    {
-      "title": "Chapter 8. The Pulpit.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_008.xhtml"
-    },
-    {
-      "title": "Chapter 9. The Sermon.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_009.xhtml"
-    },
-    {
-      "title": "Chapter 10. A Bosom Friend.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_010.xhtml"
-    },
-    {
-      "title": "Chapter 11. Nightgown.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_011.xhtml"
-    },
-    {
-      "title": "Chapter 12. Biographical.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_012.xhtml"
-    },
-    {
-      "title": "Chapter 13. Wheelbarrow.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_013.xhtml"
-    },
-    {
-      "title": "Chapter 14. Nantucket.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_014.xhtml"
-    },
-    {
-      "title": "Chapter 15. Chowder.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_015.xhtml"
-    },
-    {
-      "title": "Chapter 16. The Ship.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_016.xhtml"
-    },
-    {
-      "title": "Chapter 17. The Ramadan.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_017.xhtml"
-    },
-    {
-      "title": "Chapter 18. His Mark.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_018.xhtml"
-    },
-    {
-      "title": "Chapter 19. The Prophet.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_019.xhtml"
-    },
-    {
-      "title": "Chapter 20. All Astir.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_020.xhtml"
-    },
-    {
-      "title": "Chapter 21. Going Aboard.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_021.xhtml"
-    },
+    { "title": "Chapter 1. Loomings.", "href": "OPS/chapter_001.xhtml" },
+    { "title": "Chapter 2. The Carpet-Bag.", "href": "OPS/chapter_002.xhtml" },
+    { "title": "Chapter 3. The Spouter-Inn.", "href": "OPS/chapter_003.xhtml" },
+    { "title": "Chapter 4. The Counterpane.", "href": "OPS/chapter_004.xhtml" },
+    { "title": "Chapter 5. Breakfast.", "href": "OPS/chapter_005.xhtml" },
+    { "title": "Chapter 6. The Street.", "href": "OPS/chapter_006.xhtml" },
+    { "title": "Chapter 7. The Chapel.", "href": "OPS/chapter_007.xhtml" },
+    { "title": "Chapter 8. The Pulpit.", "href": "OPS/chapter_008.xhtml" },
+    { "title": "Chapter 9. The Sermon.", "href": "OPS/chapter_009.xhtml" },
+    { "title": "Chapter 10. A Bosom Friend.", "href": "OPS/chapter_010.xhtml" },
+    { "title": "Chapter 11. Nightgown.", "href": "OPS/chapter_011.xhtml" },
+    { "title": "Chapter 12. Biographical.", "href": "OPS/chapter_012.xhtml" },
+    { "title": "Chapter 13. Wheelbarrow.", "href": "OPS/chapter_013.xhtml" },
+    { "title": "Chapter 14. Nantucket.", "href": "OPS/chapter_014.xhtml" },
+    { "title": "Chapter 15. Chowder.", "href": "OPS/chapter_015.xhtml" },
+    { "title": "Chapter 16. The Ship.", "href": "OPS/chapter_016.xhtml" },
+    { "title": "Chapter 17. The Ramadan.", "href": "OPS/chapter_017.xhtml" },
+    { "title": "Chapter 18. His Mark.", "href": "OPS/chapter_018.xhtml" },
+    { "title": "Chapter 19. The Prophet.", "href": "OPS/chapter_019.xhtml" },
+    { "title": "Chapter 20. All Astir.", "href": "OPS/chapter_020.xhtml" },
+    { "title": "Chapter 21. Going Aboard.", "href": "OPS/chapter_021.xhtml" },
     {
       "title": "Chapter 22. Merry Christmas.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_022.xhtml"
+      "href": "OPS/chapter_022.xhtml"
     },
-    {
-      "title": "Chapter 23. The Lee Shore.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_023.xhtml"
-    },
-    {
-      "title": "Chapter 24. The Advocate.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_024.xhtml"
-    },
-    {
-      "title": "Chapter 25. Postscript.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_025.xhtml"
-    },
+    { "title": "Chapter 23. The Lee Shore.", "href": "OPS/chapter_023.xhtml" },
+    { "title": "Chapter 24. The Advocate.", "href": "OPS/chapter_024.xhtml" },
+    { "title": "Chapter 25. Postscript.", "href": "OPS/chapter_025.xhtml" },
     {
       "title": "Chapter 26. Knights and Squires.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_026.xhtml"
+      "href": "OPS/chapter_026.xhtml"
     },
     {
       "title": "Chapter 27. Knights and Squires.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_027.xhtml"
+      "href": "OPS/chapter_027.xhtml"
     },
-    {
-      "title": "Chapter 28. Ahab.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_028.xhtml"
-    },
+    { "title": "Chapter 28. Ahab.", "href": "OPS/chapter_028.xhtml" },
     {
       "title": "Chapter 29. Enter Ahab; to Him, Stubb.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_029.xhtml"
+      "href": "OPS/chapter_029.xhtml"
     },
-    {
-      "title": "Chapter 30. The Pipe.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_030.xhtml"
-    },
-    {
-      "title": "Chapter 31. Queen Mab.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_031.xhtml"
-    },
-    {
-      "title": "Chapter 32. Cetology.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_032.xhtml"
-    },
+    { "title": "Chapter 30. The Pipe.", "href": "OPS/chapter_030.xhtml" },
+    { "title": "Chapter 31. Queen Mab.", "href": "OPS/chapter_031.xhtml" },
+    { "title": "Chapter 32. Cetology.", "href": "OPS/chapter_032.xhtml" },
     {
       "title": "Chapter 33. The Specksnyder.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_033.xhtml"
+      "href": "OPS/chapter_033.xhtml"
     },
     {
       "title": "Chapter 34. The Cabin-Table.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_034.xhtml"
+      "href": "OPS/chapter_034.xhtml"
     },
-    {
-      "title": "Chapter 35. The Mast-Head.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_035.xhtml"
-    },
+    { "title": "Chapter 35. The Mast-Head.", "href": "OPS/chapter_035.xhtml" },
     {
       "title": "Chapter 36. The Quarter-Deck.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_036.xhtml"
+      "href": "OPS/chapter_036.xhtml"
     },
-    {
-      "title": "Chapter 37. Sunset.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_037.xhtml"
-    },
-    {
-      "title": "Chapter 38. Dusk.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_038.xhtml"
-    },
+    { "title": "Chapter 37. Sunset.", "href": "OPS/chapter_037.xhtml" },
+    { "title": "Chapter 38. Dusk.", "href": "OPS/chapter_038.xhtml" },
     {
       "title": "Chapter 39. First Night Watch.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_039.xhtml"
+      "href": "OPS/chapter_039.xhtml"
     },
     {
       "title": "Chapter 40. Midnight, Forecastle.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_040.xhtml"
+      "href": "OPS/chapter_040.xhtml"
     },
-    {
-      "title": "Chapter 41. Moby Dick.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_041.xhtml"
-    },
+    { "title": "Chapter 41. Moby Dick.", "href": "OPS/chapter_041.xhtml" },
     {
       "title": "Chapter 42. The Whiteness of The Whale.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_042.xhtml"
+      "href": "OPS/chapter_042.xhtml"
     },
-    {
-      "title": "Chapter 43. Hark!",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_043.xhtml"
-    },
-    {
-      "title": "Chapter 44. The Chart.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_044.xhtml"
-    },
-    {
-      "title": "Chapter 45. The Affidavit.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_045.xhtml"
-    },
-    {
-      "title": "Chapter 46. Surmises.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_046.xhtml"
-    },
-    {
-      "title": "Chapter 47. The Mat-Maker.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_047.xhtml"
-    },
+    { "title": "Chapter 43. Hark!", "href": "OPS/chapter_043.xhtml" },
+    { "title": "Chapter 44. The Chart.", "href": "OPS/chapter_044.xhtml" },
+    { "title": "Chapter 45. The Affidavit.", "href": "OPS/chapter_045.xhtml" },
+    { "title": "Chapter 46. Surmises.", "href": "OPS/chapter_046.xhtml" },
+    { "title": "Chapter 47. The Mat-Maker.", "href": "OPS/chapter_047.xhtml" },
     {
       "title": "Chapter 48. The First Lowering.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_048.xhtml"
+      "href": "OPS/chapter_048.xhtml"
     },
-    {
-      "title": "Chapter 49. The Hyena.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_049.xhtml"
-    },
+    { "title": "Chapter 49. The Hyena.", "href": "OPS/chapter_049.xhtml" },
     {
       "title": "Chapter 50. Ahab’s Boat and Crew. Fedallah.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_050.xhtml"
+      "href": "OPS/chapter_050.xhtml"
     },
     {
       "title": "Chapter 51. The Spirit-Spout.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_051.xhtml"
+      "href": "OPS/chapter_051.xhtml"
     },
-    {
-      "title": "Chapter 52. The Albatross.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_052.xhtml"
-    },
-    {
-      "title": "Chapter 53. The Gam.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_053.xhtml"
-    },
+    { "title": "Chapter 52. The Albatross.", "href": "OPS/chapter_052.xhtml" },
+    { "title": "Chapter 53. The Gam.", "href": "OPS/chapter_053.xhtml" },
     {
       "title": "Chapter 54. The Town-Ho’s Story.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_054.xhtml"
+      "href": "OPS/chapter_054.xhtml"
     },
     {
       "title": "Chapter 55. Of the Monstrous Pictures of Whales.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_055.xhtml"
+      "href": "OPS/chapter_055.xhtml"
     },
     {
       "title": "Chapter 56. Of the Less Erroneous Pictures of Whales, and the True",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_056.xhtml"
+      "href": "OPS/chapter_056.xhtml"
     },
     {
       "title": "Chapter 57. Of Whales in Paint; in Teeth; in Wood; in Sheet-Iron; in",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_057.xhtml"
+      "href": "OPS/chapter_057.xhtml"
     },
-    {
-      "title": "Chapter 58. Brit.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_058.xhtml"
-    },
-    {
-      "title": "Chapter 59. Squid.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_059.xhtml"
-    },
-    {
-      "title": "Chapter 60. The Line.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_060.xhtml"
-    },
+    { "title": "Chapter 58. Brit.", "href": "OPS/chapter_058.xhtml" },
+    { "title": "Chapter 59. Squid.", "href": "OPS/chapter_059.xhtml" },
+    { "title": "Chapter 60. The Line.", "href": "OPS/chapter_060.xhtml" },
     {
       "title": "Chapter 61. Stubb Kills a Whale.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_061.xhtml"
+      "href": "OPS/chapter_061.xhtml"
     },
-    {
-      "title": "Chapter 62. The Dart.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_062.xhtml"
-    },
-    {
-      "title": "Chapter 63. The Crotch.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_063.xhtml"
-    },
-    {
-      "title": "Chapter 64. Stubb’s Supper.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_064.xhtml"
-    },
+    { "title": "Chapter 62. The Dart.", "href": "OPS/chapter_062.xhtml" },
+    { "title": "Chapter 63. The Crotch.", "href": "OPS/chapter_063.xhtml" },
+    { "title": "Chapter 64. Stubb’s Supper.", "href": "OPS/chapter_064.xhtml" },
     {
       "title": "Chapter 65. The Whale as a Dish.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_065.xhtml"
+      "href": "OPS/chapter_065.xhtml"
     },
     {
       "title": "Chapter 66. The Shark Massacre.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_066.xhtml"
+      "href": "OPS/chapter_066.xhtml"
     },
-    {
-      "title": "Chapter 67. Cutting In.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_067.xhtml"
-    },
-    {
-      "title": "Chapter 68. The Blanket.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_068.xhtml"
-    },
-    {
-      "title": "Chapter 69. The Funeral.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_069.xhtml"
-    },
-    {
-      "title": "Chapter 70. The Sphynx.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_070.xhtml"
-    },
+    { "title": "Chapter 67. Cutting In.", "href": "OPS/chapter_067.xhtml" },
+    { "title": "Chapter 68. The Blanket.", "href": "OPS/chapter_068.xhtml" },
+    { "title": "Chapter 69. The Funeral.", "href": "OPS/chapter_069.xhtml" },
+    { "title": "Chapter 70. The Sphynx.", "href": "OPS/chapter_070.xhtml" },
     {
       "title": "Chapter 71. The Jeroboam’s Story.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_071.xhtml"
+      "href": "OPS/chapter_071.xhtml"
     },
     {
       "title": "Chapter 72. The Monkey-Rope.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_072.xhtml"
+      "href": "OPS/chapter_072.xhtml"
     },
     {
       "title": "Chapter 73. Stubb and Flask Kill a Right Whale; and Then Have a Talk",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_073.xhtml"
+      "href": "OPS/chapter_073.xhtml"
     },
     {
       "title": "Chapter 74. The Sperm Whale’s Head—Contrasted View.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_074.xhtml"
+      "href": "OPS/chapter_074.xhtml"
     },
     {
       "title": "Chapter 75. The Right Whale’s Head—Contrasted View.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_075.xhtml"
+      "href": "OPS/chapter_075.xhtml"
     },
     {
       "title": "Chapter 76. The Battering-Ram.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_076.xhtml"
+      "href": "OPS/chapter_076.xhtml"
     },
     {
       "title": "Chapter 77. The Great Heidelburgh Tun.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_077.xhtml"
+      "href": "OPS/chapter_077.xhtml"
     },
     {
       "title": "Chapter 78. Cistern and Buckets.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_078.xhtml"
+      "href": "OPS/chapter_078.xhtml"
     },
-    {
-      "title": "Chapter 79. The Prairie.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_079.xhtml"
-    },
-    {
-      "title": "Chapter 80. The Nut.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_080.xhtml"
-    },
+    { "title": "Chapter 79. The Prairie.", "href": "OPS/chapter_079.xhtml" },
+    { "title": "Chapter 80. The Nut.", "href": "OPS/chapter_080.xhtml" },
     {
       "title": "Chapter 81. The Pequod Meets The Virgin.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_081.xhtml"
+      "href": "OPS/chapter_081.xhtml"
     },
     {
       "title": "Chapter 82. The Honour and Glory of Whaling.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_082.xhtml"
+      "href": "OPS/chapter_082.xhtml"
     },
     {
       "title": "Chapter 83. Jonah Historically Regarded.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_083.xhtml"
+      "href": "OPS/chapter_083.xhtml"
     },
-    {
-      "title": "Chapter 84. Pitchpoling.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_084.xhtml"
-    },
-    {
-      "title": "Chapter 85. The Fountain.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_085.xhtml"
-    },
-    {
-      "title": "Chapter 86. The Tail.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_086.xhtml"
-    },
+    { "title": "Chapter 84. Pitchpoling.", "href": "OPS/chapter_084.xhtml" },
+    { "title": "Chapter 85. The Fountain.", "href": "OPS/chapter_085.xhtml" },
+    { "title": "Chapter 86. The Tail.", "href": "OPS/chapter_086.xhtml" },
     {
       "title": "Chapter 87. The Grand Armada.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_087.xhtml"
+      "href": "OPS/chapter_087.xhtml"
     },
     {
       "title": "Chapter 88. Schools and Schoolmasters.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_088.xhtml"
+      "href": "OPS/chapter_088.xhtml"
     },
     {
       "title": "Chapter 89. Fast-Fish and Loose-Fish.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_089.xhtml"
+      "href": "OPS/chapter_089.xhtml"
     },
-    {
-      "title": "Chapter 90. Heads or Tails.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_090.xhtml"
-    },
+    { "title": "Chapter 90. Heads or Tails.", "href": "OPS/chapter_090.xhtml" },
     {
       "title": "Chapter 91. The Pequod Meets The Rose-Bud.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_091.xhtml"
+      "href": "OPS/chapter_091.xhtml"
     },
-    {
-      "title": "Chapter 92. Ambergris.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_092.xhtml"
-    },
-    {
-      "title": "Chapter 93. The Castaway.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_093.xhtml"
-    },
+    { "title": "Chapter 92. Ambergris.", "href": "OPS/chapter_092.xhtml" },
+    { "title": "Chapter 93. The Castaway.", "href": "OPS/chapter_093.xhtml" },
     {
       "title": "Chapter 94. A Squeeze of the Hand.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_094.xhtml"
+      "href": "OPS/chapter_094.xhtml"
     },
-    {
-      "title": "Chapter 95. The Cassock.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_095.xhtml"
-    },
-    {
-      "title": "Chapter 96. The Try-Works.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_096.xhtml"
-    },
-    {
-      "title": "Chapter 97. The Lamp.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_097.xhtml"
-    },
+    { "title": "Chapter 95. The Cassock.", "href": "OPS/chapter_095.xhtml" },
+    { "title": "Chapter 96. The Try-Works.", "href": "OPS/chapter_096.xhtml" },
+    { "title": "Chapter 97. The Lamp.", "href": "OPS/chapter_097.xhtml" },
     {
       "title": "Chapter 98. Stowing Down and Clearing Up.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_098.xhtml"
+      "href": "OPS/chapter_098.xhtml"
     },
-    {
-      "title": "Chapter 99. The Doubloon.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_099.xhtml"
-    },
-    {
-      "title": "Chapter 100. Leg and Arm.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_100.xhtml"
-    },
-    {
-      "title": "Chapter 101. The Decanter.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_101.xhtml"
-    },
+    { "title": "Chapter 99. The Doubloon.", "href": "OPS/chapter_099.xhtml" },
+    { "title": "Chapter 100. Leg and Arm.", "href": "OPS/chapter_100.xhtml" },
+    { "title": "Chapter 101. The Decanter.", "href": "OPS/chapter_101.xhtml" },
     {
       "title": "Chapter 102. A Bower in the Arsacides.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_102.xhtml"
+      "href": "OPS/chapter_102.xhtml"
     },
     {
       "title": "Chapter 103. Measurement of The Whale’s Skeleton.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_103.xhtml"
+      "href": "OPS/chapter_103.xhtml"
     },
     {
       "title": "Chapter 104. The Fossil Whale.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_104.xhtml"
+      "href": "OPS/chapter_104.xhtml"
     },
     {
       "title": "Chapter 105. Does the Whale’s Magnitude Diminish?—Will He Perish?",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_105.xhtml"
+      "href": "OPS/chapter_105.xhtml"
     },
-    {
-      "title": "Chapter 106. Ahab’s Leg.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_106.xhtml"
-    },
-    {
-      "title": "Chapter 107. The Carpenter.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_107.xhtml"
-    },
+    { "title": "Chapter 106. Ahab’s Leg.", "href": "OPS/chapter_106.xhtml" },
+    { "title": "Chapter 107. The Carpenter.", "href": "OPS/chapter_107.xhtml" },
     {
       "title": "Chapter 108. Ahab and the Carpenter.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_108.xhtml"
+      "href": "OPS/chapter_108.xhtml"
     },
     {
       "title": "Chapter 109. Ahab and Starbuck in the Cabin.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_109.xhtml"
+      "href": "OPS/chapter_109.xhtml"
     },
     {
       "title": "Chapter 110. Queequeg in His Coffin.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_110.xhtml"
+      "href": "OPS/chapter_110.xhtml"
     },
-    {
-      "title": "Chapter 111. The Pacific.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_111.xhtml"
-    },
+    { "title": "Chapter 111. The Pacific.", "href": "OPS/chapter_111.xhtml" },
     {
       "title": "Chapter 112. The Blacksmith.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_112.xhtml"
+      "href": "OPS/chapter_112.xhtml"
     },
-    {
-      "title": "Chapter 113. The Forge.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_113.xhtml"
-    },
-    {
-      "title": "Chapter 114. The Gilder.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_114.xhtml"
-    },
+    { "title": "Chapter 113. The Forge.", "href": "OPS/chapter_113.xhtml" },
+    { "title": "Chapter 114. The Gilder.", "href": "OPS/chapter_114.xhtml" },
     {
       "title": "Chapter 115. The Pequod Meets The Bachelor.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_115.xhtml"
+      "href": "OPS/chapter_115.xhtml"
     },
     {
       "title": "Chapter 116. The Dying Whale.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_116.xhtml"
+      "href": "OPS/chapter_116.xhtml"
     },
     {
       "title": "Chapter 117. The Whale Watch.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_117.xhtml"
+      "href": "OPS/chapter_117.xhtml"
     },
-    {
-      "title": "Chapter 118. The Quadrant.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_118.xhtml"
-    },
-    {
-      "title": "Chapter 119. The Candles.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_119.xhtml"
-    },
+    { "title": "Chapter 118. The Quadrant.", "href": "OPS/chapter_118.xhtml" },
+    { "title": "Chapter 119. The Candles.", "href": "OPS/chapter_119.xhtml" },
     {
       "title": "Chapter 120. The Deck Towards the End of the First Night Watch.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_120.xhtml"
+      "href": "OPS/chapter_120.xhtml"
     },
     {
       "title": "Chapter 121. Midnight.—The Forecastle Bulwarks.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_121.xhtml"
+      "href": "OPS/chapter_121.xhtml"
     },
     {
       "title": "Chapter 122. Midnight Aloft.—Thunder and Lightning.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_122.xhtml"
+      "href": "OPS/chapter_122.xhtml"
     },
-    {
-      "title": "Chapter 123. The Musket.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_123.xhtml"
-    },
-    {
-      "title": "Chapter 124. The Needle.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_124.xhtml"
-    },
+    { "title": "Chapter 123. The Musket.", "href": "OPS/chapter_123.xhtml" },
+    { "title": "Chapter 124. The Needle.", "href": "OPS/chapter_124.xhtml" },
     {
       "title": "Chapter 125. The Log and Line.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_125.xhtml"
+      "href": "OPS/chapter_125.xhtml"
     },
-    {
-      "title": "Chapter 126. The Life-Buoy.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_126.xhtml"
-    },
-    {
-      "title": "Chapter 127. The Deck.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_127.xhtml"
-    },
+    { "title": "Chapter 126. The Life-Buoy.", "href": "OPS/chapter_126.xhtml" },
+    { "title": "Chapter 127. The Deck.", "href": "OPS/chapter_127.xhtml" },
     {
       "title": "Chapter 128. The Pequod Meets The Rachel.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_128.xhtml"
+      "href": "OPS/chapter_128.xhtml"
     },
-    {
-      "title": "Chapter 129. The Cabin.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_129.xhtml"
-    },
-    {
-      "title": "Chapter 130. The Hat.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_130.xhtml"
-    },
+    { "title": "Chapter 129. The Cabin.", "href": "OPS/chapter_129.xhtml" },
+    { "title": "Chapter 130. The Hat.", "href": "OPS/chapter_130.xhtml" },
     {
       "title": "Chapter 131. The Pequod Meets The Delight.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_131.xhtml"
+      "href": "OPS/chapter_131.xhtml"
     },
-    {
-      "title": "Chapter 132. The Symphony.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_132.xhtml"
-    },
+    { "title": "Chapter 132. The Symphony.", "href": "OPS/chapter_132.xhtml" },
     {
       "title": "Chapter 133. The Chase—First Day.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_133.xhtml"
+      "href": "OPS/chapter_133.xhtml"
     },
     {
       "title": "Chapter 134. The Chase—Second Day.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_134.xhtml"
+      "href": "OPS/chapter_134.xhtml"
     },
     {
       "title": "Chapter 135. The Chase.—Third Day.",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_135.xhtml"
+      "href": "OPS/chapter_135.xhtml"
     },
-    {
-      "title": "Epilogue",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/chapter_136.xhtml"
-    },
-    {
-      "title": "Copyright Page",
-      "href": "/Users/ksj/d/web-reader/example/static/samples/OPS/copyright.xhtml"
-    }
+    { "title": "Epilogue", "href": "OPS/chapter_136.xhtml" },
+    { "title": "Copyright Page", "href": "OPS/copyright.xhtml" }
   ],
   "links": []
 }
