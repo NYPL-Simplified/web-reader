@@ -4,7 +4,7 @@ node_modules
 .cache
 dist
 
-example/.parcel-cache
-example/.cache
+.parcel-cache
+.cache
 
 storybook-static

@@ -5,22 +5,19 @@ import * as ReactDOM from 'react-dom';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 import WebReader from '../src';
 import { GetContent } from '../src/types';
-import { initDecryptor, makeGetContent } from '../src/utils/decryptAxisNow';
 
 const AxisNowEpub = () => {
   const [getContent, setGetContent] = React.useState<GetContent | null>(null);
 
   React.useEffect(() => {
-    initDecryptor().then((decryptor) => {
-      setGetContent(() => makeGetContent(decryptor));
-    });
+    // get content
   }, []);
 
   if (!getContent) return <div>"Loading Decryptor..."</div>;
 
   return (
     <WebReader
-      webpubManifestUrl="http://localhost:1234/axisnow-webpub/manifest.json"
+      webpubManifestUrl="http://localhost:1234/samples/axisnow/encrypted/manifest.json"
       getContent={getContent}
     />
   );
@@ -33,8 +30,11 @@ const App = () => {
         <Route path="/pdf">
           <WebReader webpubManifestUrl="/muse13454.json" />
         </Route>
-        <Route path="/axisnow-epub">
+        <Route path="/axisnow-encrypted">
           <AxisNowEpub />
+        </Route>
+        <Route path="/axisnow-decrypted">
+          <WebReader webpubManifestUrl="http://localhost:1234/samples/axisnow/decrypted/manifest.json" />
         </Route>
         <Route path="/moby-epub2">
           <WebReader webpubManifestUrl="http://localhost:1234/samples/moby-epub2-exploded/manifest.json" />
@@ -46,7 +46,10 @@ const App = () => {
           <h1>Web Reader Proof of Concept</h1>
           <ul>
             <li>
-              <Link to="/axisnow-epub">Encrypted ePub Example</Link>
+              <Link to="/axisnow-encrypted">Encrypted EPUB Example</Link>
+            </li>
+            <li>
+              <Link to="/axisnow-decrypted">Manually Decrypted EPUB</Link>
             </li>
             <li>
               <Link to="/moby-epub2">Moby EPUB2-based Webpub</Link>
