@@ -1,5 +1,8 @@
+import { ThemeProvider } from '@chakra-ui/react';
 import * as React from 'react';
 import { UseWebReaderReturn } from '../useWebReader';
+import SettingsCard from './SettingsButton';
+import theme from './theme';
 
 /**
  * The default Manager UI. This will be broken into individual components
@@ -13,62 +16,61 @@ const ManagerUI: React.FC<UseWebReaderReturn> = ({
   manifest,
 }) => {
   return (
-    <div
-      style={{
-        height: '100vh',
-        overflow: 'hidden',
-        backgroundColor: 'mistyrose',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <nav
+    <ThemeProvider theme={theme}>
+      <div
         style={{
+          height: '100vh',
+          overflow: 'hidden',
+          backgroundColor: 'mistyrose',
           display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: 8,
+          flexDirection: 'column',
         }}
       >
-        <h1>{manifest?.metadata.title}</h1>
-        <div>
-          <button style={{ margin: 4 }} onClick={navigator?.scroll}>
+        <nav
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: 8,
+          }}
+        >
+          <h1>{manifest?.metadata.title}</h1>
+          <div>
+            {navigator && <SettingsCard navigator={navigator} />}
+            {/* <button style={{ margin: 4 }} onClick={navigator?.scroll}>
             scroll
           </button>
           <button style={{ margin: 4 }} onClick={navigator?.paginate}>
             paginate
-          </button>
-        </div>
-      </nav>
-      {children}
-      <div
-        style={{
-          padding: 8,
-          display: 'flex',
-          justifyContent: 'space-between',
-        }}
-      >
-        <div style={{ display: 'flex' }}>
-          <button style={{ marginRight: 4 }} onClick={navigator?.goBackward}>
-            {`<`} page
-          </button>
-          <button onClick={navigator?.previousSection}> {`<<`} section</button>
-        </div>
-        {/* <div style={{ display: 'flex' }}>
+          </button> */}
+          </div>
+        </nav>
+        {children}
+        <div
+          style={{
+            padding: 8,
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+        >
+          <div style={{ display: 'flex' }}>
+            <button style={{ marginRight: 4 }} onClick={navigator?.goBackward}>
+              {`<`} page
+            </button>
+          </div>
+          {/* <div style={{ display: 'flex' }}>
           <select onChange={handleTocChange}>
             {toc?.map((item) => (
               <Option item={item} key={item.href} level={0} />
             ))}
           </select>
         </div> */}
-        <div style={{ display: 'flex' }}>
-          <button style={{ marginRight: 4 }} onClick={navigator?.nextSection}>
-            section {`>>`}
-          </button>
-          <button onClick={navigator?.goForward}>page {`>`}</button>
+          <div style={{ display: 'flex' }}>
+            <button onClick={navigator?.goForward}>page {`>`}</button>
+          </div>
         </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 };
 

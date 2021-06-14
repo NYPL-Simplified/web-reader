@@ -12,6 +12,7 @@
   },
   "scripts": {
     "example:build": "parcel build example/index.html",
+    "example:nocache": "parcel --no-cache example/index.html",
     "example": "parcel example/index.html",
     "start": "tsdx watch",
     "build": "tsdx build",
@@ -83,7 +84,7 @@
   },
   "dependencies": {
     "@chakra-ui/react": "^1.5.2",
-    "@d-i-t-a/reader": "^1.8.0-beta.1",
+    "@d-i-t-a/reader": "^1.8.4",
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.3.0",
     "@nypl/design-system-react-components": "^0.21.2",

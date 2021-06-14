@@ -3,8 +3,10 @@ import { Button as ChakraButton } from '@chakra-ui/react';
 
 export type ButtonProps = React.ComponentPropsWithRef<typeof ChakraButton>;
 
-const Button: React.FC<ButtonProps> = (props) => {
-  return <ChakraButton variant="solid" {...props} />;
-};
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (props, ref) => {
+    return <ChakraButton ref={ref} variant="solid" {...props} />;
+  }
+);
 
 export default Button;

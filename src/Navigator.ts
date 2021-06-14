@@ -31,9 +31,6 @@ interface Navigator {
   // for navigating one unit, unit depends on the format
   goForward(): Promise<boolean>;
   goBackward(): Promise<boolean>;
-  // for navigating by section
-  nextSection(): Promise<boolean>;
-  previousSection(): Promise<boolean>;
 }
 
 // used for initializer, but unfortunately can't be typed on the
@@ -55,4 +52,5 @@ export interface VisualNavigator extends Navigator {
   // settings
   scroll(): void;
   paginate(): void;
+  isScroll: boolean;
 }
