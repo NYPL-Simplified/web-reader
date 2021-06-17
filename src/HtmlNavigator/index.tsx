@@ -13,18 +13,14 @@ import { fetchJson } from '../utils/fetch';
 export default class HtmlNavigator implements VisualNavigator {
   static Content = EpubContent;
 
-  private constructor(
-    // apparently we don't need the instance for anything
-    // but we should probably change that for the future.
-    readonly readerInstance: any
-  ) {}
+  private constructor(readonly reader: D2Reader) {}
 
   static async init({
     webpubManifestUrl,
     getContent,
   }: NavigatorArguments): Promise<HtmlNavigator> {
     const url = new URL(webpubManifestUrl);
-    const reader = await D2Reader.load({
+    const reader = await D2Reader.build({
       url,
       injectables: injectables as any,
       api: {
@@ -62,7 +58,7 @@ export default class HtmlNavigator implements VisualNavigator {
   }
 
   // get isScrolling(): boolean {
-  //   return D2Reader.isScroll();
+  //   return this.reader.isScroll();
   // }
 
   get readingProgression(): ReadingPosition {
@@ -74,12 +70,12 @@ export default class HtmlNavigator implements VisualNavigator {
   }
 
   get currentLocation() {
-    return D2Reader.currentLocator();
+    return this.reader.currentLocator;
   }
 
   async goTo(locator: Locator) {
     try {
-      await D2Reader.goTo(locator);
+      await this.reader.goTo(locator);
       return true;
     } catch (e) {
       console.error(e);
@@ -88,7 +84,7 @@ export default class HtmlNavigator implements VisualNavigator {
   }
   async goForward() {
     try {
-      await D2Reader.nextPage();
+      await this.reader.nextPage();
       return true;
     } catch (e) {
       console.error(e);
@@ -97,7 +93,7 @@ export default class HtmlNavigator implements VisualNavigator {
   }
   async goBackward() {
     try {
-      await D2Reader.previousPage();
+      await this.reader.previousPage();
       return true;
     } catch (e) {
       console.error(e);
@@ -110,31 +106,18 @@ export default class HtmlNavigator implements VisualNavigator {
   async goRight() {
     return this.goForward();
   }
-  async nextSection() {
-    try {
-      D2Reader.nextResource();
-      return true;
-    } catch (e) {
-      console.error(e);
-      return false;
-    }
-  }
-  async previousSection() {
-    try {
-      D2Reader.previousResource();
-      return true;
-    } catch (e) {
-      console.error(e);
-      return false;
-    }
-  }
 
   // settings
   scroll() {
-    D2Reader.scroll(true);
+    this.reader.scroll(true);
   }
   paginate() {
-    D2Reader.scroll(false);
+    this.reader.scroll(false);
+  }
+  get isScroll() {
+    const settings = this.reader.currentSettings();
+    console.log(settings);
+    return false;
   }
 
   static async fetchManifest(url: string): Promise<WebpubManifest> {

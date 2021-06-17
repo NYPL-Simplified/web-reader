@@ -23,7 +23,7 @@ interface Navigator {
 
   // init(options: NavigatorOptions): Promise<Navigator>;
 
-  currentLocation: Promise<Locator>;
+  currentLocation: Locator;
 
   // change location
   goTo(link: Link): Promise<boolean>;
