@@ -136,6 +136,9 @@ export default class HtmlNavigator implements VisualNavigator {
   paginate() {
     D2Reader.scroll(false);
   }
+  get isScroll() {
+    return false;
+  }
 
   static async fetchManifest(url: string): Promise<WebpubManifest> {
     const manifest: WebpubManifest = await fetchJson(url);
