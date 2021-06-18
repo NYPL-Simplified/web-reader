@@ -5,7 +5,7 @@
 import React from 'react';
 import { fetchJson } from './utils/fetch';
 import HtmlNavigator from './HtmlNavigator';
-import { VisualNavigator } from './Navigator';
+import Navigator from './Navigator';
 import {
   AxisNowEpubConformsTo,
   GetContent,
@@ -19,7 +19,7 @@ type LoadedWebReader = {
   // how to instantiate them or what to pass to them, that's the responsibility
   // of this hook. The consumer just places it within their UI.
   content: JSX.Element;
-  navigator: VisualNavigator;
+  navigator: Navigator;
   // we will replace this with a full Publication instance once we
   // can install it from readium/web. For now we will read things
   // directly from the manifest

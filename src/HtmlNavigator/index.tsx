@@ -1,5 +1,5 @@
 import D2Reader from '@d-i-t-a/reader';
-import { NavigatorArguments, VisualNavigator } from '../Navigator';
+import Navigator, { NavigatorArguments } from '../Navigator';
 import { Locator, ReadingPosition } from '@d-i-t-a/reader/dist/model/Locator';
 import '@d-i-t-a/reader/dist/reader.css';
 import EpubContent from './HtmlNavigatorContent';
@@ -10,14 +10,16 @@ import { fetchJson } from '../utils/fetch';
  * This Navigator is meant to work with any HTML based webpub. So an ePub
  * or a Mobi, or even just html pages packaged into a collection.
  */
-export default class HtmlNavigator implements VisualNavigator {
+export default class HtmlNavigator extends Navigator {
   static Content = EpubContent;
 
   private constructor(
     // apparently we don't need the instance for anything
     // but we should probably change that for the future.
     readonly readerInstance: any
-  ) {}
+  ) {
+    super();
+  }
 
   static async init({
     webpubManifestUrl,
@@ -110,24 +112,6 @@ export default class HtmlNavigator implements VisualNavigator {
   async goRight() {
     return this.goForward();
   }
-  async nextSection() {
-    try {
-      D2Reader.nextResource();
-      return true;
-    } catch (e) {
-      console.error(e);
-      return false;
-    }
-  }
-  async previousSection() {
-    try {
-      D2Reader.previousResource();
-      return true;
-    } catch (e) {
-      console.error(e);
-      return false;
-    }
-  }
 
   // settings
   scroll() {
@@ -136,8 +120,12 @@ export default class HtmlNavigator implements VisualNavigator {
   paginate() {
     D2Reader.scroll(false);
   }
-  get isScroll() {
+  get isScrolling() {
     return false;
+  }
+  toggleScroll() {
+    console.warn('toggle scroll not implemented');
+    return;
   }
 
   static async fetchManifest(url: string): Promise<WebpubManifest> {

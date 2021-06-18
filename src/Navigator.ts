@@ -1,36 +1,39 @@
-/**
- * Defines the Navigator API and a more specific VisualNavigator API.
-    - Set Reading Order & Resources
-    - Get Current Location
-    - Go Forward
-    - Go Backward
-    - Go To Location
-    - Set View Settings
-    - Location Changed Event
-    - Error Event
-    - Open External URL Event
- */
-
 import { Locator, ReadingPosition } from '@d-i-t-a/reader/dist/model/Locator';
 import { Link } from '@d-i-t-a/reader/dist/model/Publication';
 import { GetContent } from './types';
 
-interface Navigator {
+/**
+ * Defines the Navigator API through an abstract class. This class
+ * is meant to be extended by HTMLNavigator or PDFNavigator
+ */
+export default abstract class Navigator {
   /**
    * we can't type the init function because it needs to be static:
    * https://github.com/microsoft/TypeScript/issues/34516
    * */
 
-  // init(options: NavigatorOptions): Promise<Navigator>;
+  // static init(options: NavigatorArguments): Promise<Navigator>;
 
-  currentLocation: Promise<Locator>;
+  // current location
+  abstract get currentLocation(): Promise<Locator>;
+  abstract get readingProgression(): ReadingPosition;
 
   // change location
-  goTo(link: Link): Promise<boolean>;
-  goTo(locator: Locator): Promise<boolean>;
+  abstract goTo(link: Link): Promise<boolean>;
+  abstract goTo(locator: Locator): Promise<boolean>;
   // for navigating one unit, unit depends on the format
-  goForward(): Promise<boolean>;
-  goBackward(): Promise<boolean>;
+  abstract goForward(): Promise<boolean>;
+  abstract goBackward(): Promise<boolean>;
+  // these do the same thing as forward and back, but depend
+  // on reading direction
+  abstract goLeft(): Promise<boolean>;
+  abstract goRight(): Promise<boolean>;
+
+  // settings
+  abstract scroll(): void;
+  abstract paginate(): void;
+  abstract toggleScroll(): void;
+  abstract get isScrolling(): boolean;
 }
 
 // used for initializer, but unfortunately can't be typed on the
@@ -40,17 +43,3 @@ export type NavigatorArguments = {
   getContent?: GetContent;
   initialLocation?: Locator;
 };
-export interface VisualNavigator extends Navigator {
-  readingProgression: ReadingPosition;
-
-  // change location
-  // these do the same thing as forward and back, but depend
-  // on reading direction
-  goLeft(): Promise<boolean>;
-  goRight(): Promise<boolean>;
-
-  // settings
-  scroll(): void;
-  paginate(): void;
-  isScroll: boolean;
-}
