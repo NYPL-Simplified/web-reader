@@ -13,11 +13,7 @@ import { fetchJson } from '../utils/fetch';
 export default class HtmlNavigator extends Navigator {
   static Content = EpubContent;
 
-  private constructor(
-    // apparently we don't need the instance for anything
-    // but we should probably change that for the future.
-    readonly readerInstance: any
-  ) {
+  private constructor(readonly reader: D2Reader) {
     super();
   }
 
@@ -26,7 +22,7 @@ export default class HtmlNavigator extends Navigator {
     getContent,
   }: NavigatorArguments): Promise<HtmlNavigator> {
     const url = new URL(webpubManifestUrl);
-    const reader = await D2Reader.load({
+    const reader = await D2Reader.build({
       url,
       injectables: injectables as any,
       api: {
@@ -64,7 +60,7 @@ export default class HtmlNavigator extends Navigator {
   }
 
   // get isScrolling(): boolean {
-  //   return D2Reader.isScroll();
+  //   return this.reader.isScroll();
   // }
 
   get readingProgression(): ReadingPosition {
@@ -76,12 +72,12 @@ export default class HtmlNavigator extends Navigator {
   }
 
   get currentLocation() {
-    return D2Reader.currentLocator();
+    return this.reader.currentLocator;
   }
 
   async goTo(locator: Locator) {
     try {
-      await D2Reader.goTo(locator);
+      await this.reader.goTo(locator);
       return true;
     } catch (e) {
       console.error(e);
@@ -90,7 +86,7 @@ export default class HtmlNavigator extends Navigator {
   }
   async goForward() {
     try {
-      await D2Reader.nextPage();
+      await this.reader.nextPage();
       return true;
     } catch (e) {
       console.error(e);
@@ -99,7 +95,7 @@ export default class HtmlNavigator extends Navigator {
   }
   async goBackward() {
     try {
-      await D2Reader.previousPage();
+      await this.reader.previousPage();
       return true;
     } catch (e) {
       console.error(e);
@@ -115,10 +111,15 @@ export default class HtmlNavigator extends Navigator {
 
   // settings
   scroll() {
-    D2Reader.scroll(true);
+    this.reader.scroll(true);
   }
   paginate() {
-    D2Reader.scroll(false);
+    this.reader.scroll(false);
+  }
+  get isScroll() {
+    const settings = this.reader.currentSettings();
+    console.log(settings);
+    return false;
   }
   get isScrolling() {
     return false;

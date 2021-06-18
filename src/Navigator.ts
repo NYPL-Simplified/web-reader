@@ -1,4 +1,4 @@
-import { Locator, ReadingPosition } from '@d-i-t-a/reader/dist/model/Locator';
+import { Locator } from '@d-i-t-a/reader/dist/model/Locator';
 import { Link } from '@d-i-t-a/reader/dist/model/Publication';
 import { GetContent } from './types';
 
@@ -14,9 +14,7 @@ export default abstract class Navigator {
 
   // static init(options: NavigatorArguments): Promise<Navigator>;
 
-  // current location
-  abstract get currentLocation(): Promise<Locator>;
-  abstract get readingProgression(): ReadingPosition;
+  abstract get currentLocation(): Locator;
 
   // change location
   abstract goTo(link: Link): Promise<boolean>;
