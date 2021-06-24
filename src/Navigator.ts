@@ -1,5 +1,5 @@
 import { Locator } from '@d-i-t-a/reader/dist/model/Locator';
-import { Link } from '@d-i-t-a/reader/dist/model/Link';
+import { Link } from '@d-i-t-a/reader/dist/model/Publication';
 import { GetContent } from './types';
 
 /**
