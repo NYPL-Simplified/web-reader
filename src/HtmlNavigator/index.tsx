@@ -5,7 +5,7 @@ import '@d-i-t-a/reader/dist/reader.css';
 import EpubContent from './HtmlNavigatorContent';
 import { WebpubManifest } from '../types';
 import { fetchJson } from '../utils/fetch';
-import { Link } from '@d-i-t-a/reader/dist/model/Link';
+import { Link } from '@d-i-t-a/reader/dist/model/Publication';
 
 /**
  * This Navigator is meant to work with any HTML based webpub. So an ePub
