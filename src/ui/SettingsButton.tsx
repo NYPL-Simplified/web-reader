@@ -11,13 +11,9 @@ import {
 import Button from './Button';
 import ToggleButton from './ToggleButton';
 import ToggleGroup from './ToggleGroup';
-import { VisualNavigator } from '../Navigator';
+import Navigator from '../Navigator';
 
-export default function SettingsCard({
-  navigator,
-}: {
-  navigator: VisualNavigator;
-}) {
+export default function SettingsCard({ navigator }: { navigator: Navigator }) {
   const [isOpen, setIsOpen] = React.useState(false);
   const open = () => setIsOpen(!isOpen);
   const close = () => setIsOpen(false);
@@ -35,7 +31,7 @@ export default function SettingsCard({
     }
   }
 
-  const paginationValue = navigator.isScroll ? 'scrolling' : 'paginated';
+  const paginationValue = navigator.isScrolling ? 'scrolling' : 'paginated';
 
   return (
     <>

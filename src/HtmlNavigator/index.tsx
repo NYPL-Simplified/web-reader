@@ -1,10 +1,11 @@
 import D2Reader from '@d-i-t-a/reader';
 import Navigator, { NavigatorArguments } from '../Navigator';
-import { Locator, ReadingPosition } from '@d-i-t-a/reader/dist/model/Locator';
+import { ReadingPosition } from '@d-i-t-a/reader/dist/model/Locator';
 import '@d-i-t-a/reader/dist/reader.css';
 import EpubContent from './HtmlNavigatorContent';
 import { WebpubManifest } from '../types';
 import { fetchJson } from '../utils/fetch';
+import { Link } from '@d-i-t-a/reader/dist/model/Link';
 
 /**
  * This Navigator is meant to work with any HTML based webpub. So an ePub
@@ -13,7 +14,8 @@ import { fetchJson } from '../utils/fetch';
 export default class HtmlNavigator extends Navigator {
   static Content = EpubContent;
 
-  private constructor(readonly reader: D2Reader) {
+  private constructor() {
+    // readonly reader: D2Reader
     super();
   }
 
@@ -22,7 +24,7 @@ export default class HtmlNavigator extends Navigator {
     getContent,
   }: NavigatorArguments): Promise<HtmlNavigator> {
     const url = new URL(webpubManifestUrl);
-    const reader = await D2Reader.build({
+    const reader = await D2Reader.load({
       url,
       injectables: injectables as any,
       api: {
@@ -56,11 +58,11 @@ export default class HtmlNavigator extends Navigator {
       // TODO: Fix this any assertion
     } as any);
 
-    return new HtmlNavigator(reader);
+    return new HtmlNavigator();
   }
 
   // get isScrolling(): boolean {
-  //   return this.reader.isScroll();
+  //   return D2Reader.isScroll();
   // }
 
   get readingProgression(): ReadingPosition {
@@ -72,12 +74,18 @@ export default class HtmlNavigator extends Navigator {
   }
 
   get currentLocation() {
-    return this.reader.currentLocator;
+    throw new Error('currentLocation Not implemented');
+    return {
+      href: 'blah',
+      title: 'blah',
+      locations: {},
+    };
+    // return D2Reader.currentLocator;
   }
 
-  async goTo(locator: Locator) {
+  async goTo(link: Link) {
     try {
-      await this.reader.goTo(locator);
+      await D2Reader.goTo(link);
       return true;
     } catch (e) {
       console.error(e);
@@ -86,7 +94,7 @@ export default class HtmlNavigator extends Navigator {
   }
   async goForward() {
     try {
-      await this.reader.nextPage();
+      await D2Reader.nextPage();
       return true;
     } catch (e) {
       console.error(e);
@@ -95,7 +103,7 @@ export default class HtmlNavigator extends Navigator {
   }
   async goBackward() {
     try {
-      await this.reader.previousPage();
+      await D2Reader.previousPage();
       return true;
     } catch (e) {
       console.error(e);
@@ -111,13 +119,13 @@ export default class HtmlNavigator extends Navigator {
 
   // settings
   scroll() {
-    this.reader.scroll(true);
+    D2Reader.scroll(true);
   }
   paginate() {
-    this.reader.scroll(false);
+    D2Reader.scroll(false);
   }
   get isScroll() {
-    const settings = this.reader.currentSettings();
+    const settings = D2Reader.currentSettings();
     console.log(settings);
     return false;
   }

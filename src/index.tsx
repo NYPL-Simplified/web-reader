@@ -20,4 +20,5 @@ const WebReader: FC<WebReaderProps> = ({ webpubManifestUrl, getContent }) => {
 
   return <ManagerUI {...webReader}>{content}</ManagerUI>;
 };
+
 export default WebReader;
