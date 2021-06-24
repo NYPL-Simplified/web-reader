@@ -1,6 +1,5 @@
 {
   // see https://www.typescriptlang.org/tsconfig to better understand tsconfigs
-  "include": ["src"],
   "compilerOptions": {
     "module": "esnext",
     // set target to es5 so we can use class get/set
@@ -11,8 +10,6 @@
     "declaration": true,
     // output .js.map sourcemap files for consumers
     "sourceMap": true,
-    // match output dir to input dir. e.g. dist/index instead of dist/src/index
-    "rootDir": "./src",
     // stricter type-checking for stronger correctness. Recommended by TS
     "strict": true,
     // linter checks for common issues
