@@ -23,10 +23,11 @@ function mutating(
     console.error('didMutate not instance of function', didMutate);
     return descriptor;
   }
+
   descriptor.value = function (...args: any) {
     const result = originalMethod.apply(this, args);
     console.log(`Calling didMutate for ${propertyKey}`);
-    didMutate();
+    didMutate.apply(this);
     return result;
   };
 
@@ -40,8 +41,8 @@ function mutating(
 export default class HtmlNavigator extends Navigator {
   static Content = EpubContent;
 
-  private constructor(readonly _didMutate: () => void) {
-    super();
+  private constructor(didMutate: () => void) {
+    super(didMutate);
   }
 
   static async init({
@@ -81,7 +82,6 @@ export default class HtmlNavigator extends Navigator {
     } as any);
 
     const navigator = new HtmlNavigator(didMutate);
-    console.log('NAV', navigator);
     return navigator;
   }
 
@@ -144,6 +144,7 @@ export default class HtmlNavigator extends Navigator {
   // settings
   @mutating
   scroll() {
+    console.log('calling scroll');
     D2Reader.scroll(true);
   }
 

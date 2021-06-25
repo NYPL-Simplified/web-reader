@@ -32,7 +32,7 @@ export default function SettingsCard({ navigator }: { navigator: Navigator }) {
   }
 
   const paginationValue = navigator.isScrolling ? 'scrolling' : 'paginated';
-  console.log(navigator.isScrolling, paginationValue);
+  console.log('isScrolling', navigator.isScrolling);
 
   return (
     <>

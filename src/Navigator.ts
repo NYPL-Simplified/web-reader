@@ -10,9 +10,13 @@ export default abstract class Navigator {
    * This is used to tell react when the internal state of the class
    * is being mutated so that react knows to update.
    */
-  abstract readonly _didMutate: () => void;
+  readonly _didMutate: () => void;
   didMutate() {
     this._didMutate();
+  }
+
+  constructor(didMutate: () => void) {
+    this._didMutate = didMutate;
   }
 
   /**
