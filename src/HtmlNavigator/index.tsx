@@ -6,6 +6,7 @@ import EpubContent from './HtmlNavigatorContent';
 import { WebpubManifest } from '../types';
 import { fetchJson } from '../utils/fetch';
 import { Link } from '@d-i-t-a/reader/dist/model/Publication';
+import { mutating } from '../decorators';
 
 /**
  * This Navigator is meant to work with any HTML based webpub. So an ePub
@@ -14,22 +15,18 @@ import { Link } from '@d-i-t-a/reader/dist/model/Publication';
 export default class HtmlNavigator extends Navigator {
   static Content = EpubContent;
 
-  private constructor() {
-    // readonly reader: D2Reader
-    super();
+  private constructor(didMutate: () => void) {
+    super(didMutate);
   }
 
   static async init({
     webpubManifestUrl,
-    getContent,
+    didMutate,
   }: NavigatorArguments): Promise<HtmlNavigator> {
     const url = new URL(webpubManifestUrl);
     const reader = await D2Reader.load({
       url,
       injectables: injectables as any,
-      api: {
-        getContent,
-      },
 
       // all of these were required
       userSettings: {
@@ -58,7 +55,8 @@ export default class HtmlNavigator extends Navigator {
       // TODO: Fix this any assertion
     } as any);
 
-    return new HtmlNavigator();
+    const navigator = new HtmlNavigator(didMutate);
+    return navigator;
   }
 
   // get isScrolling(): boolean {
@@ -118,9 +116,12 @@ export default class HtmlNavigator extends Navigator {
   }
 
   // settings
+  @mutating
   scroll() {
     D2Reader.scroll(true);
   }
+
+  @mutating
   paginate() {
     D2Reader.scroll(false);
   }

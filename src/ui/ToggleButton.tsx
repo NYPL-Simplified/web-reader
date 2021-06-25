@@ -33,7 +33,6 @@ function ToggleButton(props: React.PropsWithoutRef<ToggleButtonProps>) {
       <input {...input} />
       <Button
         as="div"
-        isChecked={isChecked}
         {...checked}
         rightIcon={
           isChecked ? <Icon decorative name={IconNames.check} /> : null

@@ -45,11 +45,11 @@
   "size-limit": [
     {
       "path": "dist/web-reader.cjs.production.min.js",
-      "limit": "230 KB"
+      "limit": "600 KB"
     },
     {
       "path": "dist/web-reader.esm.js",
-      "limit": "230 KB"
+      "limit": "600 KB"
     }
   ],
   "staticFiles": {
@@ -57,6 +57,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
+    "@parcel/transformer-typescript-tsc": "^2.0.0-beta.3.1",
     "@size-limit/preset-small-lib": "^4.9.1",
     "@storybook/addon-essentials": "^6.2.8",
     "@storybook/addon-info": "^5.3.21",
@@ -84,7 +85,7 @@
   },
   "dependencies": {
     "@chakra-ui/react": "^1.5.2",
-    "@d-i-t-a/reader": "^1.8.4",
+    "@d-i-t-a/reader": "^1.8.6",
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.3.0",
     "@nypl/design-system-react-components": "^0.21.2",
