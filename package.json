@@ -45,11 +45,11 @@
   "size-limit": [
     {
       "path": "dist/web-reader.cjs.production.min.js",
-      "limit": "230 KB"
+      "limit": "600 KB"
     },
     {
       "path": "dist/web-reader.esm.js",
-      "limit": "230 KB"
+      "limit": "600 KB"
     }
   ],
   "staticFiles": {
