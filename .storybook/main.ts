@@ -1,6 +1,6 @@
-const path = require("path")
+import path from "path";
 
-const toPath = (_path) => path.join(process.cwd(), _path)
+const toPath = (_path: string) => path.join(process.cwd(), _path)
 
 module.exports = {
   stories: ['../stories/**/*.stories.@(ts|tsx|js|jsx)'],
@@ -9,7 +9,7 @@ module.exports = {
   typescript: {
     check: true, // type-check stories during Storybook build
   },
-  webpackFinal: async (config) => {
+  webpackFinal: async (config: any) => {
     return {
       ...config,
       resolve: {

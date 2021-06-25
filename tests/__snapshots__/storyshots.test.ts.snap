@@ -1,0 +1,2006 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Button Dark 1`] = `
+Array [
+  .emotion-0 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: relative;
+  white-space: nowrap;
+  vertical-align: middle;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  width: auto;
+  line-height: 1.2;
+  border-radius: var(--chakra-radii-none);
+  font-weight: var(--chakra-fontWeights-semibold);
+  transition-property: var(--chakra-transition-property-common);
+  transition-duration: var(--chakra-transition-duration-normal);
+  height: var(--chakra-sizes-10);
+  min-width: var(--chakra-sizes-10);
+  font-size: var(--chakra-fontSizes-md);
+  -webkit-padding-start: var(--chakra-space-4);
+  padding-inline-start: var(--chakra-space-4);
+  -webkit-padding-end: var(--chakra-space-4);
+  padding-inline-end: var(--chakra-space-4);
+  background: rgb(17, 17, 17);
+  color: var(--chakra-colors-white);
+}
+
+.emotion-0:focus,
+.emotion-0[data-focus] {
+  box-shadow: var(--chakra-shadows-outline);
+  z-index: 1;
+}
+
+.emotion-0[disabled],
+.emotion-0[aria-disabled=true],
+.emotion-0[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: var(--chakra-shadows-none);
+}
+
+.emotion-0:hover,
+.emotion-0[data-hover] {
+  background: rgb(17, 17, 17);
+}
+
+.emotion-0:hover[disabled],
+.emotion-0[data-hover][disabled],
+.emotion-0:hover[aria-disabled=true],
+.emotion-0[data-hover][aria-disabled=true],
+.emotion-0:hover[data-disabled],
+.emotion-0[data-hover][data-disabled] {
+  background: rgb(255, 255, 255);
+}
+
+.emotion-0:active,
+.emotion-0[data-active] {
+  background: var(--chakra-colors-green-300);
+}
+
+<button
+    className="chakra-button emotion-0"
+    type="button"
+  >
+    Hello world
+  </button>,
+  <span />,
+]
+`;
+
+exports[`Storyshots Button Dark Disabled 1`] = `
+Array [
+  .emotion-0 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: relative;
+  white-space: nowrap;
+  vertical-align: middle;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  width: auto;
+  line-height: 1.2;
+  border-radius: var(--chakra-radii-none);
+  font-weight: var(--chakra-fontWeights-semibold);
+  transition-property: var(--chakra-transition-property-common);
+  transition-duration: var(--chakra-transition-duration-normal);
+  height: var(--chakra-sizes-10);
+  min-width: var(--chakra-sizes-10);
+  font-size: var(--chakra-fontSizes-md);
+  -webkit-padding-start: var(--chakra-space-4);
+  padding-inline-start: var(--chakra-space-4);
+  -webkit-padding-end: var(--chakra-space-4);
+  padding-inline-end: var(--chakra-space-4);
+  background: rgb(17, 17, 17);
+  color: var(--chakra-colors-white);
+}
+
+.emotion-0:focus,
+.emotion-0[data-focus] {
+  box-shadow: var(--chakra-shadows-outline);
+  z-index: 1;
+}
+
+.emotion-0[disabled],
+.emotion-0[aria-disabled=true],
+.emotion-0[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: var(--chakra-shadows-none);
+}
+
+.emotion-0:hover,
+.emotion-0[data-hover] {
+  background: rgb(17, 17, 17);
+}
+
+.emotion-0:hover[disabled],
+.emotion-0[data-hover][disabled],
+.emotion-0:hover[aria-disabled=true],
+.emotion-0[data-hover][aria-disabled=true],
+.emotion-0:hover[data-disabled],
+.emotion-0[data-hover][data-disabled] {
+  background: rgb(255, 255, 255);
+}
+
+.emotion-0:active,
+.emotion-0[data-active] {
+  background: var(--chakra-colors-green-300);
+}
+
+<button
+    className="chakra-button emotion-0"
+    disabled={true}
+    type="button"
+  >
+    Hello world
+  </button>,
+  <span />,
+]
+`;
+
+exports[`Storyshots Button Light 1`] = `
+Array [
+  .emotion-0 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: relative;
+  white-space: nowrap;
+  vertical-align: middle;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  width: auto;
+  line-height: 1.2;
+  border-radius: var(--chakra-radii-none);
+  font-weight: var(--chakra-fontWeights-semibold);
+  transition-property: var(--chakra-transition-property-common);
+  transition-duration: var(--chakra-transition-duration-normal);
+  height: var(--chakra-sizes-10);
+  min-width: var(--chakra-sizes-10);
+  font-size: var(--chakra-fontSizes-md);
+  -webkit-padding-start: var(--chakra-space-4);
+  padding-inline-start: var(--chakra-space-4);
+  -webkit-padding-end: var(--chakra-space-4);
+  padding-inline-end: var(--chakra-space-4);
+  background: #fff;
+  color: var(--chakra-colors-gray-500);
+}
+
+.emotion-0:focus,
+.emotion-0[data-focus] {
+  box-shadow: var(--chakra-shadows-outline);
+  z-index: 1;
+}
+
+.emotion-0[disabled],
+.emotion-0[aria-disabled=true],
+.emotion-0[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: var(--chakra-shadows-none);
+  background: var(--chakra-colors-gray-100);
+}
+
+.emotion-0:hover,
+.emotion-0[data-hover] {
+  background: light.600;
+}
+
+.emotion-0:hover[disabled],
+.emotion-0[data-hover][disabled],
+.emotion-0:hover[aria-disabled=true],
+.emotion-0[data-hover][aria-disabled=true],
+.emotion-0:hover[data-disabled],
+.emotion-0[data-hover][data-disabled] {
+  background: light.500;
+}
+
+.emotion-0:active,
+.emotion-0[data-active] {
+  background: var(--chakra-colors-green-300);
+}
+
+<button
+    className="chakra-button emotion-0"
+    type="button"
+  >
+    Hello world
+  </button>,
+  <span />,
+]
+`;
+
+exports[`Storyshots Button Light Disabled 1`] = `
+Array [
+  .emotion-0 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: relative;
+  white-space: nowrap;
+  vertical-align: middle;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  width: auto;
+  line-height: 1.2;
+  border-radius: var(--chakra-radii-none);
+  font-weight: var(--chakra-fontWeights-semibold);
+  transition-property: var(--chakra-transition-property-common);
+  transition-duration: var(--chakra-transition-duration-normal);
+  height: var(--chakra-sizes-10);
+  min-width: var(--chakra-sizes-10);
+  font-size: var(--chakra-fontSizes-md);
+  -webkit-padding-start: var(--chakra-space-4);
+  padding-inline-start: var(--chakra-space-4);
+  -webkit-padding-end: var(--chakra-space-4);
+  padding-inline-end: var(--chakra-space-4);
+  background: #fff;
+  color: var(--chakra-colors-gray-500);
+}
+
+.emotion-0:focus,
+.emotion-0[data-focus] {
+  box-shadow: var(--chakra-shadows-outline);
+  z-index: 1;
+}
+
+.emotion-0[disabled],
+.emotion-0[aria-disabled=true],
+.emotion-0[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: var(--chakra-shadows-none);
+  background: var(--chakra-colors-gray-100);
+}
+
+.emotion-0:hover,
+.emotion-0[data-hover] {
+  background: light.600;
+}
+
+.emotion-0:hover[disabled],
+.emotion-0[data-hover][disabled],
+.emotion-0:hover[aria-disabled=true],
+.emotion-0[data-hover][aria-disabled=true],
+.emotion-0:hover[data-disabled],
+.emotion-0[data-hover][data-disabled] {
+  background: light.500;
+}
+
+.emotion-0:active,
+.emotion-0[data-active] {
+  background: var(--chakra-colors-green-300);
+}
+
+<button
+    className="chakra-button emotion-0"
+    disabled={true}
+    type="button"
+  >
+    Hello world
+  </button>,
+  <span />,
+]
+`;
+
+exports[`Storyshots Button Sepia 1`] = `
+Array [
+  .emotion-0 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: relative;
+  white-space: nowrap;
+  vertical-align: middle;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  width: auto;
+  line-height: 1.2;
+  border-radius: var(--chakra-radii-none);
+  font-weight: var(--chakra-fontWeights-semibold);
+  transition-property: var(--chakra-transition-property-common);
+  transition-duration: var(--chakra-transition-duration-normal);
+  height: var(--chakra-sizes-10);
+  min-width: var(--chakra-sizes-10);
+  font-size: var(--chakra-fontSizes-md);
+  -webkit-padding-start: var(--chakra-space-4);
+  padding-inline-start: var(--chakra-space-4);
+  -webkit-padding-end: var(--chakra-space-4);
+  padding-inline-end: var(--chakra-space-4);
+  background: rgb(246, 236, 217);
+  color: rgb(17, 17, 17);
+}
+
+.emotion-0:focus,
+.emotion-0[data-focus] {
+  box-shadow: var(--chakra-shadows-outline);
+  z-index: 1;
+}
+
+.emotion-0[disabled],
+.emotion-0[aria-disabled=true],
+.emotion-0[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: var(--chakra-shadows-none);
+}
+
+.emotion-0:hover,
+.emotion-0[data-hover] {
+  background: rgb(246, 236, 217);
+}
+
+.emotion-0:hover[disabled],
+.emotion-0[data-hover][disabled],
+.emotion-0:hover[aria-disabled=true],
+.emotion-0[data-hover][aria-disabled=true],
+.emotion-0:hover[data-disabled],
+.emotion-0[data-hover][data-disabled] {
+  background: rgb(17, 17, 17);
+}
+
+.emotion-0:active,
+.emotion-0[data-active] {
+  background: var(--chakra-colors-green-300);
+}
+
+<button
+    className="chakra-button emotion-0"
+    type="button"
+  >
+    Hello world
+  </button>,
+  <span />,
+]
+`;
+
+exports[`Storyshots Button Sepia Disable 1`] = `
+Array [
+  .emotion-0 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: relative;
+  white-space: nowrap;
+  vertical-align: middle;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  width: auto;
+  line-height: 1.2;
+  border-radius: var(--chakra-radii-none);
+  font-weight: var(--chakra-fontWeights-semibold);
+  transition-property: var(--chakra-transition-property-common);
+  transition-duration: var(--chakra-transition-duration-normal);
+  height: var(--chakra-sizes-10);
+  min-width: var(--chakra-sizes-10);
+  font-size: var(--chakra-fontSizes-md);
+  -webkit-padding-start: var(--chakra-space-4);
+  padding-inline-start: var(--chakra-space-4);
+  -webkit-padding-end: var(--chakra-space-4);
+  padding-inline-end: var(--chakra-space-4);
+  background: rgb(246, 236, 217);
+  color: rgb(17, 17, 17);
+}
+
+.emotion-0:focus,
+.emotion-0[data-focus] {
+  box-shadow: var(--chakra-shadows-outline);
+  z-index: 1;
+}
+
+.emotion-0[disabled],
+.emotion-0[aria-disabled=true],
+.emotion-0[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: var(--chakra-shadows-none);
+}
+
+.emotion-0:hover,
+.emotion-0[data-hover] {
+  background: rgb(246, 236, 217);
+}
+
+.emotion-0:hover[disabled],
+.emotion-0[data-hover][disabled],
+.emotion-0:hover[aria-disabled=true],
+.emotion-0[data-hover][aria-disabled=true],
+.emotion-0:hover[data-disabled],
+.emotion-0[data-hover][data-disabled] {
+  background: rgb(17, 17, 17);
+}
+
+.emotion-0:active,
+.emotion-0[data-active] {
+  background: var(--chakra-colors-green-300);
+}
+
+<button
+    className="chakra-button emotion-0"
+    disabled={true}
+    type="button"
+  >
+    Hello world
+  </button>,
+  <span />,
+]
+`;
+
+exports[`Storyshots SettingsCard Settings Card 1`] = `
+Array [
+  .emotion-1 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: relative;
+  white-space: nowrap;
+  vertical-align: middle;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  width: auto;
+  line-height: 1.2;
+  border-radius: var(--chakra-radii-none);
+  font-weight: var(--chakra-fontWeights-semibold);
+  transition-property: var(--chakra-transition-property-common);
+  transition-duration: var(--chakra-transition-duration-normal);
+  height: var(--chakra-sizes-10);
+  min-width: var(--chakra-sizes-10);
+  font-size: var(--chakra-fontSizes-md);
+  -webkit-padding-start: var(--chakra-space-4);
+  padding-inline-start: var(--chakra-space-4);
+  -webkit-padding-end: var(--chakra-space-4);
+  padding-inline-end: var(--chakra-space-4);
+  background: var(--chakra-colors-green-500);
+  color: var(--chakra-colors-white);
+}
+
+.emotion-1:focus,
+.emotion-1[data-focus] {
+  box-shadow: var(--chakra-shadows-outline);
+  z-index: 1;
+}
+
+.emotion-1[disabled],
+.emotion-1[aria-disabled=true],
+.emotion-1[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: var(--chakra-shadows-none);
+  background: var(--chakra-colors-gray-100);
+}
+
+.emotion-1:hover,
+.emotion-1[data-hover] {
+  color: var(--chakra-colors-white);
+  background: var(--chakra-colors-green-500);
+}
+
+.emotion-1:active,
+.emotion-1[data-active] {
+  background: var(--chakra-colors-green-300);
+}
+
+.emotion-2 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-align-self: center;
+  -ms-flex-item-align: center;
+  align-self: center;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-margin-start: 0.5rem;
+  margin-inline-start: 0.5rem;
+}
+
+.emotion-4 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: relative;
+  white-space: nowrap;
+  vertical-align: middle;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  width: auto;
+  line-height: 1.2;
+  border-radius: var(--chakra-radii-none);
+  font-weight: var(--chakra-fontWeights-semibold);
+  transition-property: var(--chakra-transition-property-common);
+  transition-duration: var(--chakra-transition-duration-normal);
+  height: var(--chakra-sizes-10);
+  min-width: var(--chakra-sizes-10);
+  font-size: var(--chakra-fontSizes-md);
+  -webkit-padding-start: var(--chakra-space-4);
+  padding-inline-start: var(--chakra-space-4);
+  -webkit-padding-end: var(--chakra-space-4);
+  padding-inline-end: var(--chakra-space-4);
+  background: #fff;
+  color: var(--chakra-colors-gray-500);
+}
+
+.emotion-4:focus,
+.emotion-4[data-focus] {
+  box-shadow: var(--chakra-shadows-outline);
+  z-index: 1;
+}
+
+.emotion-4[disabled],
+.emotion-4[aria-disabled=true],
+.emotion-4[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: var(--chakra-shadows-none);
+  background: var(--chakra-colors-gray-100);
+}
+
+.emotion-4:hover,
+.emotion-4[data-hover] {
+  background: light.600;
+}
+
+.emotion-4:hover[disabled],
+.emotion-4[data-hover][disabled],
+.emotion-4:hover[aria-disabled=true],
+.emotion-4[data-hover][aria-disabled=true],
+.emotion-4:hover[data-disabled],
+.emotion-4[data-hover][data-disabled] {
+  background: light.500;
+}
+
+.emotion-4:active,
+.emotion-4[data-active] {
+  background: var(--chakra-colors-green-300);
+}
+
+.emotion-13 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: relative;
+  white-space: nowrap;
+  vertical-align: middle;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  width: auto;
+  line-height: 1.2;
+  border-radius: var(--chakra-radii-none);
+  font-weight: var(--chakra-fontWeights-semibold);
+  transition-property: var(--chakra-transition-property-common);
+  transition-duration: var(--chakra-transition-duration-normal);
+  height: var(--chakra-sizes-10);
+  min-width: var(--chakra-sizes-10);
+  font-size: var(--chakra-fontSizes-md);
+  -webkit-padding-start: var(--chakra-space-4);
+  padding-inline-start: var(--chakra-space-4);
+  -webkit-padding-end: var(--chakra-space-4);
+  padding-inline-end: var(--chakra-space-4);
+  background: rgb(246, 236, 217);
+  color: rgb(17, 17, 17);
+}
+
+.emotion-13:focus,
+.emotion-13[data-focus] {
+  box-shadow: var(--chakra-shadows-outline);
+  z-index: 1;
+}
+
+.emotion-13[disabled],
+.emotion-13[aria-disabled=true],
+.emotion-13[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: var(--chakra-shadows-none);
+}
+
+.emotion-13:hover,
+.emotion-13[data-hover] {
+  background: rgb(246, 236, 217);
+}
+
+.emotion-13:hover[disabled],
+.emotion-13[data-hover][disabled],
+.emotion-13:hover[aria-disabled=true],
+.emotion-13[data-hover][aria-disabled=true],
+.emotion-13:hover[data-disabled],
+.emotion-13[data-hover][data-disabled] {
+  background: rgb(17, 17, 17);
+}
+
+.emotion-13:active,
+.emotion-13[data-active] {
+  background: var(--chakra-colors-green-300);
+}
+
+.emotion-15 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: relative;
+  white-space: nowrap;
+  vertical-align: middle;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  width: auto;
+  line-height: 1.2;
+  border-radius: var(--chakra-radii-none);
+  font-weight: var(--chakra-fontWeights-semibold);
+  transition-property: var(--chakra-transition-property-common);
+  transition-duration: var(--chakra-transition-duration-normal);
+  height: var(--chakra-sizes-10);
+  min-width: var(--chakra-sizes-10);
+  font-size: var(--chakra-fontSizes-md);
+  -webkit-padding-start: var(--chakra-space-4);
+  padding-inline-start: var(--chakra-space-4);
+  -webkit-padding-end: var(--chakra-space-4);
+  padding-inline-end: var(--chakra-space-4);
+  background: rgb(17, 17, 17);
+  color: var(--chakra-colors-white);
+}
+
+.emotion-15:focus,
+.emotion-15[data-focus] {
+  box-shadow: var(--chakra-shadows-outline);
+  z-index: 1;
+}
+
+.emotion-15[disabled],
+.emotion-15[aria-disabled=true],
+.emotion-15[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: var(--chakra-shadows-none);
+}
+
+.emotion-15:hover,
+.emotion-15[data-hover] {
+  background: rgb(17, 17, 17);
+}
+
+.emotion-15:hover[disabled],
+.emotion-15[data-hover][disabled],
+.emotion-15:hover[aria-disabled=true],
+.emotion-15[data-hover][aria-disabled=true],
+.emotion-15:hover[data-disabled],
+.emotion-15[data-hover][data-disabled] {
+  background: rgb(255, 255, 255);
+}
+
+.emotion-15:active,
+.emotion-15[data-active] {
+  background: var(--chakra-colors-green-300);
+}
+
+<div>
+    <div
+      role="radiogroup"
+    >
+      <label
+        className="emotion-0"
+      >
+        <input
+          checked={true}
+          id="radio-2"
+          name="radio-1"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          style={
+            Object {
+              "border": "0px",
+              "clip": "rect(0px, 0px, 0px, 0px)",
+              "height": "1px",
+              "margin": "-1px",
+              "overflow": "hidden",
+              "padding": "0px",
+              "position": "absolute",
+              "whiteSpace": "nowrap",
+              "width": "1px",
+            }
+          }
+          type="radio"
+          value="publisher"
+        />
+        <div
+          aria-hidden={true}
+          className="chakra-button emotion-1"
+          data-checked=""
+          data-radiogroup={true}
+          name="radio-1"
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          value="publisher"
+        >
+          Publisher
+          <span
+            className="chakra-button__icon emotion-2"
+          >
+            <span
+              aria-hidden={true}
+              className="icon "
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<svg viewBox=\\"0 0 24 24\\" xmlns=\\"http://www.w3.org/2000/svg\\"><path d=\\"M8.795 15.875l-4.17-4.17-1.42 1.41 5.59 5.59 12-12-1.41-1.41-10.59 10.58z\\"></path></svg>",
+                }
+              }
+              role="img"
+            />
+          </span>
+        </div>
+      </label>
+      <label
+        className="emotion-0"
+      >
+        <input
+          checked={false}
+          id="radio-3"
+          name="radio-1"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          style={
+            Object {
+              "border": "0px",
+              "clip": "rect(0px, 0px, 0px, 0px)",
+              "height": "1px",
+              "margin": "-1px",
+              "overflow": "hidden",
+              "padding": "0px",
+              "position": "absolute",
+              "whiteSpace": "nowrap",
+              "width": "1px",
+            }
+          }
+          type="radio"
+          value="serif"
+        />
+        <div
+          aria-hidden={true}
+          className="chakra-button emotion-4"
+          data-radiogroup={true}
+          name="radio-1"
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          value="serif"
+        >
+          Serif
+        </div>
+      </label>
+      <label
+        className="emotion-0"
+      >
+        <input
+          checked={false}
+          id="radio-4"
+          name="radio-1"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          style={
+            Object {
+              "border": "0px",
+              "clip": "rect(0px, 0px, 0px, 0px)",
+              "height": "1px",
+              "margin": "-1px",
+              "overflow": "hidden",
+              "padding": "0px",
+              "position": "absolute",
+              "whiteSpace": "nowrap",
+              "width": "1px",
+            }
+          }
+          type="radio"
+          value="sans-serif"
+        />
+        <div
+          aria-hidden={true}
+          className="chakra-button emotion-4"
+          data-radiogroup={true}
+          name="radio-1"
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          value="sans-serif"
+        >
+          Sans-Serif
+        </div>
+      </label>
+      <label
+        className="emotion-0"
+      >
+        <input
+          checked={false}
+          id="radio-5"
+          name="radio-1"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          style={
+            Object {
+              "border": "0px",
+              "clip": "rect(0px, 0px, 0px, 0px)",
+              "height": "1px",
+              "margin": "-1px",
+              "overflow": "hidden",
+              "padding": "0px",
+              "position": "absolute",
+              "whiteSpace": "nowrap",
+              "width": "1px",
+            }
+          }
+          type="radio"
+          value="dyslexia-friendly"
+        />
+        <div
+          aria-hidden={true}
+          className="chakra-button emotion-4"
+          data-radiogroup={true}
+          name="radio-1"
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          value="dyslexia-friendly"
+        >
+          Dyslexia-Friendly
+        </div>
+      </label>
+    </div>
+    <div
+      role="radiogroup"
+    >
+      <label
+        className="emotion-0"
+      >
+        <input
+          checked={true}
+          id="radio-7"
+          name="radio-6"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          style={
+            Object {
+              "border": "0px",
+              "clip": "rect(0px, 0px, 0px, 0px)",
+              "height": "1px",
+              "margin": "-1px",
+              "overflow": "hidden",
+              "padding": "0px",
+              "position": "absolute",
+              "whiteSpace": "nowrap",
+              "width": "1px",
+            }
+          }
+          type="radio"
+          value="day"
+        />
+        <div
+          aria-hidden={true}
+          className="chakra-button emotion-1"
+          data-checked=""
+          data-radiogroup={true}
+          name="radio-6"
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          value="day"
+        >
+          Day
+          <span
+            className="chakra-button__icon emotion-2"
+          >
+            <span
+              aria-hidden={true}
+              className="icon "
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<svg viewBox=\\"0 0 24 24\\" xmlns=\\"http://www.w3.org/2000/svg\\"><path d=\\"M8.795 15.875l-4.17-4.17-1.42 1.41 5.59 5.59 12-12-1.41-1.41-10.59 10.58z\\"></path></svg>",
+                }
+              }
+              role="img"
+            />
+          </span>
+        </div>
+      </label>
+      <label
+        className="emotion-0"
+      >
+        <input
+          checked={false}
+          id="radio-8"
+          name="radio-6"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          style={
+            Object {
+              "border": "0px",
+              "clip": "rect(0px, 0px, 0px, 0px)",
+              "height": "1px",
+              "margin": "-1px",
+              "overflow": "hidden",
+              "padding": "0px",
+              "position": "absolute",
+              "whiteSpace": "nowrap",
+              "width": "1px",
+            }
+          }
+          type="radio"
+          value="sepia"
+        />
+        <div
+          aria-hidden={true}
+          className="chakra-button emotion-13"
+          data-radiogroup={true}
+          name="radio-6"
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          value="sepia"
+        >
+          Sepia
+        </div>
+      </label>
+      <label
+        className="emotion-0"
+      >
+        <input
+          checked={false}
+          id="radio-9"
+          name="radio-6"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          style={
+            Object {
+              "border": "0px",
+              "clip": "rect(0px, 0px, 0px, 0px)",
+              "height": "1px",
+              "margin": "-1px",
+              "overflow": "hidden",
+              "padding": "0px",
+              "position": "absolute",
+              "whiteSpace": "nowrap",
+              "width": "1px",
+            }
+          }
+          type="radio"
+          value="night"
+        />
+        <div
+          aria-hidden={true}
+          className="chakra-button emotion-15"
+          data-radiogroup={true}
+          name="radio-6"
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          value="night"
+        >
+          Night
+        </div>
+      </label>
+    </div>
+    <div
+      role="radiogroup"
+    >
+      <label
+        className="emotion-0"
+      >
+        <input
+          checked={true}
+          id="radio-11"
+          name="radio-10"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          style={
+            Object {
+              "border": "0px",
+              "clip": "rect(0px, 0px, 0px, 0px)",
+              "height": "1px",
+              "margin": "-1px",
+              "overflow": "hidden",
+              "padding": "0px",
+              "position": "absolute",
+              "whiteSpace": "nowrap",
+              "width": "1px",
+            }
+          }
+          type="radio"
+          value="paginated"
+        />
+        <div
+          aria-hidden={true}
+          className="chakra-button emotion-1"
+          data-checked=""
+          data-radiogroup={true}
+          name="radio-10"
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          value="paginated"
+        >
+          Paginated
+          <span
+            className="chakra-button__icon emotion-2"
+          >
+            <span
+              aria-hidden={true}
+              className="icon "
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<svg viewBox=\\"0 0 24 24\\" xmlns=\\"http://www.w3.org/2000/svg\\"><path d=\\"M8.795 15.875l-4.17-4.17-1.42 1.41 5.59 5.59 12-12-1.41-1.41-10.59 10.58z\\"></path></svg>",
+                }
+              }
+              role="img"
+            />
+          </span>
+        </div>
+      </label>
+      <label
+        className="emotion-0"
+      >
+        <input
+          checked={false}
+          id="radio-12"
+          name="radio-10"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          style={
+            Object {
+              "border": "0px",
+              "clip": "rect(0px, 0px, 0px, 0px)",
+              "height": "1px",
+              "margin": "-1px",
+              "overflow": "hidden",
+              "padding": "0px",
+              "position": "absolute",
+              "whiteSpace": "nowrap",
+              "width": "1px",
+            }
+          }
+          type="radio"
+          value="scrolling"
+        />
+        <div
+          aria-hidden={true}
+          className="chakra-button emotion-4"
+          data-radiogroup={true}
+          name="radio-10"
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          value="scrolling"
+        >
+          Scrolling
+        </div>
+      </label>
+    </div>
+  </div>,
+  <span />,
+]
+`;
+
+exports[`Storyshots ToggleButton Checked 1`] = `
+Array [
+  .emotion-1 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: relative;
+  white-space: nowrap;
+  vertical-align: middle;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  width: auto;
+  line-height: 1.2;
+  border-radius: var(--chakra-radii-none);
+  font-weight: var(--chakra-fontWeights-semibold);
+  transition-property: var(--chakra-transition-property-common);
+  transition-duration: var(--chakra-transition-duration-normal);
+  height: var(--chakra-sizes-10);
+  min-width: var(--chakra-sizes-10);
+  font-size: var(--chakra-fontSizes-md);
+  -webkit-padding-start: var(--chakra-space-4);
+  padding-inline-start: var(--chakra-space-4);
+  -webkit-padding-end: var(--chakra-space-4);
+  padding-inline-end: var(--chakra-space-4);
+  background: var(--chakra-colors-green-500);
+  color: var(--chakra-colors-white);
+}
+
+.emotion-1:focus,
+.emotion-1[data-focus] {
+  box-shadow: var(--chakra-shadows-outline);
+  z-index: 1;
+}
+
+.emotion-1[disabled],
+.emotion-1[aria-disabled=true],
+.emotion-1[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: var(--chakra-shadows-none);
+  background: var(--chakra-colors-gray-100);
+}
+
+.emotion-1:hover,
+.emotion-1[data-hover] {
+  color: var(--chakra-colors-white);
+  background: var(--chakra-colors-green-500);
+}
+
+.emotion-1:active,
+.emotion-1[data-active] {
+  background: var(--chakra-colors-green-300);
+}
+
+.emotion-2 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-align-self: center;
+  -ms-flex-item-align: center;
+  align-self: center;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-margin-start: 0.5rem;
+  margin-inline-start: 0.5rem;
+}
+
+<label
+    className="emotion-0"
+  >
+    <input
+      checked={true}
+      id="radio-1"
+      onBlur={[Function]}
+      onChange={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      style={
+        Object {
+          "border": "0px",
+          "clip": "rect(0px, 0px, 0px, 0px)",
+          "height": "1px",
+          "margin": "-1px",
+          "overflow": "hidden",
+          "padding": "0px",
+          "position": "absolute",
+          "whiteSpace": "nowrap",
+          "width": "1px",
+        }
+      }
+      type="radio"
+    />
+    <div
+      aria-hidden={true}
+      className="chakra-button emotion-1"
+      data-checked=""
+      onMouseDown={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+    >
+      Hello world
+      <span
+        className="chakra-button__icon emotion-2"
+      >
+        <span
+          aria-hidden={true}
+          className="icon "
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "<svg viewBox=\\"0 0 24 24\\" xmlns=\\"http://www.w3.org/2000/svg\\"><path d=\\"M8.795 15.875l-4.17-4.17-1.42 1.41 5.59 5.59 12-12-1.41-1.41-10.59 10.58z\\"></path></svg>",
+            }
+          }
+          role="img"
+        />
+      </span>
+    </div>
+  </label>,
+  <span />,
+]
+`;
+
+exports[`Storyshots ToggleButton Default 1`] = `
+Array [
+  .emotion-1 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: relative;
+  white-space: nowrap;
+  vertical-align: middle;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  width: auto;
+  line-height: 1.2;
+  border-radius: var(--chakra-radii-none);
+  font-weight: var(--chakra-fontWeights-semibold);
+  transition-property: var(--chakra-transition-property-common);
+  transition-duration: var(--chakra-transition-duration-normal);
+  height: var(--chakra-sizes-10);
+  min-width: var(--chakra-sizes-10);
+  font-size: var(--chakra-fontSizes-md);
+  -webkit-padding-start: var(--chakra-space-4);
+  padding-inline-start: var(--chakra-space-4);
+  -webkit-padding-end: var(--chakra-space-4);
+  padding-inline-end: var(--chakra-space-4);
+  background: #fff;
+  color: var(--chakra-colors-gray-500);
+}
+
+.emotion-1:focus,
+.emotion-1[data-focus] {
+  box-shadow: var(--chakra-shadows-outline);
+  z-index: 1;
+}
+
+.emotion-1[disabled],
+.emotion-1[aria-disabled=true],
+.emotion-1[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: var(--chakra-shadows-none);
+  background: var(--chakra-colors-gray-100);
+}
+
+.emotion-1:hover,
+.emotion-1[data-hover] {
+  background: light.600;
+}
+
+.emotion-1:hover[disabled],
+.emotion-1[data-hover][disabled],
+.emotion-1:hover[aria-disabled=true],
+.emotion-1[data-hover][aria-disabled=true],
+.emotion-1:hover[data-disabled],
+.emotion-1[data-hover][data-disabled] {
+  background: light.500;
+}
+
+.emotion-1:active,
+.emotion-1[data-active] {
+  background: var(--chakra-colors-green-300);
+}
+
+<label
+    className="emotion-0"
+  >
+    <input
+      checked={false}
+      id="radio-1"
+      onBlur={[Function]}
+      onChange={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      style={
+        Object {
+          "border": "0px",
+          "clip": "rect(0px, 0px, 0px, 0px)",
+          "height": "1px",
+          "margin": "-1px",
+          "overflow": "hidden",
+          "padding": "0px",
+          "position": "absolute",
+          "whiteSpace": "nowrap",
+          "width": "1px",
+        }
+      }
+      type="radio"
+    />
+    <div
+      aria-hidden={true}
+      className="chakra-button emotion-1"
+      onMouseDown={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+    >
+      Hello world
+    </div>
+  </label>,
+  <span />,
+]
+`;
+
+exports[`Storyshots ToggleGroup Light 1`] = `
+Array [
+  .emotion-1 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: relative;
+  white-space: nowrap;
+  vertical-align: middle;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  width: auto;
+  line-height: 1.2;
+  border-radius: var(--chakra-radii-none);
+  font-weight: var(--chakra-fontWeights-semibold);
+  transition-property: var(--chakra-transition-property-common);
+  transition-duration: var(--chakra-transition-duration-normal);
+  height: var(--chakra-sizes-10);
+  min-width: var(--chakra-sizes-10);
+  font-size: var(--chakra-fontSizes-md);
+  -webkit-padding-start: var(--chakra-space-4);
+  padding-inline-start: var(--chakra-space-4);
+  -webkit-padding-end: var(--chakra-space-4);
+  padding-inline-end: var(--chakra-space-4);
+  background: var(--chakra-colors-green-500);
+  color: var(--chakra-colors-white);
+}
+
+.emotion-1:focus,
+.emotion-1[data-focus] {
+  box-shadow: var(--chakra-shadows-outline);
+  z-index: 1;
+}
+
+.emotion-1[disabled],
+.emotion-1[aria-disabled=true],
+.emotion-1[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: var(--chakra-shadows-none);
+  background: var(--chakra-colors-gray-100);
+}
+
+.emotion-1:hover,
+.emotion-1[data-hover] {
+  color: var(--chakra-colors-white);
+  background: var(--chakra-colors-green-500);
+}
+
+.emotion-1:active,
+.emotion-1[data-active] {
+  background: var(--chakra-colors-green-300);
+}
+
+.emotion-2 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-align-self: center;
+  -ms-flex-item-align: center;
+  align-self: center;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-margin-start: 0.5rem;
+  margin-inline-start: 0.5rem;
+}
+
+.emotion-4 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: relative;
+  white-space: nowrap;
+  vertical-align: middle;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  width: auto;
+  line-height: 1.2;
+  border-radius: var(--chakra-radii-none);
+  font-weight: var(--chakra-fontWeights-semibold);
+  transition-property: var(--chakra-transition-property-common);
+  transition-duration: var(--chakra-transition-duration-normal);
+  height: var(--chakra-sizes-10);
+  min-width: var(--chakra-sizes-10);
+  font-size: var(--chakra-fontSizes-md);
+  -webkit-padding-start: var(--chakra-space-4);
+  padding-inline-start: var(--chakra-space-4);
+  -webkit-padding-end: var(--chakra-space-4);
+  padding-inline-end: var(--chakra-space-4);
+  background: #fff;
+  color: var(--chakra-colors-gray-500);
+}
+
+.emotion-4:focus,
+.emotion-4[data-focus] {
+  box-shadow: var(--chakra-shadows-outline);
+  z-index: 1;
+}
+
+.emotion-4[disabled],
+.emotion-4[aria-disabled=true],
+.emotion-4[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: var(--chakra-shadows-none);
+  background: var(--chakra-colors-gray-100);
+}
+
+.emotion-4:hover,
+.emotion-4[data-hover] {
+  background: light.600;
+}
+
+.emotion-4:hover[disabled],
+.emotion-4[data-hover][disabled],
+.emotion-4:hover[aria-disabled=true],
+.emotion-4[data-hover][aria-disabled=true],
+.emotion-4:hover[data-disabled],
+.emotion-4[data-hover][data-disabled] {
+  background: light.500;
+}
+
+.emotion-4:active,
+.emotion-4[data-active] {
+  background: var(--chakra-colors-green-300);
+}
+
+<div
+    role="radiogroup"
+  >
+    <label
+      className="emotion-0"
+    >
+      <input
+        checked={true}
+        id="radio-2"
+        name="southwest"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        style={
+          Object {
+            "border": "0px",
+            "clip": "rect(0px, 0px, 0px, 0px)",
+            "height": "1px",
+            "margin": "-1px",
+            "overflow": "hidden",
+            "padding": "0px",
+            "position": "absolute",
+            "whiteSpace": "nowrap",
+            "width": "1px",
+          }
+        }
+        type="radio"
+        value="sedona"
+      />
+      <div
+        aria-hidden={true}
+        className="chakra-button emotion-1"
+        data-checked=""
+        data-radiogroup={true}
+        name="southwest"
+        onChange={[Function]}
+        onMouseDown={[Function]}
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        value="sedona"
+      >
+        Sedona
+        <span
+          className="chakra-button__icon emotion-2"
+        >
+          <span
+            aria-hidden={true}
+            className="icon "
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "<svg viewBox=\\"0 0 24 24\\" xmlns=\\"http://www.w3.org/2000/svg\\"><path d=\\"M8.795 15.875l-4.17-4.17-1.42 1.41 5.59 5.59 12-12-1.41-1.41-10.59 10.58z\\"></path></svg>",
+              }
+            }
+            role="img"
+          />
+        </span>
+      </div>
+    </label>
+    <label
+      className="emotion-0"
+    >
+      <input
+        checked={false}
+        id="radio-3"
+        name="southwest"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        style={
+          Object {
+            "border": "0px",
+            "clip": "rect(0px, 0px, 0px, 0px)",
+            "height": "1px",
+            "margin": "-1px",
+            "overflow": "hidden",
+            "padding": "0px",
+            "position": "absolute",
+            "whiteSpace": "nowrap",
+            "width": "1px",
+          }
+        }
+        type="radio"
+        value="santa_fe"
+      />
+      <div
+        aria-hidden={true}
+        className="chakra-button emotion-4"
+        data-radiogroup={true}
+        name="southwest"
+        onChange={[Function]}
+        onMouseDown={[Function]}
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        value="santa_fe"
+      >
+        Santa Fe
+      </div>
+    </label>
+    <label
+      className="emotion-0"
+    >
+      <input
+        checked={false}
+        id="radio-4"
+        name="southwest"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        style={
+          Object {
+            "border": "0px",
+            "clip": "rect(0px, 0px, 0px, 0px)",
+            "height": "1px",
+            "margin": "-1px",
+            "overflow": "hidden",
+            "padding": "0px",
+            "position": "absolute",
+            "whiteSpace": "nowrap",
+            "width": "1px",
+          }
+        }
+        type="radio"
+        value="las_cruces"
+      />
+      <div
+        aria-hidden={true}
+        className="chakra-button emotion-4"
+        data-radiogroup={true}
+        name="southwest"
+        onChange={[Function]}
+        onMouseDown={[Function]}
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        value="las_cruces"
+      >
+        Las Cruces
+      </div>
+    </label>
+  </div>,
+  <span />,
+]
+`;
+
+exports[`Storyshots ToggleGroup One Option 1`] = `
+Array [
+  .emotion-1 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: relative;
+  white-space: nowrap;
+  vertical-align: middle;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  width: auto;
+  line-height: 1.2;
+  border-radius: var(--chakra-radii-none);
+  font-weight: var(--chakra-fontWeights-semibold);
+  transition-property: var(--chakra-transition-property-common);
+  transition-duration: var(--chakra-transition-duration-normal);
+  height: var(--chakra-sizes-10);
+  min-width: var(--chakra-sizes-10);
+  font-size: var(--chakra-fontSizes-md);
+  -webkit-padding-start: var(--chakra-space-4);
+  padding-inline-start: var(--chakra-space-4);
+  -webkit-padding-end: var(--chakra-space-4);
+  padding-inline-end: var(--chakra-space-4);
+  background: #fff;
+  color: var(--chakra-colors-gray-500);
+}
+
+.emotion-1:focus,
+.emotion-1[data-focus] {
+  box-shadow: var(--chakra-shadows-outline);
+  z-index: 1;
+}
+
+.emotion-1[disabled],
+.emotion-1[aria-disabled=true],
+.emotion-1[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: var(--chakra-shadows-none);
+  background: var(--chakra-colors-gray-100);
+}
+
+.emotion-1:hover,
+.emotion-1[data-hover] {
+  background: light.600;
+}
+
+.emotion-1:hover[disabled],
+.emotion-1[data-hover][disabled],
+.emotion-1:hover[aria-disabled=true],
+.emotion-1[data-hover][aria-disabled=true],
+.emotion-1:hover[data-disabled],
+.emotion-1[data-hover][data-disabled] {
+  background: light.500;
+}
+
+.emotion-1:active,
+.emotion-1[data-active] {
+  background: var(--chakra-colors-green-300);
+}
+
+<div
+    role="radiogroup"
+  >
+    <label
+      className="emotion-0"
+    >
+      <input
+        checked={false}
+        id="radio-2"
+        name="southwest"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        style={
+          Object {
+            "border": "0px",
+            "clip": "rect(0px, 0px, 0px, 0px)",
+            "height": "1px",
+            "margin": "-1px",
+            "overflow": "hidden",
+            "padding": "0px",
+            "position": "absolute",
+            "whiteSpace": "nowrap",
+            "width": "1px",
+          }
+        }
+        type="radio"
+        value="sedona"
+      />
+      <div
+        aria-hidden={true}
+        className="chakra-button emotion-1"
+        data-radiogroup={true}
+        name="southwest"
+        onChange={[Function]}
+        onMouseDown={[Function]}
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        value="sedona"
+      >
+        Sedona
+      </div>
+    </label>
+  </div>,
+  <span />,
+]
+`;

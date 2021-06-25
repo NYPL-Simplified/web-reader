@@ -5,7 +5,7 @@ import { Icon, IconNames } from '@nypl/design-system-react-components';
 import Button from './Button';
 
 export interface ToggleButtonProps
-  extends React.ComponentPropsWithRef<typeof ChakraBox> {
+  extends React.ComponentPropsWithoutRef<typeof ChakraBox> {
   isChecked?: false;
   value: string;
 }
