@@ -42,12 +42,16 @@ export default function useWebReader(
   webpubManifestUrl: string,
   options: UseWebReaderOptions = {}
 ): UseWebReaderReturn {
-  const { getContent } = options;
   const [navigator, setNavigator] = React.useState<null | HtmlNavigator>(null);
   const [manifest, setManifest] = React.useState<WebpubManifest | null>(null);
+  const [_state, setState] = React.useState<number>(0);
 
   // Asynchronously initialize the client
   React.useEffect(() => {
+    function didMutate() {
+      setState((state) => state + 1);
+    }
+
     // fetch the manifest
     fetchJson<WebpubManifest>(webpubManifestUrl).then((manifest) => {
       setManifest(manifest);
@@ -64,12 +68,12 @@ export default function useWebReader(
          */
         case undefined:
         case AxisNowEpubConformsTo:
-          HtmlNavigator.init({ webpubManifestUrl, getContent }).then(
+          HtmlNavigator.init({ webpubManifestUrl, didMutate }).then(
             setNavigator
           );
       }
     });
-  }, [webpubManifestUrl, getContent]);
+  }, [webpubManifestUrl, setState, setNavigator, setManifest]);
 
   // here we will need to switch based on what the manifest conforms to
   const content = <HtmlNavigator.Content />;
