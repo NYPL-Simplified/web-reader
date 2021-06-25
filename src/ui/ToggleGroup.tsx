@@ -5,6 +5,7 @@ type ToggleGroupProps = UseRadioGroupProps;
 
 const ToggleGroup: React.FC<ToggleGroupProps> = ({
   defaultValue,
+  value,
   name,
   children,
   onChange,
@@ -13,6 +14,7 @@ const ToggleGroup: React.FC<ToggleGroupProps> = ({
     name,
     defaultValue,
     onChange,
+    value,
   });
 
   const group = getRootProps();
