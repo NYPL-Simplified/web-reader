@@ -1,10 +1,6 @@
 import { extendTheme } from '@chakra-ui/react';
 import Button from './components/button';
-import breakpoints from './foundations/breakpoints';
-import typography from './foundations/typography';
 import colors from './foundations/colors';
-import radii from './foundations/radii';
-import spacing from './foundations/spacing';
 import nyplTheme from '../nypl-base-theme';
 
 /**
@@ -13,11 +9,7 @@ import nyplTheme from '../nypl-base-theme';
  */
 const theme = extendTheme(
   {
-    breakpoints,
-    radii,
     colors,
-    ...typography,
-    space: spacing,
     /**
      * Chakra documentation on component styles:
      * https://chakra-ui.com/docs/theming/component-style
