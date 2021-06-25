@@ -7,6 +7,32 @@ import { WebpubManifest } from '../types';
 import { fetchJson } from '../utils/fetch';
 import { Link } from '@d-i-t-a/reader/dist/model/Publication';
 
+function mutating(
+  target: any,
+  propertyKey: string,
+  descriptor: PropertyDescriptor
+) {
+  const originalMethod = descriptor.value;
+
+  if (!('didMutate' in target)) {
+    console.error('didMutate missing from target', target);
+    return descriptor;
+  }
+  const { didMutate } = target;
+  if (!(didMutate instanceof Function)) {
+    console.error('didMutate not instance of function', didMutate);
+    return descriptor;
+  }
+  descriptor.value = function (...args: any) {
+    const result = originalMethod.apply(this, args);
+    console.log(`Calling didMutate for ${propertyKey}`);
+    didMutate();
+    return result;
+  };
+
+  return descriptor;
+}
+
 /**
  * This Navigator is meant to work with any HTML based webpub. So an ePub
  * or a Mobi, or even just html pages packaged into a collection.
@@ -14,22 +40,18 @@ import { Link } from '@d-i-t-a/reader/dist/model/Publication';
 export default class HtmlNavigator extends Navigator {
   static Content = EpubContent;
 
-  private constructor() {
-    // readonly reader: D2Reader
+  private constructor(readonly _didMutate: () => void) {
     super();
   }
 
   static async init({
     webpubManifestUrl,
-    getContent,
+    didMutate,
   }: NavigatorArguments): Promise<HtmlNavigator> {
     const url = new URL(webpubManifestUrl);
     const reader = await D2Reader.load({
       url,
       injectables: injectables as any,
-      api: {
-        getContent,
-      },
 
       // all of these were required
       userSettings: {
@@ -58,7 +80,9 @@ export default class HtmlNavigator extends Navigator {
       // TODO: Fix this any assertion
     } as any);
 
-    return new HtmlNavigator();
+    const navigator = new HtmlNavigator(didMutate);
+    console.log('NAV', navigator);
+    return navigator;
   }
 
   // get isScrolling(): boolean {
@@ -118,9 +142,12 @@ export default class HtmlNavigator extends Navigator {
   }
 
   // settings
+  @mutating
   scroll() {
     D2Reader.scroll(true);
   }
+
+  @mutating
   paginate() {
     D2Reader.scroll(false);
   }

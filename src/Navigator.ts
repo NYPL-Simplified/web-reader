@@ -1,12 +1,20 @@
 import { Locator } from '@d-i-t-a/reader/dist/model/Locator';
 import { Link } from '@d-i-t-a/reader/dist/model/Publication';
-import { GetContent } from './types';
 
 /**
  * Defines the Navigator API through an abstract class. This class
  * is meant to be extended by HTMLNavigator or PDFNavigator
  */
 export default abstract class Navigator {
+  /**
+   * This is used to tell react when the internal state of the class
+   * is being mutated so that react knows to update.
+   */
+  abstract readonly _didMutate: () => void;
+  didMutate() {
+    this._didMutate();
+  }
+
   /**
    * we can't type the init function because it needs to be static:
    * https://github.com/microsoft/TypeScript/issues/34516
@@ -38,6 +46,6 @@ export default abstract class Navigator {
 // interface
 export type NavigatorArguments = {
   webpubManifestUrl: string;
-  getContent?: GetContent;
+  didMutate: () => void;
   initialLocation?: Locator;
 };

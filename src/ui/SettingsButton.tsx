@@ -14,7 +14,7 @@ import ToggleGroup from './ToggleGroup';
 import Navigator from '../Navigator';
 
 export default function SettingsCard({ navigator }: { navigator: Navigator }) {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(true);
   const open = () => setIsOpen(!isOpen);
   const close = () => setIsOpen(false);
 
@@ -32,6 +32,7 @@ export default function SettingsCard({ navigator }: { navigator: Navigator }) {
   }
 
   const paginationValue = navigator.isScrolling ? 'scrolling' : 'paginated';
+  console.log(navigator.isScrolling, paginationValue);
 
   return (
     <>
