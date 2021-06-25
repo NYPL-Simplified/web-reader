@@ -6,33 +6,7 @@ import EpubContent from './HtmlNavigatorContent';
 import { WebpubManifest } from '../types';
 import { fetchJson } from '../utils/fetch';
 import { Link } from '@d-i-t-a/reader/dist/model/Publication';
-
-function mutating(
-  target: any,
-  propertyKey: string,
-  descriptor: PropertyDescriptor
-) {
-  const originalMethod = descriptor.value;
-
-  if (!('didMutate' in target)) {
-    console.error('didMutate missing from target', target);
-    return descriptor;
-  }
-  const { didMutate } = target;
-  if (!(didMutate instanceof Function)) {
-    console.error('didMutate not instance of function', didMutate);
-    return descriptor;
-  }
-
-  descriptor.value = function (...args: any) {
-    const result = originalMethod.apply(this, args);
-    console.log(`Calling didMutate for ${propertyKey}`);
-    didMutate.apply(this);
-    return result;
-  };
-
-  return descriptor;
-}
+import { mutating } from '../decorators';
 
 /**
  * This Navigator is meant to work with any HTML based webpub. So an ePub
@@ -144,7 +118,6 @@ export default class HtmlNavigator extends Navigator {
   // settings
   @mutating
   scroll() {
-    console.log('calling scroll');
     D2Reader.scroll(true);
   }
 
