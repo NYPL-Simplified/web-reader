@@ -55,6 +55,12 @@
   "staticFiles": {
     "staticPath": "example/static"
   },
+  "example-app": "www/index.html",
+  "targets": {
+    "example-app": {},
+    "main": false,
+    "module": false
+  },
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@parcel/transformer-typescript-tsc": "^2.0.0-beta.3.1",

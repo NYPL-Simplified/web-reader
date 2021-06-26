@@ -9,3 +9,6 @@ dist
 
 storybook-static
 .vercel
+
+# the parcel built example app
+www
