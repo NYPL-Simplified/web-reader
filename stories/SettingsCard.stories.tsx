@@ -16,10 +16,18 @@ export const SettingsCard = () => {
   return (
     <div>
       <ToggleGroup defaultValue="publisher">
-        <ToggleButton value="publisher">Publisher</ToggleButton>
-        <ToggleButton value="serif">Serif</ToggleButton>
-        <ToggleButton value="sans-serif">Sans-Serif</ToggleButton>
-        <ToggleButton value="dyslexia-friendly">Dyslexia-Friendly</ToggleButton>
+        <ToggleButton value="publisher" variant="setting">
+          Publisher
+        </ToggleButton>
+        <ToggleButton value="serif" variant="setting">
+          Serif
+        </ToggleButton>
+        <ToggleButton value="sans-serif" variant="setting">
+          Sans-Serif
+        </ToggleButton>
+        <ToggleButton value="dyslexia-friendly" variant="setting">
+          Dyslexia-Friendly
+        </ToggleButton>
       </ToggleGroup>
       <ToggleGroup defaultValue="day">
         <ToggleButton colorScheme="light" value="day">
@@ -33,8 +41,12 @@ export const SettingsCard = () => {
         </ToggleButton>
       </ToggleGroup>
       <ToggleGroup defaultValue="paginated">
-        <ToggleButton value="paginated">Paginated</ToggleButton>
-        <ToggleButton value="scrolling">Scrolling</ToggleButton>
+        <ToggleButton value="paginated" variant="setting">
+          Paginated
+        </ToggleButton>
+        <ToggleButton value="scrolling" variant="setting">
+          Scrolling
+        </ToggleButton>
       </ToggleGroup>
     </div>
   );

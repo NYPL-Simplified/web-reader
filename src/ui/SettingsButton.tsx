@@ -45,15 +45,23 @@ export default function SettingsCard({ navigator }: { navigator: Navigator }) {
           <Button onClick={open}>Settings</Button>
         </PopoverTrigger>
         <PopoverContent>
-          <PopoverHeader fontWeight="semibold">Settings</PopoverHeader>
+          <PopoverHeader fontWeight="semibold" variant="setting">
+            Settings
+          </PopoverHeader>
           <PopoverArrow />
           <PopoverCloseButton />
           <PopoverBody>
             <ToggleGroup defaultValue="publisher">
-              <ToggleButton value="publisher">Publisher</ToggleButton>
-              <ToggleButton value="serif">Serif</ToggleButton>
-              <ToggleButton value="sans-serif">Sans-Serif</ToggleButton>
-              <ToggleButton value="dyslexia-friendly">
+              <ToggleButton value="publisher" variant="setting">
+                Publisher
+              </ToggleButton>
+              <ToggleButton value="serif" variant="setting">
+                Serif
+              </ToggleButton>
+              <ToggleButton value="sans-serif" variant="setting">
+                Sans-Serif
+              </ToggleButton>
+              <ToggleButton value="dyslexia-friendly" variant="setting">
                 Dyslexia-Friendly
               </ToggleButton>
             </ToggleGroup>
@@ -68,9 +76,17 @@ export default function SettingsCard({ navigator }: { navigator: Navigator }) {
                 Night
               </ToggleButton>
             </ToggleGroup>
-            <ToggleGroup onChange={setScroll} value={paginationValue}>
-              <ToggleButton value="paginated">Paginated</ToggleButton>
-              <ToggleButton value="scrolling">Scrolling</ToggleButton>
+            <ToggleGroup
+              onChange={setScroll}
+              value={paginationValue}
+              defaultValue="paginated"
+            >
+              <ToggleButton value="paginated" variant="setting">
+                Paginated
+              </ToggleButton>
+              <ToggleButton value="scrolling" variant="setting">
+                Scrolling
+              </ToggleButton>
             </ToggleGroup>
           </PopoverBody>
         </PopoverContent>

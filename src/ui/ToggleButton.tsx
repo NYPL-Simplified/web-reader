@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box as ChakraBox, useRadio } from '@chakra-ui/react';
+import { Box as ChakraBox, Circle, useRadio } from '@chakra-ui/react';
 import { Icon, IconNames } from '@nypl/design-system-react-components';
 
 import Button from './Button';
@@ -17,30 +17,24 @@ function ToggleButton(props: React.PropsWithoutRef<ToggleButtonProps>) {
   const input = getInputProps();
   const checkbox = getCheckboxProps();
 
-  const checked = isChecked
-    ? {
-        color: 'white',
-        bg: 'green.500',
-        _hover: {
-          color: 'white',
-          bg: 'green.500',
-        },
-      }
-    : {};
-
   return (
     <ChakraBox as="label">
       <input {...input} />
-      <Button
-        as="div"
-        {...checked}
-        rightIcon={
-          isChecked ? <Icon decorative name={IconNames.check} /> : null
-        }
-        {...checkbox}
-        {...rest}
-      >
+      <Button as="div" {...checkbox} {...rest}>
         {children}
+        {isChecked && (
+          <Circle
+            position="absolute"
+            verticalAlign="middle"
+            right={2}
+            top="50%"
+            transform="translateY(-50%)"
+            borderColor="white"
+            border="1px solid"
+          >
+            <Icon decorative name={IconNames.check} modifiers={['small']} />
+          </Circle>
+        )}
       </Button>
     </ChakraBox>
   );
