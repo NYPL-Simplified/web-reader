@@ -1,6 +1,6 @@
-import React from 'react';
-import { ChakraProvider, extendTheme } from "@chakra-ui/react"
-import theme from "../src/ui/theme"
+const React = require("react")
+const {ChakraProvider} = require("@chakra-ui/react")
+const theme = require("../src/ui/theme")
 
 import '@nypl/design-system-react-components/dist/styles.css'
 
@@ -10,7 +10,7 @@ export const parameters = {
   actions: { argTypesRegex: '^on.*' },
 };
 
-const withChakra = (StoryFn: Function, context: StoryContext) => {
+const withChakra = (StoryFn, _context) => {
   return (
     <ChakraProvider theme={theme} >
         <StoryFn />
