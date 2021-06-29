@@ -31,7 +31,6 @@ Light.args = {
       Las Cruces
     </ToggleButton>,
   ],
-  colorScheme: 'light',
   name: 'southwest',
   defaultValue: 'sedona',
 };
@@ -40,7 +39,6 @@ export const OneOption = Template.bind({});
 
 OneOption.args = {
   children: <ToggleButton value="sedona">Sedona</ToggleButton>,
-  colorScheme: 'light',
   name: 'southwest',
   defaultValue: 'Sedona',
 };
