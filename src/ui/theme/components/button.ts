@@ -8,7 +8,7 @@ const ButtonStyle = {
   // styles for different visual variants ("outline", "solid")
   variants: {
     solid: variantSolid,
-    setting: variantSetting,
+    toggle: variantToggle,
   },
   // default values for `size`, `variant`, `colorScheme`
   defaultProps: {
@@ -18,15 +18,25 @@ const ButtonStyle = {
   },
 };
 
-const commonSettingButtonStyle = {
-  color: 'black',
+const sepia = 'rgb(246, 236, 217)';
+const lightGreen = '#468028';
+const lightGrey = '#DADADA';
+const defaultBlack = '#383535';
+const activeBlack = '#111';
+
+const commonToggleButtonStyle = {
+  color: activeBlack,
   px: '8',
-  border: '1px solid',
-  borderColor: 'gray.100',
+  border: '0.0625rem solid',
+  borderColor: lightGrey,
   transition: 'none',
+  fontSize: '-2',
+  fontWeight: 'medium',
+  letterSpacing: '0.07rem',
+  textTransform: 'uppercase',
   maxWidth: '100%',
+  cursor: 'pointer',
   _focus: {
-    'z-index': 1,
     boxShadow: 'none',
   },
   _active: {
@@ -44,93 +54,82 @@ const commonSettingButtonStyle = {
  */
 function variantSolid(props: any) {
   const { colorScheme } = props;
-  const common = {
-    _focus: {
-      'z-index': 1,
-    },
-    _active: {
-      bg: `green.300`,
-    },
-  };
 
   switch (colorScheme) {
     case 'sepia':
       return {
-        ...common,
-        ...commonSettingButtonStyle,
-        bg: 'rgb(246, 236, 217)',
-        color: 'rgb(17, 17, 17)',
+        ...commonToggleButtonStyle,
+        bg: sepia,
+        color: defaultBlack,
         _focus: {
-          bg: 'rgb(246, 236, 217)',
-          color: 'rgb(17, 17, 17)',
+          bg: sepia,
+          color: activeBlack,
           boxShadow: 'none',
         },
         _active: {
-          bg: 'rgb(246, 236, 217)',
-          color: 'rgb(17, 17, 17)',
+          bg: sepia,
+          color: activeBlack,
         },
         _hover: {
-          bg: 'rgb(246, 236, 217)',
+          bg: sepia,
           _disabled: {
-            bg: 'rgb(17, 17, 17)',
+            bg: activeBlack,
           },
         },
         _checked: {
-          bg: 'rgb(246, 236, 217)',
-          color: 'rgb(17, 17, 17)',
+          bg: sepia,
+          color: activeBlack,
         },
       };
     case 'dark':
       return {
-        ...common,
-        ...commonSettingButtonStyle,
-        bg: 'rgb(17, 17, 17)',
-        color: 'white',
+        ...commonToggleButtonStyle,
+        bg: activeBlack,
+        color: 'ui.white',
         _focus: {
-          bg: 'rgb(17, 17, 17)',
+          bg: activeBlack,
           color: 'white',
           boxShadow: 'none',
         },
         _active: {
-          bg: 'rgb(17, 17, 17)',
-          color: 'white',
+          bg: activeBlack,
+          color: 'ui.white',
           boxShadow: 'none',
         },
         _hover: {
-          bg: 'rgb(17, 17, 17)',
+          bg: activeBlack,
           _disabled: {
-            bg: 'rgb(255, 255, 255)',
+            bg: 'ui.white',
           },
         },
         _checked: {
-          bg: 'rgb(17, 17, 17)',
-          color: 'white',
+          bg: activeBlack,
+          color: 'ui.white',
         },
       };
     default:
       // default is 'light'
       return {
-        ...common,
-        ...commonSettingButtonStyle,
-        bg: '#fff',
-        color: `gray.500`,
+        ...commonToggleButtonStyle,
+        bg: 'ui.white',
+        color: defaultBlack,
         _disabled: {
           bg: `gray.100`,
         },
         _checked: {
-          bg: `#fff`,
-          color: `gray.500`,
+          bg: `ui.white`,
+          color: activeBlack,
         },
       };
   }
 }
 
-function variantSetting(props: any) {
+function variantToggle(props: any) {
   return {
     ...variantSolid(props),
     _checked: {
-      color: 'white',
-      bg: '#468028',
+      color: 'ui.white',
+      bg: lightGreen,
     },
   };
 }
