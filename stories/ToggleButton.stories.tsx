@@ -47,6 +47,6 @@ export const CheckedSettingButton = Template.bind({});
 
 CheckedSettingButton.args = {
   ...Default.args,
-  variant: 'setting',
+  variant: 'toggle',
   isChecked: true,
 };

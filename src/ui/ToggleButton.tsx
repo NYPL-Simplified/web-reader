@@ -20,7 +20,7 @@ function ToggleButton(props: React.PropsWithoutRef<ToggleButtonProps>) {
   return (
     <ChakraBox as="label">
       <input {...input} />
-      <Button as="div" {...checkbox} {...rest}>
+      <Button as="div" {...checkbox} variant="toggle" {...rest}>
         {children}
         {isChecked && (
           <Circle

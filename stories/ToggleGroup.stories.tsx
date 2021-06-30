@@ -21,15 +21,9 @@ export const Light = Template.bind({});
 
 Light.args = {
   children: [
-    <ToggleButton value="sedona" variant="setting">
-      Sedona
-    </ToggleButton>,
-    <ToggleButton value="santa_fe" variant="setting">
-      Santa Fe
-    </ToggleButton>,
-    <ToggleButton value="las_cruces" variant="setting">
-      Las Cruces
-    </ToggleButton>,
+    <ToggleButton value="sedona">Sedona</ToggleButton>,
+    <ToggleButton value="santa_fe">Santa Fe</ToggleButton>,
+    <ToggleButton value="las_cruces">Las Cruces</ToggleButton>,
   ],
   name: 'southwest',
   defaultValue: 'sedona',
