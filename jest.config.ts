@@ -19,6 +19,7 @@ const config: Config.InitialOptions = {
     '\\.(css|less)$': '<rootDir>/tests/cssStub.js',
   },
   snapshotSerializers: ['@emotion/jest/serializer'],
+  setupFilesAfterEnv: ['<rootDir>/tests/jest.setup.ts'],
   testEnvironment: 'jsdom',
 };
 
