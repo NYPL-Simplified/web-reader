@@ -22,13 +22,13 @@ export const SettingsCard = () => {
         <ToggleButton value="dyslexia-friendly">Dyslexia-Friendly</ToggleButton>
       </ToggleGroup>
       <ToggleGroup defaultValue="day">
-        <ToggleButton colorScheme="light" value="day">
+        <ToggleButton colorScheme="light" value="day" variant="solid">
           Day
         </ToggleButton>
-        <ToggleButton colorScheme="sepia" value="sepia">
+        <ToggleButton colorScheme="sepia" value="sepia" variant="solid">
           Sepia
         </ToggleButton>
-        <ToggleButton colorScheme="dark" value="night">
+        <ToggleButton colorScheme="dark" value="night" variant="solid">
           Night
         </ToggleButton>
       </ToggleGroup>

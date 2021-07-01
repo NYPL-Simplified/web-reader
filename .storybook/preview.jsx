@@ -1,6 +1,6 @@
 const React = require("react")
-const {ChakraProvider} = require("@chakra-ui/react")
-const theme = require("../src/ui/theme")
+const {ChakraProvider, ColorModeProvider} = require("@chakra-ui/react")
+const theme = require("../src/ui/theme").default
 
 import '@nypl/design-system-react-components/dist/styles.css'
 

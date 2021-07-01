@@ -3,10 +3,7 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-  PopoverHeader,
   PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
 } from '@chakra-ui/react';
 import Button from './Button';
 import ToggleButton from './ToggleButton';
@@ -40,15 +37,17 @@ export default function SettingsCard({ navigator }: { navigator: Navigator }) {
         closeOnBlur={false}
         isOpen={isOpen}
         onClose={close}
+        autoFocus={false}
       >
         <PopoverTrigger>
           <Button onClick={open}>Settings</Button>
         </PopoverTrigger>
-        <PopoverContent>
-          <PopoverHeader fontWeight="semibold">Settings</PopoverHeader>
-          <PopoverArrow />
-          <PopoverCloseButton />
-          <PopoverBody>
+        <PopoverContent
+          borderColor="gray.100"
+          width="fit-content"
+          _active={{ boxShadow: 'none' }}
+        >
+          <PopoverBody p={0}>
             <ToggleGroup defaultValue="publisher">
               <ToggleButton value="publisher">Publisher</ToggleButton>
               <ToggleButton value="serif">Serif</ToggleButton>
@@ -58,17 +57,21 @@ export default function SettingsCard({ navigator }: { navigator: Navigator }) {
               </ToggleButton>
             </ToggleGroup>
             <ToggleGroup defaultValue="day">
-              <ToggleButton colorScheme="light" value="day">
+              <ToggleButton colorScheme="light" value="day" variant="solid">
                 Day
               </ToggleButton>
-              <ToggleButton colorScheme="sepia" value="sepia">
+              <ToggleButton colorScheme="sepia" value="sepia" variant="solid">
                 Sepia
               </ToggleButton>
-              <ToggleButton colorScheme="dark" value="night">
+              <ToggleButton colorScheme="dark" value="night" variant="solid">
                 Night
               </ToggleButton>
             </ToggleGroup>
-            <ToggleGroup onChange={setScroll} value={paginationValue}>
+            <ToggleGroup
+              onChange={setScroll}
+              value={paginationValue}
+              defaultValue="paginated"
+            >
               <ToggleButton value="paginated">Paginated</ToggleButton>
               <ToggleButton value="scrolling">Scrolling</ToggleButton>
             </ToggleGroup>
