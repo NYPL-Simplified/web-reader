@@ -14,6 +14,7 @@ export default meta;
 const ColorCard = ({ color }: { color: SingleColor }) => {
   return (
     <VStack
+      spacing={0}
       w="100px"
       h="100px"
       flex="0 0 100px"
@@ -23,7 +24,7 @@ const ColorCard = ({ color }: { color: SingleColor }) => {
       borderRadius="sm"
     >
       <Box flex="1 0 auto" w="100%" bg={color.value} />
-      <Text fontSize="xs" px={1}>
+      <Text fontSize="xs" p={1} mt={0}>
         {color.title}
       </Text>
     </VStack>
