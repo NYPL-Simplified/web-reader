@@ -1,6 +1,6 @@
 import React from 'react';
 import { Meta } from '@storybook/react';
-import { Box, Text, HStack, useTheme, VStack } from '@chakra-ui/react';
+import { Box, Text, HStack, useTheme, VStack, Heading } from '@chakra-ui/react';
 
 const meta: Meta = {
   title: 'Theme',
@@ -15,9 +15,9 @@ const ColorCard = ({ color }: { color: SingleColor }) => {
   return (
     <VStack
       spacing={0}
-      w="100px"
+      w="160px"
       h="100px"
-      flex="0 0 100px"
+      flex="0 0 160px"
       display="flex"
       my={2}
       border="1px solid black"
@@ -66,26 +66,39 @@ export const Colors = () => {
     'black',
     'white',
     'whiteAlpha',
+    'ui',
+    'brand',
   ];
 
-  const keys = Object.keys(themeColors).filter((key) => !ignored.includes(key));
+  const colorScalesKeys = Object.keys(themeColors).filter(
+    (key) => !ignored.includes(key)
+  );
+  const uiColorsKeys = Object.keys(themeColors.ui);
 
-  const colors = keys.map((key) => {
-    const value = themeColors[key];
+  const flattenObject = (obj: any, prefix: string) => (key: string) => {
+    const value = obj[key];
     if (typeof value === 'string') {
-      return { title: key, value };
+      return { title: `${prefix}${key}`, value };
     }
     return {
       title: key,
       children: Object.keys(value).map((subkey: string) => {
-        return { title: `${key}.${subkey}`, value: value[subkey] };
+        return { title: `${prefix}${key}.${subkey}`, value: value[subkey] };
       }),
     };
-  });
+  };
+
+  const colorScales = colorScalesKeys.map(flattenObject(themeColors, ''));
+  const uiColors = uiColorsKeys.map(flattenObject(themeColors.ui, 'ui.'));
 
   return (
     <>
-      {colors.map((color) => (
+      <Heading>UI Colors</Heading>
+      {uiColors.map((color) => (
+        <ColorRow color={color} key={color.title} />
+      ))}
+      <Heading>Color Scales</Heading>
+      {colorScales.map((color) => (
         <ColorRow color={color} key={color.title} />
       ))}
     </>
