@@ -4,8 +4,9 @@ import { Box, Text, HStack, useTheme, VStack, Heading } from '@chakra-ui/react';
 
 const meta: Meta = {
   title: 'Theme',
+  // showPanel: false,
   parameters: {
-    controls: { expanded: false },
+    options: { showPanel: false },
   },
 };
 
