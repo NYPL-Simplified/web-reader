@@ -6,6 +6,8 @@ import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 import WebReader from '../src';
 import { GetContent } from '../src/types';
 
+import '@nypl/design-system-react-components/dist/styles.css';
+
 const AxisNowEpub = () => {
   const [getContent, setGetContent] = React.useState<GetContent | null>(null);
 
