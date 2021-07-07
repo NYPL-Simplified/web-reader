@@ -15,13 +15,13 @@ export default meta;
 export const SettingsCard = () => {
   return (
     <div>
-      <ToggleGroup defaultValue="publisher">
+      <ToggleGroup value="publisher" label="text font options">
         <ToggleButton value="publisher">Publisher</ToggleButton>
         <ToggleButton value="serif">Serif</ToggleButton>
         <ToggleButton value="sans-serif">Sans-Serif</ToggleButton>
         <ToggleButton value="dyslexia-friendly">Dyslexia-Friendly</ToggleButton>
       </ToggleGroup>
-      <ToggleGroup defaultValue="day">
+      <ToggleGroup value="day" label="reading theme options">
         <ToggleButton colorScheme="light" value="day" variant="solid">
           Day
         </ToggleButton>
@@ -32,7 +32,7 @@ export const SettingsCard = () => {
           Night
         </ToggleButton>
       </ToggleGroup>
-      <ToggleGroup defaultValue="paginated">
+      <ToggleGroup value="paginated" label="pagination options">
         <ToggleButton value="paginated">Paginated</ToggleButton>
         <ToggleButton value="scrolling">Scrolling</ToggleButton>
       </ToggleGroup>

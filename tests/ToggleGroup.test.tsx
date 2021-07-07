@@ -5,7 +5,7 @@ import ToggleGroup from '../src/ui/ToggleGroup';
 
 const renderComponent = () => {
   return render(
-    <ToggleGroup value="sedona">
+    <ToggleGroup value="sedona" label="test">
       <ToggleButton value="sedona">Sedona</ToggleButton>
       <ToggleButton value="santa_fe">Santa Fe</ToggleButton>
       <ToggleButton value="las_cruces">Las Cruces</ToggleButton>
@@ -15,7 +15,7 @@ const renderComponent = () => {
 
 test('radiogroup should be in the document', () => {
   const { getByRole } = renderComponent();
-  expect(getByRole('radiogroup')).toBeInTheDocument();
+  expect(getByRole('radiogroup', { name: 'test' })).toBeInTheDocument();
 });
 
 test('toggle group should contain all radio buttons', () => {
@@ -36,7 +36,7 @@ test('respect value props', () => {
 test('onChange callback function should be called', () => {
   const onChangeHandler = jest.fn();
   const { getByLabelText } = render(
-    <ToggleGroup value="sedona" onChange={onChangeHandler}>
+    <ToggleGroup value="sedona" onChange={onChangeHandler} label="test">
       <ToggleButton value="sedona">Sedona</ToggleButton>
       <ToggleButton value="santa_fe">Santa Fe</ToggleButton>
       <ToggleButton value="las_cruces">Las Cruces</ToggleButton>

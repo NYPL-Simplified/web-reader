@@ -48,7 +48,7 @@ export default function SettingsCard({ navigator }: { navigator: Navigator }) {
           _active={{ boxShadow: 'none' }}
         >
           <PopoverBody p={0}>
-            <ToggleGroup defaultValue="publisher">
+            <ToggleGroup value="publisher" label="text font options">
               <ToggleButton value="publisher">Publisher</ToggleButton>
               <ToggleButton value="serif">Serif</ToggleButton>
               <ToggleButton value="sans-serif">Sans-Serif</ToggleButton>
@@ -56,7 +56,7 @@ export default function SettingsCard({ navigator }: { navigator: Navigator }) {
                 Dyslexia-Friendly
               </ToggleButton>
             </ToggleGroup>
-            <ToggleGroup defaultValue="day">
+            <ToggleGroup value="day" label="reading theme options">
               <ToggleButton colorScheme="light" value="day" variant="solid">
                 Day
               </ToggleButton>
@@ -70,7 +70,7 @@ export default function SettingsCard({ navigator }: { navigator: Navigator }) {
             <ToggleGroup
               onChange={setScroll}
               value={paginationValue}
-              defaultValue="paginated"
+              label="pagination options"
             >
               <ToggleButton value="paginated">Paginated</ToggleButton>
               <ToggleButton value="scrolling">Scrolling</ToggleButton>

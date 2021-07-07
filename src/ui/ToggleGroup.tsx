@@ -1,18 +1,20 @@
 import React from 'react';
 import { useRadioGroup, UseRadioGroupProps } from '@chakra-ui/react';
 
-type ToggleGroupProps = UseRadioGroupProps;
+type ToggleGroupProps = Omit<UseRadioGroupProps, 'value' | 'defaultValue'> & {
+  value: string;
+  label: string;
+};
 
 const ToggleGroup: React.FC<ToggleGroupProps> = ({
-  defaultValue,
   value,
+  label,
   name,
   children,
   onChange,
 }) => {
   const { getRootProps, getRadioProps } = useRadioGroup({
     name,
-    defaultValue,
     onChange,
     value,
   });
@@ -20,7 +22,7 @@ const ToggleGroup: React.FC<ToggleGroupProps> = ({
   const group = getRootProps();
 
   return (
-    <div {...group}>
+    <div {...group} aria-label={label}>
       {React.Children.map(children, (element) => {
         try {
           const value = (element as any).props.value;
