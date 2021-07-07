@@ -1,11 +1,11 @@
+// import D2Reader, { ReadingPosition, Locator } from '@d-i-t-a/reader';
 import D2Reader from '@d-i-t-a/reader';
+import { Locator, ReadingPosition } from '@d-i-t-a/reader/dist/model/Locator';
 import Navigator, { NavigatorArguments } from '../Navigator';
-import { ReadingPosition } from '@d-i-t-a/reader/dist/model/Locator';
 import '@d-i-t-a/reader/dist/reader.css';
 import EpubContent from './HtmlNavigatorContent';
-import { WebpubManifest } from '../types';
+import { ColorMode, WebpubManifest } from '../types';
 import { fetchJson } from '../utils/fetch';
-import { Link } from '@d-i-t-a/reader/dist/model/Publication';
 import { mutating } from '../decorators';
 
 /**
@@ -15,8 +15,11 @@ import { mutating } from '../decorators';
 export default class HtmlNavigator extends Navigator {
   static Content = EpubContent;
 
-  private constructor(didMutate: () => void) {
+  private readonly reader: D2Reader;
+
+  private constructor(didMutate: () => void, reader: D2Reader) {
     super(didMutate);
+    this.reader = reader;
   }
 
   static async init({
@@ -24,7 +27,7 @@ export default class HtmlNavigator extends Navigator {
     didMutate,
   }: NavigatorArguments): Promise<HtmlNavigator> {
     const url = new URL(webpubManifestUrl);
-    const reader = await D2Reader.load({
+    const reader = await D2Reader.build({
       url,
       injectables: injectables as any,
 
@@ -55,12 +58,12 @@ export default class HtmlNavigator extends Navigator {
       // TODO: Fix this any assertion
     } as any);
 
-    const navigator = new HtmlNavigator(didMutate);
+    const navigator = new HtmlNavigator(didMutate, reader);
     return navigator;
   }
 
   // get isScrolling(): boolean {
-  //   return D2Reader.isScroll();
+  //   return this.reader.isScroll();
   // }
 
   get readingProgression(): ReadingPosition {
@@ -78,12 +81,12 @@ export default class HtmlNavigator extends Navigator {
       title: 'blah',
       locations: {},
     };
-    // return D2Reader.currentLocator;
+    // return this.reader.currentLocator;
   }
 
-  async goTo(link: Link) {
+  async goTo(locator: Locator) {
     try {
-      await D2Reader.goTo(link);
+      await this.reader.goTo(locator);
       return true;
     } catch (e) {
       console.error(e);
@@ -92,7 +95,7 @@ export default class HtmlNavigator extends Navigator {
   }
   async goForward() {
     try {
-      await D2Reader.nextPage();
+      await this.reader.nextPage();
       return true;
     } catch (e) {
       console.error(e);
@@ -101,7 +104,7 @@ export default class HtmlNavigator extends Navigator {
   }
   async goBackward() {
     try {
-      await D2Reader.previousPage();
+      await this.reader.previousPage();
       return true;
     } catch (e) {
       console.error(e);
@@ -118,24 +121,30 @@ export default class HtmlNavigator extends Navigator {
   // settings
   @mutating
   scroll() {
-    D2Reader.scroll(true);
+    this.reader.scroll(true);
   }
 
   @mutating
   paginate() {
-    D2Reader.scroll(false);
-  }
-  get isScroll() {
-    const settings = D2Reader.currentSettings();
-    console.log(settings);
-    return false;
+    this.reader.scroll(false);
   }
   get isScrolling() {
-    return false;
+    return this.reader.currentSettings.verticalScroll;
   }
-  toggleScroll() {
-    console.warn('toggle scroll not implemented');
-    return;
+  toggleScroll = () => {
+    if (this.isScrolling) {
+      this.paginate();
+    } else {
+      this.scroll();
+    }
+  };
+
+  // @mutating
+  setColorMode = (mode: ColorMode) => {
+    return this.reader.applyUserSettings({ appearance: mode } as any);
+  };
+  get colorMode() {
+    return this.reader.currentSettings.appearance as ColorMode;
   }
 
   static async fetchManifest(url: string): Promise<WebpubManifest> {
