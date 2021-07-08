@@ -20,6 +20,15 @@ export default class HtmlNavigator extends Navigator {
   private constructor(didMutate: () => void, reader: D2Reader) {
     super(didMutate);
     this.reader = reader;
+
+    /**
+     * We have to bind all of the non arrow functions that use the mutating decorator
+     */
+    this.goForward = this.goForward.bind(this);
+    this.goBackward = this.goBackward.bind(this);
+    this.scroll = this.scroll.bind(this);
+    this.paginate = this.paginate.bind(this);
+    this.setColorMode = this.setColorMode.bind(this);
   }
 
   static async init({
@@ -68,6 +77,8 @@ export default class HtmlNavigator extends Navigator {
       return false;
     }
   }
+
+  @mutating
   async goForward() {
     try {
       await this.reader.nextPage();
@@ -77,6 +88,8 @@ export default class HtmlNavigator extends Navigator {
       return false;
     }
   }
+
+  @mutating
   async goBackward() {
     try {
       await this.reader.previousPage();
@@ -86,14 +99,18 @@ export default class HtmlNavigator extends Navigator {
       return false;
     }
   }
-  async goLeft() {
-    return this.goBackward();
-  }
-  async goRight() {
-    return this.goForward();
+  goLeft = async () => {
+    return await this.goBackward();
+  };
+  goRight = async () => {
+    return await this.goForward();
+  };
+
+  // scrolling
+  get isScrolling() {
+    return this.reader.currentSettings.verticalScroll;
   }
 
-  // settings
   @mutating
   scroll() {
     this.reader.scroll(true);
@@ -103,9 +120,7 @@ export default class HtmlNavigator extends Navigator {
   paginate() {
     this.reader.scroll(false);
   }
-  get isScrolling() {
-    return this.reader.currentSettings.verticalScroll;
-  }
+
   toggleScroll = () => {
     if (this.isScrolling) {
       this.paginate();
@@ -114,12 +129,14 @@ export default class HtmlNavigator extends Navigator {
     }
   };
 
-  // @mutating
-  setColorMode = (mode: ColorMode) => {
-    return this.reader.applyUserSettings({ appearance: mode } as any);
-  };
+  // color mode
   get colorMode() {
     return this.reader.currentSettings.appearance as ColorMode;
+  }
+
+  @mutating
+  setColorMode(mode: ColorMode) {
+    return this.reader.applyUserSettings({ appearance: mode } as any);
   }
 
   static async fetchManifest(url: string): Promise<WebpubManifest> {

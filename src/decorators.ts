@@ -7,8 +7,15 @@
 export function mutating(
   target: any,
   propertyKey: string,
-  descriptor: PropertyDescriptor
+  descriptor?: PropertyDescriptor
 ) {
+  if (!descriptor) {
+    console.error(
+      'Attempting to use @mutate on a class property will not work'
+    );
+    return;
+  }
+
   const originalMethod = descriptor.value;
 
   if (!('didMutate' in target)) {
@@ -23,7 +30,7 @@ export function mutating(
 
   descriptor.value = function (...args: any) {
     const result = originalMethod.apply(this, args);
-    // console.log(`Calling didMutate for ${propertyKey}`);
+    console.log(`Calling didMutate for ${propertyKey}`);
     didMutate.apply(this);
     return result;
   };
