@@ -12,7 +12,7 @@ const ButtonStyle = {
   },
   // default values for `size`, `variant`, `colorScheme`
   defaultProps: {
-    size: 'md',
+    size: 'sm',
     variant: 'solid',
     colorScheme: 'light',
   },
