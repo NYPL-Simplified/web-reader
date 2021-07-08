@@ -41,4 +41,4 @@ export type Spine<TFormat> = { href: string; type: TFormat; title: string }[];
 
 export type GetContent = (readingOrderHref: string) => Promise<string>;
 
-export type ColorMode = 'dark' | 'sepia' | 'light';
+export type ColorMode = 'night' | 'sepia' | 'day';

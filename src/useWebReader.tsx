@@ -12,6 +12,10 @@ import {
   WebpubManifest,
   WebpubPdfConformsTo,
 } from './types';
+import { ColorMode } from '@chakra-ui/react';
+import useHtmlNavigator, {
+  UseHtmlNavigatorReturn,
+} from './HtmlNavigator/useHtmlNavigator';
 
 type LoadedWebReader = {
   isLoading: false;
@@ -19,17 +23,17 @@ type LoadedWebReader = {
   // how to instantiate them or what to pass to them, that's the responsibility
   // of this hook. The consumer just places it within their UI.
   content: JSX.Element;
-  navigator: Navigator;
   // we will replace this with a full Publication instance once we
   // can install it from readium/web. For now we will read things
   // directly from the manifest
-  manifest: WebpubManifest;
+  // manifest: WebpubManifest;
+  navigator: UseHtmlNavigatorReturn;
 };
+
 type LoadingWebReader = {
   isLoading: true;
   content: JSX.Element;
   navigator: null;
-  manifest: null;
 };
 
 export type UseWebReaderReturn = LoadedWebReader | LoadingWebReader;
@@ -42,54 +46,19 @@ export default function useWebReader(
   webpubManifestUrl: string,
   options: UseWebReaderOptions = {}
 ): UseWebReaderReturn {
-  const [navigator, setNavigator] = React.useState<null | HtmlNavigator>(null);
-  const [manifest, setManifest] = React.useState<WebpubManifest | null>(null);
-  const [_state, setState] = React.useState<number>(0);
+  const navigator = useHtmlNavigator(webpubManifestUrl);
+  const { content, isLoading } = navigator;
 
-  // Asynchronously initialize the client
-  React.useEffect(() => {
-    function didMutate() {
-      setState((state) => state + 1);
-    }
-
-    // fetch the manifest
-    fetchJson<WebpubManifest>(webpubManifestUrl).then((manifest) => {
-      setManifest(manifest);
-
-      const conformsTo = manifest.metadata?.conformsTo;
-
-      switch (conformsTo) {
-        case WebpubPdfConformsTo:
-          // initialize a PDF Navigator
-          throw new Error('Unimplemented PDF Manifest');
-        /**
-         * The default navigator is HTML, like we use for ePubs and
-         * AxisNow encrypted ePubs
-         */
-        case undefined:
-        case AxisNowEpubConformsTo:
-          HtmlNavigator.init({ webpubManifestUrl, didMutate }).then(
-            setNavigator
-          );
-      }
-    });
-  }, [webpubManifestUrl, setState, setNavigator, setManifest]);
-
-  // here we will need to switch based on what the manifest conforms to
-  const content = <HtmlNavigator.Content />;
-
-  if (!navigator || !manifest) {
+  if (navigator.isLoading) {
     return {
       isLoading: true,
       content,
       navigator: null,
-      manifest: null,
     };
   }
   return {
     isLoading: false,
-    navigator,
     content,
-    manifest,
+    navigator,
   };
 }

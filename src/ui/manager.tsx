@@ -10,11 +10,7 @@ import theme from './theme';
  * It takes the return value of useWebReader as props
  */
 
-const ManagerUI: React.FC<UseWebReaderReturn> = ({
-  children,
-  navigator,
-  manifest,
-}) => {
+const ManagerUI: React.FC<UseWebReaderReturn> = ({ children, navigator }) => {
   return (
     <ThemeProvider theme={theme}>
       <div
@@ -34,7 +30,8 @@ const ManagerUI: React.FC<UseWebReaderReturn> = ({
             padding: 8,
           }}
         >
-          <h1>{manifest?.metadata.title}</h1>
+          {/* <h1>{manifest?.metadata.title}</h1> */}
+          <h1>No title</h1>
           <div>
             {navigator && <SettingsCard navigator={navigator} />}
             {/* <button style={{ margin: 4 }} onClick={navigator?.scroll}>

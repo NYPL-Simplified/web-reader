@@ -7,6 +7,7 @@ import EpubContent from './HtmlNavigatorContent';
 import { ColorMode, WebpubManifest } from '../types';
 import { fetchJson } from '../utils/fetch';
 import { mutating } from '../decorators';
+import injectables from './injectables';
 
 /**
  * This Navigator is meant to work with any HTML based webpub. So an ePub
@@ -140,38 +141,3 @@ export default class HtmlNavigator extends Navigator {
     return manifest;
   }
 }
-
-const injectables = [
-  {
-    type: 'style',
-    url: 'http://localhost:1234/viewer/readium-css/ReadiumCSS-before.css',
-    r2before: true,
-  },
-  {
-    type: 'style',
-    url: 'http://localhost:1234/viewer/readium-css/ReadiumCSS-default.css',
-    r2default: true,
-  },
-  {
-    type: 'style',
-    url: 'http://localhost:1234/viewer/readium-css/ReadiumCSS-after.css',
-    r2after: true,
-  },
-  // {
-  //   type: 'style',
-  //   url: 'http://localhost:1234/viewer/injectables/pagebreak/pagebreak.css',
-  //   r2after: true,
-  // },
-  // {
-  //   type: 'script',
-  //   url:
-  //     'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-MML-AM_CHTML&latest',
-  // },
-  // {
-  //   type: 'style',
-  //   url: 'http://localhost:1234/viewer/fonts/opendyslexic/opendyslexic.css',
-  //   fontFamily: 'opendyslexic',
-  //   systemFont: false,
-  // },
-  // { type: 'style', fontFamily: 'Courier', systemFont: true },
-];
