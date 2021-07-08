@@ -46,10 +46,6 @@ export default class HtmlNavigator extends Navigator {
     return navigator;
   }
 
-  // get isScrolling(): boolean {
-  //   return this.reader.isScroll();
-  // }
-
   get readingProgression(): ReadingPosition {
     return {
       created: new Date(),
