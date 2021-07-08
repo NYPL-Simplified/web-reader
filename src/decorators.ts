@@ -7,15 +7,8 @@
 export function mutating(
   target: any,
   propertyKey: string,
-  descriptor?: PropertyDescriptor
+  descriptor: PropertyDescriptor
 ) {
-  if (!descriptor) {
-    console.error(
-      'Attempting to use @mutate on a class property will not work'
-    );
-    return;
-  }
-
   const originalMethod = descriptor.value;
 
   if (!('didMutate' in target)) {
