@@ -1,16 +1,12 @@
 import D2Reader from '@d-i-t-a/reader';
 import React from 'react';
-import HtmlNavigatorContent from './HtmlNavigatorContent';
 import injectables from './injectables';
-import { ColorMode } from '../types';
+import { ColorMode, ReaderState, ReaderReturn, WebpubManifest } from '../types';
+import HtmlReaderContent from './HtmlReaderContent';
 
-export type HtmlNavigatorState = {
-  type: 'HTML';
-  colorMode: ColorMode;
-  isScrolling: boolean;
-  fontSize: number;
-  fontFamily: string; //'serif' | 'sans-serif';
+type HtmlState = ReaderState & {
   reader: D2Reader | undefined;
+  type: 'HTML';
 };
 
 function getColorMode(d2Mode: string): ColorMode {
@@ -33,11 +29,12 @@ export type HtmlNavigatorAction =
   | { type: 'SET_SCROLL'; isScrolling: boolean };
 
 function hmtlNavigatorReducer(
-  state: HtmlNavigatorState,
+  state: HtmlState,
   action: HtmlNavigatorAction
-): HtmlNavigatorState {
+): HtmlState {
   switch (action.type) {
     case 'SET_READER':
+      // set all the initial settings taken from the reader
       const settings = action.reader.currentSettings;
       return {
         type: 'HTML',
@@ -62,18 +59,10 @@ function hmtlNavigatorReducer(
   }
 }
 
-export type UseHtmlNavigatorReturn = HtmlNavigatorState & {
-  isLoading: boolean;
-  goForward: () => void;
-  goBackward: () => void;
-  setColorMode: (mode: ColorMode) => Promise<void>;
-  setScroll: (val: 'scrolling' | 'paginated') => Promise<void>;
-  content: JSX.Element;
-};
-
-export default function useHtmlNavigator(
-  webpubManifestUrl: string
-): UseHtmlNavigatorReturn {
+export default function useHtmlReader(
+  webpubManifestUrl: string | undefined,
+  manifest: WebpubManifest | null
+): ReaderReturn {
   const [state, dispatch] = React.useReducer(hmtlNavigatorReducer, {
     type: 'HTML',
     colorMode: 'day',
@@ -87,7 +76,10 @@ export default function useHtmlNavigator(
 
   // initialize the reader
   React.useEffect(() => {
+    // bail out if there is no webpubManifestUrl. It indicates this format is not being used.
+    if (!webpubManifestUrl) return;
     const url = new URL(webpubManifestUrl);
+    console.log('calling build');
     D2Reader.build({
       url,
       injectables: injectables,
@@ -128,13 +120,32 @@ export default function useHtmlNavigator(
   );
 
   const isLoading = !reader;
+
+  // this format is inactive, return null
+  if (!webpubManifestUrl || !manifest) return null;
+
+  // we are initializing the reader
+  if (isLoading) {
+    return {
+      isLoading: true,
+      content: <HtmlReaderContent />,
+      navigator: null,
+      manifest: null,
+      state: null,
+    };
+  }
+
+  // the reader is active
   return {
-    content: <HtmlNavigatorContent />,
-    ...state,
-    isLoading,
-    goForward,
-    goBackward,
-    setColorMode,
-    setScroll,
+    isLoading: false,
+    content: <HtmlReaderContent />,
+    state,
+    manifest,
+    navigator: {
+      goForward,
+      goBackward,
+      setColorMode,
+      setScroll,
+    },
   };
 }

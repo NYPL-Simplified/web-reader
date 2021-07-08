@@ -1,64 +1,73 @@
-/**
- * The React hook that exposes the main API into the reader.
- */
-
-import React from 'react';
-import { fetchJson } from './utils/fetch';
-import HtmlNavigator from './HtmlNavigator';
-import Navigator from './Navigator';
 import {
+  AnyConformsTo,
   AxisNowEpubConformsTo,
-  GetContent,
+  ReaderReturn,
   WebpubManifest,
   WebpubPdfConformsTo,
 } from './types';
-import { ColorMode } from '@chakra-ui/react';
-import useHtmlNavigator, {
-  UseHtmlNavigatorReturn,
-} from './HtmlNavigator/useHtmlNavigator';
-
-type LoadedWebReader = {
-  isLoading: false;
-  // we return fully formed JSX elements so the consumer doesn't need to know
-  // how to instantiate them or what to pass to them, that's the responsibility
-  // of this hook. The consumer just places it within their UI.
-  content: JSX.Element;
-  // we will replace this with a full Publication instance once we
-  // can install it from readium/web. For now we will read things
-  // directly from the manifest
-  // manifest: WebpubManifest;
-  navigator: UseHtmlNavigatorReturn;
-};
-
-type LoadingWebReader = {
-  isLoading: true;
-  content: JSX.Element;
-  navigator: null;
-};
-
-export type UseWebReaderReturn = LoadedWebReader | LoadingWebReader;
+import useHtmlNavigator from './HtmlNavigator/useHtmlReader';
+import React from 'react';
+import { fetchJson } from './utils/fetch';
+import HtmlReaderContent from './HtmlNavigator/HtmlReaderContent';
 
 type UseWebReaderOptions = {
-  // a function to fetch / decrypt content
-  getContent?: GetContent;
+  // TBD
 };
+
+function getReaderType(conformsTo: AnyConformsTo | null | undefined) {
+  switch (conformsTo) {
+    case AxisNowEpubConformsTo:
+      return 'HTML';
+    case WebpubPdfConformsTo:
+      return 'PDF';
+    case undefined:
+      // the manifest didn't indicate any conformsTo,
+      // so return our default
+      return 'HTML';
+    case null:
+      // the manifest is still loading, return undefined
+      return undefined;
+  }
+}
+
+/**
+ * The React hook that exposes the main API into the reader.
+ */
 export default function useWebReader(
   webpubManifestUrl: string,
   options: UseWebReaderOptions = {}
-): UseWebReaderReturn {
-  const navigator = useHtmlNavigator(webpubManifestUrl);
-  const { content, isLoading } = navigator;
+): ReaderReturn {
+  const [manifest, setManifest] = React.useState<WebpubManifest | null>(null);
+  const readerType = getReaderType(
+    manifest ? manifest.metadata.conformsTo : null
+  );
 
-  if (navigator.isLoading) {
+  const htmlReader = useHtmlNavigator(
+    readerType === 'HTML' ? webpubManifestUrl : undefined,
+    manifest
+  );
+
+  // fetch the manifest and set it in state
+  React.useEffect(() => {
+    fetchJson<WebpubManifest>(webpubManifestUrl).then(setManifest);
+  }, [webpubManifestUrl]);
+
+  // first if we are still fetching the manifest, return loading
+  if (manifest === null) {
     return {
       isLoading: true,
-      content,
+      content: <HtmlReaderContent />,
+      manifest: null,
       navigator: null,
+      state: null,
     };
   }
-  return {
-    isLoading: false,
-    content,
-    navigator,
-  };
+
+  // first handle the case of the html reader
+  if (htmlReader) {
+    return htmlReader;
+  }
+
+  console.log(readerType, manifest.metadata.conformsTo);
+  throw new Error('No reader was initialized for the webpub');
 }

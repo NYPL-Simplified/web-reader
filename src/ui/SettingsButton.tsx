@@ -8,18 +8,20 @@ import {
 import Button from './Button';
 import ToggleButton from './ToggleButton';
 import ToggleGroup from './ToggleGroup';
-import { UseHtmlNavigatorReturn } from '../HtmlNavigator/useHtmlNavigator';
+import { Navigator, ReaderState } from '../types';
 
 export default function SettingsCard({
   navigator,
+  state,
 }: {
-  navigator?: UseHtmlNavigatorReturn;
+  navigator: Navigator;
+  state: ReaderState;
 }) {
   const [isOpen, setIsOpen] = React.useState(false);
   const open = () => setIsOpen(!isOpen);
   const close = () => setIsOpen(false);
 
-  const paginationValue = navigator?.isScrolling ? 'scrolling' : 'paginated';
+  const paginationValue = state?.isScrolling ? 'scrolling' : 'paginated';
 
   return (
     <>
@@ -48,7 +50,7 @@ export default function SettingsCard({
               </ToggleButton>
             </ToggleGroup>
             <ToggleGroup
-              value={navigator?.colorMode}
+              value={state?.colorMode}
               label="reading theme options"
               onChange={navigator?.setColorMode}
             >
