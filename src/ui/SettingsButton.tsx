@@ -4,6 +4,7 @@ import {
   PopoverTrigger,
   PopoverContent,
   PopoverBody,
+  ButtonGroup,
 } from '@chakra-ui/react';
 import Button from './Button';
 import ToggleButton from './ToggleButton';
@@ -28,6 +29,14 @@ export default function SettingsCard({ navigator }: { navigator: Navigator }) {
     }
   }
 
+  function setIncrease(evt: React.FormEvent<HTMLButtonElement>) {
+    console.log(evt.currentTarget.textContent);
+  }
+
+  function setDecrease(evt: React.FormEvent<HTMLButtonElement>) {
+    console.log(evt.currentTarget.textContent);
+  }
+
   const paginationValue = navigator.isScrolling ? 'scrolling' : 'paginated';
 
   return (
@@ -47,7 +56,7 @@ export default function SettingsCard({ navigator }: { navigator: Navigator }) {
           width="fit-content"
           _active={{ boxShadow: 'none' }}
         >
-          <PopoverBody p={0}>
+          <PopoverBody p={0} maxWidth="95vw">
             <ToggleGroup value="publisher" label="text font options">
               <ToggleButton value="publisher">Publisher</ToggleButton>
               <ToggleButton value="serif">Serif</ToggleButton>
@@ -56,6 +65,22 @@ export default function SettingsCard({ navigator }: { navigator: Navigator }) {
                 Dyslexia-Friendly
               </ToggleButton>
             </ToggleGroup>
+            <ButtonGroup d="flex" spacing={0}>
+              <Button
+                flexGrow="1"
+                aria-label="Decrease font size"
+                onClick={setDecrease}
+              >
+                A-
+              </Button>
+              <Button
+                flexGrow="1"
+                aria-label="Increase font size"
+                onClick={setIncrease}
+              >
+                A+
+              </Button>
+            </ButtonGroup>
             <ToggleGroup value="day" label="reading theme options">
               <ToggleButton colorScheme="light" value="day" variant="solid">
                 Day
