@@ -2,7 +2,7 @@ import * as React from 'react';
 
 const HtmlReaderContent = () => {
   return (
-    <div style={{ height: '100%', overflow: 'hidden', background: 'white' }}>
+    <div style={{ height: '100%', overflow: 'hidden' }}>
       <div id="D2Reader-Container">
         <main
           style={{ height: 'calc(100vh - 150px)' }}
