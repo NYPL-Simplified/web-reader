@@ -12,7 +12,7 @@ import ToggleGroup from './ToggleGroup';
 import Navigator from '../Navigator';
 
 export default function SettingsCard({ navigator }: { navigator: Navigator }) {
-  const [isOpen, setIsOpen] = React.useState(true);
+  const [isOpen, setIsOpen] = React.useState(false);
   const open = () => setIsOpen(!isOpen);
   const close = () => setIsOpen(false);
 
@@ -43,10 +43,9 @@ export default function SettingsCard({ navigator }: { navigator: Navigator }) {
     <>
       <Popover
         placement="bottom-end"
-        closeOnBlur={false}
         isOpen={isOpen}
         onClose={close}
-        autoFocus={false}
+        autoFocus={true}
       >
         <PopoverTrigger>
           <Button onClick={open}>Settings</Button>
@@ -54,7 +53,9 @@ export default function SettingsCard({ navigator }: { navigator: Navigator }) {
         <PopoverContent
           borderColor="gray.100"
           width="fit-content"
-          _active={{ boxShadow: 'none' }}
+          _active={{ boxShadow: 'lg' }}
+          _focus={{ boxShadow: 'lg' }}
+          boxShadow="lg"
         >
           <PopoverBody p={0} maxWidth="95vw">
             <ToggleGroup value="publisher" label="text font options">
