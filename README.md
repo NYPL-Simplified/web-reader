@@ -113,6 +113,7 @@ We always start with a Webpub Manifest, which gives us metadata and the structur
 - There is one `use_X_Reader` per _media-type_ (PDF, HTML, Image, etc), not per _format_. As in, ePub and Mobi books are different formats that use the same media type (HTML). Audiobooks and PDF collections use different media types. We currently only have plans for HTML and PDF, but other hooks are welcome and should fit right in.
 - We always start from a Webpub Manifest. This means other formats (like ePub) need to be processed before they get to us. This can be done with a Readium Streamer, or some other way. 
   - For example, DRB is pre-generating PDF manifests from web-scraped content.
+  - There is [nypl/epub-to-webpub](https://github.com/NYPL/ePub-to-webpub) to generate Webpub Manifests from EPUBS.
   - ePubs are generally run through a Streamer, which is a piece that fetches the full compressed ePub, generates a manifest for it, and then serves the individual pieces separately. 
   - AxisNow encrypted ePubs are served uncompressed. We will generate the manifest for them on the client before instantiating the reader.
 
