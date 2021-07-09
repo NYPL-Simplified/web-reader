@@ -8,27 +8,20 @@ import {
 import Button from './Button';
 import ToggleButton from './ToggleButton';
 import ToggleGroup from './ToggleGroup';
-import Navigator from '../Navigator';
+import { Navigator, ReaderState } from '../types';
 
-export default function SettingsCard({ navigator }: { navigator: Navigator }) {
+export default function SettingsCard({
+  navigator,
+  state,
+}: {
+  navigator: Navigator;
+  state: ReaderState;
+}) {
   const [isOpen, setIsOpen] = React.useState(false);
   const open = () => setIsOpen(!isOpen);
   const close = () => setIsOpen(false);
 
-  function setScroll(val: string) {
-    switch (val) {
-      case 'scrolling':
-        navigator.scroll();
-        break;
-      case 'paginated':
-        navigator.paginate();
-        break;
-      default:
-        throw new Error(`Scroll value ${val} not accepted.`);
-    }
-  }
-
-  const paginationValue = navigator.isScrolling ? 'scrolling' : 'paginated';
+  const paginationValue = state?.isScrolling ? 'scrolling' : 'paginated';
 
   return (
     <>
@@ -56,7 +49,11 @@ export default function SettingsCard({ navigator }: { navigator: Navigator }) {
                 Dyslexia-Friendly
               </ToggleButton>
             </ToggleGroup>
-            <ToggleGroup value="day" label="reading theme options">
+            <ToggleGroup
+              value={state?.colorMode}
+              label="reading theme options"
+              onChange={navigator?.setColorMode}
+            >
               <ToggleButton colorScheme="light" value="day" variant="solid">
                 Day
               </ToggleButton>
@@ -68,7 +65,7 @@ export default function SettingsCard({ navigator }: { navigator: Navigator }) {
               </ToggleButton>
             </ToggleGroup>
             <ToggleGroup
-              onChange={setScroll}
+              onChange={navigator?.setScroll}
               value={paginationValue}
               label="pagination options"
             >

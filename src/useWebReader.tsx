@@ -1,95 +1,101 @@
-/**
- * The React hook that exposes the main API into the reader.
- */
-
-import React from 'react';
-import { fetchJson } from './utils/fetch';
-import HtmlNavigator from './HtmlNavigator';
-import Navigator from './Navigator';
 import {
+  ActiveReader,
+  AnyConformsTo,
   AxisNowEpubConformsTo,
-  GetContent,
+  LoadingReader,
   WebpubManifest,
   WebpubPdfConformsTo,
 } from './types';
-
-type LoadedWebReader = {
-  isLoading: false;
-  // we return fully formed JSX elements so the consumer doesn't need to know
-  // how to instantiate them or what to pass to them, that's the responsibility
-  // of this hook. The consumer just places it within their UI.
-  content: JSX.Element;
-  navigator: Navigator;
-  // we will replace this with a full Publication instance once we
-  // can install it from readium/web. For now we will read things
-  // directly from the manifest
-  manifest: WebpubManifest;
-};
-type LoadingWebReader = {
-  isLoading: true;
-  content: JSX.Element;
-  navigator: null;
-  manifest: null;
-};
-
-export type UseWebReaderReturn = LoadedWebReader | LoadingWebReader;
+import React from 'react';
+import { fetchJson } from './utils/fetch';
+import HtmlReaderContent from './HtmlReader/HtmlReaderContent';
+import usePdfReader from './PdfReader';
+import useHtmlReader from './HtmlReader';
 
 type UseWebReaderOptions = {
-  // a function to fetch / decrypt content
-  getContent?: GetContent;
+  // TBD
 };
+
+function getReaderType(conformsTo: AnyConformsTo | null | undefined) {
+  switch (conformsTo) {
+    case AxisNowEpubConformsTo:
+      return 'HTML';
+    case WebpubPdfConformsTo:
+      return 'PDF';
+    case undefined:
+      // the manifest didn't indicate any conformsTo,
+      // so return our default
+      return 'HTML';
+    case null:
+      // the manifest is still loading, return undefined
+      return undefined;
+  }
+}
+
+/**
+ * The React hook that exposes the main API into the reader. It
+ * will determine the type of the webpub, and then use the correct reader
+ * for that type.
+ */
 export default function useWebReader(
   webpubManifestUrl: string,
   options: UseWebReaderOptions = {}
-): UseWebReaderReturn {
-  const [navigator, setNavigator] = React.useState<null | HtmlNavigator>(null);
+): ActiveReader | LoadingReader {
   const [manifest, setManifest] = React.useState<WebpubManifest | null>(null);
-  const [_state, setState] = React.useState<number>(0);
+  const readerType = getReaderType(
+    manifest ? manifest.metadata.conformsTo : null
+  );
 
-  // Asynchronously initialize the client
+  /**
+   * Our HTML reader and PDf Reader. Note that we cannot conditionally
+   * call a React hook, so we must _always_ call the hook, but allow for the
+   * case where we call the hook with `undefined`, which tells the hook that
+   * that format is inactive, and it will in turn return the InactiveState.
+   */
+  const htmlReader = useHtmlReader(
+    readerType === 'HTML' && manifest
+      ? {
+          webpubManifestUrl,
+          manifest,
+        }
+      : undefined
+  );
+  const pdfReader = usePdfReader(
+    readerType === 'PDF' && manifest
+      ? {
+          webpubManifestUrl,
+          manifest,
+        }
+      : undefined
+  );
+
+  // fetch the manifest and set it in state
   React.useEffect(() => {
-    function didMutate() {
-      setState((state) => state + 1);
-    }
+    fetchJson<WebpubManifest>(webpubManifestUrl).then(setManifest);
+  }, [webpubManifestUrl]);
 
-    // fetch the manifest
-    fetchJson<WebpubManifest>(webpubManifestUrl).then((manifest) => {
-      setManifest(manifest);
-
-      const conformsTo = manifest.metadata?.conformsTo;
-
-      switch (conformsTo) {
-        case WebpubPdfConformsTo:
-          // initialize a PDF Navigator
-          throw new Error('Unimplemented PDF Manifest');
-        /**
-         * The default navigator is HTML, like we use for ePubs and
-         * AxisNow encrypted ePubs
-         */
-        case undefined:
-        case AxisNowEpubConformsTo:
-          HtmlNavigator.init({ webpubManifestUrl, didMutate }).then(
-            setNavigator
-          );
-      }
-    });
-  }, [webpubManifestUrl, setState, setNavigator, setManifest]);
-
-  // here we will need to switch based on what the manifest conforms to
-  const content = <HtmlNavigator.Content />;
-
-  if (!navigator || !manifest) {
+  // first if we are still fetching the manifest, return loading
+  if (manifest === null) {
     return {
       isLoading: true,
-      content,
-      navigator: null,
+      content: <HtmlReaderContent />,
       manifest: null,
+      navigator: null,
+      state: null,
     };
   }
-  return {
-    isLoading: false,
-    navigator,
-    content,
-    manifest,
-  };
+
+  /**
+   * Return whichever reader is not Inactive (not `null`)
+   */
+  if (htmlReader) {
+    return htmlReader;
+  }
+  if (pdfReader) {
+    return pdfReader;
+  }
+
+  throw new Error(
+    `No reader was initialized for the webpub with url: ${webpubManifestUrl} and type: ${readerType}.`
+  );
 }
