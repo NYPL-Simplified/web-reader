@@ -77,7 +77,6 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
 
   // prev and next page functions
   const goForward = React.useCallback(() => {
-    console.log('Go forward', reader);
     if (!reader) return;
     reader.nextPage();
   }, [reader]);
