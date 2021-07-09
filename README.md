@@ -122,7 +122,7 @@ We always start with a Webpub Manifest, which gives us metadata and the structur
   - Takes in the Webpub Manifest and returns:
     - `State` of the reader, such as current settings and location.
     - `Content` of the reader for the consuming component to render wherever.
-    - `Navigator`, which is just an object conforming to the `Navigator` type, which defines the API to interact with the reader (`goForward`, `changeColorMode`, etc).
+    - `Navigator`, which is just an object conforming to the `Navigator` type, which defines the API to interact with the reader (`goForward`, `changeColorMode`, etc). We will make every effort to have our `Navigator` object conform to the [Readium Navigator API spec](https://github.com/readium/architecture/blob/master/navigator/public-api.md).
   - Internally, it will instantiate whatever package is being used to control that media type, and render the contents into the `Content` element it returns.
   - Each hook for each media type separately manages its own state using a redux-style `useReducer` hook. There is a basic set of common state that is shared and returned from the `use_X_Reader` hook, but custom internal state can also be added, such as the `D2Reader` instance in the `useHtmlReader` hook.
 2. **useWebReader hook**
