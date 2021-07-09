@@ -50,13 +50,7 @@ export default function SettingsCard({ navigator }: { navigator: Navigator }) {
         <PopoverTrigger>
           <Button onClick={open}>Settings</Button>
         </PopoverTrigger>
-        <PopoverContent
-          borderColor="gray.100"
-          width="fit-content"
-          _active={{ boxShadow: 'lg' }}
-          _focus={{ boxShadow: 'lg' }}
-          boxShadow="lg"
-        >
+        <PopoverContent borderColor="gray.100" width="fit-content">
           <PopoverBody p={0} maxWidth="95vw">
             <ToggleGroup value="publisher" label="text font options">
               <ToggleButton value="publisher">Publisher</ToggleButton>

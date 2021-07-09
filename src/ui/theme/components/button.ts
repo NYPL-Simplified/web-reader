@@ -36,9 +36,6 @@ const commonToggleButtonStyle = {
   textTransform: 'uppercase',
   maxWidth: '100%',
   cursor: 'pointer',
-  _focus: {
-    boxShadow: 'none',
-  },
   _active: {
     bg: 'none',
   },
@@ -64,7 +61,6 @@ function variantSolid(props: any) {
         _focus: {
           bg: sepia,
           color: activeBlack,
-          boxShadow: 'none',
         },
         _active: {
           bg: sepia,
@@ -89,12 +85,10 @@ function variantSolid(props: any) {
         _focus: {
           bg: activeBlack,
           color: 'white',
-          boxShadow: 'none',
         },
         _active: {
           bg: activeBlack,
           color: 'ui.white',
-          boxShadow: 'none',
         },
         _hover: {
           bg: activeBlack,
