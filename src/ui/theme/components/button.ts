@@ -40,7 +40,7 @@ const commonToggleButtonStyle = {
     boxShadow: 'none',
   },
   _active: {
-    bg: 'none',
+    bg: 'ui.white',
   },
 };
 
