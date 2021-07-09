@@ -7,9 +7,6 @@
     "dist",
     "src"
   ],
-  "engines": {
-    "node": ">=10"
-  },
   "scripts": {
     "example:build": "parcel build example/index.html",
     "example:nocache": "parcel --no-cache example/index.html",
@@ -58,7 +55,12 @@
   },
   "example-app": "www/index.html",
   "targets": {
-    "example-app": {},
+    "example-app": {
+      "engines": {
+        "browsers": "> 2%"
+      },
+      "scopeHoist": false
+    },
     "main": false,
     "module": false
   },
