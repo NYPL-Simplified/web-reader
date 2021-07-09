@@ -6,7 +6,12 @@ import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 import WebReader from '../src';
 import { GetContent } from '../src/types';
 import '@nypl/design-system-react-components/dist/styles.css';
-import { ChakraProvider } from '@chakra-ui/react';
+import {
+  ChakraProvider,
+  Heading,
+  UnorderedList,
+  ListItem,
+} from '@chakra-ui/react';
 import theme from '../src/ui/theme';
 
 const AxisNowEpub = () => {
@@ -63,27 +68,27 @@ const App = () => {
             <WebReader webpubManifestUrl="https://alice.dita.digital/manifest.json" />
           </Route>
           <Route path="/">
-            <h1>Web Reader Proof of Concept</h1>
-            <ul>
-              <li>
+            <Heading as="h1">Web Reader Proof of Concept</Heading>
+            <UnorderedList p={4}>
+              <ListItem>
                 <Link to="/axisnow-encrypted">Encrypted EPUB Example</Link>
-              </li>
-              <li>
+              </ListItem>
+              <ListItem>
                 <Link to="/swtest">SW Test</Link>
-              </li>
-              <li>
+              </ListItem>
+              <ListItem>
                 <Link to="/axisnow-decrypted">Manually Decrypted EPUB</Link>
-              </li>
-              <li>
+              </ListItem>
+              <ListItem>
                 <Link to="/moby-epub2">Moby EPUB2-based Webpub</Link>
-              </li>
-              <li>
+              </ListItem>
+              <ListItem>
                 <Link to="/streamed-epub">Regular (streamed) ePub Example</Link>
-              </li>
-              <li>
+              </ListItem>
+              <ListItem>
                 <Link to="/pdf">Pdf Example</Link>
-              </li>
-            </ul>
+              </ListItem>
+            </UnorderedList>
           </Route>
         </Switch>
       </BrowserRouter>

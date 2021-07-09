@@ -2,7 +2,6 @@
 import D2Reader from '@d-i-t-a/reader';
 import { Locator, ReadingPosition } from '@d-i-t-a/reader/dist/model/Locator';
 import Navigator, { NavigatorArguments } from '../Navigator';
-import '@d-i-t-a/reader/dist/reader.css';
 import EpubContent from './HtmlNavigatorContent';
 import { ColorMode, WebpubManifest } from '../types';
 import { fetchJson } from '../utils/fetch';
