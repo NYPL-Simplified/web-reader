@@ -5,10 +5,10 @@ import {
   WebpubManifest,
   WebpubPdfConformsTo,
 } from './types';
-import useHtmlNavigator from './HtmlNavigator/useHtmlReader';
+import useHtmlNavigator from './HtmlReader';
 import React from 'react';
 import { fetchJson } from './utils/fetch';
-import HtmlReaderContent from './HtmlNavigator/HtmlReaderContent';
+import HtmlReaderContent from './HtmlReader/HtmlReaderContent';
 
 type UseWebReaderOptions = {
   // TBD
