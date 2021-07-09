@@ -17,7 +17,7 @@
     "start": "tsdx watch --tsconfig tsconfig.build.json",
     "build": "tsdx build --tsconfig tsconfig.build.json",
     "test": "jest --passWithNoTests --watch",
-    "test:ci": "jest --passWithNoTests",
+    "test:ci": "jest --passWithNoTests --ci --coverage --maxWorkers=2",
     "lint": "tsdx lint",
     "prepare": "npm run build",
     "size": "size-limit",
