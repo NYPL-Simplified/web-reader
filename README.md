@@ -51,7 +51,7 @@ To support customization, you can piece together your own UI and call the `useWe
 ```typescript
 import { useWebReader, ReaderNav, ReaderFooter } from "nypl/web-reader"
 
-const CustomizedReaderPage = ({manifestUrl}) => {
+const CustomizedReaderPage = ({webpubManifestUrl}) => {
 	// takes a manifest, instantiates a Navigator, and
 	// returns the Navigator, interaction handlers, and
 	// the current state of the reader as an object
@@ -69,12 +69,24 @@ const CustomizedReaderPage = ({manifestUrl}) => {
       <button onClick={reader.handlePrevPage}>Prev</button>
 
       {/* you will receive content from the reader to render wherever you want */}
-      <reader.Content />
+      {reader.content}
         
       {/* use the default footer */}
       <ReaderFooter {...reader} />
 	  </div>
 	)
+}
+```
+
+If you know you are only going to be using one type of reader, you can also call the hook just for that reader:
+
+```typescript
+import { usePdfReader } from "nypl/web-reader";
+
+const MyPdfReader = ({webpubManifestUrl, manifest}) => {
+  const reader = usePdfReader({manifest, webpubManifestUrl});
+
+  return <div>{reader.content}</div>
 }
 ```
 
@@ -95,10 +107,10 @@ Finally, to use in a vanilla Javascript app:
 
 ### Overview
 
-We always start with a Webpub Manifest, which gives us metadata and the structure of the publication with links to the content. Depending on the `metadata.conformsTo` field, we know what type of `Navigator` to use to render the publication. The `Navigator`s provide all the functionality we need to interact with the various publication types. 
+We always start with a Webpub Manifest, which gives us metadata and the structure of the publication with links to the content. Depending on the `metadata.conformsTo` field, we know which type of reader to use to render the publication. Each media type (HTML for EPUBS, PDF for PDF publications, etc) has its own `use_X_Reader` hook (`usePdfReader`, `useHtmlReader`, etc).
 
 **Notes:**
-- There is one `Navigator` per _media-type_ (PDF, HTML, Image, etc), not per _format_. As in, ePub and Mobi books are different formats that use the same media type (HTML). Audiobooks and PDF collections use different media types. We currently only have plans for HTML and PDF, but other Navigators are welcome and should fit right in.
+- There is one `use_X_Reader` per _media-type_ (PDF, HTML, Image, etc), not per _format_. As in, ePub and Mobi books are different formats that use the same media type (HTML). Audiobooks and PDF collections use different media types. We currently only have plans for HTML and PDF, but other hooks are welcome and should fit right in.
 - We always start from a Webpub Manifest. This means other formats (like ePub) need to be processed before they get to us. This can be done with a Readium Streamer, or some other way. 
   - For example, DRB is pre-generating PDF manifests from web-scraped content.
   - ePubs are generally run through a Streamer, which is a piece that fetches the full compressed ePub, generates a manifest for it, and then serves the individual pieces separately. 
@@ -106,15 +118,15 @@ We always start with a Webpub Manifest, which gives us metadata and the structur
 
 ### Pieces of the architecture:
 
-1. **useWebReader hook**
-  - Takes in the Webpub Manifest and instantiates the proper Navigator for it.
-  - Instructs the Navigator to render to the appropriate HTML element.
-  - Returns the current state to be displayed, and a set of functions to interact with the Navigator.
-  - It can also take in an initial state to be used when initializing the Navigator, for example a current page or user settings.
-2. **Navigators**
-  - Provide a unified interface into a variety of media types. Follows the [Readium Navigator API](https://github.com/readium/architecture/blob/master/navigator/public-api.md)
-  - Our HTML Navigator will use [@d-i-t-a/R2D2BC](https://github.com/d-i-t-a/R2D2BC) to render ePubs.
-  - Our PDF Navigator will probably use PDF.js internally.
+1. **use_X_Reader hook**
+  - Takes in the Webpub Manifest and returns:
+    - `State` of the reader, such as current settings and location.
+    - `Content` of the reader for the consuming component to render wherever.
+    - `Navigator`, which is just an object conforming to the `Navigator` type, which defines the API to interact with the reader (`goForward`, `changeColorMode`, etc).
+  - Internally, it will instantiate whatever package is being used to control that media type, and render the contents into the `Content` element it returns.
+  - Each hook for each media type separately manages its own state using a redux-style `useReducer` hook. There is a basic set of common state that is shared and returned from the `use_X_Reader` hook, but custom internal state can also be added, such as the `D2Reader` instance in the `useHtmlReader` hook.
+2. **useWebReader hook**
+  - This is a generic hook that works for both PDF manifests and HTML-type manifests. It will internally call the proper `use_X_Reader` hook for you, and pass through the return value.
 3. **Reader UI Components**
   - Accepts the state and methods returned from the useWebReader hook.
   - Renders the React UI
@@ -129,13 +141,12 @@ This is the folder structure:
   index.html
   index.tsx         # entrypoint for the demo app
 /src
-  /HtmlNavigator    # the HTML Navigator used for ePub or any other HTML content
-  /PdfNavigator     # a stub for the coming PDF Navigator
+  /HtmlReader       # the HTML Reader used for ePub or any other HTML content
+  /PdfReader        # a stub for the coming PDF Reader
   /ui               # the react components for our default UI
     manager.tsx     # the fully-formed default UI
   /utils          
   index.tsx         # exports the main React Component <WebReader />
-  Navigator.ts      # the Navigator interface without an implementation
   types.ts          # commonly used types
   useWebReader.tsx  # the React hook providing the main API into the reader
 /test
@@ -173,12 +184,10 @@ This loads the stories from `./stories`.
 To run the example app:
 
 ```bash
-cd example
-npm i 
-npm run start
+npm run example
 ```
 
-The example imports and live reloads.
+The example will rebundle on change, but you have to refresh your browser to see changes (no hot reloading currently).
 
 ### Other Scripts
 
