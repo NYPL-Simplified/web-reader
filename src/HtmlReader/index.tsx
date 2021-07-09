@@ -14,20 +14,6 @@ type HtmlState = ReaderState & {
   type: 'HTML';
 };
 
-function getColorMode(d2Mode: string): ColorMode {
-  switch (d2Mode) {
-    case 'readium-default-on':
-      return 'day';
-    case 'readium-night-on':
-      return 'night';
-    case 'readium-sepia-on':
-      return 'sepia';
-    default:
-      console.error('COLOR MODE SLIPPED THROUG', d2Mode);
-      return 'day';
-  }
-}
-
 export type HtmlAction =
   | { type: 'SET_READER'; reader: D2Reader }
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
@@ -148,4 +134,18 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       setScroll,
     },
   };
+}
+
+function getColorMode(d2Mode: string): ColorMode {
+  switch (d2Mode) {
+    case 'readium-default-on':
+      return 'day';
+    case 'readium-night-on':
+      return 'night';
+    case 'readium-sepia-on':
+      return 'sepia';
+    default:
+      console.error('COLOR MODE SLIPPED THROUG', d2Mode);
+      return 'day';
+  }
 }
