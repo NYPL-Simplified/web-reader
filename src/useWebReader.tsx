@@ -1,7 +1,8 @@
 import {
+  ActiveReader,
   AnyConformsTo,
   AxisNowEpubConformsTo,
-  ReaderReturn,
+  LoadingReader,
   WebpubManifest,
   WebpubPdfConformsTo,
 } from './types';
@@ -9,6 +10,7 @@ import useHtmlNavigator from './HtmlReader';
 import React from 'react';
 import { fetchJson } from './utils/fetch';
 import HtmlReaderContent from './HtmlReader/HtmlReaderContent';
+import usePdfReader from './PdfReader';
 
 type UseWebReaderOptions = {
   // TBD
@@ -31,20 +33,40 @@ function getReaderType(conformsTo: AnyConformsTo | null | undefined) {
 }
 
 /**
- * The React hook that exposes the main API into the reader.
+ * The React hook that exposes the main API into the reader. It
+ * will determine the type of the webpub, and then use the correct reader
+ * for that type.
  */
 export default function useWebReader(
   webpubManifestUrl: string,
   options: UseWebReaderOptions = {}
-): ReaderReturn {
+): ActiveReader | LoadingReader {
   const [manifest, setManifest] = React.useState<WebpubManifest | null>(null);
   const readerType = getReaderType(
     manifest ? manifest.metadata.conformsTo : null
   );
 
+  /**
+   * Our HTML reader and PDf Reader. Note that we cannot conditionally
+   * call a React hook, so we must _always_ call the hook, but allow for the
+   * case where we call the hook with `undefined`, which tells the hook that
+   * that format is inactive, and it will in turn return the InactiveState.
+   */
   const htmlReader = useHtmlNavigator(
-    readerType === 'HTML' ? webpubManifestUrl : undefined,
-    manifest
+    readerType === 'HTML' && manifest
+      ? {
+          webpubManifestUrl,
+          manifest,
+        }
+      : undefined
+  );
+  const pdfReader = usePdfReader(
+    readerType === 'PDF' && manifest
+      ? {
+          webpubManifestUrl,
+          manifest,
+        }
+      : undefined
   );
 
   // fetch the manifest and set it in state
@@ -63,11 +85,17 @@ export default function useWebReader(
     };
   }
 
-  // first handle the case of the html reader
+  /**
+   * Return whichever reader is not Inactive (not `null`)
+   */
   if (htmlReader) {
     return htmlReader;
   }
+  if (pdfReader) {
+    return pdfReader;
+  }
 
-  console.log(readerType, manifest.metadata.conformsTo);
-  throw new Error('No reader was initialized for the webpub');
+  throw new Error(
+    `No reader was initialized for the webpub with url: ${webpubManifestUrl} and type: ${readerType}.`
+  );
 }

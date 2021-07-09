@@ -1,5 +1,15 @@
 import React from 'react';
-import { ColorMode, ReaderReturn, ReaderState } from '../types';
+import {
+  ActiveReader,
+  ActiveReaderArguments,
+  ColorMode,
+  InactiveReader,
+  InactiveReaderArguments,
+  LoadingReader,
+  ReaderArguments,
+  ReaderReturn,
+  ReaderState,
+} from '../types';
 import PDFContent from './PdfContent';
 
 type PdfState = ReaderState & {
@@ -28,7 +38,8 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
   }
 }
 
-export default function usePdfReader(webpubManifestUrl?: string): ReaderReturn {
+export default function usePdfReader(args: ReaderArguments): ReaderReturn {
+  const { webpubManifestUrl, manifest } = args ?? {};
   const [state, dispatch] = React.useReducer(pdfReducer, {
     type: 'PDF',
     colorMode: 'day',
@@ -39,13 +50,19 @@ export default function usePdfReader(webpubManifestUrl?: string): ReaderReturn {
 
   // initialize the pdf reader
   React.useEffect(() => {
-    // bail out if there is not manifest url passed in,
+    // bail out if there is not manifest passed in,
     // that indicates that this format is inactive
-    if (!webpubManifestUrl) return;
+    if (!manifest) return;
     // here initialize reader however u do
     // ...
-  }, [webpubManifestUrl]);
+  }, [manifest]);
 
+  /**
+   * Here you add the functionality, either directly working with the iframe
+   * or through PDF.js. You should update the internal state. In the PDF case,
+   * you will probably want to store which resource you are currently on and
+   * update that on goForward or goBackward
+   */
   const goForward = React.useCallback(() => {
     console.log('unimplemented');
   }, []);
@@ -53,6 +70,12 @@ export default function usePdfReader(webpubManifestUrl?: string): ReaderReturn {
   const goBackward = React.useCallback(() => {
     console.log('unimplemented');
   }, []);
+
+  /**
+   * These ones don't make sense in the PDF case I dont think. I'm still
+   * deciding how we will separate the types of Navigators and States, so
+   * for now just pass dummies through.
+   */
   const setColorMode = React.useCallback(async () => {
     console.log('unimplemented');
   }, []);
@@ -61,7 +84,7 @@ export default function usePdfReader(webpubManifestUrl?: string): ReaderReturn {
   }, []);
 
   // this format is inactive, return null
-  if (!webpubManifestUrl) return null;
+  if (!webpubManifestUrl || !manifest) return null;
 
   const isLoading = true;
 
@@ -70,6 +93,9 @@ export default function usePdfReader(webpubManifestUrl?: string): ReaderReturn {
     return {
       isLoading: true,
       content: <PDFContent />,
+      manifest: null,
+      navigator: null,
+      state: null,
     };
   }
 
@@ -78,6 +104,7 @@ export default function usePdfReader(webpubManifestUrl?: string): ReaderReturn {
     isLoading: false,
     content: <PDFContent />,
     state,
+    manifest,
     navigator: {
       goForward,
       goBackward,

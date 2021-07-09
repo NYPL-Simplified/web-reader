@@ -79,3 +79,11 @@ export type ActiveReader = {
 };
 
 export type ReaderReturn = InactiveReader | LoadingReader | ActiveReader;
+
+export type ActiveReaderArguments = {
+  webpubManifestUrl: string;
+  manifest: WebpubManifest;
+};
+export type InactiveReaderArguments = undefined;
+
+export type ReaderArguments = ActiveReaderArguments | InactiveReaderArguments;

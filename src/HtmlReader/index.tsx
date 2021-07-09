@@ -1,7 +1,18 @@
 import D2Reader from '@d-i-t-a/reader';
 import React from 'react';
 import injectables from './injectables';
-import { ColorMode, ReaderState, ReaderReturn, WebpubManifest } from '../types';
+import {
+  ColorMode,
+  ReaderState,
+  ReaderReturn,
+  WebpubManifest,
+  InactiveReaderArguments,
+  InactiveReader,
+  ActiveReaderArguments,
+  LoadingReader,
+  ActiveReader,
+  ReaderArguments,
+} from '../types';
 import HtmlReaderContent from './HtmlReaderContent';
 
 type HtmlState = ReaderState & {
@@ -59,10 +70,8 @@ function hmtlNavigatorReducer(
   }
 }
 
-export default function useHtmlReader(
-  webpubManifestUrl: string | undefined,
-  manifest: WebpubManifest | null
-): ReaderReturn {
+export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
+  const { webpubManifestUrl, manifest } = args ?? {};
   const [state, dispatch] = React.useReducer(hmtlNavigatorReducer, {
     type: 'HTML',
     colorMode: 'day',
@@ -79,7 +88,7 @@ export default function useHtmlReader(
     // bail out if there is no webpubManifestUrl. It indicates this format is not being used.
     if (!webpubManifestUrl) return;
     const url = new URL(webpubManifestUrl);
-    console.log('calling build');
+
     D2Reader.build({
       url,
       injectables: injectables,
