@@ -1,5 +1,4 @@
 import { Locator } from '@d-i-t-a/reader/dist/model/Locator';
-import { Link } from '@d-i-t-a/reader/dist/model/Publication';
 
 /**
  * Defines the Navigator API through an abstract class. This class
@@ -29,7 +28,7 @@ export default abstract class Navigator {
   abstract get currentLocation(): Locator;
 
   // change location
-  abstract goTo(link: Link): Promise<boolean>;
+  abstract goTo(locator: Locator): Promise<boolean>;
   // abstract goTo(locator: Locator): Promise<boolean>;
   // for navigating one unit, unit depends on the format
   abstract goForward(): Promise<boolean>;

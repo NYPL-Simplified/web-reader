@@ -11,7 +11,7 @@ import ToggleGroup from './ToggleGroup';
 import Navigator from '../Navigator';
 
 export default function SettingsCard({ navigator }: { navigator: Navigator }) {
-  const [isOpen, setIsOpen] = React.useState(true);
+  const [isOpen, setIsOpen] = React.useState(false);
   const open = () => setIsOpen(!isOpen);
   const close = () => setIsOpen(false);
 
