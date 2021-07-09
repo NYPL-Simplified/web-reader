@@ -23,7 +23,6 @@ export function mutating(
 
   descriptor.value = function (...args: any) {
     const result = originalMethod.apply(this, args);
-    // console.log(`Calling didMutate for ${propertyKey}`);
     didMutate.apply(this);
     return result;
   };
