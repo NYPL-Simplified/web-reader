@@ -6,11 +6,11 @@ import {
   WebpubManifest,
   WebpubPdfConformsTo,
 } from './types';
-import useHtmlNavigator from './HtmlReader';
 import React from 'react';
 import { fetchJson } from './utils/fetch';
 import HtmlReaderContent from './HtmlReader/HtmlReaderContent';
 import usePdfReader from './PdfReader';
+import useHtmlReader from './HtmlReader';
 
 type UseWebReaderOptions = {
   // TBD
@@ -52,7 +52,7 @@ export default function useWebReader(
    * case where we call the hook with `undefined`, which tells the hook that
    * that format is inactive, and it will in turn return the InactiveState.
    */
-  const htmlReader = useHtmlNavigator(
+  const htmlReader = useHtmlReader(
     readerType === 'HTML' && manifest
       ? {
           webpubManifestUrl,

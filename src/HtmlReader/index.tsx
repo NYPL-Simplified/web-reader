@@ -5,12 +5,6 @@ import {
   ColorMode,
   ReaderState,
   ReaderReturn,
-  WebpubManifest,
-  InactiveReaderArguments,
-  InactiveReader,
-  ActiveReaderArguments,
-  LoadingReader,
-  ActiveReader,
   ReaderArguments,
 } from '../types';
 import HtmlReaderContent from './HtmlReaderContent';
@@ -34,15 +28,12 @@ function getColorMode(d2Mode: string): ColorMode {
   }
 }
 
-export type HtmlNavigatorAction =
+export type HtmlAction =
   | { type: 'SET_READER'; reader: D2Reader }
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
   | { type: 'SET_SCROLL'; isScrolling: boolean };
 
-function hmtlNavigatorReducer(
-  state: HtmlState,
-  action: HtmlNavigatorAction
-): HtmlState {
+function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
   switch (action.type) {
     case 'SET_READER':
       // set all the initial settings taken from the reader
@@ -72,7 +63,7 @@ function hmtlNavigatorReducer(
 
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const { webpubManifestUrl, manifest } = args ?? {};
-  const [state, dispatch] = React.useReducer(hmtlNavigatorReducer, {
+  const [state, dispatch] = React.useReducer(htmlReducer, {
     type: 'HTML',
     colorMode: 'day',
     isScrolling: false,
