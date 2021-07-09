@@ -41,4 +41,49 @@ export type Spine<TFormat> = { href: string; type: TFormat; title: string }[];
 
 export type GetContent = (readingOrderHref: string) => Promise<string>;
 
-export type ColorMode = 'dark' | 'sepia' | 'light';
+export type ColorMode = 'night' | 'sepia' | 'day';
+
+export type Navigator = {
+  goForward: () => void;
+  goBackward: () => void;
+  setColorMode: (mode: ColorMode) => Promise<void>;
+  setScroll: (val: 'scrolling' | 'paginated') => Promise<void>;
+};
+
+export type ReaderType = 'HTML' | 'PDF';
+
+export type ReaderState = {
+  type: ReaderType;
+  colorMode: ColorMode;
+  isScrolling: boolean;
+  fontSize: number;
+  fontFamily: string; //'serif' | 'sans-serif';
+};
+
+export type InactiveReader = null;
+
+export type LoadingReader = {
+  isLoading: true;
+  content: JSX.Element;
+  navigator: null;
+  state: null;
+  manifest: null;
+};
+
+export type ActiveReader = {
+  isLoading: false;
+  state: ReaderState;
+  navigator: Navigator;
+  content: JSX.Element;
+  manifest: WebpubManifest;
+};
+
+export type ReaderReturn = InactiveReader | LoadingReader | ActiveReader;
+
+export type ActiveReaderArguments = {
+  webpubManifestUrl: string;
+  manifest: WebpubManifest;
+};
+export type InactiveReaderArguments = undefined;
+
+export type ReaderArguments = ActiveReaderArguments | InactiveReaderArguments;
