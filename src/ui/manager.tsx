@@ -1,6 +1,6 @@
 import { ThemeProvider } from '@chakra-ui/react';
 import * as React from 'react';
-import { UseWebReaderReturn } from '../useWebReader';
+import { ReaderReturn } from '../types';
 import SettingsCard from './SettingsButton';
 import theme from './theme';
 
@@ -9,10 +9,10 @@ import theme from './theme';
  * that can be imported and used separately or in a customized setup.
  * It takes the return value of useWebReader as props
  */
-
-const ManagerUI: React.FC<UseWebReaderReturn> = ({
+const ManagerUI: React.FC<ReaderReturn> = ({
   children,
   navigator,
+  state,
   manifest,
 }) => {
   return (
@@ -36,13 +36,9 @@ const ManagerUI: React.FC<UseWebReaderReturn> = ({
         >
           <h1>{manifest?.metadata.title}</h1>
           <div>
-            {navigator && <SettingsCard navigator={navigator} />}
-            {/* <button style={{ margin: 4 }} onClick={navigator?.scroll}>
-            scroll
-          </button>
-          <button style={{ margin: 4 }} onClick={navigator?.paginate}>
-            paginate
-          </button> */}
+            {navigator && state && (
+              <SettingsCard navigator={navigator} state={state} />
+            )}
           </div>
         </nav>
         {children}

@@ -7,16 +7,14 @@
     "dist",
     "src"
   ],
-  "engines": {
-    "node": ">=10"
-  },
   "scripts": {
     "example:build": "parcel build example/index.html",
     "example:nocache": "parcel --no-cache example/index.html",
     "example": "parcel example/index.html",
     "start": "tsdx watch --tsconfig tsconfig.build.json",
     "build": "tsdx build --tsconfig tsconfig.build.json",
-    "test": "jest --passWithNoTests",
+    "test": "jest --passWithNoTests --watch",
+    "test:ci": "jest --passWithNoTests --ci --coverage --maxWorkers=2",
     "lint": "tsdx lint",
     "prepare": "npm run build",
     "size": "size-limit",
@@ -57,7 +55,12 @@
   },
   "example-app": "www/index.html",
   "targets": {
-    "example-app": {},
+    "example-app": {
+      "engines": {
+        "browsers": "> 2%"
+      },
+      "scopeHoist": false
+    },
     "main": false,
     "module": false
   },
@@ -106,7 +109,6 @@
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
     "@nypl/design-system-react-components": "^0.21.2",
-    "epubjs": "^0.3.88",
     "framer-motion": "^4.1.6",
     "node-fetch": "^2.6.1",
     "workbox-core": "^6.1.5",

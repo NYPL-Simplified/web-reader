@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-const EpubContent = () => {
+const HtmlReaderContent = () => {
   return (
     <div style={{ height: '100%', overflow: 'hidden' }}>
       <div id="D2Reader-Container">
@@ -17,4 +17,4 @@ const EpubContent = () => {
   );
 };
 
-export default EpubContent;
+export default HtmlReaderContent;
