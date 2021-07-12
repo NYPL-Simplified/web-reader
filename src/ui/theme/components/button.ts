@@ -42,6 +42,15 @@ const commonToggleButtonStyle = {
   _active: {
     bg: 'ui.white',
   },
+  _hover: {
+    bg: 'ui.white',
+    _disabled: {
+      bg: 'ui.white',
+    },
+  },
+  _disabled: {
+    bg: 'ui.white',
+  },
 };
 
 /* Color Schemes:
@@ -73,12 +82,15 @@ function variantSolid(props: any) {
         _hover: {
           bg: sepia,
           _disabled: {
-            bg: activeBlack,
+            bg: sepia,
           },
         },
         _checked: {
           bg: sepia,
           color: activeBlack,
+        },
+        _disabled: {
+          bg: sepia,
         },
       };
     case 'dark':
@@ -99,12 +111,15 @@ function variantSolid(props: any) {
         _hover: {
           bg: activeBlack,
           _disabled: {
-            bg: 'ui.white',
+            bg: activeBlack,
           },
         },
         _checked: {
           bg: activeBlack,
           color: 'ui.white',
+        },
+        _disabled: {
+          bg: activeBlack,
         },
       };
     default:
@@ -113,12 +128,18 @@ function variantSolid(props: any) {
         ...commonToggleButtonStyle,
         bg: 'ui.white',
         color: defaultBlack,
-        _disabled: {
-          bg: `gray.100`,
+        _hover: {
+          bg: 'ui.white',
+          _disabled: {
+            bg: 'ui.white',
+          },
         },
         _checked: {
           bg: `ui.white`,
           color: activeBlack,
+        },
+        _disabled: {
+          bg: 'ui.white',
         },
       };
   }
