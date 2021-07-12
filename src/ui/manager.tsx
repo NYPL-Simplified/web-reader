@@ -1,7 +1,8 @@
-import { ThemeProvider } from '@chakra-ui/react';
+import { ThemeProvider, Box } from '@chakra-ui/react';
 import * as React from 'react';
 import { ReaderReturn } from '../types';
 import SettingsCard from './SettingsButton';
+import PageButton from './PageButton';
 import theme from './theme';
 
 /**
@@ -21,7 +22,6 @@ const ManagerUI: React.FC<ReaderReturn> = ({
         style={{
           height: '100vh',
           overflow: 'hidden',
-          backgroundColor: 'mistyrose',
           display: 'flex',
           flexDirection: 'column',
         }}
@@ -41,30 +41,20 @@ const ManagerUI: React.FC<ReaderReturn> = ({
             )}
           </div>
         </nav>
-        {children}
-        <div
-          style={{
-            padding: 8,
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}
+        <Box
+          className="ui-manager"
+          maxWidth="unset"
+          w="100vw"
+          d="flex"
+          justifyContent="space-evenly"
+          flexWrap="nowrap"
         >
-          <div style={{ display: 'flex' }}>
-            <button style={{ marginRight: 4 }} onClick={navigator?.goBackward}>
-              {`<`} page
-            </button>
-          </div>
-          {/* <div style={{ display: 'flex' }}>
-          <select onChange={handleTocChange}>
-            {toc?.map((item) => (
-              <Option item={item} key={item.href} level={0} />
-            ))}
-          </select>
-        </div> */}
-          <div style={{ display: 'flex' }}>
-            <button onClick={navigator?.goForward}>page {`>`}</button>
-          </div>
-        </div>
+          <PageButton onClick={navigator?.goBackward}>{`<`}</PageButton>
+          <Box className="ui-manager__content" width="100%">
+            {children}
+          </Box>
+          <PageButton onClick={navigator?.goForward}>{`>`}</PageButton>
+        </Box>
       </div>
     </ThemeProvider>
   );
