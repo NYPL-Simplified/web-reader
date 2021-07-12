@@ -112,6 +112,7 @@ function variantSolid(props: any) {
           bg: activeBlack,
           _disabled: {
             bg: activeBlack,
+            color: 'ui.white',
           },
         },
         _checked: {
@@ -120,6 +121,7 @@ function variantSolid(props: any) {
         },
         _disabled: {
           bg: activeBlack,
+          color: 'ui.white',
         },
       };
     default:
