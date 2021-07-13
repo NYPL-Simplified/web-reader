@@ -16,9 +16,11 @@ function PageButton(props: React.PropsWithoutRef<PageButtonProps>) {
         alignItems="center"
         border="1px solid"
         borderColor="ui.gray.light-cool"
-        bg="ui.white"
-        mx={7}
-        size="50px"
+        color="ui.black"
+        bg="inherit"
+        size={{ sm: '40px', md: '50px' }}
+        mr={8}
+        ml={6}
         cursor="unset"
         _hover={{ background: 'ui.black', color: 'ui.white' }}
         onClick={onClick}

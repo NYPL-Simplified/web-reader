@@ -1,4 +1,4 @@
-import { ThemeProvider, Box } from '@chakra-ui/react';
+import { ThemeProvider, Flex, Box } from '@chakra-ui/react';
 import * as React from 'react';
 import { ReaderReturn } from '../types';
 import SettingsCard from './SettingsButton';
@@ -41,20 +41,11 @@ const ManagerUI: React.FC<ReaderReturn> = ({
             )}
           </div>
         </nav>
-        <Box
-          className="ui-manager"
-          maxWidth="unset"
-          w="100vw"
-          d="flex"
-          justifyContent="space-evenly"
-          flexWrap="nowrap"
-        >
+        <Flex w="100vw" justifyContent="space-around">
           <PageButton onClick={navigator?.goBackward}>{`<`}</PageButton>
-          <Box className="ui-manager__content" width="100%">
-            {children}
-          </Box>
+          {children}
           <PageButton onClick={navigator?.goForward}>{`>`}</PageButton>
-        </Box>
+        </Flex>
       </div>
     </ThemeProvider>
   );
