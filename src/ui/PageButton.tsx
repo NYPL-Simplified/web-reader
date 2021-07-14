@@ -22,7 +22,7 @@ function PageButton(props: React.PropsWithoutRef<PageButtonProps>) {
         mr={8}
         ml={6}
         cursor="unset"
-        _hover={{ background: 'ui.black', color: 'ui.white' }}
+        _hover={{ backgroundColor: 'gray.700', color: 'ui.white' }}
         onClick={onClick}
         {...rest}
       >
