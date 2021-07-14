@@ -1,4 +1,4 @@
-import { ThemeProvider, Flex, Box } from '@chakra-ui/react';
+import { ThemeProvider, Flex } from '@chakra-ui/react';
 import * as React from 'react';
 import { ReaderReturn } from '../types';
 import SettingsCard from './SettingsButton';
