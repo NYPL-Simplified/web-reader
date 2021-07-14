@@ -19,6 +19,7 @@ export default function SettingsCard({
   state: ReaderState;
 }) {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [font, setFont] = React.useState('publisher');
   const open = () => setIsOpen(!isOpen);
   const close = () => setIsOpen(false);
 
@@ -45,7 +46,11 @@ export default function SettingsCard({
         </PopoverTrigger>
         <PopoverContent borderColor="gray.100" width="fit-content">
           <PopoverBody p={0} maxWidth="95vw">
-            <ToggleGroup value="publisher" label="text font options">
+            <ToggleGroup
+              value={font}
+              label="text font options"
+              onChange={(val) => setFont(val)}
+            >
               <ToggleButton value="publisher">Publisher</ToggleButton>
               <ToggleButton value="serif">Serif</ToggleButton>
               <ToggleButton value="sans-serif">Sans-Serif</ToggleButton>
