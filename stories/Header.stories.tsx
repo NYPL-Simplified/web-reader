@@ -9,18 +9,17 @@ const meta: Meta = {
   },
   args: {
     navigator: {},
-    currentState: {},
-    manifest: {},
+    readerState: {},
   },
   argTypes: {
-    logo: {
-      description: 'Your Logo [Optional]',
+    headerLeft: {
+      description: '[Optional]',
     },
     navigator: {
       description: 'Navigator Object',
       type: { name: 'object', required: true },
     },
-    currentState: {
+    readerState: {
       description: 'ReaderState Object',
       type: { name: 'object', required: true },
     },

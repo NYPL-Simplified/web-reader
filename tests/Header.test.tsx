@@ -1,22 +1,16 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import Header from '../src/ui/Header';
-import { Navigator, ReaderState, WebpubManifest } from '../src/types';
+import { Navigator, ReaderState } from '../src/types';
 
 test('render header bar', () => {
-  const manifest = {} as WebpubManifest;
   const readerState = {} as ReaderState;
   const navigator = {} as Navigator;
 
-  render(
-    <Header
-      manifest={manifest}
-      readerState={readerState}
-      navigator={navigator}
-    />
-  );
+  render(<Header readerState={readerState} navigator={navigator} />);
 
-  //  Should also test the href once everthings been implemented in the furture
+  // Should also test the href once everthings been implemented in the furture
+  // By default it should show the NYPL logo and a link
   expect(
     screen.getByRole('link', { name: 'Return to Digital Research Books' })
   ).toBeInTheDocument();
