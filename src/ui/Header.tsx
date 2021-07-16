@@ -21,7 +21,14 @@ export default function Header(props: HeaderProps) {
   const { logo, readerState, navigator } = props;
 
   return (
-    <Flex alignContent="space-between" alignItems="center" py={1} px={8}>
+    <Flex
+      alignContent="space-between"
+      alignItems="center"
+      py={2}
+      px={8}
+      border="1px solid"
+      borderColor="gray.100"
+    >
       <Link
         href="/"
         aria-label="Return to Digital Research Books"
