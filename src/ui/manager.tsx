@@ -1,7 +1,8 @@
-import { ThemeProvider } from '@chakra-ui/react';
+import { ThemeProvider, Flex } from '@chakra-ui/react';
 import * as React from 'react';
 import { ReaderReturn } from '../types';
 import Header from './Header';
+import PageButton from './PageButton';
 import theme from './theme';
 
 /**
@@ -21,7 +22,6 @@ const ManagerUI: React.FC<ReaderReturn> = ({
         style={{
           height: '100vh',
           overflow: 'hidden',
-          backgroundColor: 'mistyrose',
           display: 'flex',
           flexDirection: 'column',
         }}
@@ -33,30 +33,11 @@ const ManagerUI: React.FC<ReaderReturn> = ({
             navigator={navigator}
           />
         )}
-        {children}
-        <div
-          style={{
-            padding: 8,
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}
-        >
-          <div style={{ display: 'flex' }}>
-            <button style={{ marginRight: 4 }} onClick={navigator?.goBackward}>
-              {`<`} page
-            </button>
-          </div>
-          {/* <div style={{ display: 'flex' }}>
-          <select onChange={handleTocChange}>
-            {toc?.map((item) => (
-              <Option item={item} key={item.href} level={0} />
-            ))}
-          </select>
-        </div> */}
-          <div style={{ display: 'flex' }}>
-            <button onClick={navigator?.goForward}>page {`>`}</button>
-          </div>
-        </div>
+        <Flex w="100vw" justifyContent="space-around">
+          <PageButton onClick={navigator?.goBackward}>{`<`}</PageButton>
+          {children}
+          <PageButton onClick={navigator?.goForward}>{`>`}</PageButton>
+        </Flex>
       </div>
     </ThemeProvider>
   );
