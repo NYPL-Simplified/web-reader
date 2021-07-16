@@ -11,7 +11,7 @@ import { Icon, IconNames } from '@nypl/design-system-react-components';
 import { ReaderState, Navigator } from '../types';
 
 export type HeaderProps = {
-  headerLeft?: any; // Top-left header section
+  headerLeft?: React.ReactNode; // Top-left header section
   readerState: ReaderState;
   navigator: Navigator;
 };
