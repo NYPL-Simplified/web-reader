@@ -1,7 +1,7 @@
 import { ThemeProvider } from '@chakra-ui/react';
 import * as React from 'react';
 import { ReaderReturn } from '../types';
-import SettingsCard from './SettingsButton';
+import Header from './Header';
 import theme from './theme';
 
 /**
@@ -26,21 +26,13 @@ const ManagerUI: React.FC<ReaderReturn> = ({
           flexDirection: 'column',
         }}
       >
-        <nav
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: 8,
-          }}
-        >
-          <h1>{manifest?.metadata.title}</h1>
-          <div>
-            {navigator && state && (
-              <SettingsCard navigator={navigator} state={state} />
-            )}
-          </div>
-        </nav>
+        {navigator && state && manifest && (
+          <Header
+            manifest={manifest}
+            readerState={state}
+            navigator={navigator}
+          />
+        )}
         {children}
         <div
           style={{

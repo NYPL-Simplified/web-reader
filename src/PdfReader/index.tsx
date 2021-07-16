@@ -35,7 +35,7 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
 
 export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   const { webpubManifestUrl, manifest } = args ?? {};
-  const [state, dispatch] = React.useReducer(pdfReducer, {
+  const [state] = React.useReducer(pdfReducer, {
     type: 'PDF',
     colorMode: 'day',
     isScrolling: false,
