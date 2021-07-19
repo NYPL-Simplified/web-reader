@@ -25,15 +25,15 @@ export default function Header(props: HeaderProps) {
       alignItems="center"
       py={2}
       px={8}
-      border="1px solid"
+      borderBottom="1px solid"
       borderColor="gray.100"
     >
       {headerLeft ? (
         headerLeft
       ) : (
         <Link
-          href="/"
-          aria-label="Return to Digital Research Books"
+          href="https://www.nypl.org"
+          aria-label="Return to NYPL"
           tabIndex={0}
           fontSize={0}
           py={1}
@@ -46,7 +46,7 @@ export default function Header(props: HeaderProps) {
           }}
         >
           <Icon decorative name={IconNames.headset} modifiers={['small']} />
-          <Text variant="headerNav">Return to Digital Research Books</Text>
+          <Text variant="headerNav">Return to NYPL</Text>
         </Link>
       )}
       <HStack ml="auto" spacing={1}>

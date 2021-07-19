@@ -36,7 +36,6 @@ export default function SettingsCard({
       >
         <PopoverTrigger>
           <ChakraButton onClick={open} variant="headerNav">
-            {' '}
             <Icon decorative name={IconNames.plus} modifiers={['small']} />{' '}
             <Text variant="headerNav">Settings</Text>
           </ChakraButton>
