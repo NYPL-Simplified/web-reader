@@ -19,17 +19,11 @@ const ButtonStyle = {
   },
 };
 
-const sepia = 'rgb(246, 236, 217)';
-const lightGreen = '#468028';
-const lightGrey = '#DADADA';
-const defaultBlack = '#383535';
-const activeBlack = '#111';
-
 const commonToggleButtonStyle = {
-  color: activeBlack,
-  px: '8',
-  border: '0.0625rem solid',
-  borderColor: lightGrey,
+  color: 'ui.black',
+  px: 8,
+  border: '1px solid',
+  borderColor: 'gray.100',
   transition: 'none',
   fontSize: '-2',
   fontWeight: 'medium',
@@ -69,59 +63,59 @@ function variantSolid(props: any) {
     case 'sepia':
       return {
         ...commonToggleButtonStyle,
-        bg: sepia,
-        color: defaultBlack,
+        bg: 'ui.sepia',
+        color: 'gray.800',
         _focus: {
-          bg: sepia,
-          color: activeBlack,
+          bg: 'ui.sepia',
+          color: 'ui.black',
           boxShadow: 'none',
         },
         _active: {
-          bg: sepia,
-          color: activeBlack,
+          bg: 'ui.sepia',
+          color: 'ui.black',
         },
         _hover: {
-          bg: sepia,
+          bg: 'ui.sepia',
           _disabled: {
-            bg: sepia,
+            bg: 'ui.sepia',
           },
         },
         _checked: {
-          bg: sepia,
-          color: activeBlack,
+          bg: 'ui.sepia',
+          color: 'ui.black',
         },
         _disabled: {
-          bg: sepia,
+          bg: 'ui.sepia',
         },
       };
     case 'dark':
       return {
         ...commonToggleButtonStyle,
-        bg: activeBlack,
+        bg: 'ui.black',
         color: 'ui.white',
         _focus: {
-          bg: activeBlack,
+          bg: 'ui.black',
           color: 'white',
           boxShadow: 'none',
         },
         _active: {
-          bg: activeBlack,
+          bg: 'ui.black',
           color: 'ui.white',
           boxShadow: 'none',
         },
         _hover: {
-          bg: activeBlack,
+          bg: 'ui.black',
           _disabled: {
-            bg: activeBlack,
+            bg: 'ui.black',
             color: 'ui.white',
           },
         },
         _checked: {
-          bg: activeBlack,
+          bg: 'ui.black',
           color: 'ui.white',
         },
         _disabled: {
-          bg: activeBlack,
+          bg: 'ui.black',
           color: 'ui.white',
         },
       };
@@ -130,7 +124,7 @@ function variantSolid(props: any) {
       return {
         ...commonToggleButtonStyle,
         bg: 'ui.white',
-        color: defaultBlack,
+        color: 'gray.800',
         _hover: {
           bg: 'ui.white',
           _disabled: {
@@ -139,7 +133,7 @@ function variantSolid(props: any) {
         },
         _checked: {
           bg: `ui.white`,
-          color: activeBlack,
+          color: 'ui.black',
         },
         _disabled: {
           bg: 'ui.white',
@@ -153,7 +147,7 @@ function variantToggle(props: any) {
     ...variantSolid(props),
     _checked: {
       color: 'ui.white',
-      bg: lightGreen,
+      bg: 'green.700',
     },
   };
 }
