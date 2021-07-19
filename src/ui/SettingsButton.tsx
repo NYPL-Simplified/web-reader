@@ -4,9 +4,11 @@ import {
   PopoverTrigger,
   PopoverContent,
   PopoverBody,
-  Text,
+  ButtonGroup,
   Button as ChakraButton,
+  Text,
 } from '@chakra-ui/react';
+import Button from './Button';
 import ToggleButton from './ToggleButton';
 import ToggleGroup from './ToggleGroup';
 import { Navigator, ReaderState } from '../types';
@@ -20,19 +22,27 @@ export default function SettingsCard({
   state: ReaderState;
 }) {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [font, setFont] = React.useState('publisher');
   const open = () => setIsOpen(!isOpen);
   const close = () => setIsOpen(false);
 
   const paginationValue = state?.isScrolling ? 'scrolling' : 'paginated';
 
+  function setIncrease(evt: React.FormEvent<HTMLButtonElement>) {
+    console.log(evt.currentTarget.textContent);
+  }
+
+  function setDecrease(evt: React.FormEvent<HTMLButtonElement>) {
+    console.log(evt.currentTarget.textContent);
+  }
+
   return (
     <>
       <Popover
         placement="bottom"
-        closeOnBlur={false}
         isOpen={isOpen}
         onClose={close}
-        autoFocus={false}
+        autoFocus={true}
       >
         <PopoverTrigger>
           <ChakraButton onClick={open} variant="headerNav">
@@ -40,13 +50,13 @@ export default function SettingsCard({
             <Text variant="headerNav">Settings</Text>
           </ChakraButton>
         </PopoverTrigger>
-        <PopoverContent
-          borderColor="gray.100"
-          width="fit-content"
-          _active={{ boxShadow: 'none' }}
-        >
-          <PopoverBody p={0}>
-            <ToggleGroup value="publisher" label="text font options">
+        <PopoverContent borderColor="gray.100" width="fit-content">
+          <PopoverBody p={0} maxWidth="95vw">
+            <ToggleGroup
+              value={font}
+              label="text font options"
+              onChange={(val) => setFont(val)}
+            >
               <ToggleButton value="publisher">Publisher</ToggleButton>
               <ToggleButton value="serif">Serif</ToggleButton>
               <ToggleButton value="sans-serif">Sans-Serif</ToggleButton>
@@ -54,6 +64,22 @@ export default function SettingsCard({
                 Dyslexia-Friendly
               </ToggleButton>
             </ToggleGroup>
+            <ButtonGroup d="flex" spacing={0}>
+              <Button
+                flexGrow="1"
+                aria-label="Decrease font size"
+                onClick={setDecrease}
+              >
+                A-
+              </Button>
+              <Button
+                flexGrow="1"
+                aria-label="Increase font size"
+                onClick={setIncrease}
+              >
+                A+
+              </Button>
+            </ButtonGroup>
             <ToggleGroup
               value={state?.colorMode}
               label="reading theme options"

@@ -13,7 +13,7 @@ const ButtonStyle = {
   },
   // default values for `size`, `variant`, `colorScheme`
   defaultProps: {
-    size: 'md',
+    size: 'sm',
     variant: 'solid',
     colorScheme: 'light',
   },
@@ -31,9 +31,6 @@ const commonToggleButtonStyle = {
   textTransform: 'uppercase',
   maxWidth: '100%',
   cursor: 'pointer',
-  _focus: {
-    boxShadow: 'none',
-  },
   _active: {
     bg: 'ui.white',
   },
@@ -68,7 +65,6 @@ function variantSolid(props: any) {
         _focus: {
           bg: 'ui.sepia',
           color: 'ui.black',
-          boxShadow: 'none',
         },
         _active: {
           bg: 'ui.sepia',
@@ -96,12 +92,10 @@ function variantSolid(props: any) {
         _focus: {
           bg: 'ui.black',
           color: 'white',
-          boxShadow: 'none',
         },
         _active: {
           bg: 'ui.black',
           color: 'ui.white',
-          boxShadow: 'none',
         },
         _hover: {
           bg: 'ui.black',
