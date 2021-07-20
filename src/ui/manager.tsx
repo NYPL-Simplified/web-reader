@@ -1,7 +1,7 @@
 import { ThemeProvider, Flex } from '@chakra-ui/react';
 import * as React from 'react';
 import { ReaderReturn } from '../types';
-import SettingsCard from './SettingsButton';
+import Header from './Header';
 import PageButton from './PageButton';
 import theme from './theme';
 
@@ -10,12 +10,7 @@ import theme from './theme';
  * that can be imported and used separately or in a customized setup.
  * It takes the return value of useWebReader as props
  */
-const ManagerUI: React.FC<ReaderReturn> = ({
-  children,
-  navigator,
-  state,
-  manifest,
-}) => {
+const ManagerUI: React.FC<ReaderReturn> = ({ children, navigator, state }) => {
   return (
     <ThemeProvider theme={theme}>
       <div
@@ -26,21 +21,9 @@ const ManagerUI: React.FC<ReaderReturn> = ({
           flexDirection: 'column',
         }}
       >
-        <nav
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: 8,
-          }}
-        >
-          <h1>{manifest?.metadata.title}</h1>
-          <div>
-            {navigator && state && (
-              <SettingsCard navigator={navigator} state={state} />
-            )}
-          </div>
-        </nav>
+        {navigator && state && (
+          <Header readerState={state} navigator={navigator} />
+        )}
         <Flex w="100vw" justifyContent="space-around">
           <PageButton onClick={navigator?.goBackward}>{`<`}</PageButton>
           {children}

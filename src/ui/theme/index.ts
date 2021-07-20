@@ -1,5 +1,6 @@
 import { extendTheme } from '@chakra-ui/react';
 import Button from './components/button';
+import Text from './components/text';
 import colors from './foundations/colors';
 import nyplTheme from '../nypl-base-theme';
 
@@ -16,6 +17,7 @@ const theme = extendTheme(
      */
     components: {
       Button,
+      Text,
     },
   },
   nyplTheme

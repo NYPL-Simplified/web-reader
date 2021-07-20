@@ -9,6 +9,7 @@ const ButtonStyle = {
   variants: {
     solid: variantSolid,
     toggle: variantToggle,
+    headerNav: variantHeaderNav,
   },
   // default values for `size`, `variant`, `colorScheme`
   defaultProps: {
@@ -142,6 +143,17 @@ function variantToggle(props: any) {
       color: 'ui.white',
       bg: 'green.700',
     },
+  };
+}
+
+function variantHeaderNav() {
+  return {
+    py: 1,
+    border: 'none',
+    bg: 'transparent',
+    textTransform: 'uppercase',
+    fontSize: 0,
+    color: 'gray.700',
   };
 }
 
