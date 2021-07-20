@@ -150,7 +150,7 @@ function variantHeaderNav() {
   return {
     py: 1,
     border: 'none',
-    background: 'transparent',
+    bg: 'transparent',
     textTransform: 'uppercase',
     fontSize: 0,
     color: 'gray.700',
