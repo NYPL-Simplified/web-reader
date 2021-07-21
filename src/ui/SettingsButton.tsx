@@ -5,11 +5,14 @@ import {
   PopoverContent,
   PopoverBody,
   ButtonGroup,
+  Button as ChakraButton,
+  Text,
 } from '@chakra-ui/react';
 import Button from './Button';
 import ToggleButton from './ToggleButton';
 import ToggleGroup from './ToggleGroup';
 import { Navigator, ReaderState } from '../types';
+import { Icon, IconNames } from '@nypl/design-system-react-components';
 
 export default function SettingsCard({
   navigator,
@@ -36,13 +39,16 @@ export default function SettingsCard({
   return (
     <>
       <Popover
-        placement="bottom-end"
+        placement="bottom"
         isOpen={isOpen}
         onClose={close}
         autoFocus={true}
       >
         <PopoverTrigger>
-          <Button onClick={open}>Settings</Button>
+          <ChakraButton onClick={open} variant="headerNav">
+            <Icon decorative name={IconNames.plus} modifiers={['small']} />{' '}
+            <Text variant="headerNav">Settings</Text>
+          </ChakraButton>
         </PopoverTrigger>
         <PopoverContent borderColor="gray.100" width="fit-content">
           <PopoverBody p={0} maxWidth="95vw">
