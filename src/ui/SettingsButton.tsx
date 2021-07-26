@@ -22,7 +22,6 @@ export default function SettingsCard({
   state: ReaderState;
 }) {
   const [isOpen, setIsOpen] = React.useState(false);
-  const [font, setFont] = React.useState('publisher');
   const open = () => setIsOpen(!isOpen);
   const close = () => setIsOpen(false);
 
@@ -45,14 +44,14 @@ export default function SettingsCard({
         <PopoverContent borderColor="gray.100" width="fit-content">
           <PopoverBody p={0} maxWidth="95vw">
             <ToggleGroup
-              value={font}
+              value={state.fontFamily}
               label="text font options"
-              onChange={(val) => setFont(val)}
+              onChange={navigator.setFontFamily}
             >
               <ToggleButton value="publisher">Publisher</ToggleButton>
               <ToggleButton value="serif">Serif</ToggleButton>
               <ToggleButton value="sans-serif">Sans-Serif</ToggleButton>
-              <ToggleButton value="dyslexia-friendly">
+              <ToggleButton value="open-dyslexic">
                 Dyslexia-Friendly
               </ToggleButton>
             </ToggleGroup>
@@ -73,9 +72,9 @@ export default function SettingsCard({
               </Button>
             </ButtonGroup>
             <ToggleGroup
-              value={state?.colorMode}
+              value={state.colorMode}
               label="reading theme options"
-              onChange={navigator?.setColorMode}
+              onChange={navigator.setColorMode}
             >
               <ToggleButton colorScheme="light" value="day" variant="solid">
                 Day
@@ -88,7 +87,7 @@ export default function SettingsCard({
               </ToggleButton>
             </ToggleGroup>
             <ToggleGroup
-              onChange={navigator?.setScroll}
+              onChange={navigator.setScroll}
               value={paginationValue}
               label="pagination options"
             >
