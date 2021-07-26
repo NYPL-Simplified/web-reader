@@ -28,14 +28,6 @@ export default function SettingsCard({
 
   const paginationValue = state?.isScrolling ? 'scrolling' : 'paginated';
 
-  function setIncrease(evt: React.FormEvent<HTMLButtonElement>) {
-    console.log(evt.currentTarget.textContent);
-  }
-
-  function setDecrease(evt: React.FormEvent<HTMLButtonElement>) {
-    console.log(evt.currentTarget.textContent);
-  }
-
   return (
     <>
       <Popover
@@ -68,14 +60,14 @@ export default function SettingsCard({
               <Button
                 flexGrow="1"
                 aria-label="Decrease font size"
-                onClick={setDecrease}
+                onClick={navigator.decreaseFontSize}
               >
                 A-
               </Button>
               <Button
                 flexGrow="1"
                 aria-label="Increase font size"
-                onClick={setIncrease}
+                onClick={navigator.increaseFontSize}
               >
                 A+
               </Button>

@@ -78,6 +78,13 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     console.log('unimplemented');
   }, []);
 
+  const increaseFontSize = React.useCallback(async () => {
+    console.log('unimplemented');
+  }, []);
+  const decreaseFontSize = React.useCallback(async () => {
+    console.log('unimplemented');
+  }, []);
+
   // this format is inactive, return null
   if (!webpubManifestUrl || !manifest) return null;
 
@@ -105,6 +112,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       goBackward,
       setColorMode,
       setScroll,
+      increaseFontSize,
+      decreaseFontSize,
     },
   };
 }

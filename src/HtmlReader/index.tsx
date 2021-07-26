@@ -17,7 +17,8 @@ type HtmlState = ReaderState & {
 export type HtmlAction =
   | { type: 'SET_READER'; reader: D2Reader }
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
-  | { type: 'SET_SCROLL'; isScrolling: boolean };
+  | { type: 'SET_SCROLL'; isScrolling: boolean }
+  | { type: 'SET_FONT_SIZE'; size: number };
 
 function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
   switch (action.type) {
@@ -44,8 +45,16 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
         ...state,
         isScrolling: action.isScrolling,
       };
+
+    case 'SET_FONT_SIZE':
+      return {
+        ...state,
+        fontSize: action.size,
+      };
   }
 }
+
+const FONT_SIZE_STEP = 4;
 
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const { webpubManifestUrl, manifest } = args ?? {};
@@ -58,7 +67,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     reader: undefined,
   });
 
-  const { reader } = state;
+  const { reader, fontSize } = state;
 
   // initialize the reader
   React.useEffect(() => {
@@ -104,6 +113,20 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     [reader]
   );
 
+  const increaseFontSize = React.useCallback(async () => {
+    if (!reader) return;
+    const newSize = fontSize + FONT_SIZE_STEP;
+    await reader.applyUserSettings({ fontSize: newSize });
+    dispatch({ type: 'SET_FONT_SIZE', size: newSize });
+  }, [reader, fontSize]);
+
+  const decreaseFontSize = React.useCallback(async () => {
+    if (!reader) return;
+    const newSize = fontSize - FONT_SIZE_STEP;
+    await reader.applyUserSettings({ fontSize: newSize });
+    dispatch({ type: 'SET_FONT_SIZE', size: newSize });
+  }, [reader, fontSize]);
+
   const isLoading = !reader;
 
   // this format is inactive, return null
@@ -131,6 +154,8 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       goBackward,
       setColorMode,
       setScroll,
+      increaseFontSize,
+      decreaseFontSize,
     },
   };
 }

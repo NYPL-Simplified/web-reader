@@ -48,6 +48,8 @@ export type Navigator = {
   goBackward: () => void;
   setColorMode: (mode: ColorMode) => Promise<void>;
   setScroll: (val: 'scrolling' | 'paginated') => Promise<void>;
+  increaseFontSize: () => Promise<void>;
+  decreaseFontSize: () => Promise<void>;
 };
 
 export type ReaderType = 'HTML' | 'PDF';
