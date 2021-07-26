@@ -1,3 +1,5 @@
+import { Document, Page } from 'react-pdf/dist/esm/entry.parcel';
+
 import React from 'react';
 import {
   ColorMode,
@@ -9,13 +11,15 @@ import PDFContent from './PdfContent';
 
 type PdfState = ReaderState & {
   type: 'PDF';
+  resource: string;
   // some pdf-specific state here, like the instance of the
   // package you are using if necessary
 };
 
 type PdfReaderAction =
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
-  | { type: 'SET_SCROLL'; isScrolling: boolean };
+  | { type: 'SET_SCROLL'; isScrolling: boolean }
+  | { type: 'SET_RESOURCE'; resource: string };
 
 function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
   switch (action.type) {
@@ -30,26 +34,38 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
         ...state,
         isScrolling: action.isScrolling,
       };
+
+    case 'SET_RESOURCE':
+      return {
+        ...state,
+        resource: action.resource,
+      };
   }
 }
 
 export default function usePdfReader(args: ReaderArguments): ReaderReturn {
+  console.log('got here');
   const { webpubManifestUrl, manifest } = args ?? {};
-  const [state] = React.useReducer(pdfReducer, {
+
+  const [state, dispatch] = React.useReducer(pdfReducer, {
     type: 'PDF',
     colorMode: 'day',
     isScrolling: false,
     fontSize: 16,
     fontFamily: 'sans-serif',
+    resource: '',
   });
 
   // initialize the pdf reader
   React.useEffect(() => {
+    console.log('initializing', manifest);
     // bail out if there is not manifest passed in,
     // that indicates that this format is inactive
     if (!manifest) return;
+    const resource: string = manifest.readingOrder![0].href;
+    console.log('resource', resource);
+    dispatch({ type: 'SET_RESOURCE', resource });
     // here initialize reader however u do
-    // ...
   }, [manifest]);
 
   /**
@@ -92,23 +108,31 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   // this format is inactive, return null
   if (!webpubManifestUrl || !manifest) return null;
 
-  const isLoading = true;
+  const isLoading = false;
 
   // we are initializing the reader
   if (isLoading) {
     return {
       isLoading: true,
-      content: <PDFContent />,
+      content: <PDFContent resource={''} />,
       manifest: null,
       navigator: null,
       state: null,
     };
   }
 
+  function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
+    console.log('success');
+  }
+
   // the reader is active
   return {
     isLoading: false,
-    content: <PDFContent />,
+    content: (
+      <Document file={state.resource} onLoadSuccess={onDocumentLoadSuccess}>
+        <Page pageNumber={1} />
+      </Document>
+    ),
     state,
     manifest,
     navigator: {

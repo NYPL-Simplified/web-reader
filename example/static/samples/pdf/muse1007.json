@@ -1,0 +1,396 @@
+{
+    "context": "https://drb-files-qa-s3.amazonaws.com/manifests/context.jsonld",
+    "metadata": {
+        "@type": "https://schema.org/Book",
+        "title": "Anthropology without Informants Collected Works in Paleoanthropology by L.G. Freeman /",
+        "author": "Freeman, Leslie G.",
+        "identifier": "urn:isbn:9780870819704"
+    },
+    "links": [
+        {
+            "href": "https://muse.jhu.edu/book/2691/",
+            "type": "text/html",
+            "rel": "alternate"
+        },
+        {
+            "href": "https://drb-files-qa.s3.amazonaws.com/manifests/muse/muse1007.json",
+            "type": "application/webpub+json",
+            "rel": "self"
+        }
+    ],
+    "readingOrder": [
+        {
+            "href": "https://muse.jhu.edu/chapter/230616/pdf",
+            "title": "Cover",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230617/pdf",
+            "title": "Title Page, Copyright Page",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230618/pdf",
+            "title": "Contents",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230619/pdf",
+            "title": "Foreword",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230620/pdf",
+            "title": "Preface",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230621/pdf",
+            "title": "PART I",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230622/pdf",
+            "title": "1: Anthropology without Informants",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230623/pdf",
+            "title": "2: A Theoretical Framework for Interpreting\nArcheological Materials",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230624/pdf",
+            "title": "3: The Fat of the Land\nNotes on Paleolithic Diet in Iberia",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230625/pdf",
+            "title": "PART II: An Overview of the Paleolithic",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230626/pdf",
+            "title": "4: By Their Works You Shall Know Them\nCultural Developments in the Paleolithic",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230627/pdf",
+            "title": "5: Paleolithic Polygons\nVoronoi Tesserae and Sett lement Hierarchies in Cantabrian Spain",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230629/pdf",
+            "title": "6: Torralba and Ambrona\nA Review of Discoveries",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230630/pdf",
+            "title": "7: Were There Scavengers at Torralba?",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230632/pdf",
+            "title": "8: Kaleidoscope or Tarnished Mirror?\nThirty Years of Mousterian Investigations in Cantabria",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230633/pdf",
+            "title": "9: The Mousterian, Present and Future of a Concept\n(A Personal View)",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230634/pdf",
+            "title": "10: Research on the Middle Paleolithic\nin the Cantabrian Region\nWhere Have We Come From? Where Are We Now?*",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230635/pdf",
+            "title": "PART V: Paleolithic Art",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230636/pdf",
+            "title": "11: Meanders on the Byways of Paleolithic Art",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230637/pdf",
+            "title": "12: The Many Faces of Altamira",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230638/pdf",
+            "title": "13: Techniques of Figure Enhancement in\nPaleolithic Cave Art",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230639/pdf",
+            "title": "14: The Cave as Paleolithic Sanctuary",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230640/pdf",
+            "title": "15: Caves and Art\nRites of Initiation and Transcendence",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230642/pdf",
+            "title": "16: The Participation of North Americans and Spaniards\nin Joint Prehistoric Research in Cantabria",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230643/pdf",
+            "title": "Afterword",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230644/pdf",
+            "title": "Permissions",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230645/pdf",
+            "title": "Index",
+            "type": "application/pdf"
+        }
+    ],
+    "resources": [
+        {
+            "href": "https://muse.jhu.edu/chapter/230645/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230627/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230633/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230642/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230623/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230625/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230638/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230618/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230640/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230616/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230644/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230622/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230636/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230626/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230619/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230634/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230629/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230630/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230617/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230643/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230637/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230620/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230632/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230621/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230624/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230639/pdf",
+            "type": "application/pdf"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230635/pdf",
+            "type": "application/pdf"
+        }
+    ],
+    "toc": [
+        {
+            "href": "https://muse.jhu.edu/chapter/230616/pdf",
+            "title": "Cover"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230617/pdf",
+            "title": "Title Page, Copyright Page"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230618/pdf",
+            "title": "Contents"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230619/pdf",
+            "title": "Foreword"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230620/pdf",
+            "title": "Preface"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230621/pdf",
+            "title": "PART I"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230622/pdf",
+            "title": "1: Anthropology without Informants"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230623/pdf",
+            "title": "2: A Theoretical Framework for Interpreting\nArcheological Materials"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230624/pdf",
+            "title": "3: The Fat of the Land\nNotes on Paleolithic Diet in Iberia"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230625/pdf",
+            "title": "PART II: An Overview of the Paleolithic"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230626/pdf",
+            "title": "4: By Their Works You Shall Know Them\nCultural Developments in the Paleolithic"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230627/pdf",
+            "title": "5: Paleolithic Polygons\nVoronoi Tesserae and Sett lement Hierarchies in Cantabrian Spain"
+        },
+        {
+            "href": "",
+            "title": "PART III: The Lower Paleolithic",
+            "children": [
+                {
+                    "href": "https://muse.jhu.edu/chapter/230629/pdf",
+                    "title": "6: Torralba and Ambrona\nA Review of Discoveries"
+                },
+                {
+                    "href": "https://muse.jhu.edu/chapter/230630/pdf",
+                    "title": "7: Were There Scavengers at Torralba?"
+                }
+            ]
+        },
+        {
+            "href": "",
+            "title": "PART IV: The Middle Paleolithic",
+            "children": [
+                {
+                    "href": "https://muse.jhu.edu/chapter/230632/pdf",
+                    "title": "8: Kaleidoscope or Tarnished Mirror?\nThirty Years of Mousterian Investigations in Cantabria"
+                },
+                {
+                    "href": "https://muse.jhu.edu/chapter/230633/pdf",
+                    "title": "9: The Mousterian, Present and Future of a Concept\n(A Personal View)"
+                },
+                {
+                    "href": "https://muse.jhu.edu/chapter/230634/pdf",
+                    "title": "10: Research on the Middle Paleolithic\nin the Cantabrian Region\nWhere Have We Come From? Where Are We Now?*"
+                }
+            ]
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230635/pdf",
+            "title": "PART V: Paleolithic Art"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230636/pdf",
+            "title": "11: Meanders on the Byways of Paleolithic Art"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230637/pdf",
+            "title": "12: The Many Faces of Altamira"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230638/pdf",
+            "title": "13: Techniques of Figure Enhancement in\nPaleolithic Cave Art"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230639/pdf",
+            "title": "14: The Cave as Paleolithic Sanctuary"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230640/pdf",
+            "title": "15: Caves and Art\nRites of Initiation and Transcendence"
+        },
+        {
+            "href": "",
+            "title": "PART VI: The Benefits of Cooperation",
+            "children": [
+                {
+                    "href": "https://muse.jhu.edu/chapter/230642/pdf",
+                    "title": "16: The Participation of North Americans and Spaniards\nin Joint Prehistoric Research in Cantabria"
+                }
+            ]
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230643/pdf",
+            "title": "Afterword"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230644/pdf",
+            "title": "Permissions"
+        },
+        {
+            "href": "https://muse.jhu.edu/chapter/230645/pdf",
+            "title": "Index"
+        }
+    ]
+}

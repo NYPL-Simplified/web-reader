@@ -34,7 +34,7 @@ const AxisNowEpub = () => {
 const SWTest = () => {
   const [value, setValue] = React.useState<null | string>(null);
   React.useEffect(() => {
-    fetch('http://localhost:1234/samples/muse13454.json').then((res) => {
+    fetch('http://localhost:1234/samples/pdf/degruyter.json').then((res) => {
       res.text().then((text) => {
         setValue(text);
       });
@@ -50,7 +50,7 @@ const App = () => {
       <BrowserRouter>
         <Switch>
           <Route path="/pdf">
-            <WebReader webpubManifestUrl="samples/muse13454.json" />
+            <WebReader webpubManifestUrl="http://localhost:1234/samples/pdf/degruyter.json" />
           </Route>
           <Route path="/swtest">
             <SWTest />

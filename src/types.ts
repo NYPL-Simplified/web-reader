@@ -11,7 +11,7 @@ export const WebpubMimeType = 'application/webpub';
  * THE FOLLOWING TWO TYPES ARE MADE UP STUBS
  */
 // a webpub pdf collection
-export const WebpubPdfConformsTo = 'stub/webpub+pdf';
+export const WebpubPdfConformsTo = 'application/webpub+pdf';
 // a webpub of axisnow content
 export const AxisNowEpubConformsTo = 'stub/webpub+axisnow';
 
@@ -35,6 +35,13 @@ export type WebpubManifest = {
   spine: Spine<'text/html'>;
   links: any[];
   resources: any[];
+  readingOrder?: ReadingOrder[];
+};
+
+export type ReadingOrder = {
+  href: string;
+  title: string;
+  type: string;
 };
 
 export type Spine<TFormat> = { href: string; type: TFormat; title: string }[];
@@ -88,6 +95,7 @@ export type ReaderReturn = InactiveReader | LoadingReader | ActiveReader;
 export type ActiveReaderArguments = {
   webpubManifestUrl: string;
   manifest: WebpubManifest;
+  proxyUrl?: URL;
 };
 export type InactiveReaderArguments = undefined;
 

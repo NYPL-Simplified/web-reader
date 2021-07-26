@@ -42,9 +42,12 @@ export default function useWebReader(
   options: UseWebReaderOptions = {}
 ): ActiveReader | LoadingReader {
   const [manifest, setManifest] = React.useState<WebpubManifest | null>(null);
-  const readerType = getReaderType(
-    manifest ? manifest.metadata.conformsTo : null
-  );
+  console.log('useWebreaderManifest', manifest);
+  // const readerType = getReaderType(
+  //   manifest ? manifest.metadata.conformsTo : null
+  // );
+  const readerType = 'PDF';
+  console.log('readerType', readerType);
 
   /**
    * Our HTML reader and PDf Reader. Note that we cannot conditionally
