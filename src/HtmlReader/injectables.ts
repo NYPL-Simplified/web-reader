@@ -16,18 +16,11 @@ const injectables = [
     url: `${origin}/css/ReadiumCSS-after.css`,
     r2after: true,
   },
-  // {
-  //   type: 'script',
-  //   url:
-  //     'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-MML-AM_CHTML&latest',
-  // },
-  // {
-  //   type: 'style',
-  //   url: 'http://localhost:1234/viewer/fonts/opendyslexic/opendyslexic.css',
-  //   fontFamily: 'opendyslexic',
-  //   systemFont: false,
-  // },
-  // { type: 'style', fontFamily: 'Courier', systemFont: true },
+  {
+    type: 'style',
+    url: `${origin}/fonts/opendyslexic/opendyslexic.css`,
+    fontFamily: 'opendyslexic',
+  },
 ];
 
 export default injectables;

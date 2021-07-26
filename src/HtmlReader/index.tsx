@@ -201,7 +201,7 @@ const familyToR2Family: Record<FontFamily, string> = {
   publisher: 'Original',
   serif: 'serif',
   'sans-serif': 'sans-serif',
-  'open-dyslexic': 'open-dyslexic',
+  'open-dyslexic': 'opendyslexic',
 };
 /**
  * And vice-versa
@@ -210,4 +210,5 @@ const r2FamilyToFamily: Record<string, FontFamily | undefined> = {
   Original: 'publisher',
   serif: 'serif',
   'sans-serif': 'sans-serif',
+  opendyslexic: 'open-dyslexic',
 };
