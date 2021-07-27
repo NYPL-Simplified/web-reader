@@ -1,25 +1,24 @@
 import { Document, Page } from 'react-pdf/dist/esm/entry.parcel';
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   ColorMode,
   ReaderArguments,
   ReaderReturn,
   ReaderState,
 } from '../types';
-import PDFContent from './PdfContent';
 
 type PdfState = ReaderState & {
   type: 'PDF';
   resource: string;
-  // some pdf-specific state here, like the instance of the
-  // package you are using if necessary
+  pageNumber: number;
 };
 
 type PdfReaderAction =
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
   | { type: 'SET_SCROLL'; isScrolling: boolean }
-  | { type: 'SET_RESOURCE'; resource: string };
+  | { type: 'SET_RESOURCE'; resource: string }
+  | { type: 'SET_PAGENUM'; pageNum: number };
 
 function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
   switch (action.type) {
@@ -40,11 +39,16 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
         ...state,
         resource: action.resource,
       };
+
+    case 'SET_PAGENUM':
+      return {
+        ...state,
+        pageNumber: action.pageNum,
+      };
   }
 }
 
 export default function usePdfReader(args: ReaderArguments): ReaderReturn {
-  console.log('got here');
   const { webpubManifestUrl, manifest } = args ?? {};
 
   const [state, dispatch] = React.useReducer(pdfReducer, {
@@ -54,7 +58,11 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     fontSize: 16,
     fontFamily: 'sans-serif',
     resource: '',
+    pageNumber: 1,
   });
+
+  const [numPages, setNumPages] = useState(0);
+  const [isLoading, setLoading] = useState(true);
 
   // initialize the pdf reader
   React.useEffect(() => {
@@ -65,6 +73,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     const resource: string = manifest.readingOrder![0].href;
     console.log('resource', resource);
     dispatch({ type: 'SET_RESOURCE', resource });
+    setLoading(false);
     // here initialize reader however u do
   }, [manifest]);
 
@@ -75,12 +84,14 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
    * update that on goForward or goBackward
    */
   const goForward = React.useCallback(() => {
-    console.log('unimplemented');
-  }, []);
+    const pageNum = state.pageNumber + 1;
+    dispatch({ type: 'SET_PAGENUM', pageNum });
+  }, [state.pageNumber]);
 
   const goBackward = React.useCallback(() => {
-    console.log('unimplemented');
-  }, []);
+    const pageNum = state.pageNumber - 1;
+    dispatch({ type: 'SET_PAGENUM', pageNum });
+  }, [state.pageNumber]);
 
   /**
    * These ones don't make sense in the PDF case I dont think. I'm still
@@ -90,9 +101,14 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   const setColorMode = React.useCallback(async () => {
     console.log('unimplemented');
   }, []);
-  const setScroll = React.useCallback(async () => {
-    console.log('unimplemented');
-  }, []);
+
+  const setScroll = React.useCallback(
+    async (val: 'scrolling' | 'paginated') => {
+      const isScrolling = val === 'scrolling';
+      dispatch({ type: 'SET_SCROLL', isScrolling });
+    },
+    []
+  );
 
   const increaseFontSize = React.useCallback(async () => {
     console.log('unimplemented');
@@ -108,13 +124,11 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   // this format is inactive, return null
   if (!webpubManifestUrl || !manifest) return null;
 
-  const isLoading = false;
-
   // we are initializing the reader
   if (isLoading) {
     return {
       isLoading: true,
-      content: <PDFContent resource={''} />,
+      content: <>PDF is loading</>,
       manifest: null,
       navigator: null,
       state: null,
@@ -122,15 +136,19 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   }
 
   function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
-    console.log('success');
+    setNumPages(numPages);
   }
 
   // the reader is active
   return {
-    isLoading: false,
+    isLoading,
     content: (
       <Document file={state.resource} onLoadSuccess={onDocumentLoadSuccess}>
-        <Page pageNumber={1} />
+        {state.isScrolling &&
+          Array.from(new Array(numPages), (el, index) => (
+            <Page key={`page_${index + 1}`} pageNumber={index + 1} />
+          ))}
+        {!state.isScrolling && <Page pageNumber={state.pageNumber} />}
       </Document>
     ),
     state,
