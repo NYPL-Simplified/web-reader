@@ -5,14 +5,15 @@ import {
   PopoverContent,
   PopoverBody,
   ButtonGroup,
-  Button as ChakraButton,
   Text,
 } from '@chakra-ui/react';
+import { Navigator, ReaderState } from '../types';
+import { Icon, IconNames } from '@nypl/design-system-react-components';
+
 import Button from './Button';
 import ToggleButton from './ToggleButton';
 import ToggleGroup from './ToggleGroup';
-import { Navigator, ReaderState } from '../types';
-import { Icon, IconNames } from '@nypl/design-system-react-components';
+import HeaderButton from './HeaderButton';
 
 export default function SettingsCard({
   navigator,
@@ -36,10 +37,10 @@ export default function SettingsCard({
         autoFocus={true}
       >
         <PopoverTrigger>
-          <ChakraButton onClick={open} variant="headerNav">
+          <HeaderButton onClick={open}>
             <Icon decorative name={IconNames.plus} modifiers={['small']} />{' '}
             <Text variant="headerNav">Settings</Text>
-          </ChakraButton>
+          </HeaderButton>
         </PopoverTrigger>
         <PopoverContent borderColor="gray.100" width="fit-content">
           <PopoverBody p={0} maxWidth="95vw">
@@ -57,14 +58,14 @@ export default function SettingsCard({
             </ToggleGroup>
             <ButtonGroup d="flex" spacing={0}>
               <Button
-                flexGrow="1"
+                flexGrow={1}
                 aria-label="Decrease font size"
                 onClick={navigator.decreaseFontSize}
               >
                 A-
               </Button>
               <Button
-                flexGrow="1"
+                flexGrow={1}
                 aria-label="Increase font size"
                 onClick={navigator.increaseFontSize}
               >

@@ -1,14 +1,11 @@
 import React from 'react';
-import SettingsCard from './SettingsButton';
-import {
-  Flex,
-  Link,
-  HStack,
-  Button as ChakraButton,
-  Text,
-} from '@chakra-ui/react';
+import { Flex, Link, HStack, Text } from '@chakra-ui/react';
 import { Icon, IconNames } from '@nypl/design-system-react-components';
 import { ReaderState, Navigator } from '../types';
+import useColorModeValue from '../ui/hooks/useColorModeValue';
+
+import SettingsCard from './SettingsButton';
+import HeaderButton from './HeaderButton';
 
 export type HeaderProps = {
   headerLeft?: React.ReactNode; // Top-left header section
@@ -18,7 +15,8 @@ export type HeaderProps = {
 
 export default function Header(props: HeaderProps) {
   const { headerLeft, readerState, navigator } = props;
-
+  const linkColor = useColorModeValue('gray.700', 'gray.100', 'gray.700');
+  const mainBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
   return (
     <Flex
       alignContent="space-between"
@@ -27,6 +25,7 @@ export default function Header(props: HeaderProps) {
       px={8}
       borderBottom="1px solid"
       borderColor="gray.100"
+      bgColor={mainBgColor}
     >
       {headerLeft ? (
         headerLeft
@@ -38,8 +37,8 @@ export default function Header(props: HeaderProps) {
           fontSize={0}
           py={1}
           textTransform="uppercase"
-          color="gray.700"
           d="flex"
+          color={linkColor}
           alignItems="center"
           _hover={{
             textDecoration: 'none',
@@ -51,10 +50,10 @@ export default function Header(props: HeaderProps) {
       )}
       <HStack ml="auto" spacing={1}>
         <SettingsCard navigator={navigator} state={readerState} />
-        <ChakraButton variant="headerNav">
+        <HeaderButton>
           <Icon decorative name={IconNames.search} modifiers={['small']} />
           <Text variant="headerNav">Toggle Fullscreen</Text>
-        </ChakraButton>
+        </HeaderButton>
       </HStack>
     </Flex>
   );

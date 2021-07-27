@@ -1,4 +1,6 @@
-const ButtonStyle = {
+import { GetColor } from '../../../types';
+
+const getButtonStyle = (getColor: GetColor) => ({
   // style object for base or default style
   baseStyle: {
     borderRadius: 'none',
@@ -9,7 +11,6 @@ const ButtonStyle = {
   variants: {
     solid: variantSolid,
     toggle: variantToggle,
-    headerNav: variantHeaderNav,
   },
   // default values for `size`, `variant`, `colorScheme`
   defaultProps: {
@@ -17,7 +18,7 @@ const ButtonStyle = {
     variant: 'solid',
     colorScheme: 'light',
   },
-};
+});
 
 const commonToggleButtonStyle = {
   color: 'ui.black',
@@ -53,7 +54,7 @@ const commonToggleButtonStyle = {
  ** Disabled
  ** Hovered
  */
-function variantSolid(props: any) {
+const variantSolid = (props: any) => {
   const { colorScheme } = props;
 
   switch (colorScheme) {
@@ -134,9 +135,9 @@ function variantSolid(props: any) {
         },
       };
   }
-}
+};
 
-function variantToggle(props: any) {
+const variantToggle = (props: any) => {
   return {
     ...variantSolid(props),
     _checked: {
@@ -144,17 +145,6 @@ function variantToggle(props: any) {
       bg: 'green.700',
     },
   };
-}
+};
 
-function variantHeaderNav() {
-  return {
-    py: 1,
-    border: 'none',
-    bg: 'transparent',
-    textTransform: 'uppercase',
-    fontSize: 0,
-    color: 'gray.700',
-  };
-}
-
-export default ButtonStyle;
+export default getButtonStyle;
