@@ -6,6 +6,7 @@ import {
   ReaderState,
   ReaderReturn,
   ReaderArguments,
+  FontFamily,
 } from '../types';
 import HtmlReaderContent from './HtmlReaderContent';
 
@@ -17,7 +18,9 @@ type HtmlState = ReaderState & {
 export type HtmlAction =
   | { type: 'SET_READER'; reader: D2Reader }
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
-  | { type: 'SET_SCROLL'; isScrolling: boolean };
+  | { type: 'SET_SCROLL'; isScrolling: boolean }
+  | { type: 'SET_FONT_SIZE'; size: number }
+  | { type: 'SET_FONT_FAMILY'; family: FontFamily };
 
 function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
   switch (action.type) {
@@ -30,7 +33,7 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
         isScrolling: settings.verticalScroll,
         colorMode: getColorMode(settings.appearance),
         fontSize: settings.fontSize,
-        fontFamily: settings.fontFamily,
+        fontFamily: r2FamilyToFamily[settings.fontFamily] ?? 'publisher',
       };
 
     case 'SET_COLOR_MODE':
@@ -44,8 +47,22 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
         ...state,
         isScrolling: action.isScrolling,
       };
+
+    case 'SET_FONT_SIZE':
+      return {
+        ...state,
+        fontSize: action.size,
+      };
+
+    case 'SET_FONT_FAMILY':
+      return {
+        ...state,
+        fontFamily: action.family,
+      };
   }
 }
+
+const FONT_SIZE_STEP = 4;
 
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const { webpubManifestUrl, manifest } = args ?? {};
@@ -58,7 +75,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     reader: undefined,
   });
 
-  const { reader } = state;
+  const { reader, fontSize } = state;
 
   // initialize the reader
   React.useEffect(() => {
@@ -104,6 +121,31 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     [reader]
   );
 
+  const increaseFontSize = React.useCallback(async () => {
+    if (!reader) return;
+    const newSize = fontSize + FONT_SIZE_STEP;
+    await reader.applyUserSettings({ fontSize: newSize });
+    dispatch({ type: 'SET_FONT_SIZE', size: newSize });
+  }, [reader, fontSize]);
+
+  const decreaseFontSize = React.useCallback(async () => {
+    if (!reader) return;
+    const newSize = fontSize - FONT_SIZE_STEP;
+    await reader.applyUserSettings({ fontSize: newSize });
+    dispatch({ type: 'SET_FONT_SIZE', size: newSize });
+  }, [reader, fontSize]);
+
+  const setFontFamily = React.useCallback(
+    async (family: FontFamily) => {
+      if (!reader) return;
+      const r2Family = familyToR2Family[family];
+      // the applyUserSettings type is incorrect. We are supposed to pass in a string.
+      await reader.applyUserSettings({ fontFamily: r2Family as any });
+      dispatch({ type: 'SET_FONT_FAMILY', family });
+    },
+    [reader]
+  );
+
   const isLoading = !reader;
 
   // this format is inactive, return null
@@ -131,6 +173,9 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       goBackward,
       setColorMode,
       setScroll,
+      increaseFontSize,
+      decreaseFontSize,
+      setFontFamily,
     },
   };
 }
@@ -148,3 +193,22 @@ function getColorMode(d2Mode: string): ColorMode {
       return 'day';
   }
 }
+
+/**
+ * We need to map from our family values to R2D2BC's family values.
+ */
+const familyToR2Family: Record<FontFamily, string> = {
+  publisher: 'Original',
+  serif: 'serif',
+  'sans-serif': 'sans-serif',
+  'open-dyslexic': 'opendyslexic',
+};
+/**
+ * And vice-versa
+ */
+const r2FamilyToFamily: Record<string, FontFamily | undefined> = {
+  Original: 'publisher',
+  serif: 'serif',
+  'sans-serif': 'sans-serif',
+  opendyslexic: 'open-dyslexic',
+};
