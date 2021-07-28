@@ -88,6 +88,9 @@ const App = () => {
               <ListItem>
                 <Link to="/pdf">Pdf Example</Link>
               </ListItem>
+              <ListItem>
+                <Link to="/pdf">Pdf Collection Example</Link>
+              </ListItem>
             </UnorderedList>
           </Route>
         </Switch>

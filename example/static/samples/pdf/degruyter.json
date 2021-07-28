@@ -8,7 +8,7 @@
     },
     "links": [
         {
-            "href": "http://localhost:1234/samples/pdf/degruyterpdf.pdf",
+            "href": "https://www.degruyter.com/document/doi/10.1515/9783110314724/pdf",
             "type": "application/pdf",
             "rel": "alternate"
         },
@@ -20,20 +20,20 @@
     ],
     "readingOrder": [
         {
-            "href": "http://localhost:1234/samples/pdf/degruyterpdf.pdf",
+            "href": "https://www.degruyter.com/document/doi/10.1515/9783110314724/pdf",
             "title": "Pioneers of Zionism: Hess, Pinsker, R\u00fclf Messianism, Settlement Policy, and the Israeli-Palestinian Conflict",
             "type": "application/pdf"
         }
     ],
     "resources": [
         {
-            "href": "http://localhost:1234/samples/pdf/degruyterpdf.pdf",
+            "href": "https://www.degruyter.com/document/doi/10.1515/9783110314724/pdf",
             "type": "application/pdf"
         }
     ],
     "toc": [
         {
-            "href": "http://localhost:1234/samples/pdf/degruyterpdf.pdf",
+            "href": "https://www.degruyter.com/document/doi/10.1515/9783110314724/pdf",
             "title": "Pioneers of Zionism: Hess, Pinsker, R\u00fclf Messianism, Settlement Policy, and the Israeli-Palestinian Conflict"
         }
     ]

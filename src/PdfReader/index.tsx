@@ -1,4 +1,4 @@
-import { Document, Page } from 'react-pdf/dist/esm/entry.parcel';
+import { Document, Outline, Page } from 'react-pdf/dist/esm/entry.parcel';
 
 import React, { useState } from 'react';
 import {
@@ -70,13 +70,20 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     // bail out if there is not manifest passed in,
     // that indicates that this format is inactive
     if (!manifest) return;
-    const resource: string = manifest.readingOrder![0].href;
-    console.log('resource', resource);
-    dispatch({ type: 'SET_RESOURCE', resource });
+
+    // Fetch the resource, then pass it into the reader
+    const resource: string =
+      args?.proxyUrl + encodeURI(manifest.readingOrder![0].href);
+
+    fetch(resource).then((pdf) => {
+      console.log('pdf fetched', pdf);
+      dispatch({ type: 'SET_RESOURCE', pdf.body });
+    });
     setLoading(false);
     // here initialize reader however u do
   }, [manifest]);
 
+  React.useEffect(() => {});
   /**
    * Here you add the functionality, either directly working with the iframe
    * or through PDF.js. You should update the internal state. In the PDF case,
@@ -135,15 +142,30 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     };
   }
 
-  function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
+  function onDocumentLoadSuccess({
+    numPages,
+    pdf,
+  }: {
+    numPages: number;
+    pdf: any;
+  }) {
+    console.log('pdf', pdf);
     setNumPages(numPages);
   }
+
+  // function onItemClick({ pageNumber }: { pageNumber: number }) {
+  //   console.log('pageNumber', pageNumber);
+  //   const pageNum = pageNumber;
+  //   dispatch({ type: 'SET_PAGENUM', pageNum });
+  // }
 
   // the reader is active
   return {
     isLoading,
     content: (
       <Document file={state.resource} onLoadSuccess={onDocumentLoadSuccess}>
+        {/* <Outline onItemClick={onItemClick} /> */}
+
         {state.isScrolling &&
           Array.from(new Array(numPages), (el, index) => (
             <Page key={`page_${index + 1}`} pageNumber={index + 1} />

@@ -63,11 +63,13 @@ export default function useWebReader(
         }
       : undefined
   );
+  const proxyUrl = 'http://localhost:5000/utils/proxy?proxy_url=';
   const pdfReader = usePdfReader(
     readerType === 'PDF' && manifest
       ? {
           webpubManifestUrl,
           manifest,
+          proxyUrl,
         }
       : undefined
   );
