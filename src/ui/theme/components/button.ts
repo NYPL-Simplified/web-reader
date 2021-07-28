@@ -10,7 +10,7 @@ const getButtonStyle = (getColor: GetColor) => ({
   // styles for different visual variants ("outline", "solid")
   variants: {
     solid: variantSolid,
-    toggle: variantToggle,
+    toggle: variantToggle(getColor),
   },
   // default values for `size`, `variant`, `colorScheme`
   defaultProps: {
@@ -137,9 +137,19 @@ const variantSolid = (props: any) => {
   }
 };
 
-const variantToggle = (props: any) => {
+const variantToggle = (getColor: GetColor) => (props: any) => {
+  const bg = getColor('ui.white', 'gray.800', 'ui.white');
+  const color = getColor('gray.800', 'ui.white', 'gray.800');
   return {
     ...variantSolid(props),
+    bg,
+    color,
+    _hover: {
+      bg,
+    },
+    _active: {
+      bg,
+    },
     _checked: {
       color: 'ui.white',
       bg: 'green.700',

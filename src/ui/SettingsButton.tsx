@@ -14,6 +14,7 @@ import Button from './Button';
 import ToggleButton from './ToggleButton';
 import ToggleGroup from './ToggleGroup';
 import HeaderButton from './HeaderButton';
+import useColorModeValue from './hooks/useColorModeValue';
 
 export default function SettingsCard({
   navigator,
@@ -27,6 +28,7 @@ export default function SettingsCard({
   const close = () => setIsOpen(false);
 
   const paginationValue = state?.isScrolling ? 'scrolling' : 'paginated';
+  const contentBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.white');
 
   return (
     <>
@@ -42,7 +44,11 @@ export default function SettingsCard({
             <Text variant="headerNav">Settings</Text>
           </HeaderButton>
         </PopoverTrigger>
-        <PopoverContent borderColor="gray.100" width="fit-content">
+        <PopoverContent
+          borderColor="gray.100"
+          width="fit-content"
+          bgColor={contentBgColor}
+        >
           <PopoverBody p={0} maxWidth="95vw">
             <ToggleGroup
               value={state.fontFamily}
@@ -61,6 +67,7 @@ export default function SettingsCard({
                 flexGrow={1}
                 aria-label="Decrease font size"
                 onClick={navigator.decreaseFontSize}
+                variant="toggle"
               >
                 A-
               </Button>
@@ -68,6 +75,7 @@ export default function SettingsCard({
                 flexGrow={1}
                 aria-label="Increase font size"
                 onClick={navigator.increaseFontSize}
+                variant="toggle"
               >
                 A+
               </Button>
