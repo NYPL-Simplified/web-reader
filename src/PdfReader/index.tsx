@@ -1,6 +1,6 @@
 import { Document, Outline, Page } from 'react-pdf/dist/esm/entry.parcel';
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   ColorMode,
   ReaderArguments,
@@ -10,18 +10,43 @@ import {
 
 type PdfState = ReaderState & {
   type: 'PDF';
-  resource: string;
+  loadSuccess: boolean;
+  resource: string | null;
+  data: Uint8Array | null;
+  numPages: number;
   pageNumber: number;
 };
 
 type PdfReaderAction =
+  | { type: 'LOAD_SUCCESS'; success: boolean }
+  | { type: 'SET_RESOURCE'; resource: string }
+  | { type: 'SET_DATA'; data: Uint8Array }
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
   | { type: 'SET_SCROLL'; isScrolling: boolean }
-  | { type: 'SET_RESOURCE'; resource: string }
+  | { type: 'SET_NUMPAGES'; numPages: number }
   | { type: 'SET_PAGENUM'; pageNum: number };
 
 function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
   switch (action.type) {
+    case 'LOAD_SUCCESS': {
+      return {
+        ...state,
+        loadSuccess: action.success,
+      };
+    }
+
+    case 'SET_RESOURCE':
+      return {
+        ...state,
+        resource: action.resource,
+      };
+
+    case 'SET_DATA':
+      return {
+        ...state,
+        data: action.data,
+      };
+
     case 'SET_COLOR_MODE':
       return {
         ...state,
@@ -34,10 +59,10 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
         isScrolling: action.isScrolling,
       };
 
-    case 'SET_RESOURCE':
+    case 'SET_NUMPAGES':
       return {
         ...state,
-        resource: action.resource,
+        numPages: action.numPages,
       };
 
     case 'SET_PAGENUM':
@@ -47,43 +72,58 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
       };
   }
 }
+async function fetchPdf<ExpectedResponse extends any = any>(url: string) {
+  console.log('fetchPdf called', url);
+  const response = await fetch(url, { mode: 'cors' });
+  const array = new Uint8Array(await response.arrayBuffer());
+
+  if (!response.ok) {
+    throw new Error('Response not Ok for URL: ' + url);
+  }
+  return array as ExpectedResponse;
+}
 
 export default function usePdfReader(args: ReaderArguments): ReaderReturn {
-  const { webpubManifestUrl, manifest } = args ?? {};
+  const { webpubManifestUrl, manifest, proxyUrl } = args ?? {};
 
   const [state, dispatch] = React.useReducer(pdfReducer, {
     type: 'PDF',
+    loadSuccess: false,
     colorMode: 'day',
     isScrolling: false,
     fontSize: 16,
     fontFamily: 'sans-serif',
-    resource: '',
+    resource: null,
+    data: null,
     pageNumber: 1,
+    numPages: 0,
   });
 
-  const [numPages, setNumPages] = useState(0);
-  const [isLoading, setLoading] = useState(true);
+  const file = useMemo(() => {
+    return { data: state.data };
+  }, [state.data]);
 
   // initialize the pdf reader
   React.useEffect(() => {
-    console.log('initializing', manifest);
+    async function setFile(resource: string) {
+      const data = await fetchPdf(resource);
+      dispatch({ type: 'SET_DATA', data });
+    }
     // bail out if there is not manifest passed in,
     // that indicates that this format is inactive
     if (!manifest) return;
+    if (!manifest.readingOrder || !manifest.readingOrder.length) {
+      throw new Error('Manifest has no Reading Order');
+    }
 
     // Fetch the resource, then pass it into the reader
     const resource: string =
-      args?.proxyUrl + encodeURI(manifest.readingOrder![0].href);
+      proxyUrl + encodeURI(manifest.readingOrder[0].href);
 
-    fetch(resource).then((pdf) => {
-      console.log('pdf fetched', pdf);
-      dispatch({ type: 'SET_RESOURCE', pdf.body });
-    });
-    setLoading(false);
-    // here initialize reader however u do
-  }, [manifest]);
+    dispatch({ type: 'SET_RESOURCE', resource });
+    setFile(resource);
+  }, [proxyUrl, manifest]);
 
-  React.useEffect(() => {});
   /**
    * Here you add the functionality, either directly working with the iframe
    * or through PDF.js. You should update the internal state. In the PDF case,
@@ -132,7 +172,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   if (!webpubManifestUrl || !manifest) return null;
 
   // we are initializing the reader
-  if (isLoading) {
+  if (!state.data) {
     return {
       isLoading: true,
       content: <>PDF is loading</>,
@@ -142,15 +182,9 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     };
   }
 
-  function onDocumentLoadSuccess({
-    numPages,
-    pdf,
-  }: {
-    numPages: number;
-    pdf: any;
-  }) {
-    console.log('pdf', pdf);
-    setNumPages(numPages);
+  function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
+    dispatch({ type: 'LOAD_SUCCESS', success: true });
+    dispatch({ type: 'SET_NUMPAGES', numPages: numPages });
   }
 
   // function onItemClick({ pageNumber }: { pageNumber: number }) {
@@ -161,13 +195,13 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
 
   // the reader is active
   return {
-    isLoading,
+    isLoading: false,
     content: (
-      <Document file={state.resource} onLoadSuccess={onDocumentLoadSuccess}>
+      <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
         {/* <Outline onItemClick={onItemClick} /> */}
 
         {state.isScrolling &&
-          Array.from(new Array(numPages), (el, index) => (
+          Array.from(new Array(state.numPages), (index) => (
             <Page key={`page_${index + 1}`} pageNumber={index + 1} />
           ))}
         {!state.isScrolling && <Page pageNumber={state.pageNumber} />}
