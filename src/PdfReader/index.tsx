@@ -13,7 +13,7 @@ type PdfState = ReaderState & {
   type: 'PDF';
   loadSuccess: boolean;
   resourceIndex: number;
-  data: Uint8Array | null;
+  data: { data: Uint8Array } | null;
   numPages: number;
   pageNumber: number;
 };
@@ -21,7 +21,7 @@ type PdfState = ReaderState & {
 type PdfReaderAction =
   | { type: 'LOAD_SUCCESS'; success: boolean }
   | { type: 'SET_RESOURCEINDEX'; index: number }
-  | { type: 'SET_DATA'; data: Uint8Array }
+  | { type: 'SET_DATA'; data: { data: Uint8Array } | null }
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
   | { type: 'SET_SCROLL'; isScrolling: boolean }
   | { type: 'SET_NUMPAGES'; numPages: number }
@@ -100,10 +100,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     numPages: 0,
   });
 
-  const file = useMemo(() => {
-    return { data: state.data };
-  }, [state.data]);
-
   const loadResource = async (
     manifest: WebpubManifest,
     resourceIndex: number,
@@ -122,7 +118,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   React.useEffect(() => {
     async function setPdfResource(manifest: WebpubManifest, proxyUrl: string) {
       const data = await loadResource(manifest, 0, proxyUrl);
-      dispatch({ type: 'SET_DATA', data });
+      dispatch({ type: 'SET_DATA', data: { data } });
       dispatch({ type: 'SET_RESOURCEINDEX', index: 0 });
     }
     // bail out if there is not manifest passed in,
@@ -146,14 +142,14 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       const pageNum = state.pageNumber + 1;
       dispatch({ type: 'SET_PAGENUM', pageNum });
     } else {
-      dispatch({ type: 'LOAD_SUCCESS', success: false });
+      dispatch({ type: 'SET_DATA', data: null });
 
       const data = await loadResource(
         manifest!,
         state.resourceIndex + 1,
         proxyUrl
       );
-      dispatch({ type: 'SET_DATA', data });
+      dispatch({ type: 'SET_DATA', data: { data } });
       dispatch({ type: 'SET_RESOURCEINDEX', index: state.resourceIndex + 1 });
     }
   }, [
@@ -169,14 +165,16 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       const pageNum = state.pageNumber - 1;
       dispatch({ type: 'SET_PAGENUM', pageNum });
     } else {
-      dispatch({ type: 'LOAD_SUCCESS', success: false });
+      dispatch({ type: 'SET_DATA', data: null });
+
+      dispatch({ type: 'SET_PAGENUM', pageNum: 1 });
 
       const data = await loadResource(
         manifest!,
         state.resourceIndex - 1,
         proxyUrl
       );
-      dispatch({ type: 'SET_DATA', data });
+      dispatch({ type: 'SET_DATA', data: { data } });
       dispatch({ type: 'SET_RESOURCEINDEX', index: state.resourceIndex - 1 });
     }
   }, [manifest, proxyUrl, state.pageNumber, state.resourceIndex]);
@@ -227,14 +225,13 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     console.log('success');
     dispatch({ type: 'LOAD_SUCCESS', success: true });
     dispatch({ type: 'SET_NUMPAGES', numPages: numPages });
-    dispatch({ type: 'SET_PAGENUM', pageNum: 1 });
   }
 
   // the reader is active
   return {
     isLoading: false,
     content: (
-      <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
+      <Document file={state.data} onLoadSuccess={onDocumentLoadSuccess}>
         {state.isScrolling &&
           Array.from(new Array(state.numPages), (index) => (
             <Page key={`page_${index + 1}`} pageNumber={index + 1} />
