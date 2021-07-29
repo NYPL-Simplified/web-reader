@@ -28,26 +28,8 @@ const getButtonStyle = (getColor: GetColor) => ({
  ** Hovered
  */
 const variantSolid = (getColor: GetColor) => (props: any) => {
-  const { colorScheme } = props;
-  // dynamic colors based on colorMode
   let bgColor = getColor('ui.white', 'ui.black', 'ui.sepia');
   let color = getColor('gray.800', 'ui.white', 'gray.800');
-
-  // style stays the same when it's being labeled with a colorScheme prop.
-  switch (colorScheme) {
-    case 'light':
-      bgColor = 'ui.white';
-      color = 'gray.800';
-      break;
-    case 'dark':
-      bgColor = 'ui.black';
-      color = 'ui.white';
-      break;
-    case 'sepia':
-      bgColor = 'ui.sepia';
-      color = 'gray.800';
-      break;
-  }
 
   const _focus = { bgColor, color };
   const _hover = { bgColor, color, _disabled: { bgColor } };

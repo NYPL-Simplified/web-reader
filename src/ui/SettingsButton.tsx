@@ -85,13 +85,13 @@ export default function SettingsCard({
               label="reading theme options"
               onChange={navigator.setColorMode}
             >
-              <ToggleButton colorScheme="light" value="day" variant="solid">
+              <ToggleButton colorMode="day" value="day" variant="solid">
                 Day
               </ToggleButton>
-              <ToggleButton colorScheme="sepia" value="sepia" variant="solid">
+              <ToggleButton colorMode="sepia" value="sepia" variant="solid">
                 Sepia
               </ToggleButton>
-              <ToggleButton colorScheme="dark" value="night" variant="solid">
+              <ToggleButton colorMode="night" value="night" variant="solid">
                 Night
               </ToggleButton>
             </ToggleGroup>
