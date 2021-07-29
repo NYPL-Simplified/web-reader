@@ -38,12 +38,10 @@ const variantSolid = (getColor: GetColor) => (props: any) => {
   const _disabled = { bgColor };
 
   return {
-    px: 8,
     border: '1px solid',
     borderColor: 'gray.100',
     transition: 'none',
-    fontSize: -2,
-    fontWeight: 'medium',
+    fontSize: 0,
     letterSpacing: 1,
     textTransform: 'uppercase',
     maxWidth: '100%',
@@ -65,6 +63,9 @@ const variantToggle = (getColor: GetColor) => (props: any) => {
     ...variantSolid(getColor)(props),
     bgColor,
     color,
+    px: 8,
+    fontWeight: 'medium',
+    fontSize: -2,
     _focus: {
       bgColor,
     },

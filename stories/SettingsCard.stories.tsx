@@ -22,13 +22,13 @@ export const SettingsCard = () => {
         <ToggleButton value="dyslexia-friendly">Dyslexia-Friendly</ToggleButton>
       </ToggleGroup>
       <ToggleGroup value="day" label="reading theme options">
-        <ToggleButton colorMode="day" value="day" variant="solid">
+        <ToggleButton colorMode="day" value="day" _checked={{ bg: 'ui.white' }}>
           Day
         </ToggleButton>
-        <ToggleButton colorMode="sepia" value="sepia" variant="solid">
+        <ToggleButton colorMode="sepia" value="sepia">
           Sepia
         </ToggleButton>
-        <ToggleButton colorMode="night" value="night" variant="solid">
+        <ToggleButton colorMode="night" value="night">
           Night
         </ToggleButton>
       </ToggleGroup>

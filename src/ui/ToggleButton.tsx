@@ -10,11 +10,12 @@ import { Icon, IconNames } from '@nypl/design-system-react-components';
 
 import Button from './Button';
 import { getTheme } from './theme';
+import { ColorMode } from '../types';
 
 export interface ToggleButtonProps
   extends React.ComponentPropsWithoutRef<typeof ChakraBox> {
   isChecked?: false;
-  colorMode?: string;
+  colorMode?: ColorMode;
   value: string;
 }
 

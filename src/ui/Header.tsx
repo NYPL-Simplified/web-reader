@@ -5,7 +5,7 @@ import { ReaderState, Navigator } from '../types';
 import useColorModeValue from '../ui/hooks/useColorModeValue';
 
 import SettingsCard from './SettingsButton';
-import HeaderButton from './HeaderButton';
+import Button from './Button';
 
 export type HeaderProps = {
   headerLeft?: React.ReactNode; // Top-left header section
@@ -50,10 +50,10 @@ export default function Header(props: HeaderProps) {
       )}
       <HStack ml="auto" spacing={1}>
         <SettingsCard navigator={navigator} state={readerState} />
-        <HeaderButton>
+        <Button border="none">
           <Icon decorative name={IconNames.search} modifiers={['small']} />
           <Text variant="headerNav">Toggle Fullscreen</Text>
-        </HeaderButton>
+        </Button>
       </HStack>
     </Flex>
   );

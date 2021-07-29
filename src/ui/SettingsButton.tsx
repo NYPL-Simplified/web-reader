@@ -13,7 +13,6 @@ import { Icon, IconNames } from '@nypl/design-system-react-components';
 import Button from './Button';
 import ToggleButton from './ToggleButton';
 import ToggleGroup from './ToggleGroup';
-import HeaderButton from './HeaderButton';
 import useColorModeValue from './hooks/useColorModeValue';
 
 export default function SettingsCard({
@@ -39,10 +38,10 @@ export default function SettingsCard({
         autoFocus={true}
       >
         <PopoverTrigger>
-          <HeaderButton onClick={open}>
+          <Button onClick={open} border="none">
             <Icon decorative name={IconNames.plus} modifiers={['small']} />{' '}
             <Text variant="headerNav">Settings</Text>
-          </HeaderButton>
+          </Button>
         </PopoverTrigger>
         <PopoverContent
           borderColor="gray.100"
@@ -85,13 +84,28 @@ export default function SettingsCard({
               label="reading theme options"
               onChange={navigator.setColorMode}
             >
-              <ToggleButton colorMode="day" value="day" variant="solid">
+              <ToggleButton
+                colorMode="day"
+                value="day"
+                _checked={{ bg: 'ui.white' }} // default _checked color is green for toggles
+              >
                 Day
               </ToggleButton>
-              <ToggleButton colorMode="sepia" value="sepia" variant="solid">
+              <ToggleButton
+                colorMode="sepia"
+                value="sepia"
+                bg="ui.sepia" // distinct case where default needs to be sepia
+                _active={{ bg: 'ui.sepia' }}
+                _hover={{ bg: 'ui.sepia' }}
+                _checked={{ bg: 'ui.sepia' }}
+              >
                 Sepia
               </ToggleButton>
-              <ToggleButton colorMode="night" value="night" variant="solid">
+              <ToggleButton
+                colorMode="night"
+                value="night"
+                _checked={{ bg: 'ui.black' }}
+              >
                 Night
               </ToggleButton>
             </ToggleGroup>
