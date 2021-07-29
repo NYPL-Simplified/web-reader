@@ -52,6 +52,9 @@ const App = () => {
           <Route path="/pdf">
             <WebReader webpubManifestUrl="http://localhost:1234/samples/pdf/degruyter.json" />
           </Route>
+          <Route path="/pdfcollection">
+            <WebReader webpubManifestUrl="http://localhost:1234/samples/pdf/muse1007.json" />
+          </Route>
           <Route path="/swtest">
             <SWTest />
           </Route>
@@ -89,7 +92,7 @@ const App = () => {
                 <Link to="/pdf">Pdf Example</Link>
               </ListItem>
               <ListItem>
-                <Link to="/pdf">Pdf Collection Example</Link>
+                <Link to="/pdfcollection">Pdf Collection Example</Link>
               </ListItem>
             </UnorderedList>
           </Route>

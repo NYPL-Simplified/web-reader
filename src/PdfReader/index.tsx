@@ -6,12 +6,13 @@ import {
   ReaderArguments,
   ReaderReturn,
   ReaderState,
+  WebpubManifest,
 } from '../types';
 
 type PdfState = ReaderState & {
   type: 'PDF';
   loadSuccess: boolean;
-  resource: string | null;
+  resourceIndex: number;
   data: Uint8Array | null;
   numPages: number;
   pageNumber: number;
@@ -19,7 +20,7 @@ type PdfState = ReaderState & {
 
 type PdfReaderAction =
   | { type: 'LOAD_SUCCESS'; success: boolean }
-  | { type: 'SET_RESOURCE'; resource: string }
+  | { type: 'SET_RESOURCEINDEX'; index: number }
   | { type: 'SET_DATA'; data: Uint8Array }
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
   | { type: 'SET_SCROLL'; isScrolling: boolean }
@@ -35,10 +36,10 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
       };
     }
 
-    case 'SET_RESOURCE':
+    case 'SET_RESOURCEINDEX':
       return {
         ...state,
-        resource: action.resource,
+        resourceIndex: action.index,
       };
 
     case 'SET_DATA':
@@ -84,7 +85,7 @@ async function fetchPdf<ExpectedResponse extends any = any>(url: string) {
 }
 
 export default function usePdfReader(args: ReaderArguments): ReaderReturn {
-  const { webpubManifestUrl, manifest, proxyUrl } = args ?? {};
+  const { webpubManifestUrl, manifest, proxyUrl = '' } = args ?? {};
 
   const [state, dispatch] = React.useReducer(pdfReducer, {
     type: 'PDF',
@@ -93,7 +94,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     isScrolling: false,
     fontSize: 16,
     fontFamily: 'sans-serif',
-    resource: null,
+    resourceIndex: 0,
     data: null,
     pageNumber: 1,
     numPages: 0,
@@ -103,25 +104,35 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     return { data: state.data };
   }, [state.data]);
 
+  const loadResource = async (
+    manifest: WebpubManifest,
+    resourceIndex: number,
+    proxyUrl?: string
+  ) => {
+    // Fetch the resource, then set data in state
+
+    // Generate the resource URL using the proxy
+    const resource: string =
+      proxyUrl + encodeURI(manifest.readingOrder![resourceIndex].href);
+
+    return await fetchPdf(resource);
+  };
+
   // initialize the pdf reader
   React.useEffect(() => {
-    async function setFile(resource: string) {
-      const data = await fetchPdf(resource);
+    async function setPdfResource(manifest: WebpubManifest, proxyUrl: string) {
+      const data = await loadResource(manifest, 0, proxyUrl);
       dispatch({ type: 'SET_DATA', data });
+      dispatch({ type: 'SET_RESOURCEINDEX', index: 0 });
     }
     // bail out if there is not manifest passed in,
     // that indicates that this format is inactive
     if (!manifest) return;
+    // throw an error on a badly formed manifest
     if (!manifest.readingOrder || !manifest.readingOrder.length) {
       throw new Error('Manifest has no Reading Order');
     }
-
-    // Fetch the resource, then pass it into the reader
-    const resource: string =
-      proxyUrl + encodeURI(manifest.readingOrder[0].href);
-
-    dispatch({ type: 'SET_RESOURCE', resource });
-    setFile(resource);
+    setPdfResource(manifest, proxyUrl);
   }, [proxyUrl, manifest]);
 
   /**
@@ -130,15 +141,45 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
    * you will probably want to store which resource you are currently on and
    * update that on goForward or goBackward
    */
-  const goForward = React.useCallback(() => {
-    const pageNum = state.pageNumber + 1;
-    dispatch({ type: 'SET_PAGENUM', pageNum });
-  }, [state.pageNumber]);
+  const goForward = React.useCallback(async () => {
+    if (state.pageNumber < state.numPages) {
+      const pageNum = state.pageNumber + 1;
+      dispatch({ type: 'SET_PAGENUM', pageNum });
+    } else {
+      dispatch({ type: 'LOAD_SUCCESS', success: false });
 
-  const goBackward = React.useCallback(() => {
-    const pageNum = state.pageNumber - 1;
-    dispatch({ type: 'SET_PAGENUM', pageNum });
-  }, [state.pageNumber]);
+      const data = await loadResource(
+        manifest!,
+        state.resourceIndex + 1,
+        proxyUrl
+      );
+      dispatch({ type: 'SET_DATA', data });
+      dispatch({ type: 'SET_RESOURCEINDEX', index: state.resourceIndex + 1 });
+    }
+  }, [
+    manifest,
+    proxyUrl,
+    state.numPages,
+    state.pageNumber,
+    state.resourceIndex,
+  ]);
+
+  const goBackward = React.useCallback(async () => {
+    if (state.pageNumber > 1) {
+      const pageNum = state.pageNumber - 1;
+      dispatch({ type: 'SET_PAGENUM', pageNum });
+    } else {
+      dispatch({ type: 'LOAD_SUCCESS', success: false });
+
+      const data = await loadResource(
+        manifest!,
+        state.resourceIndex - 1,
+        proxyUrl
+      );
+      dispatch({ type: 'SET_DATA', data });
+      dispatch({ type: 'SET_RESOURCEINDEX', index: state.resourceIndex - 1 });
+    }
+  }, [manifest, proxyUrl, state.pageNumber, state.resourceIndex]);
 
   /**
    * These ones don't make sense in the PDF case I dont think. I'm still
@@ -183,23 +224,17 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   }
 
   function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
+    console.log('success');
     dispatch({ type: 'LOAD_SUCCESS', success: true });
     dispatch({ type: 'SET_NUMPAGES', numPages: numPages });
+    dispatch({ type: 'SET_PAGENUM', pageNum: 1 });
   }
-
-  // function onItemClick({ pageNumber }: { pageNumber: number }) {
-  //   console.log('pageNumber', pageNumber);
-  //   const pageNum = pageNumber;
-  //   dispatch({ type: 'SET_PAGENUM', pageNum });
-  // }
 
   // the reader is active
   return {
     isLoading: false,
     content: (
       <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
-        {/* <Outline onItemClick={onItemClick} /> */}
-
         {state.isScrolling &&
           Array.from(new Array(state.numPages), (index) => (
             <Page key={`page_${index + 1}`} pageNumber={index + 1} />

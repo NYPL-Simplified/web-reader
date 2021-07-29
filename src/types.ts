@@ -11,7 +11,7 @@ export const WebpubMimeType = 'application/webpub';
  * THE FOLLOWING TWO TYPES ARE MADE UP STUBS
  */
 // a webpub pdf collection
-export const WebpubPdfConformsTo = 'application/webpub+pdf';
+export const WebpubPdfConformsTo = 'stub/webpub+pdf';
 // a webpub of axisnow content
 export const AxisNowEpubConformsTo = 'stub/webpub+axisnow';
 
