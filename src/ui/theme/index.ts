@@ -10,7 +10,7 @@ import getButtonStyle from './components/button';
  * See Chakra default theme for shape of theme object:
  * https://github.com/chakra-ui/chakra-ui/tree/main/packages/theme
  */
-export function theme(colorMode: ColorMode) {
+export function getTheme(colorMode: ColorMode) {
   return extendTheme(
     {
       colors,
