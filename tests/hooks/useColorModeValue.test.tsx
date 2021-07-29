@@ -2,7 +2,7 @@ import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import useColorModeValue from '../../src/ui/hooks/useColorModeValue';
 import { ThemeProvider } from '@chakra-ui/react';
-import { theme } from '../../src/ui/theme';
+import { getTheme } from '../../src/ui/theme';
 import { ColorMode } from '../../src/types';
 
 type ComponentWrapperType = {
@@ -11,7 +11,7 @@ type ComponentWrapperType = {
 };
 
 const ComponentWrapper = ({ colorMode, children }: ComponentWrapperType) => {
-  return <ThemeProvider theme={theme(colorMode)}>{children}</ThemeProvider>;
+  return <ThemeProvider theme={getTheme(colorMode)}>{children}</ThemeProvider>;
 };
 
 const testData = [

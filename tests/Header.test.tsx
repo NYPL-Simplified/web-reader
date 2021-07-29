@@ -2,7 +2,6 @@ import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import Header from '../src/ui/Header';
 import { Navigator, ReaderState } from '../src/types';
-import { Icon, IconNames } from '@nypl/design-system-react-components';
 
 test('render header bar', () => {
   const readerState = {} as ReaderState;
