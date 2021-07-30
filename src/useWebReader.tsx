@@ -59,8 +59,9 @@ export default function useWebReader(
         }
       : undefined
   );
-  const proxyUrl = 'http://localhost:5000/utils/proxy?proxy_url=';
-  // const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+
+  //TODO: Do not hardcode this proxy URL
+  const proxyUrl = 'https://drb-api-qa.nypl.org/utils/proxy?proxy_url=';
   const pdfReader = usePdfReader(
     readerType === 'PDF' && manifest
       ? {

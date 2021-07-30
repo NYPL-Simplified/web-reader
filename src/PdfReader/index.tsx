@@ -1,6 +1,6 @@
-import { Document, Outline, Page } from 'react-pdf/dist/esm/entry.parcel';
+import { Document, Page } from 'react-pdf/dist/esm/entry.parcel';
 
-import React, { useMemo, useState } from 'react';
+import React from 'react';
 import {
   ColorMode,
   ReaderArguments,
