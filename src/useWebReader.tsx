@@ -42,13 +42,9 @@ export default function useWebReader(
   options: UseWebReaderOptions = {}
 ): ActiveReader | LoadingReader {
   const [manifest, setManifest] = React.useState<WebpubManifest | null>(null);
-  console.log('useWebreaderManifest', manifest);
-  // const readerType = getReaderType(
-  //   manifest ? manifest.metadata.conformsTo : null
-  // );
-  const readerType = 'PDF';
-  console.log('readerType', readerType);
-
+  const readerType = getReaderType(
+    manifest ? manifest.metadata.conformsTo : null
+  );
   /**
    * Our HTML reader and PDf Reader. Note that we cannot conditionally
    * call a React hook, so we must _always_ call the hook, but allow for the

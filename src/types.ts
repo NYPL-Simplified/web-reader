@@ -11,7 +11,9 @@ export const WebpubMimeType = 'application/webpub';
  * THE FOLLOWING TWO TYPES ARE MADE UP STUBS
  */
 // a webpub pdf collection
-export const WebpubPdfConformsTo = 'stub/webpub+pdf';
+// TODO: Replace with a non-s3 location
+export const WebpubPdfConformsTo =
+  'https://webpub-manifest-profiles.s3.amazonaws.com/pdf.md';
 // a webpub of axisnow content
 export const AxisNowEpubConformsTo = 'stub/webpub+axisnow';
 

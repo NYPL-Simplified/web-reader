@@ -19,7 +19,6 @@ type PdfState = ReaderState & {
 };
 
 type PdfReaderAction =
-  | { type: 'LOAD_SUCCESS'; success: boolean }
   | { type: 'SET_RESOURCEINDEX'; index: number }
   | { type: 'SET_DATA'; data: { data: Uint8Array } | null }
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
@@ -29,13 +28,6 @@ type PdfReaderAction =
 
 function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
   switch (action.type) {
-    case 'LOAD_SUCCESS': {
-      return {
-        ...state,
-        loadSuccess: action.success,
-      };
-    }
-
     case 'SET_RESOURCEINDEX':
       return {
         ...state,
@@ -74,7 +66,6 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
   }
 }
 async function fetchPdf<ExpectedResponse extends any = any>(url: string) {
-  console.log('fetchPdf called', url);
   const response = await fetch(url, { mode: 'cors' });
   const array = new Uint8Array(await response.arrayBuffer());
 
@@ -105,8 +96,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     resourceIndex: number,
     proxyUrl?: string
   ) => {
-    // Fetch the resource, then set data in state
-
     // Generate the resource URL using the proxy
     const resource: string =
       proxyUrl + encodeURI(manifest.readingOrder![resourceIndex].href);
@@ -131,18 +120,17 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     setPdfResource(manifest, proxyUrl);
   }, [proxyUrl, manifest]);
 
-  /**
-   * Here you add the functionality, either directly working with the iframe
-   * or through PDF.js. You should update the internal state. In the PDF case,
-   * you will probably want to store which resource you are currently on and
-   * update that on goForward or goBackward
-   */
+  // prev and next page functions
   const goForward = React.useCallback(async () => {
     if (state.pageNumber < state.numPages) {
-      const pageNum = state.pageNumber + 1;
-      dispatch({ type: 'SET_PAGENUM', pageNum });
-    } else {
+      dispatch({ type: 'SET_PAGENUM', pageNum: state.pageNumber + 1 });
+    } else if (
+      manifest &&
+      manifest.readingOrder &&
+      state.resourceIndex < manifest?.readingOrder?.length - 1
+    ) {
       dispatch({ type: 'SET_DATA', data: null });
+      dispatch({ type: 'SET_PAGENUM', pageNum: 1 });
 
       const data = await loadResource(
         manifest!,
@@ -152,6 +140,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       dispatch({ type: 'SET_DATA', data: { data } });
       dispatch({ type: 'SET_RESOURCEINDEX', index: state.resourceIndex + 1 });
     }
+    // Do nothing if it's at the last page of the last resource
   }, [
     manifest,
     proxyUrl,
@@ -164,9 +153,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     if (state.pageNumber > 1) {
       const pageNum = state.pageNumber - 1;
       dispatch({ type: 'SET_PAGENUM', pageNum });
-    } else {
+    } else if (manifest && manifest.readingOrder && state.resourceIndex > 0) {
       dispatch({ type: 'SET_DATA', data: null });
-
       dispatch({ type: 'SET_PAGENUM', pageNum: 1 });
 
       const data = await loadResource(
@@ -210,34 +198,53 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   // this format is inactive, return null
   if (!webpubManifestUrl || !manifest) return null;
 
-  // we are initializing the reader
+  // The reader is loading a page
   if (!state.data) {
     return {
-      isLoading: true,
-      content: <>PDF is loading</>,
-      manifest: null,
-      navigator: null,
-      state: null,
+      isLoading: false,
+      content: (
+        <main
+          style={{ height: 'calc(100vh - 100px)' }}
+          tabIndex={-1}
+          id="iframe-wrapper"
+        >
+          PDF is loading
+        </main>
+      ),
+      state,
+      manifest,
+      navigator: {
+        goForward,
+        goBackward,
+        setColorMode,
+        setScroll,
+      },
     };
   }
 
   function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
-    console.log('success');
-    dispatch({ type: 'LOAD_SUCCESS', success: true });
     dispatch({ type: 'SET_NUMPAGES', numPages: numPages });
   }
 
-  // the reader is active
+  // the reader is active but loading a page
   return {
     isLoading: false,
     content: (
-      <Document file={state.data} onLoadSuccess={onDocumentLoadSuccess}>
-        {state.isScrolling &&
-          Array.from(new Array(state.numPages), (index) => (
-            <Page key={`page_${index + 1}`} pageNumber={index + 1} />
-          ))}
-        {!state.isScrolling && <Page pageNumber={state.pageNumber} />}
-      </Document>
+      <main
+        style={{ height: 'calc(100vh - 100px)' }}
+        tabIndex={-1}
+        id="iframe-wrapper"
+      >
+        <Document file={state.data} onLoadSuccess={onDocumentLoadSuccess}>
+          {state.isScrolling &&
+            Array.from(new Array(state.numPages), (index) => (
+              <Page key={`page_${index + 1}`} pageNumber={index + 1} />
+            ))}
+          {!state.isScrolling && (
+            <Page pageNumber={state.pageNumber} loading={<></>} />
+          )}
+        </Document>
+      </main>
     ),
     state,
     manifest,
