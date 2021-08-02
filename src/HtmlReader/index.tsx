@@ -146,6 +146,18 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     [reader]
   );
 
+  const goToPage = React.useCallback(
+    (href) => {
+      if (!reader) return;
+      reader.goTo({
+        // locations: { position: 1 }, // isn't locations optional?
+        ...reader.currentLocator,
+        href,
+      });
+    },
+    [reader]
+  );
+
   const isLoading = !reader;
 
   // this format is inactive, return null
@@ -176,6 +188,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       increaseFontSize,
       decreaseFontSize,
       setFontFamily,
+      goToPage,
     },
   };
 }

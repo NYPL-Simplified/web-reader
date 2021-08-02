@@ -1,3 +1,5 @@
+import { Locator } from '@d-i-t-a/reader/dist/model/Locator';
+
 // the MimeType for a packaged epub
 export const EpubMimeType = 'application/epub';
 // the Mimetype for a generic webpub
@@ -35,6 +37,7 @@ export type WebpubManifest = {
   spine: Spine<'text/html'>;
   links: any[];
   resources: any[];
+  toc: any[]; // TODO: get the type once we import the webpubmanifest
 };
 
 export type Spine<TFormat> = { href: string; type: TFormat; title: string }[];
@@ -53,6 +56,7 @@ export type Navigator = {
   increaseFontSize: () => Promise<void>;
   decreaseFontSize: () => Promise<void>;
   setFontFamily: (family: FontFamily) => Promise<void>;
+  goToPage: (href: Locator) => void; // TODO: should extract Locator type too
 };
 
 export type ReaderType = 'HTML' | 'PDF';

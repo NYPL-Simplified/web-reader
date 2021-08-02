@@ -10,7 +10,12 @@ import theme from './theme';
  * that can be imported and used separately or in a customized setup.
  * It takes the return value of useWebReader as props
  */
-const ManagerUI: React.FC<ReaderReturn> = ({ children, navigator, state }) => {
+const ManagerUI: React.FC<ReaderReturn> = ({
+  children,
+  navigator,
+  state,
+  manifest,
+}) => {
   return (
     <ThemeProvider theme={theme}>
       <div
@@ -21,8 +26,12 @@ const ManagerUI: React.FC<ReaderReturn> = ({ children, navigator, state }) => {
           flexDirection: 'column',
         }}
       >
-        {navigator && state && (
-          <Header readerState={state} navigator={navigator} />
+        {navigator && state && manifest && (
+          <Header
+            readerState={state}
+            navigator={navigator}
+            manifest={manifest}
+          />
         )}
         <Flex w="100vw" justifyContent="space-around">
           <PageButton onClick={navigator?.goBackward}>{`<`}</PageButton>

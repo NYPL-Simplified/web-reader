@@ -1,5 +1,4 @@
 import React from 'react';
-import SettingsCard from './SettingsButton';
 import {
   Flex,
   Link,
@@ -8,16 +7,19 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { Icon, IconNames } from '@nypl/design-system-react-components';
-import { ReaderState, Navigator } from '../types';
+import { ReaderState, Navigator, WebpubManifest } from '../types';
+import SettingsCard from './SettingsButton';
+import TableOfContent from './TableOfContent';
 
 export type HeaderProps = {
   headerLeft?: React.ReactNode; // Top-left header section
   readerState: ReaderState;
   navigator: Navigator;
+  manifest: WebpubManifest;
 };
 
 export default function Header(props: HeaderProps) {
-  const { headerLeft, readerState, navigator } = props;
+  const { headerLeft, readerState, navigator, manifest } = props;
 
   return (
     <Flex
@@ -50,6 +52,7 @@ export default function Header(props: HeaderProps) {
         </Link>
       )}
       <HStack ml="auto" spacing={1}>
+        <TableOfContent navigator={navigator} manifest={manifest} />
         <SettingsCard navigator={navigator} state={readerState} />
         <ChakraButton variant="headerNav">
           <Icon decorative name={IconNames.search} modifiers={['small']} />
