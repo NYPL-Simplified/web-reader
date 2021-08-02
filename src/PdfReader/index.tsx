@@ -198,8 +198,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   // this format is inactive, return null
   if (!webpubManifestUrl || !manifest) return null;
 
-  // The reader is loading a page
   if (!state.data) {
+    // The reader is loading a page
     return {
       isLoading: false,
       content: (
@@ -216,6 +216,9 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       navigator: {
         goForward,
         goBackward,
+        increaseFontSize,
+        decreaseFontSize,
+        setFontFamily,
         setColorMode,
         setScroll,
       },
