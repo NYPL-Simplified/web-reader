@@ -13,12 +13,6 @@ function PageButton(props: React.PropsWithoutRef<PageButtonProps>) {
   const circleColor = useColorModeValue('ui.black', 'ui.white', 'ui.black');
   const circleBgColor = useColorModeValue('ui.white', 'gray.700', 'ui.white');
 
-  const hoverStyle = {
-    bg: useColorModeValue('gray.700', 'gray.700', 'gray.700'),
-    color: useColorModeValue('ui.white', 'ui.white', 'ui.white'),
-    border: 'none',
-  };
-
   return (
     <Flex alignItems="center" bgColor={mainBgColor}>
       <ChakraCircle
@@ -33,7 +27,6 @@ function PageButton(props: React.PropsWithoutRef<PageButtonProps>) {
         mr={8}
         ml={6}
         cursor="cursor"
-        _hover={hoverStyle}
         onClick={onClick}
         {...rest}
       >
