@@ -91,7 +91,6 @@ const loadResource = async (
   // Generate the resource URL using the proxy
   const resource: string =
     proxyUrl + encodeURI(manifest.readingOrder![resourceIndex].href);
-
   const response = await fetch(resource, { mode: 'cors' });
   const array = new Uint8Array(await response.arrayBuffer());
 
@@ -126,7 +125,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   });
 
   // state we can derive from the state above
-  const isFetching = !!state.file;
+  const isFetching = !state.file;
   const isParsed = typeof state.numPages === 'number';
 
   // initialize the pdf reader
