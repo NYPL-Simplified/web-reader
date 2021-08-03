@@ -128,7 +128,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   // state we can derive from the state above
   const isFetching = !!state.file;
   const isParsed = typeof state.numPages === 'number';
-  const shouldNavigateToEnd = state.pageNumber === -1;
 
   // initialize the pdf reader
   React.useEffect(() => {
@@ -288,7 +287,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         id="iframe-wrapper"
       >
         <Document file={state.file} onLoadSuccess={onDocumentLoadSuccess}>
-          {isParsed && (
+          {isParsed && state.numPages && (
             <>
               {state.isScrolling &&
                 Array.from(new Array(state.numPages), (index) => (
