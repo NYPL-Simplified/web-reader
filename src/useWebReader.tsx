@@ -1,22 +1,21 @@
-import {
-  ActiveReader,
-  AnyConformsTo,
-  AxisNowEpubConformsTo,
-  LoadingReader,
-  WebpubManifest,
-  WebpubPdfConformsTo,
-} from './types';
 import React from 'react';
 import { fetchJson } from './utils/fetch';
 import HtmlReaderContent from './HtmlReader/HtmlReaderContent';
 import usePdfReader from './PdfReader';
 import useHtmlReader from './HtmlReader';
+import { ActiveReader, LoadingReader } from './types';
+import { WebpubManifest } from './WebpubManifestTypes/WebpubManifest';
+import {
+  AxisNowEpubConformsTo,
+  WebpubPdfConformsTo,
+  ConformsTo,
+} from './WebpubManifestTypes/ConformsTo';
 
 type UseWebReaderOptions = {
   // TBD
 };
 
-function getReaderType(conformsTo: AnyConformsTo | null | undefined) {
+function getReaderType(conformsTo: ConformsTo | null | undefined) {
   switch (conformsTo) {
     case AxisNowEpubConformsTo:
       return 'HTML';
