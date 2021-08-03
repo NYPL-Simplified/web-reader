@@ -61,7 +61,7 @@ export default function useWebReader(
   );
 
   //TODO: Do not hardcode this proxy URL
-  const proxyUrl = 'https://drb-api-qa.nypl.org/utils/proxy?proxy_url=';
+  const proxyUrl = 'http://localhost:5000/utils/proxy?proxy_url=';
   const pdfReader = usePdfReader(
     readerType === 'PDF' && manifest
       ? {
