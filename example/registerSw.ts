@@ -1,3 +1,8 @@
+/**
+ * Every consuming app will need to have a serviceWorker.js file and
+ * in there they can call our code.
+ */
+
 // Check that service workers are supported
 console.log('registering sw');
 if ('serviceWorker' in navigator) {
@@ -7,8 +12,8 @@ if ('serviceWorker' in navigator) {
       (registration) => {
         // Registration was successful
         console.log(
-          'ServiceWorker registration successful with scope: ',
-          registration.scope
+          'ServiceWorker registration successful with registration: ',
+          registration
         );
       },
       (err) => {
