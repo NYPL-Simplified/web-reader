@@ -11,29 +11,23 @@ import {
 
 type PdfState = ReaderState & {
   type: 'PDF';
-  // The PDF information has been fetched
-  fetchSuccess: boolean;
-  // Is the PDF ready for display
-  displayReady: boolean;
   resourceIndex: number;
   file: { data: Uint8Array } | null;
-  numPages: number;
+  // we only know the numPages once the file has been parsed
+  numPages: number | null;
+  // if pageNumber is -1, we will navigate to the end of the
+  // resource once it is parsed
   pageNumber: number;
 };
 
 type PdfReaderAction =
-  | { type: 'SET_LOADING' }
   | {
-      type: 'PDF_FETCH_SUCCESS';
-      file: { data: Uint8Array };
+      type: 'SET_CURRENT_RESOURCE';
       index: number;
-      direction?: 'previous' | 'next';
+      shouldNavigateToEnd: boolean;
     }
-  | {
-      type: 'DOCUMENT_LOAD_SUCCESS';
-      numPages: number;
-      direction: 'previous' | 'next';
-    }
+  | { type: 'RESOURCE_FETCH_SUCCESS'; file: { data: Uint8Array } }
+  | { type: 'PDF_PARSED'; numPages: number }
   | { type: 'NAVIGATE_PAGE'; pageNum: number }
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
   | { type: 'SET_SCROLL'; isScrolling: boolean };
@@ -41,33 +35,31 @@ type PdfReaderAction =
 function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
   switch (action.type) {
     // Changes reader to be in "loading" state
-    case 'SET_LOADING':
+    case 'SET_CURRENT_RESOURCE':
       return {
         ...state,
-        fetchSuccess: false,
-        displayReady: false,
         file: null,
-        pageNumber: 1,
+        resourceIndex: action.index,
+        pageNumber: action.shouldNavigateToEnd ? -1 : 1,
+        numPages: null,
       };
 
-    // Changes reader to be in "loaded" state
-    case 'PDF_FETCH_SUCCESS':
+    case 'RESOURCE_FETCH_SUCCESS':
       return {
         ...state,
         file: action.file,
-        fetchSuccess: true,
-        resourceIndex: action.index,
-        pageNumber: 1,
-        displayReady: action.direction !== 'previous',
       };
 
-    // Changes reader to be in success state
-    case 'DOCUMENT_LOAD_SUCCESS':
+    // called when the file has been parsed by react-pdf
+    // and we know the number of pages
+    case 'PDF_PARSED':
       return {
         ...state,
         numPages: action.numPages,
-        pageNumber: action.direction === 'previous' ? action.numPages : 1,
-        displayReady: true,
+        // if the state.pageNumber is -1, we know to navigate to the
+        // end of the PDF that was just parsed
+        pageNumber:
+          state.pageNumber === -1 ? action.numPages : state.pageNumber,
       };
 
     // Navigates to page in resource
@@ -100,7 +92,7 @@ const loadResource = async (
   const resource: string =
     proxyUrl + encodeURI(manifest.readingOrder![resourceIndex].href);
 
-  const response = await fetch(url, { mode: 'cors' });
+  const response = await fetch(resource, { mode: 'cors' });
   const array = new Uint8Array(await response.arrayBuffer());
 
   if (!response.ok) {
@@ -124,25 +116,27 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   const [state, dispatch] = React.useReducer(pdfReducer, {
     type: 'PDF',
     colorMode: 'day',
-    fetchSuccess: false,
-    displayReady: false,
     isScrolling: false,
     fontSize: 16,
     fontFamily: 'sans-serif',
     resourceIndex: 0,
     file: null,
     pageNumber: 1,
-    numPages: 0,
+    numPages: null,
   });
+
+  // state we can derive from the state above
+  const isFetching = !!state.file;
+  const isParsed = typeof state.numPages === 'number';
+  const shouldNavigateToEnd = state.pageNumber === -1;
 
   // initialize the pdf reader
   React.useEffect(() => {
     async function setPdfResource(manifest: WebpubManifest, proxyUrl: string) {
       const data = await loadResource(manifest, 0, proxyUrl);
       dispatch({
-        type: 'PDF_FETCH_SUCCESS',
+        type: 'RESOURCE_FETCH_SUCCESS',
         file: { data: data },
-        index: 0,
       });
     }
     // bail out if there is not manifest passed in,
@@ -158,6 +152,9 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
 
   // prev and next page functions
   const goForward = React.useCallback(async () => {
+    // do nothing if we haven't parsed the number of pages yet
+    if (!state.numPages) return;
+
     if (state.pageNumber < state.numPages) {
       dispatch({
         type: 'NAVIGATE_PAGE',
@@ -168,18 +165,17 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       manifest.readingOrder &&
       state.resourceIndex < manifest?.readingOrder?.length - 1
     ) {
-      dispatch({ type: 'SET_LOADING' });
-
-      const data = await loadResource(
-        manifest,
-        state.resourceIndex + 1,
-        proxyUrl
-      );
+      const nextIndex = state.resourceIndex + 1;
       dispatch({
-        type: 'PDF_FETCH_SUCCESS',
+        type: 'SET_CURRENT_RESOURCE',
+        index: nextIndex,
+        shouldNavigateToEnd: false,
+      });
+
+      const data = await loadResource(manifest, nextIndex, proxyUrl);
+      dispatch({
+        type: 'RESOURCE_FETCH_SUCCESS',
         file: { data },
-        index: state.resourceIndex + 1,
-        direction: 'next',
       });
     }
     // Do nothing if it's at the last page of the last resource
@@ -192,28 +188,30 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   ]);
 
   const goBackward = React.useCallback(async () => {
+    // do nothing if we haven't parsed the PDF yet
+    if (!isParsed) return;
+
     if (state.pageNumber > 1) {
       dispatch({
         type: 'NAVIGATE_PAGE',
         pageNum: state.pageNumber - 1,
       });
-    } else if (manifest && manifest.readingOrder && state.resourceIndex > 0) {
-      dispatch({ type: 'SET_LOADING' });
+    } else if (manifest?.readingOrder && state.resourceIndex > 0) {
+      const nextIndex = state.resourceIndex - 1;
+      dispatch({
+        type: 'SET_CURRENT_RESOURCE',
+        index: nextIndex,
+        shouldNavigateToEnd: true,
+      });
 
-      const data = await loadResource(
-        manifest,
-        state.resourceIndex - 1,
-        proxyUrl
-      );
+      const data = await loadResource(manifest, nextIndex, proxyUrl);
 
       dispatch({
-        type: 'PDF_FETCH_SUCCESS',
+        type: 'RESOURCE_FETCH_SUCCESS',
         file: { data },
-        index: state.resourceIndex - 1,
-        direction: 'previous',
       });
     }
-  }, [manifest, proxyUrl, state.pageNumber, state.resourceIndex]);
+  }, [manifest, proxyUrl, isParsed, state.pageNumber, state.resourceIndex]);
 
   /**
    * These ones don't make sense in the PDF case I dont think. I'm still
@@ -246,7 +244,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   // this format is inactive, return null
   if (!webpubManifestUrl || !manifest) return null;
 
-  if (!state.fetchSuccess) {
+  if (isFetching) {
     // The Reader is fetching a PDF file
     return {
       isLoading: false,
@@ -275,9 +273,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
 
   function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
     dispatch({
-      type: 'DOCUMENT_LOAD_SUCCESS',
+      type: 'PDF_PARSED',
       numPages: numPages,
-      direction: state.displayReady ? 'next' : 'previous',
     });
   }
 
@@ -291,7 +288,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         id="iframe-wrapper"
       >
         <Document file={state.file} onLoadSuccess={onDocumentLoadSuccess}>
-          {state.displayReady && (
+          {isParsed && (
             <>
               {state.isScrolling &&
                 Array.from(new Array(state.numPages), (index) => (
