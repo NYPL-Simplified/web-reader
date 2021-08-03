@@ -175,7 +175,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       dispatch({ type: 'SET_LOADING' });
 
       const data = await loadResource(
-        manifest!,
+        manifest,
         state.resourceIndex + 1,
         proxyUrl
       );
@@ -205,7 +205,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       dispatch({ type: 'SET_LOADING' });
 
       const data = await loadResource(
-        manifest!,
+        manifest,
         state.resourceIndex - 1,
         proxyUrl
       );
