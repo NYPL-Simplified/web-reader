@@ -1,5 +1,7 @@
 import { WebpubManifest } from './WebpubManifestTypes/WebpubManifest';
 
+export { WebpubManifest };
+
 // the MimeType for a packaged epub
 export const EpubMimeType = 'application/epub';
 // the Mimetype for a generic webpub

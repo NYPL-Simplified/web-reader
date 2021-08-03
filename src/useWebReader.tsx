@@ -3,8 +3,7 @@ import { fetchJson } from './utils/fetch';
 import HtmlReaderContent from './HtmlReader/HtmlReaderContent';
 import usePdfReader from './PdfReader';
 import useHtmlReader from './HtmlReader';
-import { ActiveReader, LoadingReader } from './types';
-import { WebpubManifest } from './WebpubManifestTypes/WebpubManifest';
+import { ActiveReader, LoadingReader, WebpubManifest } from './types';
 import {
   AxisNowEpubConformsTo,
   WebpubPdfConformsTo,
