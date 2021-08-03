@@ -96,21 +96,17 @@ const loadResource = async (
   resourceIndex: number,
   proxyUrl?: string
 ) => {
-  async function fetchPdf<ExpectedResponse extends any = any>(url: string) {
-    const response = await fetch(url, { mode: 'cors' });
-    const array = new Uint8Array(await response.arrayBuffer());
-
-    if (!response.ok) {
-      throw new Error('Response not Ok for URL: ' + url);
-    }
-    return array as ExpectedResponse;
-  }
-
   // Generate the resource URL using the proxy
   const resource: string =
     proxyUrl + encodeURI(manifest.readingOrder![resourceIndex].href);
 
-  return await fetchPdf(resource);
+  const response = await fetch(url, { mode: 'cors' });
+  const array = new Uint8Array(await response.arrayBuffer());
+
+  if (!response.ok) {
+    throw new Error('Response not Ok for URL: ' + resource);
+  }
+  return array;
 };
 
 /**
