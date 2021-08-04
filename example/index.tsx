@@ -50,10 +50,10 @@ const App = () => {
       <BrowserRouter>
         <Switch>
           <Route path="/pdf">
-            <WebReader webpubManifestUrl="http://localhost:1234/samples/pdf/degruyter.json" />
+            <WebReader webpubManifestUrl="/samples/pdf/degruyter.json" />
           </Route>
           <Route path="/pdfcollection">
-            <WebReader webpubManifestUrl="http://localhost:1234/samples/pdf/muse1007.json" />
+            <WebReader webpubManifestUrl="/samples/pdf/muse1007.json" />
           </Route>
           <Route path="/swtest">
             <SWTest />
