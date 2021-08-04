@@ -1,5 +1,5 @@
 import React from 'react';
-import { Meta, Story } from '@storybook/react';
+import { Meta } from '@storybook/react';
 import ToggleGroup from '../src/ui/ToggleGroup';
 import ToggleButton from '../src/ui/ToggleButton';
 
@@ -22,13 +22,13 @@ export const SettingsCard = () => {
         <ToggleButton value="dyslexia-friendly">Dyslexia-Friendly</ToggleButton>
       </ToggleGroup>
       <ToggleGroup value="day" label="reading theme options">
-        <ToggleButton colorScheme="light" value="day" variant="solid">
+        <ToggleButton colorMode="day" value="day" _checked={{ bg: 'ui.white' }}>
           Day
         </ToggleButton>
-        <ToggleButton colorScheme="sepia" value="sepia" variant="solid">
+        <ToggleButton colorMode="sepia" value="sepia">
           Sepia
         </ToggleButton>
-        <ToggleButton colorScheme="dark" value="night" variant="solid">
+        <ToggleButton colorMode="night" value="night">
           Night
         </ToggleButton>
       </ToggleGroup>

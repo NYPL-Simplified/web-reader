@@ -60,3 +60,5 @@ export type ActiveReaderArguments = {
 export type InactiveReaderArguments = undefined;
 
 export type ReaderArguments = ActiveReaderArguments | InactiveReaderArguments;
+
+export type GetColor = (light: string, dark: string, sepia: string) => string;

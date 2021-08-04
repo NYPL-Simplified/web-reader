@@ -1,6 +1,6 @@
 const React = require("react")
-const {ChakraProvider, ColorModeProvider} = require("@chakra-ui/react")
-const theme = require("../src/ui/theme").default
+const { ChakraProvider } = require("@chakra-ui/react")
+import { getTheme } from "../src/ui/theme"
 
 import '@nypl/design-system-react-components/dist/styles.css'
 
@@ -12,7 +12,7 @@ export const parameters = {
 
 const withChakra = (StoryFn, _context) => {
   return (
-    <ChakraProvider theme={theme} >
+    <ChakraProvider theme={getTheme('day')} >
         <StoryFn />
     </ChakraProvider>
   )
