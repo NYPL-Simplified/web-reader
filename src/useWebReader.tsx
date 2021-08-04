@@ -43,7 +43,6 @@ export default function useWebReader(
   const readerType = getReaderType(
     manifest ? manifest.metadata.conformsTo : null
   );
-
   /**
    * Our HTML reader and PDf Reader. Note that we cannot conditionally
    * call a React hook, so we must _always_ call the hook, but allow for the
@@ -58,11 +57,15 @@ export default function useWebReader(
         }
       : undefined
   );
+
+  //TODO: Do not hardcode this proxy URL
+  const proxyUrl = 'https://drb-api-qa.nypl.org/utils/proxy?proxy_url=';
   const pdfReader = usePdfReader(
     readerType === 'PDF' && manifest
       ? {
           webpubManifestUrl,
           manifest,
+          proxyUrl,
         }
       : undefined
   );

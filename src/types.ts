@@ -56,6 +56,7 @@ export type ReaderReturn = InactiveReader | LoadingReader | ActiveReader;
 export type ActiveReaderArguments = {
   webpubManifestUrl: string;
   manifest: WebpubManifest;
+  proxyUrl?: string;
 };
 export type InactiveReaderArguments = undefined;
 

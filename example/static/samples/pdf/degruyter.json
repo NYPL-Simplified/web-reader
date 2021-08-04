@@ -1,0 +1,41 @@
+{
+    "context": "https://drb-files-qa-s3.amazonaws.com/manifests/context.jsonld",
+    "metadata": {
+        "@type": "https://schema.org/Book",
+        "title": "Pioneers of Zionism: Hess, Pinsker, R\u00fclf Messianism, Settlement Policy, and the Israeli-Palestinian Conflict",
+        "author": "Schoeps, Julius H.",
+        "identifier": "urn:isbn:9783110314724",
+        "conformsTo": "https://librarysimplified.org/terms/profiles/pdf"
+    },
+    "links": [
+        {
+            "href": "https://www.degruyter.com/document/doi/10.1515/9783110314724/pdf",
+            "type": "application/pdf",
+            "rel": "alternate"
+        },
+        {
+            "rel": "self",
+            "href": "https://drb-files-qa.s3.amazonaws.com/manifests/degruyter/9783110314724.json",
+            "type": "application/webpub+json"
+        }
+    ],
+    "readingOrder": [
+        {
+            "href": "https://www.degruyter.com/document/doi/10.1515/9783110314724/pdf",
+            "title": "Pioneers of Zionism: Hess, Pinsker, R\u00fclf Messianism, Settlement Policy, and the Israeli-Palestinian Conflict",
+            "type": "application/pdf"
+        }
+    ],
+    "resources": [
+        {
+            "href": "https://www.degruyter.com/document/doi/10.1515/9783110314724/pdf",
+            "type": "application/pdf"
+        }
+    ],
+    "toc": [
+        {
+            "href": "https://www.degruyter.com/document/doi/10.1515/9783110314724/pdf",
+            "title": "Pioneers of Zionism: Hess, Pinsker, R\u00fclf Messianism, Settlement Policy, and the Israeli-Palestinian Conflict"
+        }
+    ]
+}
