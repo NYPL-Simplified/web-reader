@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Button as ChakraButton, Text } from '@chakra-ui/react';
+import { Text } from '@chakra-ui/react';
 import { Icon, IconNames } from '@nypl/design-system-react-components';
 import { Navigator, WebpubManifest } from '../types';
 import { Link } from '@chakra-ui/react';
+import Button from './Button';
 
 export default function TableOfContent({
   navigator,
@@ -20,11 +21,11 @@ export default function TableOfContent({
 
   return (
     <>
-      <ChakraButton variant="headerNav" onClick={() => setIsOpen(!isOpen)}>
+      <Button border="none" onClick={() => setIsOpen(!isOpen)}>
         <Icon decorative name={IconNames.download} modifiers={['small']} />
         <Text variant="headerNav">Table of Contents</Text>
-      </ChakraButton>
-      {isOpen && manifest.toc && (
+      </Button>
+      {isOpen && manifest?.toc && (
         <ul
           style={{
             position: 'fixed',

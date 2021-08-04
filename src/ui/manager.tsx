@@ -3,7 +3,7 @@ import * as React from 'react';
 import { ReaderReturn } from '../types';
 import Header from './Header';
 import PageButton from './PageButton';
-import theme from './theme';
+import { getTheme } from './theme';
 
 /**
  * The default Manager UI. This will be broken into individual components
@@ -17,15 +17,8 @@ const ManagerUI: React.FC<ReaderReturn> = ({
   manifest,
 }) => {
   return (
-    <ThemeProvider theme={theme}>
-      <div
-        style={{
-          height: '100vh',
-          overflow: 'hidden',
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
+    <ThemeProvider theme={getTheme(state?.colorMode ?? 'day')}>
+      <Flex flexDir="column" overflow="hidden" height="100vh">
         {navigator && state && manifest && (
           <Header
             readerState={state}
@@ -38,7 +31,7 @@ const ManagerUI: React.FC<ReaderReturn> = ({
           {children}
           <PageButton onClick={navigator?.goForward}>{`>`}</PageButton>
         </Flex>
-      </div>
+      </Flex>
     </ThemeProvider>
   );
 };

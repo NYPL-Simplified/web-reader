@@ -12,7 +12,7 @@ import {
   UnorderedList,
   ListItem,
 } from '@chakra-ui/react';
-import theme from '../src/ui/theme';
+import { getTheme } from '../src/ui/theme';
 
 const AxisNowEpub = () => {
   const [getContent, setGetContent] = React.useState<GetContent | null>(null);
@@ -46,7 +46,7 @@ const SWTest = () => {
 
 const App = () => {
   return (
-    <ChakraProvider theme={theme}>
+    <ChakraProvider theme={getTheme('day')}>
       <BrowserRouter>
         <Switch>
           <Route path="/pdf">
