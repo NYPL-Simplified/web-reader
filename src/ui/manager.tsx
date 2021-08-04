@@ -1,4 +1,4 @@
-import { ThemeProvider, Flex } from '@chakra-ui/react';
+import { ThemeProvider, Flex, Box } from '@chakra-ui/react';
 import * as React from 'react';
 import { ReaderReturn } from '../types';
 import Header from './Header';
@@ -13,15 +13,21 @@ import { getTheme } from './theme';
 const ManagerUI: React.FC<ReaderReturn> = ({ children, navigator, state }) => {
   return (
     <ThemeProvider theme={getTheme(state?.colorMode ?? 'day')}>
-      <Flex flexDir="column" overflow="hidden" height="100vh">
+      <Flex flexDir="column">
         {navigator && state && (
           <Header readerState={state} navigator={navigator} />
         )}
-        <Flex w="100vw" justifyContent="space-around">
-          <PageButton onClick={navigator?.goBackward}>{`<`}</PageButton>
+        <Box w="100vw">
+          <PageButton
+            onClick={navigator?.goBackward}
+            left={0}
+          >{`<`}</PageButton>
           {children}
-          <PageButton onClick={navigator?.goForward}>{`>`}</PageButton>
-        </Flex>
+          <PageButton
+            onClick={navigator?.goForward}
+            right={0}
+          >{`>`}</PageButton>
+        </Box>
       </Flex>
     </ThemeProvider>
   );

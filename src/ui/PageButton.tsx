@@ -1,10 +1,9 @@
 import React from 'react';
-import { Flex, Circle as ChakraCircle } from '@chakra-ui/react';
+import { Flex, Circle as ChakraCircle, Box } from '@chakra-ui/react';
 import useColorModeValue from './hooks/useColorModeValue';
 
-export type PageButtonProps = {
+export type PageButtonProps = React.ComponentPropsWithoutRef<typeof Box> & {
   children: React.ReactNode;
-  onClick: (() => void) | undefined;
 };
 
 function PageButton(props: React.PropsWithoutRef<PageButtonProps>) {
@@ -14,7 +13,14 @@ function PageButton(props: React.PropsWithoutRef<PageButtonProps>) {
   const circleBgColor = useColorModeValue('ui.white', 'gray.700', 'ui.white');
 
   return (
-    <Flex alignItems="center" bgColor={mainBgColor}>
+    <Flex
+      alignItems="center"
+      bgColor={mainBgColor}
+      position="fixed"
+      top="0"
+      height="100vh"
+      {...rest}
+    >
       <ChakraCircle
         as="button"
         d="flex"
@@ -28,7 +34,6 @@ function PageButton(props: React.PropsWithoutRef<PageButtonProps>) {
         ml={6}
         cursor="cursor"
         onClick={onClick}
-        {...rest}
       >
         {children}
       </ChakraCircle>

@@ -19,6 +19,12 @@ export default function Header(props: HeaderProps) {
   const mainBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
   return (
     <Flex
+      as="header"
+      position="sticky"
+      top={0}
+      left={0}
+      right={0}
+      zIndex={100}
       alignContent="space-between"
       alignItems="center"
       py={2}
