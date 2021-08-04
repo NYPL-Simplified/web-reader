@@ -1,4 +1,6 @@
-const ButtonStyle = {
+import { GetColor } from '../../../types';
+
+const getButtonStyle = (getColor: GetColor) => ({
   // style object for base or default style
   baseStyle: {
     borderRadius: 'none',
@@ -7,43 +9,15 @@ const ButtonStyle = {
   sizes: {},
   // styles for different visual variants ("outline", "solid")
   variants: {
-    solid: variantSolid,
-    toggle: variantToggle,
-    headerNav: variantHeaderNav,
+    solid: variantSolid(getColor),
+    toggle: variantToggle(getColor),
   },
   // default values for `size`, `variant`, `colorScheme`
   defaultProps: {
     size: 'sm',
     variant: 'solid',
-    colorScheme: 'light',
   },
-};
-
-const commonToggleButtonStyle = {
-  color: 'ui.black',
-  px: 8,
-  border: '1px solid',
-  borderColor: 'gray.100',
-  transition: 'none',
-  fontSize: '-2',
-  fontWeight: 'medium',
-  letterSpacing: '0.07rem',
-  textTransform: 'uppercase',
-  maxWidth: '100%',
-  cursor: 'pointer',
-  _active: {
-    bg: 'ui.white',
-  },
-  _hover: {
-    bg: 'ui.white',
-    _disabled: {
-      bg: 'ui.white',
-    },
-  },
-  _disabled: {
-    bg: 'ui.white',
-  },
-};
+});
 
 /* Color Schemes:
  ** Light, Sepia, Dark
@@ -53,108 +27,59 @@ const commonToggleButtonStyle = {
  ** Disabled
  ** Hovered
  */
-function variantSolid(props: any) {
-  const { colorScheme } = props;
+const variantSolid = (getColor: GetColor) => (props: any) => {
+  let bgColor = getColor('ui.white', 'ui.black', 'ui.sepia');
+  let color = getColor('gray.800', 'ui.white', 'gray.800');
 
-  switch (colorScheme) {
-    case 'sepia':
-      return {
-        ...commonToggleButtonStyle,
-        bg: 'ui.sepia',
-        color: 'gray.800',
-        _focus: {
-          bg: 'ui.sepia',
-          color: 'ui.black',
-        },
-        _active: {
-          bg: 'ui.sepia',
-          color: 'ui.black',
-        },
-        _hover: {
-          bg: 'ui.sepia',
-          _disabled: {
-            bg: 'ui.sepia',
-          },
-        },
-        _checked: {
-          bg: 'ui.sepia',
-          color: 'ui.black',
-        },
-        _disabled: {
-          bg: 'ui.sepia',
-        },
-      };
-    case 'dark':
-      return {
-        ...commonToggleButtonStyle,
-        bg: 'ui.black',
-        color: 'ui.white',
-        _focus: {
-          bg: 'ui.black',
-          color: 'white',
-        },
-        _active: {
-          bg: 'ui.black',
-          color: 'ui.white',
-        },
-        _hover: {
-          bg: 'ui.black',
-          _disabled: {
-            bg: 'ui.black',
-            color: 'ui.white',
-          },
-        },
-        _checked: {
-          bg: 'ui.black',
-          color: 'ui.white',
-        },
-        _disabled: {
-          bg: 'ui.black',
-          color: 'ui.white',
-        },
-      };
-    default:
-      // default is 'light'
-      return {
-        ...commonToggleButtonStyle,
-        bg: 'ui.white',
-        color: 'gray.800',
-        _hover: {
-          bg: 'ui.white',
-          _disabled: {
-            bg: 'ui.white',
-          },
-        },
-        _checked: {
-          bg: `ui.white`,
-          color: 'ui.black',
-        },
-        _disabled: {
-          bg: 'ui.white',
-        },
-      };
-  }
-}
+  const _focus = { bgColor, color };
+  const _hover = { bgColor, color, _disabled: { bgColor } };
+  const _active = { bgColor, color };
+  const _checked = { bgColor, color };
+  const _disabled = { bgColor };
 
-function variantToggle(props: any) {
   return {
-    ...variantSolid(props),
+    border: '1px solid',
+    borderColor: 'gray.100',
+    transition: 'none',
+    fontSize: 0,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+    maxWidth: '100%',
+    cursor: 'pointer',
+    bgColor,
+    color,
+    _focus,
+    _hover,
+    _active,
+    _checked,
+    _disabled,
+  };
+};
+
+const variantToggle = (getColor: GetColor) => (props: any) => {
+  const bgColor = getColor('ui.white', 'gray.800', 'ui.white');
+  const color = getColor('gray.800', 'ui.white', 'gray.800');
+  return {
+    ...variantSolid(getColor)(props),
+    bgColor,
+    color,
+    px: 8,
+    fontWeight: 'medium',
+    fontSize: -2,
+    _focus: {
+      bgColor,
+    },
+    _hover: {
+      bgColor,
+    },
+    _active: {
+      bgColor,
+    },
     _checked: {
       color: 'ui.white',
-      bg: 'green.700',
+      bgColor: 'green.700',
     },
   };
-}
+};
 
-function variantHeaderNav() {
-  return {
-    py: 1,
-    border: 'none',
-    bg: 'transparent',
-    textTransform: 'uppercase',
-    fontSize: 0,
-    color: 'gray.700',
-  };
-}
-
-export default ButtonStyle;
+export default getButtonStyle;

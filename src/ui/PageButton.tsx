@@ -1,5 +1,6 @@
 import React from 'react';
 import { Flex, Circle as ChakraCircle } from '@chakra-ui/react';
+import useColorModeValue from './hooks/useColorModeValue';
 
 export type PageButtonProps = {
   children: React.ReactNode;
@@ -8,21 +9,24 @@ export type PageButtonProps = {
 
 function PageButton(props: React.PropsWithoutRef<PageButtonProps>) {
   const { children, onClick, ...rest } = props;
+  const mainBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
+  const circleColor = useColorModeValue('ui.black', 'ui.white', 'ui.black');
+  const circleBgColor = useColorModeValue('ui.white', 'gray.700', 'ui.white');
+
   return (
-    <Flex alignItems="center">
+    <Flex alignItems="center" bgColor={mainBgColor}>
       <ChakraCircle
         as="button"
         d="flex"
         alignItems="center"
         border="1px solid"
         borderColor="ui.gray.light-cool"
-        color="ui.black"
-        bg="inherit"
+        color={circleColor}
+        bg={circleBgColor}
         size={{ sm: '40px', md: '50px' }}
         mr={8}
         ml={6}
-        cursor="unset"
-        _hover={{ backgroundColor: 'gray.700', color: 'ui.white' }}
+        cursor="cursor"
         onClick={onClick}
         {...rest}
       >
