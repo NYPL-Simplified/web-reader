@@ -24,7 +24,7 @@ export default function Header(props: HeaderProps) {
       top={0}
       left={0}
       right={0}
-      zIndex={100}
+      zIndex="sticky"
       alignContent="space-between"
       alignItems="center"
       py={2}
