@@ -11,7 +11,7 @@ import {
 } from './WebpubManifestTypes/ConformsTo';
 
 type UseWebReaderOptions = {
-  // TBD
+  proxyUrl?: string;
 };
 
 function getReaderType(conformsTo: ConformsTo | null | undefined) {
@@ -58,14 +58,12 @@ export default function useWebReader(
       : undefined
   );
 
-  //TODO: Do not hardcode this proxy URL
-  const proxyUrl = 'https://drb-api-qa.nypl.org/utils/proxy?proxy_url=';
   const pdfReader = usePdfReader(
     readerType === 'PDF' && manifest
       ? {
           webpubManifestUrl,
           manifest,
-          proxyUrl,
+          proxyUrl: options.proxyUrl,
         }
       : undefined
   );

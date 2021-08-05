@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import ManagerUI from './ui/manager';
-import { GetContent } from './types';
 import useWebReader from './useWebReader';
 
 /**
@@ -9,12 +8,12 @@ import useWebReader from './useWebReader';
 
 export type WebReaderProps = {
   webpubManifestUrl: string;
-  getContent?: GetContent;
+  proxyUrl?: string;
 };
 
-const WebReader: FC<WebReaderProps> = ({ webpubManifestUrl, getContent }) => {
+const WebReader: FC<WebReaderProps> = ({ webpubManifestUrl, proxyUrl }) => {
   const webReader = useWebReader(webpubManifestUrl, {
-    getContent,
+    proxyUrl,
   });
   const { content } = webReader;
 
