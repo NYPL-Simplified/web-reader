@@ -41,6 +41,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     isScrolling: false,
     fontSize: 16,
     fontFamily: 'sans-serif',
+    currentTocUrl: '',
   });
 
   // initialize the pdf reader

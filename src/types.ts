@@ -22,7 +22,7 @@ export type Navigator = {
   increaseFontSize: () => Promise<void>;
   decreaseFontSize: () => Promise<void>;
   setFontFamily: (family: FontFamily) => Promise<void>;
-  goToPage: (href: Locator) => void; // TODO: should extract Locator type too
+  goToPage: (href: Locator) => void;
 };
 
 export type ReaderType = 'HTML' | 'PDF';
@@ -33,6 +33,7 @@ export type ReaderState = {
   isScrolling: boolean;
   fontSize: number;
   fontFamily: FontFamily;
+  currentTocUrl: string;
 };
 
 export type InactiveReader = null;

@@ -9,6 +9,7 @@ import {
   FontFamily,
 } from '../types';
 import HtmlReaderContent from './HtmlReaderContent';
+import { Locator } from '@d-i-t-a/reader/dist/model/Locator';
 
 type HtmlState = ReaderState & {
   reader: D2Reader | undefined;
@@ -20,7 +21,8 @@ export type HtmlAction =
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
   | { type: 'SET_SCROLL'; isScrolling: boolean }
   | { type: 'SET_FONT_SIZE'; size: number }
-  | { type: 'SET_FONT_FAMILY'; family: FontFamily };
+  | { type: 'SET_FONT_FAMILY'; family: FontFamily }
+  | { type: 'SET_CURRENT_TOC_URL'; currentTocUrl: string };
 
 function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
   switch (action.type) {
@@ -34,6 +36,7 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
         colorMode: getColorMode(settings.appearance),
         fontSize: settings.fontSize,
         fontFamily: r2FamilyToFamily[settings.fontFamily] ?? 'publisher',
+        currentTocUrl: action.reader.mostRecentNavigatedTocItem(), // This returns a relative href
       };
 
     case 'SET_COLOR_MODE':
@@ -59,6 +62,12 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
         ...state,
         fontFamily: action.family,
       };
+
+    case 'SET_CURRENT_TOC_URL':
+      return {
+        ...state,
+        currentTocUrl: action.currentTocUrl,
+      };
   }
 }
 
@@ -73,6 +82,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     fontSize: 16,
     fontFamily: 'sans-serif',
     reader: undefined,
+    currentTocUrl: '',
   });
 
   const { reader, fontSize } = state;
@@ -95,12 +105,26 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   // prev and next page functions
   const goForward = React.useCallback(() => {
     if (!reader) return;
+    const isLastPage = reader.atEnd();
     reader.nextPage();
+    if (isLastPage) {
+      dispatch({
+        type: 'SET_CURRENT_TOC_URL',
+        currentTocUrl: reader.mostRecentNavigatedTocItem(),
+      });
+    }
   }, [reader]);
 
   const goBackward = React.useCallback(() => {
     if (!reader) return;
+    const isFirstPage = reader.atStart();
     reader.previousPage();
+    if (isFirstPage) {
+      dispatch({
+        type: 'SET_CURRENT_TOC_URL',
+        currentTocUrl: reader.mostRecentNavigatedTocItem(),
+      });
+    }
   }, [reader]);
 
   const setColorMode = React.useCallback(
@@ -149,11 +173,14 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const goToPage = React.useCallback(
     (href) => {
       if (!reader) return;
-      reader.goTo({
-        // locations: { position: 1 }, // isn't locations optional?
-        ...reader.currentLocator,
-        href,
-      });
+      // Adding try/catch here because goTo throws a TypeError
+      // if the TOC link you clicked on was the current page..
+      try {
+        reader.goTo({ href } as Locator); // This needs to be fixed, locations should be optional.
+        dispatch({ type: 'SET_CURRENT_TOC_URL', currentTocUrl: href });
+      } catch (error) {
+        console.error(error);
+      }
     },
     [reader]
   );

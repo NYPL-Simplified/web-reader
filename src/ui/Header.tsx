@@ -51,8 +51,12 @@ export default function Header(props: HeaderProps) {
         </Link>
       )}
       <HStack ml="auto" spacing={1}>
-        <TableOfContent navigator={navigator} manifest={manifest} />
-        <SettingsCard navigator={navigator} state={readerState} />
+        <TableOfContent
+          navigator={navigator}
+          manifest={manifest}
+          readerState={readerState}
+        />
+        <SettingsCard navigator={navigator} readerState={readerState} />
         <Button border="none">
           <Icon decorative name={IconNames.search} modifiers={['small']} />
           <Text variant="headerNav">Toggle Fullscreen</Text>

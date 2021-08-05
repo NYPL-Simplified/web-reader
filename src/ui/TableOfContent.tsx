@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { Text } from '@chakra-ui/react';
 import { Icon, IconNames } from '@nypl/design-system-react-components';
-import { Navigator, WebpubManifest } from '../types';
+import { Navigator, ReaderState, WebpubManifest } from '../types';
 import { Link } from '@chakra-ui/react';
 import Button from './Button';
 
 export default function TableOfContent({
   navigator,
   manifest,
+  readerState,
 }: {
   navigator: Navigator;
   manifest: WebpubManifest;
+  readerState: ReaderState;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const tocLinkHandler = (evt: any) => {
@@ -45,11 +47,30 @@ export default function TableOfContent({
               <Link
                 href={content.href}
                 onClick={tocLinkHandler}
-                fontSize="2"
-                _hover={{ fontSize: '3' }}
+                fontSize={`${
+                  readerState?.currentTocUrl === content.href ? 3 : 2
+                }`}
+                _hover={{ fontSize: 3 }}
               >
                 {content.title}
               </Link>
+              {content.children && (
+                <ul>
+                  {content.children.map((subLink) => (
+                    <li key={subLink.title} style={{ margin: '15px 25px' }}>
+                      <Link
+                        href={subLink.href}
+                        onClick={tocLinkHandler}
+                        fontSize={`${
+                          readerState?.currentTocUrl === subLink.href ? 3 : 2
+                        }`}
+                      >
+                        {subLink.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           ))}
         </ul>
