@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { getTheme } from '../src/ui/theme';
 
-const pdfProxyUrl = process.env.CORS_PROXY_URL;
+const pdfProxyUrl: string = process.env.CORS_PROXY_URL as string | undefined;
 
 const AxisNowEpub = () => {
   React.useEffect(() => {

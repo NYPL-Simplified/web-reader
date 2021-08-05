@@ -12,6 +12,8 @@ app.get('/', (req, res) => {
   // read query parameters
   const requestUrl = req.query['requestUrl'];
 
+  console.log(`Proxying request to: ${requestUrl}`);
+
   // make request to IEX API and forward response
   request(requestUrl).pipe(res);
 });

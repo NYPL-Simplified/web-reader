@@ -11,7 +11,7 @@ storybook-static
 .vercel
 
 # env
-example/.env.local
+.env
 
 # the parcel built example app
 www
