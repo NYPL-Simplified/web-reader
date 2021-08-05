@@ -13,11 +13,11 @@ import { getTheme } from './theme';
 const ManagerUI: React.FC<ReaderReturn> = ({ children, navigator, state }) => {
   return (
     <ThemeProvider theme={getTheme(state?.colorMode ?? 'day')}>
-      <Flex flexDir="column">
+      <Flex flexDir="column" minHeight="100vh">
         {navigator && state && (
           <Header readerState={state} navigator={navigator} />
         )}
-        <Box w="100vw">
+        <Box w="100vw" display="flex" flex="1 0 auto">
           <PageButton
             onClick={navigator?.goBackward}
             left={0}
