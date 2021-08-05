@@ -23,7 +23,7 @@ function PageButton(props: React.PropsWithoutRef<PageButtonProps>) {
       color={circleColor}
       bg={circleBgColor}
       size={{ sm: '40px', md: '50px' }}
-      mx={6}
+      mx={{ sm: 2, md: 6 }}
       top="50%"
       cursor="cursor"
       onClick={onClick}

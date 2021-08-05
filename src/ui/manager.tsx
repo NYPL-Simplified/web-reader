@@ -1,4 +1,4 @@
-import { ThemeProvider, Flex, Box } from '@chakra-ui/react';
+import { ThemeProvider, Flex } from '@chakra-ui/react';
 import * as React from 'react';
 import { ReaderReturn } from '../types';
 import Header from './Header';
@@ -17,17 +17,18 @@ const ManagerUI: React.FC<ReaderReturn> = ({ children, navigator, state }) => {
         {navigator && state && (
           <Header readerState={state} navigator={navigator} />
         )}
-        <Flex w="100vw" flexDir="column" alignItems="stretch" flex="1 0 auto">
-          <PageButton
-            onClick={navigator?.goBackward}
-            left={0}
-          >{`<`}</PageButton>
+        <PageButton onClick={navigator?.goBackward} left={0}>{`<`}</PageButton>
+        <Flex
+          w="100vw"
+          // accounting for the prev/next buttons
+          px={{ sm: 10, md: 16 }}
+          flexDir="column"
+          alignItems="stretch"
+          flex="1 0 auto"
+        >
           {children}
-          <PageButton
-            onClick={navigator?.goForward}
-            right={0}
-          >{`>`}</PageButton>
         </Flex>
+        <PageButton onClick={navigator?.goForward} right={0}>{`>`}</PageButton>
       </Flex>
     </ThemeProvider>
   );
