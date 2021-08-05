@@ -13,6 +13,9 @@ export type HeaderProps = {
   navigator: Navigator;
 };
 
+// we have to set a constant height to make this work with R2D2BC
+export const HEADER_HEIGHT = 48;
+
 export default function Header(props: HeaderProps) {
   const { headerLeft, readerState, navigator } = props;
   const linkColor = useColorModeValue('gray.700', 'gray.100', 'gray.700');
@@ -24,10 +27,10 @@ export default function Header(props: HeaderProps) {
       top={0}
       left={0}
       right={0}
+      height={`${HEADER_HEIGHT}px`}
       zIndex="sticky"
       alignContent="space-between"
       alignItems="center"
-      py={2}
       px={8}
       borderBottom="1px solid"
       borderColor="gray.100"

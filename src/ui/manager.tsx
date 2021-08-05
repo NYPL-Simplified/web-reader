@@ -17,7 +17,7 @@ const ManagerUI: React.FC<ReaderReturn> = ({ children, navigator, state }) => {
         {navigator && state && (
           <Header readerState={state} navigator={navigator} />
         )}
-        <Box w="100vw" display="flex" flex="1 0 auto">
+        <Flex w="100vw" flexDir="column" alignItems="stretch" flex="1 0 auto">
           <PageButton
             onClick={navigator?.goBackward}
             left={0}
@@ -27,7 +27,7 @@ const ManagerUI: React.FC<ReaderReturn> = ({ children, navigator, state }) => {
             onClick={navigator?.goForward}
             right={0}
           >{`>`}</PageButton>
-        </Box>
+        </Flex>
       </Flex>
     </ThemeProvider>
   );
