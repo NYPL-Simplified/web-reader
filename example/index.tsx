@@ -4,7 +4,6 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 import WebReader from '../src';
-import { GetContent } from '../src/types';
 import '@nypl/design-system-react-components/dist/styles.css';
 import {
   ChakraProvider,
@@ -14,20 +13,15 @@ import {
 } from '@chakra-ui/react';
 import { getTheme } from '../src/ui/theme';
 
-const AxisNowEpub = () => {
-  const [getContent, setGetContent] = React.useState<GetContent | null>(null);
+const pdfProxyUrl = process.env.CORS_PROXY_URL;
 
+const AxisNowEpub = () => {
   React.useEffect(() => {
     // get content
   }, []);
 
-  if (!getContent) return <div>"Loading Decryptor..."</div>;
-
   return (
-    <WebReader
-      webpubManifestUrl="http://localhost:1234/samples/axisnow/encrypted/manifest.json"
-      getContent={getContent}
-    />
+    <WebReader webpubManifestUrl="http://localhost:1234/samples/axisnow/encrypted/manifest.json" />
   );
 };
 
@@ -50,10 +44,16 @@ const App = () => {
       <BrowserRouter>
         <Switch>
           <Route path="/pdf">
-            <WebReader webpubManifestUrl="/samples/pdf/degruyter.json" />
+            <WebReader
+              webpubManifestUrl="/samples/pdf/degruyter.json"
+              proxyUrl={pdfProxyUrl}
+            />
           </Route>
           <Route path="/pdfcollection">
-            <WebReader webpubManifestUrl="/samples/pdf/muse1007.json" />
+            <WebReader
+              webpubManifestUrl="/samples/pdf/muse1007.json"
+              proxyUrl={pdfProxyUrl}
+            />
           </Route>
           <Route path="/swtest">
             <SWTest />

@@ -7,8 +7,6 @@ export const EpubMimeType = 'application/epub';
 // the Mimetype for a generic webpub
 export const WebpubMimeType = 'application/webpub';
 
-export type GetContent = (readingOrderHref: string) => Promise<string>;
-
 export type ColorMode = 'night' | 'sepia' | 'day';
 
 export type FontFamily = 'publisher' | 'serif' | 'sans-serif' | 'open-dyslexic';
