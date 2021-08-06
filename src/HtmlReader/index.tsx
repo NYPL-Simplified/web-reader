@@ -82,7 +82,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     fontSize: 16,
     fontFamily: 'sans-serif',
     reader: undefined,
-    currentTocUrl: '',
+    currentTocUrl: null,
   });
 
   const { reader, fontSize } = state;

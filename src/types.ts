@@ -33,7 +33,7 @@ export type ReaderState = {
   isScrolling: boolean;
   fontSize: number;
   fontFamily: FontFamily;
-  currentTocUrl: string;
+  currentTocUrl: string | null;
 };
 
 export type InactiveReader = null;
