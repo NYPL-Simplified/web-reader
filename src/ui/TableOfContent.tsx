@@ -4,6 +4,7 @@ import { Icon, IconNames } from '@nypl/design-system-react-components';
 import { Navigator, ReaderState, WebpubManifest } from '../types';
 import { Link } from '@chakra-ui/react';
 import Button from './Button';
+import { HEADER_HEIGHT } from './Header';
 
 export default function TableOfContent({
   navigator,
@@ -31,7 +32,7 @@ export default function TableOfContent({
         <ul
           style={{
             position: 'fixed',
-            top: '50px',
+            top: `${HEADER_HEIGHT}px`,
             left: 0,
             width: '100vw',
             height: '100vh',
@@ -39,7 +40,6 @@ export default function TableOfContent({
             padding: '1rem 3rem',
             margin: 0,
             overflow: 'auto',
-            zIndex: 999999,
           }}
         >
           {manifest.toc.map((content) => (
