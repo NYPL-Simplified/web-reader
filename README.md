@@ -192,13 +192,15 @@ The example will rebundle on change, but you have to refresh your browser to see
 
 ### CORS Proxy
 
-We sometimes run in to CORS errors, and have a system to allow urls in a `WebpubManifest` to be proxied. The example app can take a `CORS_PROXY_URL` environment variable to configure where that proxy should be. For development purposes, there is a simple express-based CORS proxy at `example/cors-proxy.js`. You can run it with `npm run cors-proxy` and then make a `.env` file in the root of the project with the following contents:
+We sometimes run in to CORS errors, and have a system to allow urls in a `WebpubManifest` to be proxied. This is done by passing a `proxyUrl` to the `<WebReader>` component. In order to do that, you must have a proxy running somewhere. 
 
-```
-CORS_PROXY_URL="http://localhost:3001/?requestUrl="
-```
+#### CORS Proxy in the Example App
 
-You will need to run the proxy and the example app in separate terminal sessions simultaneously. With this set up, you'll be able to request resources that have strict CORS settings.
+I have set up a small express-based CORS proxy that can be run for local development. 
+
+- Run the proxy with `npm run cors-proxy`.
+- Pass the proxy url to the example app by setting the following env var in a `.env` file at the root of the project: `CORS_PROXY_URL="http://localhost:3001/?requestUrl="`.
+- In a separate terminal session, start the example app: `npm run example`. 
 
 ### Other Scripts
 
