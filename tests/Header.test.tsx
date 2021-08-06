@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import Header from '../src/ui/Header';
-import { Navigator, ReaderState, WebpubManifest } from '../src/types';
+import {
+  MockNavigator,
+  MockReaderState,
+  MockWebpubManifest,
+} from './utils/MockData';
 
 test('render header bar', () => {
-  const readerState = {} as ReaderState;
-  const navigator = {} as Navigator;
-  const manifest = {} as WebpubManifest;
-
   render(
     <Header
-      readerState={readerState}
-      navigator={navigator}
-      manifest={manifest}
+      readerState={MockReaderState}
+      navigator={MockNavigator}
+      manifest={MockWebpubManifest}
     />
   );
 
@@ -33,10 +33,6 @@ test('render header bar', () => {
 });
 
 test('render custom left header', () => {
-  const readerState = {} as ReaderState;
-  const navigator = {} as Navigator;
-  const manifest = {} as WebpubManifest;
-
   const IconComponent = () => (
     <span data-testid="custom-icon">
       <svg viewBox="0 0 18 19" xmlns="http://www.w3.org/2000/svg">
@@ -57,9 +53,9 @@ test('render custom left header', () => {
   render(
     <Header
       headerLeft={<HeaderLeft />}
-      readerState={readerState}
-      navigator={navigator}
-      manifest={manifest}
+      readerState={MockReaderState}
+      navigator={MockNavigator}
+      manifest={MockWebpubManifest}
     />
   );
 
