@@ -11,7 +11,7 @@ import {
 } from './WebpubManifestTypes/ConformsTo';
 
 type UseWebReaderOptions = {
-  // TBD
+  proxyUrl?: string;
 };
 
 function getReaderType(conformsTo: ConformsTo | null | undefined) {
@@ -43,7 +43,6 @@ export default function useWebReader(
   const readerType = getReaderType(
     manifest ? manifest.metadata.conformsTo : null
   );
-
   /**
    * Our HTML reader and PDf Reader. Note that we cannot conditionally
    * call a React hook, so we must _always_ call the hook, but allow for the
@@ -58,11 +57,13 @@ export default function useWebReader(
         }
       : undefined
   );
+
   const pdfReader = usePdfReader(
     readerType === 'PDF' && manifest
       ? {
           webpubManifestUrl,
           manifest,
+          proxyUrl: options.proxyUrl,
         }
       : undefined
   );

@@ -4,7 +4,6 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 import WebReader from '../src';
-import { GetContent } from '../src/types';
 import '@nypl/design-system-react-components/dist/styles.css';
 import {
   ChakraProvider,
@@ -14,27 +13,22 @@ import {
 } from '@chakra-ui/react';
 import { getTheme } from '../src/ui/theme';
 
-const AxisNowEpub = () => {
-  const [getContent, setGetContent] = React.useState<GetContent | null>(null);
+const pdfProxyUrl: string = process.env.CORS_PROXY_URL as string | undefined;
 
+const AxisNowEpub = () => {
   React.useEffect(() => {
     // get content
   }, []);
 
-  if (!getContent) return <div>"Loading Decryptor..."</div>;
-
   return (
-    <WebReader
-      webpubManifestUrl="http://localhost:1234/samples/axisnow/encrypted/manifest.json"
-      getContent={getContent}
-    />
+    <WebReader webpubManifestUrl="http://localhost:1234/samples/axisnow/encrypted/manifest.json" />
   );
 };
 
 const SWTest = () => {
   const [value, setValue] = React.useState<null | string>(null);
   React.useEffect(() => {
-    fetch('http://localhost:1234/samples/muse13454.json').then((res) => {
+    fetch('http://localhost:1234/samples/pdf/degruyter.json').then((res) => {
       res.text().then((text) => {
         setValue(text);
       });
@@ -50,7 +44,16 @@ const App = () => {
       <BrowserRouter>
         <Switch>
           <Route path="/pdf">
-            <WebReader webpubManifestUrl="samples/muse13454.json" />
+            <WebReader
+              webpubManifestUrl="/samples/pdf/degruyter.json"
+              proxyUrl={pdfProxyUrl}
+            />
+          </Route>
+          <Route path="/pdfcollection">
+            <WebReader
+              webpubManifestUrl="/samples/pdf/muse1007.json"
+              proxyUrl={pdfProxyUrl}
+            />
           </Route>
           <Route path="/swtest">
             <SWTest />
@@ -87,6 +90,9 @@ const App = () => {
               </ListItem>
               <ListItem>
                 <Link to="/pdf">Pdf Example</Link>
+              </ListItem>
+              <ListItem>
+                <Link to="/pdfcollection">Pdf Collection Example</Link>
               </ListItem>
             </UnorderedList>
           </Route>
