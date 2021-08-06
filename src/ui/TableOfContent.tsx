@@ -47,9 +47,7 @@ export default function TableOfContent({
               <Link
                 href={content.href}
                 onClick={tocLinkHandler}
-                fontSize={`${
-                  readerState?.currentTocUrl === content.href ? 3 : 2
-                }`}
+                fontSize={readerState?.currentTocUrl === content.href ? 3 : 2}
                 _hover={{ fontSize: 3 }}
               >
                 {content.title}
@@ -61,9 +59,9 @@ export default function TableOfContent({
                       <Link
                         href={subLink.href}
                         onClick={tocLinkHandler}
-                        fontSize={`${
+                        fontSize={
                           readerState?.currentTocUrl === subLink.href ? 3 : 2
-                        }`}
+                        }
                       >
                         {subLink.title}
                       </Link>
