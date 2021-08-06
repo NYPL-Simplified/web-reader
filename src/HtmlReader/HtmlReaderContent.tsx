@@ -1,14 +1,17 @@
 import * as React from 'react';
+import { HEADER_HEIGHT } from '../ui/Header';
 
 const HtmlReaderContent = () => {
   return (
-    <div style={{ height: '100%', overflow: 'hidden', width: '100%' }}>
-      <div id="D2Reader-Container">
-        <main style={{ height: '100vh' }} tabIndex={-1} id="iframe-wrapper">
-          <div id="reader-loading" className="loading"></div>
-          <div id="reader-error" className="error"></div>
-        </main>
-      </div>
+    <div id="D2Reader-Container">
+      <main
+        tabIndex={-1}
+        id="iframe-wrapper"
+        style={{ height: `calc(100vh - ${HEADER_HEIGHT}px)` }}
+      >
+        <div id="reader-loading" className="loading"></div>
+        <div id="reader-error" className="error"></div>
+      </main>
     </div>
   );
 };

@@ -9,6 +9,7 @@ import {
   FontFamily,
 } from '../types';
 import HtmlReaderContent from './HtmlReaderContent';
+import { HEADER_HEIGHT } from '../ui/Header';
 
 type HtmlState = ReaderState & {
   reader: D2Reader | undefined;
@@ -87,6 +88,10 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       url,
       injectables: injectables,
       injectablesFixed: [],
+      attributes: {
+        navHeight: HEADER_HEIGHT,
+        margin: 0,
+      },
     }).then((reader) => {
       dispatch({ type: 'SET_READER', reader });
     });

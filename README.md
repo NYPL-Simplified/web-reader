@@ -190,6 +190,18 @@ npm run example
 
 The example will rebundle on change, but you have to refresh your browser to see changes (no hot reloading currently).
 
+### CORS Proxy
+
+We sometimes run in to CORS errors, and have a system to allow urls in a `WebpubManifest` to be proxied. This is done by passing a `proxyUrl` to the `<WebReader>` component. In order to do that, you must have a proxy running somewhere. 
+
+#### CORS Proxy in the Example App
+
+I have set up a small express-based CORS proxy that can be run for local development. 
+
+- Run the proxy with `npm run cors-proxy`.
+- Pass the proxy url to the example app by setting the following env var in a `.env` file at the root of the project: `CORS_PROXY_URL="http://localhost:3001/?requestUrl="`.
+- In a separate terminal session, start the example app: `npm run example`. 
+
 ### Other Scripts
 
 - `npm run test` - to run Jest in watch mode.

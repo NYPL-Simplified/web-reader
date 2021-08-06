@@ -8,6 +8,7 @@ import {
   ReaderState,
   WebpubManifest,
 } from '../types';
+import { Box, Flex } from '@chakra-ui/react';
 
 type PdfState = ReaderState & {
   type: 'PDF';
@@ -247,13 +248,17 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     return {
       isLoading: false,
       content: (
-        <main
-          style={{ height: 'calc(100vh - 100px)' }}
+        <Flex
+          as="main"
           tabIndex={-1}
           id="iframe-wrapper"
+          zIndex="base"
+          alignItems="center"
+          justifyContent="center"
+          flex="1 0 auto"
         >
           PDF is loading
-        </main>
+        </Flex>
       ),
       state,
       manifest,
@@ -280,8 +285,12 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   return {
     isLoading: false,
     content: (
-      <main
-        style={{ height: 'calc(100vh - 100px)' }}
+      <Flex
+        as="main"
+        zIndex="base"
+        flex="1 0 auto"
+        justifyContent="center"
+        alignItems="center"
         tabIndex={-1}
         id="iframe-wrapper"
       >
@@ -298,7 +307,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
             </>
           )}
         </Document>
-      </main>
+      </Flex>
     ),
     state,
     manifest,
