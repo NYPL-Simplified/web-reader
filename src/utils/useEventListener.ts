@@ -7,7 +7,11 @@ import { useEffect } from 'react';
  * @param {string} type Event type
  * @param {Function} listener Event listener
  */
-export default function useEventListener(element, type, listener) {
+export default function useEventListener(
+  element: Window & typeof globalThis,
+  type: string,
+  listener: () => void
+) {
   useEffect(() => {
     if (!element) {
       return undefined;

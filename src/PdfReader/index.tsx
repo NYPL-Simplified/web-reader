@@ -10,6 +10,8 @@ import {
 } from '../types';
 import { Flex } from '@chakra-ui/react';
 import useWindowWidth from '../utils/useWindowWidth';
+import useWindowHeight from '../utils/useWindowHeight';
+import { HEADER_HEIGHT } from '../ui/Header';
 
 type PdfState = ReaderState & {
   type: 'PDF';
@@ -131,6 +133,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   const isParsed = typeof state.numPages === 'number';
 
   const width = useWindowWidth();
+  const height = useWindowHeight();
 
   // initialize the pdf reader
   React.useEffect(() => {
@@ -312,6 +315,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
                 <Page
                   pageNumber={state.pageNumber}
                   width={width}
+                  height={height - HEADER_HEIGHT}
                   loading={<></>}
                 />
               )}

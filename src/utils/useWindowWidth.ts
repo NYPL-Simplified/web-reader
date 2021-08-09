@@ -6,7 +6,7 @@ import useEventListener from './useEventListener';
  *
  * @returns {number} Width of the window in pixels
  */
-export default function useWindowWidth() {
+export default function useWindowWidth(): number {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const getWindowWidth = useCallback(
