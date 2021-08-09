@@ -18,6 +18,9 @@ beforeEach(() => {
 });
 
 test('render Table Of Content', () => {
+  // The initial TOC component render should not show TOC popover on the screen.
+  expect(screen.queryByText('Chapter 1')).toBeNull();
+
   // We need to open the TOC element for TOC links to show up
   const toggleBtn = screen.getByRole('button', { name: 'Table of Contents' });
   fireEvent.click(toggleBtn);
