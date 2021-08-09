@@ -8,7 +8,8 @@ import {
   ReaderState,
   WebpubManifest,
 } from '../types';
-import { Box, Flex } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
+import useWindowWidth from '../utils/useWindowWidth';
 
 type PdfState = ReaderState & {
   type: 'PDF';
@@ -128,6 +129,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   // state we can derive from the state above
   const isFetching = !state.file;
   const isParsed = typeof state.numPages === 'number';
+
+  const width = useWindowWidth();
 
   // initialize the pdf reader
   React.useEffect(() => {
@@ -298,11 +301,19 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
           {isParsed && state.numPages && (
             <>
               {state.isScrolling &&
-                Array.from(new Array(state.numPages), (index) => (
-                  <Page key={`page_${index + 1}`} pageNumber={index + 1} />
+                Array.from(new Array(state.numPages), (_, index) => (
+                  <Page
+                    key={`page_${index + 1}`}
+                    width={width}
+                    pageNumber={index + 1}
+                  />
                 ))}
               {!state.isScrolling && (
-                <Page pageNumber={state.pageNumber} loading={<></>} />
+                <Page
+                  pageNumber={state.pageNumber}
+                  width={width}
+                  loading={<></>}
+                />
               )}
             </>
           )}
