@@ -11,6 +11,7 @@ import {
 import HtmlReaderContent from './HtmlReaderContent';
 import { Locator } from '@d-i-t-a/reader/dist/model/Locator';
 import { HEADER_HEIGHT } from '../ui/Header';
+import { usePublicationSW } from '../ServiceWorker/client';
 
 type HtmlState = ReaderState & {
   reader: D2Reader | undefined;
@@ -86,6 +87,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     reader: undefined,
     currentTocUrl: null,
   });
+  const swState = usePublicationSW(webpubManifestUrl);
 
   const { reader, fontSize } = state;
 

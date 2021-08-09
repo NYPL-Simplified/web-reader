@@ -10,6 +10,7 @@ import {
 } from '../types';
 import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
 import useContainerWidth from '../ui/hooks/useContainerWidth';
+import { usePublicationSW } from '../ServiceWorker/client';
 
 type PdfState = ReaderState & {
   type: 'PDF';
@@ -114,7 +115,7 @@ const loadResource = async (
  * @returns
  */
 export default function usePdfReader(args: ReaderArguments): ReaderReturn {
-  const { webpubManifestUrl, manifest, proxyUrl = '' } = args ?? {};
+  const { webpubManifestUrl, manifest, proxyUrl } = args ?? {};
 
   const [state, dispatch] = React.useReducer(pdfReducer, {
     type: 'PDF',
@@ -128,6 +129,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     pageNumber: 1,
     numPages: null,
   });
+  const swState = usePublicationSW(webpubManifestUrl, { proxyUrl });
 
   // state we can derive from the state above
   const isFetching = !state.file;
@@ -156,7 +158,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
 
   // initialize the pdf reader
   React.useEffect(() => {
-    async function setPdfResource(manifest: WebpubManifest, proxyUrl: string) {
+    async function setPdfResource(manifest: WebpubManifest, proxyUrl?: string) {
       const data = await loadResource(manifest, 0, proxyUrl);
       dispatch({
         type: 'RESOURCE_FETCH_SUCCESS',
