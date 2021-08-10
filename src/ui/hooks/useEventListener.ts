@@ -8,7 +8,7 @@ import { useEffect } from 'react';
  * @param {Function} listener Event listener
  */
 export default function useEventListener(
-  element: Window & typeof globalThis,
+  element: HTMLElement | Window,
   type: string,
   listener: () => void
 ) {

@@ -8,9 +8,9 @@ import {
   ReaderState,
   WebpubManifest,
 } from '../types';
-import { Flex } from '@chakra-ui/react';
-import useWindowWidth from '../utils/useWindowWidth';
-import useWindowHeight from '../utils/useWindowHeight';
+import { Flex, HStack } from '@chakra-ui/react';
+import useContainerWidth from '../ui/hooks/useContainerWidth';
+import Button from '../ui/Button';
 import { HEADER_HEIGHT } from '../ui/Header';
 
 type PdfState = ReaderState & {
@@ -35,6 +35,8 @@ type PdfReaderAction =
   | { type: 'NAVIGATE_PAGE'; pageNum: number }
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
   | { type: 'SET_SCROLL'; isScrolling: boolean };
+
+const IFRAME_WRAPPER_ID = 'iframe-wrapper';
 
 function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
   switch (action.type) {
@@ -132,8 +134,9 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   const isFetching = !state.file;
   const isParsed = typeof state.numPages === 'number';
 
-  const width = useWindowWidth();
-  const height = useWindowHeight();
+  // Width
+  // The PDF renderer needs pixel size to know how to render the PDF content
+  const width = useContainerWidth(IFRAME_WRAPPER_ID);
 
   // initialize the pdf reader
   React.useEffect(() => {
@@ -218,6 +221,50 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     }
   }, [manifest, proxyUrl, isParsed, state.pageNumber, state.resourceIndex]);
 
+  const nextChapter = React.useCallback(async () => {
+    // do nothing if we haven't parsed the PDF yet
+    if (!isParsed) return;
+
+    if (
+      manifest &&
+      manifest.readingOrder &&
+      state.resourceIndex < manifest?.readingOrder?.length - 1
+    ) {
+      const nextIndex = state.resourceIndex + 1;
+      dispatch({
+        type: 'SET_CURRENT_RESOURCE',
+        index: nextIndex,
+        shouldNavigateToEnd: false,
+      });
+
+      const data = await loadResource(manifest, nextIndex, proxyUrl);
+      dispatch({
+        type: 'RESOURCE_FETCH_SUCCESS',
+        file: { data },
+      });
+    }
+  }, [manifest, isParsed, state.resourceIndex, proxyUrl]);
+
+  const previousChapter = React.useCallback(async () => {
+    // do nothing if we haven't parsed the PDF yet
+    if (!isParsed) return;
+
+    if (manifest?.readingOrder && state.resourceIndex > 0) {
+      const nextIndex = state.resourceIndex - 1;
+      dispatch({
+        type: 'SET_CURRENT_RESOURCE',
+        index: nextIndex,
+        shouldNavigateToEnd: false,
+      });
+
+      const data = await loadResource(manifest, nextIndex, proxyUrl);
+
+      dispatch({
+        type: 'RESOURCE_FETCH_SUCCESS',
+        file: { data },
+      });
+    }
+  }, [manifest, isParsed, state.resourceIndex, proxyUrl]);
   /**
    * These ones don't make sense in the PDF case I dont think. I'm still
    * deciding how we will separate the types of Navigators and States, so
@@ -291,38 +338,59 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   return {
     isLoading: false,
     content: (
-      <Flex
-        as="main"
-        zIndex="base"
-        flex="1 0 auto"
-        justifyContent="center"
-        alignItems="center"
-        tabIndex={-1}
-        id="iframe-wrapper"
-      >
-        <Document file={state.file} onLoadSuccess={onDocumentLoadSuccess}>
-          {isParsed && state.numPages && (
-            <>
-              {state.isScrolling &&
-                Array.from(new Array(state.numPages), (_, index) => (
+      <>
+        <Flex
+          as="main"
+          zIndex="base"
+          flex="1 0 auto"
+          justifyContent="center"
+          alignItems="center"
+          tabIndex={-1}
+          id={IFRAME_WRAPPER_ID}
+        >
+          <Document file={state.file} onLoadSuccess={onDocumentLoadSuccess}>
+            {isParsed && state.numPages && (
+              <>
+                {state.isScrolling &&
+                  Array.from(new Array(state.numPages), (_, index) => (
+                    <Page
+                      key={`page_${index + 1}`}
+                      width={width}
+                      pageNumber={index + 1}
+                    />
+                  ))}
+                {!state.isScrolling && (
                   <Page
-                    key={`page_${index + 1}`}
+                    pageNumber={state.pageNumber}
                     width={width}
-                    pageNumber={index + 1}
+                    loading={<></>}
                   />
-                ))}
-              {!state.isScrolling && (
-                <Page
-                  pageNumber={state.pageNumber}
-                  width={width}
-                  height={height - HEADER_HEIGHT}
-                  loading={<></>}
-                />
-              )}
-            </>
-          )}
-        </Document>
-      </Flex>
+                )}
+              </>
+            )}
+          </Document>
+        </Flex>
+
+        {/* TODO: Visual styling */}
+        {state.isScrolling && (
+          <Flex
+            as="footer"
+            position="sticky"
+            bottom={0}
+            left={0}
+            right={0}
+            height={`${HEADER_HEIGHT}px`}
+            zIndex="sticky"
+          >
+            <HStack ml="auto" spacing={1}>
+              <Button onClick={() => previousChapter()}>
+                Previous Chapter
+              </Button>
+              <Button onClick={() => nextChapter()}>Next Chapter</Button>
+            </HStack>
+          </Flex>
+        )}
+      </>
     ),
     state,
     manifest,
