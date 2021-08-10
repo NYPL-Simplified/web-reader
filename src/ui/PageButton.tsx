@@ -16,7 +16,7 @@ function PageButton(props: React.PropsWithoutRef<PageButtonProps>) {
       as="button"
       d="flex"
       position="fixed"
-      zIndex="docked"
+      zIndex="overlay"
       alignItems="center"
       border="1px solid"
       borderColor="ui.gray.light-cool"

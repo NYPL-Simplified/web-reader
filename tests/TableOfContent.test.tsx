@@ -25,7 +25,7 @@ test('render Table Of Content', () => {
   const toggleBtn = screen.getByRole('button', { name: 'Table of Contents' });
   fireEvent.click(toggleBtn);
 
-  const tocLinkElm = screen.getByRole('link', { name: 'Chapter 1' });
+  const tocLinkElm = screen.getByRole('menuitem', { name: 'Chapter 1' });
   expect(tocLinkElm).toBeInTheDocument();
 });
 
@@ -33,7 +33,7 @@ test('navigation should be called with the correct url', () => {
   const toggleBtn = screen.getByRole('button', { name: 'Table of Contents' });
   fireEvent.click(toggleBtn);
 
-  const tocLinkElm = screen.getByRole('link', { name: 'Chapter 1' });
+  const tocLinkElm = screen.getByRole('menuitem', { name: 'Chapter 1' });
   fireEvent.click(tocLinkElm);
   expect(MockNavigator.goToPage).toHaveBeenCalledWith('chapter/one/url');
 });
