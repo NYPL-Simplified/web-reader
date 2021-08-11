@@ -23,12 +23,13 @@ const WebReaderContent: React.FC<ReaderReturn> = ({
   children,
   navigator,
   state,
+  manifest,
 }) => {
   const bgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
   return (
     <Flex flexDir="column" minHeight="100vh" w="100vw">
-      {navigator && state && (
-        <Header readerState={state} navigator={navigator} />
+      {navigator && state && manifest && (
+        <Header readerState={state} navigator={navigator} manifest={manifest} />
       )}
       <PageButton onClick={navigator?.goBackward} left={0}>{`<`}</PageButton>
       <Flex

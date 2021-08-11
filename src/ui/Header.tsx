@@ -1,23 +1,25 @@
 import React from 'react';
 import { Flex, Link, HStack, Text } from '@chakra-ui/react';
 import { Icon, IconNames } from '@nypl/design-system-react-components';
-import { ReaderState, Navigator } from '../types';
+import { ReaderState, Navigator, WebpubManifest } from '../types';
 import useColorModeValue from '../ui/hooks/useColorModeValue';
 
 import SettingsCard from './SettingsButton';
 import Button from './Button';
+import TableOfContent from './TableOfContent';
 
 export type HeaderProps = {
   headerLeft?: React.ReactNode; // Top-left header section
   readerState: ReaderState;
   navigator: Navigator;
+  manifest: WebpubManifest;
 };
 
 // we have to set a constant height to make this work with R2D2BC
 export const HEADER_HEIGHT = 48;
 
 export default function Header(props: HeaderProps) {
-  const { headerLeft, readerState, navigator } = props;
+  const { headerLeft, readerState, navigator, manifest } = props;
   const linkColor = useColorModeValue('gray.700', 'gray.100', 'gray.700');
   const mainBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
   return (
@@ -58,7 +60,12 @@ export default function Header(props: HeaderProps) {
         </Link>
       )}
       <HStack ml="auto" spacing={1}>
-        <SettingsCard navigator={navigator} state={readerState} />
+        <TableOfContent
+          navigator={navigator}
+          manifest={manifest}
+          readerState={readerState}
+        />
+        <SettingsCard navigator={navigator} readerState={readerState} />
         <Button border="none">
           <Icon decorative name={IconNames.search} modifiers={['small']} />
           <Text variant="headerNav">Toggle Fullscreen</Text>
