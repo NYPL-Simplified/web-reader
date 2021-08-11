@@ -30,9 +30,7 @@ const WebReaderContent: React.FC<ReaderReturn> = ({
       {navigator && state && (
         <Header readerState={state} navigator={navigator} />
       )}
-      {state && !state.isScrolling && (
-        <PageButton onClick={navigator?.goBackward} left={0}>{`<`}</PageButton>
-      )}
+      <PageButton onClick={navigator?.goBackward} left={0}>{`<`}</PageButton>
       <Flex
         width="100vw"
         bg={bgColor}
@@ -44,9 +42,7 @@ const WebReaderContent: React.FC<ReaderReturn> = ({
       >
         {children}
       </Flex>
-      {state && !state.isScrolling && (
-        <PageButton onClick={navigator?.goForward} right={0}>{`>`}</PageButton>
-      )}
+      <PageButton onClick={navigator?.goForward} right={0}>{`>`}</PageButton>
     </Flex>
   );
 };

@@ -1,4 +1,5 @@
 import { Document, Page } from 'react-pdf/dist/esm/entry.parcel';
+import isValidHTMLProp from '@emotion/is-prop-valid';
 
 import React from 'react';
 import {
@@ -8,7 +9,7 @@ import {
   ReaderState,
   WebpubManifest,
 } from '../types';
-import { Flex, HStack } from '@chakra-ui/react';
+import { chakra, Flex, HStack, shouldForwardProp } from '@chakra-ui/react';
 import useContainerWidth from '../ui/hooks/useContainerWidth';
 import Button from '../ui/Button';
 import { HEADER_HEIGHT } from '../ui/Header';
@@ -138,6 +139,23 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   // The PDF renderer needs pixel size to know how to render the PDF content
   const width = useContainerWidth(IFRAME_WRAPPER_ID);
 
+  // Wrap Page component so that we can pass it styles
+  const ChakraPage = chakra(Page, {
+    shouldForwardProp: (prop) => {
+      // Definitely forward width and height
+      if (['width', 'height'].includes(prop)) return true;
+      // don't forward the rest of Chakra's props
+      const isChakraProp = !shouldForwardProp(prop);
+      if (isChakraProp) return false;
+      // else, only forward `sample` prop
+      return true;
+    },
+    baseStyle: {
+      border: '1px',
+      borderColor: 'ui.gray.light-cool',
+    },
+  });
+
   // initialize the pdf reader
   React.useEffect(() => {
     async function setPdfResource(manifest: WebpubManifest, proxyUrl: string) {
@@ -163,7 +181,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     // do nothing if we haven't parsed the number of pages yet
     if (!state.numPages) return;
 
-    if (state.pageNumber < state.numPages) {
+    if (state.pageNumber < state.numPages && !state.isScrolling) {
       dispatch({
         type: 'NAVIGATE_PAGE',
         pageNum: state.pageNumber + 1,
@@ -209,7 +227,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       dispatch({
         type: 'SET_CURRENT_RESOURCE',
         index: nextIndex,
-        shouldNavigateToEnd: true,
+        shouldNavigateToEnd: !state.isScrolling,
       });
 
       const data = await loadResource(manifest, nextIndex, proxyUrl);
@@ -221,50 +239,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     }
   }, [manifest, proxyUrl, isParsed, state.pageNumber, state.resourceIndex]);
 
-  const nextChapter = React.useCallback(async () => {
-    // do nothing if we haven't parsed the PDF yet
-    if (!isParsed) return;
-
-    if (
-      manifest &&
-      manifest.readingOrder &&
-      state.resourceIndex < manifest?.readingOrder?.length - 1
-    ) {
-      const nextIndex = state.resourceIndex + 1;
-      dispatch({
-        type: 'SET_CURRENT_RESOURCE',
-        index: nextIndex,
-        shouldNavigateToEnd: false,
-      });
-
-      const data = await loadResource(manifest, nextIndex, proxyUrl);
-      dispatch({
-        type: 'RESOURCE_FETCH_SUCCESS',
-        file: { data },
-      });
-    }
-  }, [manifest, isParsed, state.resourceIndex, proxyUrl]);
-
-  const previousChapter = React.useCallback(async () => {
-    // do nothing if we haven't parsed the PDF yet
-    if (!isParsed) return;
-
-    if (manifest?.readingOrder && state.resourceIndex > 0) {
-      const nextIndex = state.resourceIndex - 1;
-      dispatch({
-        type: 'SET_CURRENT_RESOURCE',
-        index: nextIndex,
-        shouldNavigateToEnd: false,
-      });
-
-      const data = await loadResource(manifest, nextIndex, proxyUrl);
-
-      dispatch({
-        type: 'RESOURCE_FETCH_SUCCESS',
-        file: { data },
-      });
-    }
-  }, [manifest, isParsed, state.resourceIndex, proxyUrl]);
   /**
    * These ones don't make sense in the PDF case I dont think. I'm still
    * deciding how we will separate the types of Navigators and States, so
@@ -353,14 +327,14 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
               <>
                 {state.isScrolling &&
                   Array.from(new Array(state.numPages), (_, index) => (
-                    <Page
+                    <ChakraPage
                       key={`page_${index + 1}`}
                       width={width}
                       pageNumber={index + 1}
                     />
                   ))}
                 {!state.isScrolling && (
-                  <Page
+                  <ChakraPage
                     pageNumber={state.pageNumber}
                     width={width}
                     loading={<></>}
@@ -370,26 +344,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
             )}
           </Document>
         </Flex>
-
-        {/* TODO: Visual styling */}
-        {state.isScrolling && (
-          <Flex
-            as="footer"
-            position="sticky"
-            bottom={0}
-            left={0}
-            right={0}
-            height={`${HEADER_HEIGHT}px`}
-            zIndex="sticky"
-          >
-            <HStack ml="auto" spacing={1}>
-              <Button onClick={() => previousChapter()}>
-                Previous Chapter
-              </Button>
-              <Button onClick={() => nextChapter()}>Next Chapter</Button>
-            </HStack>
-          </Flex>
-        )}
       </>
     ),
     state,
