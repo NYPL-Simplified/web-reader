@@ -111,7 +111,6 @@
   "dependencies": {
     "@chakra-ui/react": "^1.6.4",
     "@d-i-t-a/reader": "^2.0.0-alpha.2",
-    "@emotion/is-prop-valid": "^0.8.8",
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
     "@nypl/design-system-react-components": "^0.21.2",

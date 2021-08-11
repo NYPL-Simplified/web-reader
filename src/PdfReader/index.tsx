@@ -1,5 +1,4 @@
 import { Document, Page } from 'react-pdf/dist/esm/entry.parcel';
-import isValidHTMLProp from '@emotion/is-prop-valid';
 
 import React from 'react';
 import {
@@ -9,10 +8,8 @@ import {
   ReaderState,
   WebpubManifest,
 } from '../types';
-import { chakra, Flex, HStack, shouldForwardProp } from '@chakra-ui/react';
+import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
 import useContainerWidth from '../ui/hooks/useContainerWidth';
-import Button from '../ui/Button';
-import { HEADER_HEIGHT } from '../ui/Header';
 
 type PdfState = ReaderState & {
   type: 'PDF';
@@ -208,6 +205,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   }, [
     manifest,
     proxyUrl,
+    state.isScrolling,
     state.numPages,
     state.pageNumber,
     state.resourceIndex,
@@ -237,7 +235,14 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         file: { data },
       });
     }
-  }, [manifest, proxyUrl, isParsed, state.pageNumber, state.resourceIndex]);
+  }, [
+    manifest,
+    proxyUrl,
+    isParsed,
+    state.isScrolling,
+    state.pageNumber,
+    state.resourceIndex,
+  ]);
 
   /**
    * These ones don't make sense in the PDF case I dont think. I'm still
