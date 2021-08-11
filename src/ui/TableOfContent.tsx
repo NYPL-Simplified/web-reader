@@ -26,7 +26,6 @@ const TocItem = (props: TocItemProps) => {
 
   const bgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
   const color = useColorModeValue('ui.black', 'ui.white', 'ui.black');
-  const activeHover = useColorModeValue('ui.white', 'ui.white', 'ui.sepia');
   const borderColor = useColorModeValue(
     'ui.gray.medium',
     'gray.500',
@@ -38,8 +37,8 @@ const TocItem = (props: TocItemProps) => {
 
   const _hover = {
     textDecoration: 'none',
-    background: isActive ? bgColor : 'ui.gray.x-dark',
-    color: isActive ? color : activeHover,
+    background: isActive ? 'ui.black' : 'ui.gray.x-dark',
+    color: 'ui.white',
   };
 
   const _focus = {
