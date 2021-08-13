@@ -18,11 +18,10 @@ type TocItemProps = React.ComponentPropsWithoutRef<typeof MenuItem> & {
   href: string;
   title: string | undefined;
   isActive: boolean;
-  onClickHandler: (evt: any) => void;
 };
 
 const TocItem = (props: TocItemProps) => {
-  const { href, title, isActive, onClickHandler, ...rest } = props;
+  const { href, title, isActive, ...rest } = props;
 
   const bgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
   const color = useColorModeValue('ui.black', 'ui.white', 'ui.black');
@@ -58,13 +57,7 @@ const TocItem = (props: TocItemProps) => {
   };
 
   return (
-    <MenuItem
-      as={Link}
-      href={href}
-      onClick={onClickHandler}
-      {...styles}
-      {...rest}
-    >
+    <MenuItem as={Link} href={href} {...styles} {...rest}>
       {title}
     </MenuItem>
   );
@@ -116,7 +109,7 @@ export default function TableOfContent({
                   href={content.href}
                   title={content.title}
                   isActive={readerState?.currentTocUrl === content.href}
-                  onClickHandler={tocLinkHandler}
+                  onClick={tocLinkHandler}
                 />
                 {content.children &&
                   content.children.map((subLink) => (
@@ -125,7 +118,7 @@ export default function TableOfContent({
                       href={subLink.href}
                       title={subLink.title}
                       isActive={readerState?.currentTocUrl === subLink.href}
-                      onClickHandler={tocLinkHandler}
+                      onClick={tocLinkHandler}
                       pl={10}
                     />
                   ))}
