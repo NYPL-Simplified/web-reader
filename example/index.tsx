@@ -12,6 +12,7 @@ import {
   ListItem,
 } from '@chakra-ui/react';
 import { getTheme } from '../src/ui/theme';
+import usePublicationSW from '../src/ServiceWorker/client';
 
 const pdfProxyUrl: string = process.env.CORS_PROXY_URL as string | undefined;
 
@@ -37,8 +38,20 @@ const SWTest = () => {
 
   return <div>{value}</div>;
 };
-
+const origin = window.location.origin;
 const App = () => {
+  const { isSupported } = usePublicationSW([
+    {
+      manifestUrl: `${origin}/samples/pdf/degruyter.json`,
+      proxyUrl: pdfProxyUrl,
+    },
+    {
+      manifestUrl: `${origin}/samples/pdf/muse1007.json`,
+      proxyUrl: pdfProxyUrl,
+    },
+    { manifestUrl: 'https://alice.dita.digital/manifest.json' },
+  ]);
+
   return (
     <ChakraProvider theme={getTheme('day')}>
       <BrowserRouter>

@@ -15,7 +15,21 @@ app.get('/', (req, res) => {
   console.log(`Proxying request to: ${requestUrl}`);
 
   // make request to IEX API and forward response
-  request(requestUrl).pipe(res);
+  try {
+    // allow a 30s timeout
+    request(requestUrl, { timeout: 300000 })
+      .on('error', (e) => {
+        const msg = `Request error at ${requestUrl}: ${e.message}`;
+        console.error(e);
+        res.status(500);
+        res.send(msg);
+      })
+      .pipe(res);
+  } catch (e) {
+    console.error(e);
+    res.status(500);
+    res.send(e.message);
+  }
 });
 
 app.listen(port, () =>
