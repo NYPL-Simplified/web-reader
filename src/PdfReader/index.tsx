@@ -8,7 +8,8 @@ import {
   ReaderState,
   WebpubManifest,
 } from '../types';
-import { Flex } from '@chakra-ui/react';
+import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
+import useContainerWidth from '../ui/hooks/useContainerWidth';
 
 type PdfState = ReaderState & {
   type: 'PDF';
@@ -32,6 +33,8 @@ type PdfReaderAction =
   | { type: 'NAVIGATE_PAGE'; pageNum: number }
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
   | { type: 'SET_SCROLL'; isScrolling: boolean };
+
+const IFRAME_WRAPPER_ID = 'iframe-wrapper';
 
 function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
   switch (action.type) {
@@ -130,6 +133,27 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   const isFetching = !state.file;
   const isParsed = typeof state.numPages === 'number';
 
+  // Width
+  // The PDF renderer needs pixel size to know how to render the PDF content
+  const width = useContainerWidth(IFRAME_WRAPPER_ID);
+
+  // Wrap Page component so that we can pass it styles
+  const ChakraPage = chakra(Page, {
+    shouldForwardProp: (prop) => {
+      // Definitely forward width and height
+      if (['width', 'height'].includes(prop)) return true;
+      // don't forward the rest of Chakra's props
+      const isChakraProp = !shouldForwardProp(prop);
+      if (isChakraProp) return false;
+      // else, only forward `sample` prop
+      return true;
+    },
+    baseStyle: {
+      border: '1px',
+      borderColor: 'ui.gray.light-cool',
+    },
+  });
+
   // initialize the pdf reader
   React.useEffect(() => {
     async function setPdfResource(manifest: WebpubManifest, proxyUrl: string) {
@@ -155,7 +179,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     // do nothing if we haven't parsed the number of pages yet
     if (!state.numPages) return;
 
-    if (state.pageNumber < state.numPages) {
+    if (state.pageNumber < state.numPages && !state.isScrolling) {
       dispatch({
         type: 'NAVIGATE_PAGE',
         pageNum: state.pageNumber + 1,
@@ -182,6 +206,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   }, [
     manifest,
     proxyUrl,
+    state.isScrolling,
     state.numPages,
     state.pageNumber,
     state.resourceIndex,
@@ -201,7 +226,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       dispatch({
         type: 'SET_CURRENT_RESOURCE',
         index: nextIndex,
-        shouldNavigateToEnd: true,
+        shouldNavigateToEnd: !state.isScrolling,
       });
 
       const data = await loadResource(manifest, nextIndex, proxyUrl);
@@ -211,7 +236,14 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         file: { data },
       });
     }
-  }, [manifest, proxyUrl, isParsed, state.pageNumber, state.resourceIndex]);
+  }, [
+    manifest,
+    proxyUrl,
+    isParsed,
+    state.isScrolling,
+    state.pageNumber,
+    state.resourceIndex,
+  ]);
 
   /**
    * These ones don't make sense in the PDF case I dont think. I'm still
@@ -291,29 +323,39 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   return {
     isLoading: false,
     content: (
-      <Flex
-        as="main"
-        zIndex="base"
-        flex="1 0 auto"
-        justifyContent="center"
-        alignItems="center"
-        tabIndex={-1}
-        id="iframe-wrapper"
-      >
-        <Document file={state.file} onLoadSuccess={onDocumentLoadSuccess}>
-          {isParsed && state.numPages && (
-            <>
-              {state.isScrolling &&
-                Array.from(new Array(state.numPages), (index) => (
-                  <Page key={`page_${index + 1}`} pageNumber={index + 1} />
-                ))}
-              {!state.isScrolling && (
-                <Page pageNumber={state.pageNumber} loading={<></>} />
-              )}
-            </>
-          )}
-        </Document>
-      </Flex>
+      <>
+        <Flex
+          as="main"
+          zIndex="base"
+          flex="1 0 auto"
+          justifyContent="center"
+          alignItems="center"
+          tabIndex={-1}
+          id={IFRAME_WRAPPER_ID}
+        >
+          <Document file={state.file} onLoadSuccess={onDocumentLoadSuccess}>
+            {isParsed && state.numPages && (
+              <>
+                {state.isScrolling &&
+                  Array.from(new Array(state.numPages), (_, index) => (
+                    <ChakraPage
+                      key={`page_${index + 1}`}
+                      width={width}
+                      pageNumber={index + 1}
+                    />
+                  ))}
+                {!state.isScrolling && (
+                  <ChakraPage
+                    pageNumber={state.pageNumber}
+                    width={width}
+                    loading={<></>}
+                  />
+                )}
+              </>
+            )}
+          </Document>
+        </Flex>
+      </>
     ),
     state,
     manifest,
