@@ -17,16 +17,16 @@ import useColorModeValue from './hooks/useColorModeValue';
 
 export default function SettingsCard({
   navigator,
-  state,
+  readerState,
 }: {
   navigator: Navigator;
-  state: ReaderState;
+  readerState: ReaderState;
 }) {
   const [isOpen, setIsOpen] = React.useState(false);
   const open = () => setIsOpen(!isOpen);
   const close = () => setIsOpen(false);
 
-  const paginationValue = state?.isScrolling ? 'scrolling' : 'paginated';
+  const paginationValue = readerState?.isScrolling ? 'scrolling' : 'paginated';
   const contentBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.white');
 
   return (
@@ -50,7 +50,7 @@ export default function SettingsCard({
         >
           <PopoverBody p={0} maxWidth="95vw">
             <ToggleGroup
-              value={state.fontFamily}
+              value={readerState.fontFamily}
               label="text font options"
               onChange={navigator.setFontFamily}
             >
@@ -80,7 +80,7 @@ export default function SettingsCard({
               </Button>
             </ButtonGroup>
             <ToggleGroup
-              value={state.colorMode}
+              value={readerState.colorMode}
               label="reading theme options"
               onChange={navigator.setColorMode}
             >

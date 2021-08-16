@@ -1,3 +1,4 @@
+import { Locator } from '@d-i-t-a/reader/dist/model/Locator';
 import { WebpubManifest } from './WebpubManifestTypes/WebpubManifest';
 
 export { WebpubManifest };
@@ -19,6 +20,7 @@ export type Navigator = {
   increaseFontSize: () => Promise<void>;
   decreaseFontSize: () => Promise<void>;
   setFontFamily: (family: FontFamily) => Promise<void>;
+  goToPage: (href: Locator) => void;
 };
 
 export type ReaderType = 'HTML' | 'PDF';
@@ -29,6 +31,7 @@ export type ReaderState = {
   isScrolling: boolean;
   fontSize: number;
   fontFamily: FontFamily;
+  currentTocUrl: string | null;
 };
 
 export type InactiveReader = null;

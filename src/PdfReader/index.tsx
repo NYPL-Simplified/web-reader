@@ -122,6 +122,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     isScrolling: false,
     fontSize: 16,
     fontFamily: 'sans-serif',
+    currentTocUrl: null,
     resourceIndex: 0,
     file: null,
     pageNumber: 1,
@@ -272,6 +273,10 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     console.log('unimplemented');
   }, []);
 
+  const goToPage = React.useCallback(async () => {
+    console.log('unimplemented');
+  }, []);
+
   // this format is inactive, return null
   if (!webpubManifestUrl || !manifest) return null;
 
@@ -302,6 +307,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         setFontFamily,
         setColorMode,
         setScroll,
+        goToPage,
       },
     };
   }
@@ -361,6 +367,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       increaseFontSize,
       decreaseFontSize,
       setFontFamily,
+      goToPage,
     },
   };
 }
