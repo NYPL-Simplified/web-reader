@@ -3,6 +3,7 @@ import { Flex, Link, HStack, Text } from '@chakra-ui/react';
 import { Icon, IconNames } from '@nypl/design-system-react-components';
 import { ReaderState, Navigator, WebpubManifest } from '../types';
 import useColorModeValue from '../ui/hooks/useColorModeValue';
+import { toggleFullScreen } from '../utils/toggleFullScreen';
 
 import SettingsCard from './SettingsButton';
 import Button from './Button';
@@ -66,7 +67,7 @@ export default function Header(props: HeaderProps) {
           readerState={readerState}
         />
         <SettingsCard navigator={navigator} readerState={readerState} />
-        <Button border="none">
+        <Button border="none" onClick={toggleFullScreen}>
           <Icon decorative name={IconNames.search} modifiers={['small']} />
           <Text variant="headerNav">Toggle Fullscreen</Text>
         </Button>
