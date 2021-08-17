@@ -1,8 +1,16 @@
-import initWebReaderSW from '../src/ServiceWorker';
-
-initWebReaderSW();
+// import '../src/ServiceWorker';
+console.log('NO SW ');
 
 /**
- * So we need to cache things. We could just call cache.add, but then we can't really
- * know if a publication is fully cached.
+ * ON INSTALL
+ *  - Cache app shell
+ *
+ * WHEN MANIFESTS AVAILABLE
+ *  - Cache manifest
+ *  - Add all book resources to cache.
+ *
+ * NEXT
+ *  - Check which books are cached
+ *  - Maybe save books to their own individual caches?
+ *
  */
