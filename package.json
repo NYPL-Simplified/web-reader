@@ -63,7 +63,8 @@
       "engines": {
         "browsers": "> 2%"
       },
-      "scopeHoist": false
+      "scopeHoist": false,
+      "sourceMap": true
     },
     "main": false,
     "module": false

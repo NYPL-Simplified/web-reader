@@ -10,7 +10,6 @@ import {
 } from '../types';
 import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
 import useContainerWidth from '../ui/hooks/useContainerWidth';
-import { usePublicationSW } from '../ServiceWorker/client';
 
 type PdfState = ReaderState & {
   type: 'PDF';
@@ -129,7 +128,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     pageNumber: 1,
     numPages: null,
   });
-  const swState = usePublicationSW(webpubManifestUrl, { proxyUrl });
 
   // state we can derive from the state above
   const isFetching = !state.file;
