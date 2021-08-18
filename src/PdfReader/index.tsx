@@ -1,6 +1,12 @@
 import { Document, Page } from 'react-pdf/dist/esm/entry.parcel';
-
-import React from 'react';
+import Measure from 'react-measure';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   ColorMode,
   ReaderArguments,
@@ -9,7 +15,9 @@ import {
   WebpubManifest,
 } from '../types';
 import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
-import useContainerWidth from '../ui/hooks/useContainerWidth';
+import throttle from '../utils/throttle';
+import useEventListener from '../ui/hooks/useEventListener';
+import { HEADER_HEIGHT } from '../ui/Header';
 
 type PdfState = ReaderState & {
   type: 'PDF';
@@ -132,10 +140,67 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   // state we can derive from the state above
   const isFetching = !state.file;
   const isParsed = typeof state.numPages === 'number';
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Width
-  // The PDF renderer needs pixel size to know how to render the PDF content
-  const width = useContainerWidth(IFRAME_WRAPPER_ID);
+  const [wrapperWidth, setWrapperWidth] = useState(0);
+  const [wrapperHeight, setWrapperHeight] = useState(0);
+  const [pageWidth, setPageWidth] = useState(0);
+  const [pageHeight, setPageHeight] = useState(0);
+
+  const resizeCanvas = useCallback(() => {
+    const container = document.getElementById(IFRAME_WRAPPER_ID);
+
+    const calculateWidth = () => {
+      if (canvasRef.current && canvasRef.current.clientWidth > 0)
+        return canvasRef.current.clientWidth;
+
+      if (container) return container.clientWidth;
+
+      return window.innerWidth;
+    };
+
+    const calculateHeight = () => {
+      if (canvasRef.current && canvasRef.current.clientHeight > 0)
+        return canvasRef.current.clientHeight;
+
+      if (container) return container.clientHeight;
+
+      return window.innerHeight - HEADER_HEIGHT;
+    };
+
+    setWrapperWidth(calculateWidth());
+    setWrapperHeight(calculateHeight());
+    console.log('wrapperWidth', wrapperWidth);
+    console.log('wrapperHeight', wrapperHeight);
+  }, [wrapperHeight, wrapperWidth]);
+
+  useEffect(() => {
+    resizeCanvas();
+  }, [wrapperWidth, wrapperHeight, resizeCanvas]);
+
+  useEventListener(window, 'resize', resizeCanvas);
+
+  const fitHorizontal = useMemo(() => {
+    const wRatio = pageWidth / wrapperWidth;
+    const hRatio = pageHeight / wrapperHeight;
+    if (wRatio < hRatio) {
+      return false;
+    }
+    return true;
+  }, [pageHeight, pageWidth, wrapperHeight, wrapperWidth]);
+
+  const setWrapperDimensions = useCallback(
+    throttle((w, h) => {
+      console.log('w: ' + w + 'h:' + h);
+      setWrapperWidth(w);
+      setWrapperHeight(h);
+    }, 500),
+    []
+  );
+
+  if (canvasRef) {
+    setWrapperDimensions(wrapperWidth, wrapperHeight);
+  }
 
   // Wrap Page component so that we can pass it styles
   const ChakraPage = chakra(Page, {
@@ -149,8 +214,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       return true;
     },
     baseStyle: {
-      border: '1px',
-      borderColor: 'ui.gray.light-cool',
+      outline: '1px',
+      outlineColor: 'ui.gray.light-cool',
     },
   });
 
@@ -319,20 +384,23 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     });
   }
 
+  console.log('wrapperWidth', wrapperWidth);
+  console.log('wrapperHeight', wrapperHeight);
+
   // the reader is active but loading a page
   return {
     isLoading: false,
     content: (
-      <>
-        <Flex
-          as="main"
-          zIndex="base"
-          flex="1 0 auto"
-          justifyContent="center"
-          alignItems="center"
-          tabIndex={-1}
-          id={IFRAME_WRAPPER_ID}
-        >
+      <Flex
+        as="main"
+        zIndex="base"
+        flex="1 0 auto"
+        justifyContent="center"
+        alignItems="center"
+        tabIndex={-1}
+        id={IFRAME_WRAPPER_ID}
+      >
+        <div id="documentwrapper">
           <Document file={state.file} onLoadSuccess={onDocumentLoadSuccess}>
             {isParsed && state.numPages && (
               <>
@@ -340,22 +408,28 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
                   Array.from(new Array(state.numPages), (_, index) => (
                     <ChakraPage
                       key={`page_${index + 1}`}
-                      width={width}
+                      width={wrapperWidth}
                       pageNumber={index + 1}
                     />
                   ))}
                 {!state.isScrolling && (
                   <ChakraPage
                     pageNumber={state.pageNumber}
-                    width={width}
+                    onLoadSuccess={(page) => {
+                      setPageWidth(page.width);
+                      setPageHeight(page.height);
+                    }}
+                    canvasRef={canvasRef}
+                    width={fitHorizontal ? wrapperWidth : undefined}
+                    height={!fitHorizontal ? wrapperHeight : undefined}
                     loading={<></>}
                   />
                 )}
               </>
             )}
           </Document>
-        </Flex>
-      </>
+        </div>
+      </Flex>
     ),
     state,
     manifest,
