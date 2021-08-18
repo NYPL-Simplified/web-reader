@@ -1,4 +1,4 @@
-import { Document, Page } from 'react-pdf';
+import { Document, Page } from 'react-pdf/dist/esm/entry.parcel';
 import * as React from 'react';
 import {
   ColorMode,
@@ -8,7 +8,6 @@ import {
   WebpubManifest,
 } from '../types';
 import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
-import { HEADER_HEIGHT } from '../ui/Header';
 import useMeasure from './useMeasure';
 
 type PdfState = ReaderState & {
@@ -21,8 +20,10 @@ type PdfState = ReaderState & {
   // resource once it is parsed
   pageNumber: number;
   scale: number;
-  pageHeight: null | number;
-  pageWidth: null | number;
+  pageHeight: number;
+  pageWidth: number;
+  containerWidth: number | undefined;
+  containerHeight: number | undefined;
 };
 
 type PdfReaderAction =
@@ -37,6 +38,11 @@ type PdfReaderAction =
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
   | { type: 'SET_SCROLL'; isScrolling: boolean }
   | { type: 'SET_SCALE'; scale: number }
+  | {
+      type: 'SET_CONTAINER_SIZE';
+      height: number | undefined;
+      width: number | undefined;
+    }
   | { type: 'PAGE_LOAD_SUCCESS'; height: number; width: number };
 
 const IFRAME_WRAPPER_ID = 'iframe-wrapper';
@@ -102,6 +108,13 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
         pageHeight: action.height,
         pageWidth: action.width,
       };
+
+    case 'SET_CONTAINER_SIZE':
+      return {
+        ...state,
+        containerHeight: action.height,
+        containerWidth: action.width,
+      };
   }
 }
 
@@ -146,15 +159,17 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     pageNumber: 1,
     numPages: null,
     scale: 1,
-    pageHeight: null,
-    pageWidth: null,
+    pageHeight: window.innerHeight,
+    pageWidth: window.innerWidth,
+    containerWidth: 0,
+    containerHeight: 0,
   });
 
   // state we can derive from the state above
   const isFetching = !state.file;
   const isParsed = typeof state.numPages === 'number';
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
-  const [containerRef, containerSize] = useMeasure();
+  const [containerRef, containerSize] = useMeasure<HTMLDivElement>();
 
   // Wrap Page component so that we can pass it styles
   const ChakraPage = chakra(Page, {
@@ -286,11 +301,11 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
    */
   const increaseFontSize = React.useCallback(async () => {
     // setPageWidth(pageWidth * (state.scale + 0.1));
-    dispatch((state) => ({ type: 'SET_SCALE', scale: state.scale + 0.1 }));
+    // dispatch((state) => ({ type: 'SET_SCALE', scale: state.scale + 0.1 }));
   }, []);
   const decreaseFontSize = React.useCallback(async () => {
     // setPageWidth(pageWidth * (state.scale - 0.1));
-    dispatch((state) => ({ type: 'SET_SCALE', scale: state.scale - 0.1 }));
+    // dispatch((state) => ({ type: 'SET_SCALE', scale: state.scale - 0.1 }));
   }, []);
 
   const setFontFamily = React.useCallback(async () => {
@@ -300,6 +315,27 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   const goToPage = React.useCallback(async () => {
     console.log('unimplemented');
   }, []);
+
+  /**
+   * calculate the height or width of the pdf page in paginated mode.
+   *  - if the page's aspect ratio is taller than the container's, we will constrain
+   *    the page to the height of the container.
+   *  - if the page's aspect ratio is wider than the container's, we will constrain
+   *    the page to the width of the container
+   */
+  React.useLayoutEffect(() => {
+    console.log('got here');
+    if (containerSize) {
+      const wRatio = state.pageWidth / containerSize.width;
+      const hRatio = state.pageHeight / containerSize.height;
+      const fitHorizontal = wRatio < hRatio;
+      dispatch({
+        type: 'SET_CONTAINER_SIZE',
+        width: fitHorizontal ? containerSize.width : undefined,
+        height: !fitHorizontal ? containerSize.height : undefined,
+      });
+    }
+  }, [containerSize, state.pageHeight, state.pageWidth]);
 
   // this format is inactive, return null
   if (!webpubManifestUrl || !manifest) return null;
@@ -357,21 +393,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     });
   }
 
-  /**
-   * calculate the height or width of the pdf page in paginated mode.
-   *  - if the page's aspect ratio is taller than the container's, we will constrain
-   *    the page to the height of the container.
-   *  - if the page's aspect ratio is wider than the container's, we will constrain
-   *    the page to the width of the container
-   */
-  const wRatio = state.pageWidth / containerSize.width;
-  const hRatio = state.pageHeight / containerSize.height;
-  const fitHorizontal = wRatio < hRatio;
-  const width = fitHorizontal ? containerSize.width : null;
-  const height = !fitHorizontal ? containerSize.height : null;
-
-  console.log('fitHorizontal', fitHorizontal);
-
   // the reader is active but loading a page
   return {
     isLoading: false,
@@ -393,7 +414,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
                 Array.from(new Array(state.numPages), (_, index) => (
                   <ChakraPage
                     key={`page_${index + 1}`}
-                    width={containerSize.width}
+                    width={state.containerWidth}
                     scale={state.scale}
                     pageNumber={index + 1}
                   />
@@ -403,8 +424,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
                   pageNumber={state.pageNumber}
                   onLoadSuccess={onPageLoadSuccess}
                   canvasRef={canvasRef}
-                  width={width}
-                  height={height}
+                  width={state.containerWidth}
+                  height={state.containerHeight}
                   loading={<></>}
                 />
               )}
