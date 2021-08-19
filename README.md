@@ -194,6 +194,10 @@ npm run example
 
 The example will rebundle on change, but you have to refresh your browser to see changes (no hot reloading currently).
 
+#### HTTPS on localhost
+
+To develop the service worker, you will need to run the app using HTTPS locally. This is done via the script `npm run example:https`. You may need to follow [this guide](https://web.dev/how-to-use-local-https/) if the certificates at the project root don't work for you.
+
 ### CORS Proxy
 
 We sometimes run in to CORS errors, and have a system to allow urls in a `WebpubManifest` to be proxied. This is done by passing a `proxyUrl` to the `<WebReader>` component. In order to do that, you must have a proxy running somewhere.
