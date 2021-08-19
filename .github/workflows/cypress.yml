@@ -1,0 +1,13 @@
+# name: Web Reader Cypress Tests
+
+# on: [deployment_status]
+# jobs:
+#   cypress:
+#     if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success'
+#     runs-on: ubuntu-20.04
+#     steps:
+#   - name: Dump GitHub context
+#     env:
+#       GITHUB_CONTEXT: ${{ toJson(github) }}
+#     run: |
+#       echo "$GITHUB_CONTEXT"
