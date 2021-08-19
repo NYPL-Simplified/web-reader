@@ -14,7 +14,7 @@ import {
 import { getTheme } from '../src/ui/theme';
 import usePublicationSW from '../src/ServiceWorker/client';
 
-const pdfProxyUrl: string = process.env.CORS_PROXY_URL as string | undefined;
+const pdfProxyUrl = process.env.CORS_PROXY_URL as string | undefined;
 
 const AxisNowEpub = () => {
   React.useEffect(() => {
@@ -50,6 +50,13 @@ const App = () => {
       proxyUrl: pdfProxyUrl,
     },
     { manifestUrl: 'https://alice.dita.digital/manifest.json' },
+    {
+      manifestUrl: `${origin}/samples/moby-epub2-exploded/manifest.json`,
+    },
+    {
+      manifestUrl:
+        'http://localhost:1234/samples/axisnow/decrypted/manifest.json',
+    },
   ]);
 
   return (
@@ -75,10 +82,14 @@ const App = () => {
             <AxisNowEpub />
           </Route>
           <Route path="/axisnow-decrypted">
-            <WebReader webpubManifestUrl="http://localhost:1234/samples/axisnow/decrypted/manifest.json" />
+            <WebReader
+              webpubManifestUrl={`${origin}/samples/axisnow/decrypted/manifest.json`}
+            />
           </Route>
           <Route path="/moby-epub2">
-            <WebReader webpubManifestUrl="http://localhost:1234/samples/moby-epub2-exploded/manifest.json" />
+            <WebReader
+              webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
+            />
           </Route>
           <Route path="/streamed-epub">
             <WebReader webpubManifestUrl="https://alice.dita.digital/manifest.json" />
