@@ -18,7 +18,7 @@
     "prettier": "prettier --write --loglevel warn --ignore-path .eslintignore .",
     "prettier:check": "prettier --check --ignore-path .eslintignore .",
     "lint": "eslint --fix .",
-    "lint:fix": "npm run prettier && npm run lint",
+    "lint:fix": "npm run lint && npm run prettier",
     "prepare": "npm run build",
     "size": "size-limit",
     "analyze": "size-limit --why",
