@@ -1,4 +1,4 @@
-import { Document, Page } from 'react-pdf/dist/esm/entry.parcel';
+import { Document, Page } from 'react-pdf';
 
 import React from 'react';
 import {
