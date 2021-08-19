@@ -8,9 +8,9 @@
     "src"
   ],
   "scripts": {
-    "example:build": "parcel build example/index.html",
-    "example:nocache": "parcel --no-cache example/index.html",
-    "example": "parcel example/index.html",
+    "example:build": "parcel build",
+    "example:nocache": "parcel --no-cache",
+    "example": "parcel",
     "start": "tsdx watch --tsconfig tsconfig.build.json",
     "build": "tsdx build --tsconfig tsconfig.build.json",
     "test": "jest --watch",
@@ -60,6 +60,7 @@
   "example-app": "www/index.html",
   "targets": {
     "example-app": {
+      "source": "example/index.html",
       "engines": {
         "browsers": "> 2%"
       },
