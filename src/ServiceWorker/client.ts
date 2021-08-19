@@ -23,6 +23,7 @@ export default function usePublicationSW(
       const promises = publications.map(async (pub) => {
         const finalManifestUrl = getProxiedUrl(pub.manifestUrl, pub.proxyUrl);
         const manifestResponse = await fetch(finalManifestUrl);
+        handleBadResponse(finalManifestUrl, manifestResponse);
         // add the manifest response to the cache
         await cache.put(finalManifestUrl, manifestResponse.clone());
 
@@ -46,14 +47,28 @@ export default function usePublicationSW(
           new Set([...resourceHrefs, ...readingOrderHrefs])
         );
         // add them all to the cache
-        await cache.addAll(allResourcesToCache);
+        await Promise.all(
+          allResourcesToCache.map(async (url) => {
+            const response = await fetch(url);
+            handleBadResponse(url, response);
+            return await cache.put(url, response);
+          })
+        );
       });
-      // wait for this to finish for all of the manifests
-      return await Promise.all(promises);
+      // wait for this to finish for all of the manifests, but don't reject if one fails
+      return await Promise.allSettled(promises);
     }
 
     cachePublications();
   }, [publications]);
+}
+
+function handleBadResponse(url: string, response: Response) {
+  if (!response.ok) {
+    const message = `Bad response status for: ${url}. Status: ${response.status}`;
+    console.warn(message);
+    throw new Error(message);
+  }
 }
 
 /**
