@@ -40,7 +40,7 @@ const SWTest = () => {
 };
 const origin = window.location.origin;
 const App = () => {
-  const { isSupported } = usePublicationSW([
+  usePublicationSW([
     {
       manifestUrl: `${origin}/samples/pdf/degruyter.json`,
       proxyUrl: pdfProxyUrl,

@@ -3,24 +3,33 @@ import { ExpirationPlugin } from 'workbox-expiration';
 import { CacheFirst } from 'workbox-strategies';
 import { IS_DEV } from '../constants';
 import { CACHE_EXPIRATION_SECONDS, WEBPUB_CACHE_NAME } from './constants';
+import { WebReaderSWConfig } from './types';
 
 declare let self: ServiceWorkerGlobalScope;
 
 const VERSION = 'v1';
 
 /**
+ * We claim the clients immediately and skip waiting because we don't care if
+ * half the page resources come from the SW and half from the network. We use
+ * content hashes for this to work
+ */
+clientsClaim();
+
+/**
  * Sets up the event listeners to:
  *  - On Fetch
  *    - Serve cached responses if they exist and are less than a week old.
  */
-
-clientsClaim();
-export default function initWebReaderSW(): void {
+export default function initWebReaderSW({
+  cacheExpirationSeconds = CACHE_EXPIRATION_SECONDS,
+}: WebReaderSWConfig | undefined = {}): void {
   log('INITIALIZING');
   self.addEventListener('install', (event) => {
     log('INSTALLING ');
     async function installSW() {
       // perform any install tasks
+      // skip the waiting phase and activate immediately
       self.skipWaiting();
       log('INSTALLED');
     }
@@ -58,7 +67,7 @@ export default function initWebReaderSW(): void {
           plugins: [
             new ExpirationPlugin({
               // Only cache requests for a week
-              maxAgeSeconds: CACHE_EXPIRATION_SECONDS,
+              maxAgeSeconds: cacheExpirationSeconds,
             }),
           ],
         }).handle(event);

@@ -3,42 +3,10 @@ import { WebpubManifest } from '../WebpubManifestTypes/WebpubManifest';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 import { WEBPUB_CACHE_NAME } from './constants';
 
-export type UsePublicationReturn = {
-  isSupported: boolean;
-};
-
 export type PublicationConfig = {
   manifestUrl: string;
   proxyUrl?: string;
 };
-
-export type PublicationRegistration = {
-  proxyUrl?: string;
-  manifest: WebpubManifest;
-  // we will add the proxy-url to all the resources to that
-  // the SW knows what to expect
-  finalResources: ReadiumLink[];
-};
-
-function getProxiedUrl(url: string, proxyUrl: string | undefined) {
-  return proxyUrl ? `${proxyUrl}${encodeURIComponent(url)}` : url;
-}
-
-/**
- * If the passed in url is relative, it will resolve it relative to the
- * manifest url. Otherwise it should stay the same. Finally, the proxy is
- * conditionally added
- */
-function getAbsoluteUrl(
-  maybeRelative: string,
-  manifestUrl: string,
-  proxyUrl?: string
-) {
-  return getProxiedUrl(
-    new URL(maybeRelative, manifestUrl).toString(),
-    proxyUrl
-  );
-}
 
 /**
  * Will add all publication resources to the cache so they
@@ -46,7 +14,7 @@ function getAbsoluteUrl(
  */
 export default function usePublicationSW(
   publications: PublicationConfig[]
-): UsePublicationReturn {
+): void {
   // add each manifest and its resources to the cache directly
   React.useEffect(() => {
     async function cachePublications() {
@@ -86,12 +54,34 @@ export default function usePublicationSW(
 
     cachePublications();
   }, [publications]);
-
-  return {
-    isSupported: true,
-  };
 }
 
+/**
+ * Prepends the proxy url if there is one
+ */
+function getProxiedUrl(url: string, proxyUrl: string | undefined) {
+  return proxyUrl ? `${proxyUrl}${encodeURIComponent(url)}` : url;
+}
+
+/**
+ * If the passed in url is relative, it will resolve it relative to the
+ * manifest url. Otherwise it should stay the same. Finally, the proxy is
+ * conditionally added
+ */
+function getAbsoluteUrl(
+  maybeRelative: string,
+  manifestUrl: string,
+  proxyUrl?: string
+) {
+  return getProxiedUrl(
+    new URL(maybeRelative, manifestUrl).toString(),
+    proxyUrl
+  );
+}
+
+/**
+ * Gets an array of raw href values from an array of readium links
+ */
 function extractHrefs(
   links: ReadiumLink[],
   manifestUrl: string,
