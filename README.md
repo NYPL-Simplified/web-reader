@@ -217,9 +217,17 @@ npm run example
 
 The example will rebundle on change, but you have to refresh your browser to see changes (no hot reloading currently).
 
-#### HTTPS on localhost
+#### Service Worker on localhost
 
-To develop the service worker, you will need to run the app using HTTPS locally. This is done via the script `npm run example:https`. You may need to follow [this guide](https://web.dev/how-to-use-local-https/) if the certificates at the project root don't work for you.
+To develop with the service worker in the example app, you will need to run the app using HTTPS locally, and you will need to enable the service worker. We have disabled it by default because otherwise your development changes will never be reflected in the browser (since old JS will be served from the cache). You can run the app with https and the service worker enabled via the script:
+
+```
+npm run example:sw
+```
+
+If this HTTPS setup doesn't work for you, you may need to follow [this guide](https://web.dev/how-to-use-local-https/) to generate your own certificates or trust ours.
+
+**NOTE:** Developing with the SW can be tricky. You will need to clear the CacheStorage of your browser whenever you make changes to your JS in dev mode. Hard refreshing your browser is not enough. I also suggest enabling `update on reload` in Chrome dev tools under `Application>Service Worker`.
 
 ### CORS Proxy
 
