@@ -16,28 +16,6 @@ import usePublicationSW from '../src/ServiceWorker/client';
 
 const pdfProxyUrl = process.env.CORS_PROXY_URL as string | undefined;
 
-const AxisNowEpub = () => {
-  React.useEffect(() => {
-    // get content
-  }, []);
-
-  return (
-    <WebReader webpubManifestUrl="http://localhost:1234/samples/axisnow/encrypted/manifest.json" />
-  );
-};
-
-const SWTest = () => {
-  const [value, setValue] = React.useState<null | string>(null);
-  React.useEffect(() => {
-    fetch('http://localhost:1234/samples/pdf/degruyter.json').then((res) => {
-      res.text().then((text) => {
-        setValue(text);
-      });
-    });
-  });
-
-  return <div>{value}</div>;
-};
 const origin = window.location.origin;
 const App = () => {
   usePublicationSW([
@@ -54,8 +32,7 @@ const App = () => {
       manifestUrl: `${origin}/samples/moby-epub2-exploded/manifest.json`,
     },
     {
-      manifestUrl:
-        'http://localhost:1234/samples/axisnow/decrypted/manifest.json',
+      manifestUrl: `${origin}/samples/axisnow/decrypted/manifest.json`,
     },
   ]);
 
@@ -75,12 +52,6 @@ const App = () => {
               proxyUrl={pdfProxyUrl}
             />
           </Route>
-          <Route path="/swtest">
-            <SWTest />
-          </Route>
-          <Route path="/axisnow-encrypted">
-            <AxisNowEpub />
-          </Route>
           <Route path="/axisnow-decrypted">
             <WebReader
               webpubManifestUrl={`${origin}/samples/axisnow/decrypted/manifest.json`}
@@ -94,14 +65,11 @@ const App = () => {
           <Route path="/streamed-epub">
             <WebReader webpubManifestUrl="https://alice.dita.digital/manifest.json" />
           </Route>
-          <Route path="/">
+          <Route exact path="/">
             <Heading as="h1">Web Reader Proof of Concept</Heading>
             <UnorderedList p={4}>
               <ListItem>
                 <Link to="/axisnow-encrypted">Encrypted EPUB Example</Link>
-              </ListItem>
-              <ListItem>
-                <Link to="/swtest">SW Test</Link>
               </ListItem>
               <ListItem>
                 <Link to="/axisnow-decrypted">Manually Decrypted EPUB</Link>
@@ -119,6 +87,10 @@ const App = () => {
                 <Link to="/pdfcollection">Pdf Collection Example</Link>
               </ListItem>
             </UnorderedList>
+          </Route>
+          <Route path="*">
+            <h1>404</h1>
+            <p>Page not found.</p>
           </Route>
         </Switch>
       </BrowserRouter>
