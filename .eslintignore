@@ -21,3 +21,6 @@ www
 
 # static files
 example/static/**/*
+
+# the cors-proxy
+example/cors-proxy.js
