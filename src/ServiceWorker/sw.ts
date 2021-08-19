@@ -35,13 +35,6 @@ export default function initWebReaderSW({
     }
     event.waitUntil(installSW);
   });
-  self.addEventListener('activate', (event) => {
-    log('ACTIVATING');
-    event.waitUntil(async () => {
-      // here we can perform any other async work needed to activate SW.
-      log('ACTIVATED');
-    });
-  });
 
   /**
    * On a fetch event, respond with an item from the cache, if
@@ -50,6 +43,10 @@ export default function initWebReaderSW({
    * and we can't tell if any given request is for app resources or
    * publication resources. Thus publication resources are added
    * to the cache separately, and then just returned if found here.
+   *
+   * This event listener MUST be run as the last fetch event listener
+   * of all in the host app because it always responds to the event
+   * in order to be able to use async functionality.
    */
   self.addEventListener('fetch', (event) => {
     if (event.request.method !== 'GET') {
