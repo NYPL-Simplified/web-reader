@@ -30,7 +30,7 @@ const ComponentWithHooks = () => {
 };
 
 describe('Should render the correct color value per color mode', () => {
-  for (let { colorMode, value } of testData) {
+  for (const { colorMode, value } of testData) {
     test(`should see '${value}' text for '${colorMode}' mode`, () => {
       render(
         <ComponentWrapper colorMode={colorMode as ColorMode}>

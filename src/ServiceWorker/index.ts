@@ -1,7 +1,7 @@
 import { registerRoute } from 'workbox-routing';
 import './install';
 
-declare var self: ServiceWorkerGlobalScope;
+declare let self: ServiceWorkerGlobalScope;
 
 /**
  * SERVICE WORKER STRATEGY
