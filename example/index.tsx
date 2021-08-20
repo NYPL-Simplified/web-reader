@@ -14,7 +14,9 @@ import {
 import { getTheme } from '../src/ui/theme';
 import usePublicationSW from '../src/ServiceWorker/client';
 import { pdfjs } from 'react-pdf';
-import getEncryptedContent from './axisnow/getEncryptedContent';
+import getEncryptedContent from './axisnow/Decryptor';
+import Decryptor from './axisnow/Decryptor';
+import { GetContent } from '../src/types';
 
 const origin = window.location.origin;
 
@@ -108,10 +110,27 @@ const App = () => {
 };
 
 const AxisNowEncrypted: React.FC = () => {
+  const [getContent, setGetContent] = React.useState<null | GetContent>(null);
+
+  React.useEffect(() => {
+    async function setupDecryptor() {
+      const params = {
+        book_vault_uuid: '6734F7F5-C48F-4A38-9AE5-9DF4ADCFBF0A',
+        isbn: '9781467784870',
+      };
+      const decryptor = await Decryptor.createDecryptor(params);
+
+      return decryptor.decryptToString;
+    }
+
+    setupDecryptor().then(setGetContent);
+  }, []);
+
+  if (!getContent) return 'loading...';
   return (
     <WebReader
       webpubManifestUrl={`${origin}/samples/axisnow/encrypted/manifest.json`}
-      getContent={getEncryptedContent}
+      getContent={getContent}
     />
   );
 };
