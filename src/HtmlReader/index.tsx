@@ -76,7 +76,7 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
 const FONT_SIZE_STEP = 4;
 
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
-  const { webpubManifestUrl, manifest } = args ?? {};
+  const { webpubManifestUrl, manifest, getContent } = args ?? {};
   const [state, dispatch] = React.useReducer(htmlReducer, {
     type: 'HTML',
     colorMode: 'day',
@@ -103,10 +103,13 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
         navHeight: HEADER_HEIGHT,
         margin: 0,
       },
+      api: {
+        getContent: getContent as any, //TODO: fix this casting,
+      } as any, //TODO: fix this casting,,
     }).then((reader) => {
       dispatch({ type: 'SET_READER', reader });
     });
-  }, [webpubManifestUrl]);
+  }, [webpubManifestUrl, getContent]);
 
   // prev and next page functions
   const goForward = React.useCallback(() => {
