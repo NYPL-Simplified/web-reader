@@ -286,11 +286,17 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
    */
   const increaseFontSize = React.useCallback(async () => {
     // setPageWidth(pageWidth * (state.scale + 0.1));
-    dispatch((state) => ({ type: 'SET_SCALE', scale: state.scale + 0.1 }));
+    // dispatch((state: { scale: number }) => ({
+    //   type: 'SET_SCALE',
+    //   scale: state.scale + 0.1,
+    // }));
   }, []);
   const decreaseFontSize = React.useCallback(async () => {
     // setPageWidth(pageWidth * (state.scale - 0.1));
-    dispatch((state) => ({ type: 'SET_SCALE', scale: state.scale - 0.1 }));
+    // dispatch((state: { scale: number }) => ({
+    //   type: 'SET_SCALE',
+    //   scale: state.scale - 0.1,
+    // }));
   }, []);
 
   const setFontFamily = React.useCallback(async () => {
@@ -364,12 +370,18 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
    *  - if the page's aspect ratio is wider than the container's, we will constrain
    *    the page to the width of the container
    */
-  const wRatio = state.pageWidth / containerSize.width;
-  const hRatio = state.pageHeight / containerSize.height;
-  const fitHorizontal = wRatio < hRatio;
-  const width = fitHorizontal ? containerSize.width : null;
-  const height = !fitHorizontal ? containerSize.height : null;
+  const wRatio =
+    state.pageWidth && containerSize
+      ? state.pageWidth / containerSize.width
+      : 0;
+  const hRatio =
+    state.pageHeight && containerSize
+      ? state.pageHeight / containerSize.height
+      : 0;
 
+  const fitHorizontal = wRatio < hRatio;
+  const width = fitHorizontal && containerSize ? containerSize.width : 0;
+  const height = !fitHorizontal && containerSize ? containerSize.height : 0;
   console.log('fitHorizontal', fitHorizontal);
 
   // the reader is active but loading a page
@@ -384,7 +396,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         alignItems="center"
         tabIndex={-1}
         id={IFRAME_WRAPPER_ID}
-        ref={containerRef}
+        // ref={containerRef}
       >
         <Document file={state.file} onLoadSuccess={onDocumentLoadSuccess}>
           {isParsed && state.numPages && (
@@ -393,7 +405,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
                 Array.from(new Array(state.numPages), (_, index) => (
                   <ChakraPage
                     key={`page_${index + 1}`}
-                    width={containerSize.width}
+                    width={containerSize?.width}
                     scale={state.scale}
                     pageNumber={index + 1}
                   />
