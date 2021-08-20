@@ -14,6 +14,7 @@ import {
 import { getTheme } from '../src/ui/theme';
 import usePublicationSW from '../src/ServiceWorker/client';
 import { pdfjs } from 'react-pdf';
+import getEncryptedContent from './axisnow/getEncryptedContent';
 
 const origin = window.location.origin;
 
@@ -56,6 +57,9 @@ const App = () => {
               webpubManifestUrl="/samples/pdf/muse1007.json"
               proxyUrl={pdfProxyUrl}
             />
+          </Route>
+          <Route path="/axisnow-encrypted">
+            <AxisNowEncrypted />
           </Route>
           <Route path="/axisnow-decrypted">
             <WebReader
@@ -100,6 +104,15 @@ const App = () => {
         </Switch>
       </BrowserRouter>
     </ChakraProvider>
+  );
+};
+
+const AxisNowEncrypted: React.FC = () => {
+  return (
+    <WebReader
+      webpubManifestUrl={`${origin}/samples/axisnow/encrypted/manifest.json`}
+      getContent={getEncryptedContent}
+    />
   );
 };
 

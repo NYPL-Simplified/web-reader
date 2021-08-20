@@ -10,10 +10,12 @@ import useWebReader from './useWebReader';
 const WebReader: FC<UseWebReaderArguments> = ({
   webpubManifestUrl,
   proxyUrl,
+  getContent,
 }) => {
   const webReader = useWebReader({
     webpubManifestUrl,
     proxyUrl,
+    getContent,
   });
   const { content } = webReader;
 
