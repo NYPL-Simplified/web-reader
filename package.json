@@ -140,6 +140,6 @@
     "workbox-strategies": "^6.2.4"
   },
   "optionalDependencies": {
-    "@nypl-simplified-packages/axisnow-access-control-web": "^1.1.2"
+    "@nypl-simplified-packages/axisnow-access-control-web": "^1.2.0"
   }
 }
