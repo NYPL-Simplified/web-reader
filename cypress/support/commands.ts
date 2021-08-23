@@ -1,6 +1,8 @@
 /// <reference types="cypress" />
 import '@testing-library/cypress/add-commands';
 import 'cypress-iframe';
+
+// eslint-disable-next-line @typescript-eslint/no-namespace
 declare global {
   namespace Cypress {
     interface Chainable<Subject = any> {

@@ -7,7 +7,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node: ['14.x']
+        node: ['14.x', '16.x']
         os: [windows-latest, macOS-latest]
 
     steps:
@@ -24,6 +24,9 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      - name: Check Formatting
+        run: npm run prettier:check
 
       - name: Test
         run: npm run test:ci

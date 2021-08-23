@@ -7,7 +7,9 @@ describe('useEventListener()', () => {
     jest.spyOn(element, 'addEventListener');
 
     const type = 'click';
-    const listener = () => {};
+    const listener = () => {
+      // do nothing
+    };
 
     renderHook(() => useEventListener(element, type, listener));
 
