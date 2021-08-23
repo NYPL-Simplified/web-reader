@@ -5,7 +5,7 @@
 
 import { clientsClaim } from 'workbox-core';
 
-declare var self: ServiceWorkerGlobalScope;
+declare let self: ServiceWorkerGlobalScope;
 
 /**
  * This disables the feature of waiting until the tab is closed to install
