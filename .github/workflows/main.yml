@@ -36,7 +36,7 @@ jobs:
             ${{ runner.os }}-
 
       - name: Install Dependencies
-        run: npm install
+        run: npm install --ignore-scripts
 
       - name: Lint
         run: npm run lint
