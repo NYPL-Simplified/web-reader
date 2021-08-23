@@ -181,6 +181,10 @@ This is the folder structure:
 /.storybook         # storybook config
 ```
 
+### Decryption
+
+In some instances, decryption of a resource must be performed upon receiving it. For this purpose you can pass an optional `getContent` function that will be used to fetch (and possibly decrypt) the resources to be displayed. It is suggested to perform heavy tasks such as decryption in a Web Worker. The example app shows an example of this being done using the private NYPL AxisNow decryptor (not available publicly). It sets up a WebWorker and communication channel using [Comlink](https://github.com/GoogleChromeLabs/comlink) to fetch, decrypt, and re-embed encrypted subresources.
+
 ## Commands
 
 TSDX scaffolds our library inside `/src`, sets up a [Parcel-based](https://parceljs.org) playground for it inside `/example`, and a storybook app with stories in `/stories`.
