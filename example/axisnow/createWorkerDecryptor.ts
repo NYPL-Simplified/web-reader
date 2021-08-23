@@ -1,5 +1,5 @@
 import * as Comlink from 'comlink';
-import createChapterDecryptor from './decryptor';
+import createChapterDecryptor from './decryptAndEmbed';
 
 const worker = new Worker(new URL('./worker.ts', import.meta.url), {
   type: 'module',
