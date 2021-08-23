@@ -1,3 +1,5 @@
+import { IFRAME_SELECTOR } from '../support/constants';
+
 describe('render app', () => {
   it('Renders content on the streamed epub page', () => {
     cy.loadPage('/streamed-epub');
@@ -11,7 +13,7 @@ describe('render app', () => {
     cy.findByRole('button', { name: '<' }).should('exist');
 
     // Page one contains an image
-    cy.iframe({ url: '/streamed-epub' })
+    cy.iframe(IFRAME_SELECTOR)
       .findByRole('img', {
         name: "Alice's Adventures in Wonderland, by Lewis Carroll",
       })
