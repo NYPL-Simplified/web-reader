@@ -225,19 +225,15 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       pdfHeight: number,
       containerSize: { width: number; height: number }
     ) => {
-      console.log('pdfWidth', pdfWidth);
-      console.log('pdfHeight', pdfHeight);
       const wRatio = pdfWidth / containerSize.width;
       const hRatio = pdfHeight / containerSize.height;
 
       const fitHorizontal = wRatio > hRatio;
-      console.log('fitHorizontal', fitHorizontal);
       const width = fitHorizontal ? Math.round(containerSize.width) : undefined;
       const height = !fitHorizontal
         ? Math.round(containerSize.height)
         : undefined;
 
-      console.log('new page width height ' + width + ' ' + height);
       dispatch({ type: 'RESIZE_PAGE', width, height });
     },
     []
@@ -245,7 +241,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
 
   //TODO: Somehow, this window size updates when height
   React.useEffect(() => {
-    console.log('useEffect called', containerSize);
     if (containerSize) {
       resizePage(state.pdfWidth, state.pdfHeight, containerSize);
     }
@@ -400,7 +395,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   }
 
   function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
-    console.log('document reloaded');
     dispatch({
       type: 'PDF_PARSED',
       numPages: numPages,
