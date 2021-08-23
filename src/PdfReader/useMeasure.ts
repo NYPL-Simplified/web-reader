@@ -20,7 +20,8 @@ export default function useMeasure<
   // work because we actually need rerenders when it changes, to update the useLayoutEffect
   const [element, ref] = React.useState<E | null>(null);
   const [rect, setRect] = React.useState<Dimensions | null>(null);
-
+  console.log('rect', rect);
+  console.log('element', element);
   const observer = React.useMemo(
     () =>
       new window.ResizeObserver(
