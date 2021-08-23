@@ -1,14 +1,17 @@
 import * as Comlink from 'comlink';
-import Decryptor from '@nypl-simplified-packages/axisnow-access-control-web';
+import createChapterDecryptor from './decryptor';
 
-// type DecryptorParams = {
-//   book_vault_uuid: string;
-//   idbn: string
-// }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+declare const self: WorkerGlobalScope;
 
-// async function getAxisNowContent(href: string, decryptorParams: DecryptorParams}): Promise<string> {
-//   const decryptor = await Decryptor.createDecryptor()
-//   return '<div>bleh</div>';
-// }
+/**
+ * We need to proxy the decryptChapter function, so we need to re-wrap this up.
+ */
+const proxiedCreateChapterDecryptor: typeof createChapterDecryptor = async (
+  params
+) => {
+  const decryptChapter = await createChapterDecryptor(params);
+  return Comlink.proxy(decryptChapter);
+};
 
-Comlink.expose(Decryptor);
+Comlink.expose(proxiedCreateChapterDecryptor);

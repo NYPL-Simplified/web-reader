@@ -1,7 +1,7 @@
 import 'react-app-polyfill/ie11';
 import 'regenerator-runtime/runtime';
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 import WebReader from '../src';
 import '@nypl/design-system-react-components/dist/styles.css';
@@ -14,8 +14,8 @@ import {
 import { getTheme } from '../src/ui/theme';
 import usePublicationSW from '../src/ServiceWorker/client';
 import { pdfjs } from 'react-pdf';
-import getEncryptedContent from './axisnow/Decryptor';
-import Decryptor from './axisnow/Decryptor';
+// import createDecryptor from './axisnow/createWorkerlessDecryptor';
+import createDecryptor from './axisnow/createWorkerDecryptor';
 import { GetContent } from '../src/types';
 
 const origin = window.location.origin;
@@ -109,24 +109,32 @@ const App = () => {
   );
 };
 
+/**
+ * This sample shows setting up a decryptor for this specific book and then passing a
+ * getContent function to the Web Reader. This getContent function runs in a separate
+ * WebWorker thread to decrypt the HTML and any embedded resources within.
+ */
 const AxisNowEncrypted: React.FC = () => {
   const [getContent, setGetContent] = React.useState<null | GetContent>(null);
 
   React.useEffect(() => {
-    async function setupDecryptor() {
+    async function setupDecryptor(): Promise<
+      (href: string) => Promise<string>
+    > {
       const params = {
         book_vault_uuid: '6734F7F5-C48F-4A38-9AE5-9DF4ADCFBF0A',
         isbn: '9781467784870',
       };
-      const decryptor = await Decryptor.createDecryptor(params);
-
-      return decryptor.decryptToString;
+      const decryptor = await createDecryptor(params);
+      return decryptor;
     }
 
-    setupDecryptor().then(setGetContent);
+    setupDecryptor().then((decr) => {
+      setGetContent(() => decr);
+    });
   }, []);
 
-  if (!getContent) return 'loading...';
+  if (!getContent) return <div>loading...</div>;
   return (
     <WebReader
       webpubManifestUrl={`${origin}/samples/axisnow/encrypted/manifest.json`}
