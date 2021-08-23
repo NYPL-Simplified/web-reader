@@ -17,12 +17,12 @@ A big thanks to [R2D2BC](https://github.com/d-i-t-a/R2D2BC) for providing the un
 - [x] PDF-based webpub support
 - [x] Customizable UI
 - [x] User settings
-	- [x] Font family (HTML only)
-	- [x] Font size (HTML only)
-	- [x] Color scheme (night, day, sepia)
-	- [x] Fullscreen 
-	- [x] Paginated / Scrolling mode toggle 
-	- [ ] Zoom (PDF only)
+  - [x] Font family (HTML only)
+  - [x] Font size (HTML only)
+  - [x] Color scheme (night, day, sepia)
+  - [x] Fullscreen
+  - [x] Paginated / Scrolling mode toggle
+  - [ ] Zoom (PDF only)
 - [x] Offline support (prefetch and cache desired content via Service Worker, along with host app shell.
 - [ ] Saving bookmarks / highlights
 - [ ] WAI-ARIA compliant accessibility (_pending accessibility review_)
