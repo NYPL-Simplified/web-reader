@@ -1,16 +1,20 @@
-import { IFRAME_SELECTOR } from '../support/constants';
+import { IFRAME_SELECTOR } from '../../support/constants';
 
-describe('navigations', () => {
+describe('navigating an EPUB page', () => {
   beforeEach(() => {
     cy.loadPage('/streamed-epub');
   });
 
-  it('table of content link should update the page content', () => {
+  it('should update page content after clicking on TOC link', () => {
     cy.iframe(IFRAME_SELECTOR)
       .findByRole('img', {
         name: "Alice's Adventures in Wonderland, by Lewis Carroll",
       })
       .should('exist');
+
+    cy.iframe(IFRAME_SELECTOR)
+    .find('.subtitle')
+    .should('not.exist');
 
     // Open TOC menu
     cy.findByRole('button', { name: 'Table of Contents' }).click();
@@ -24,7 +28,7 @@ describe('navigations', () => {
       .contains('Down the Rab­bit-Hole');
   });
 
-  it('next and previous button', () => {
+  it('should navigate forward and backwards with page buttons', () => {
     // load iframe
     cy.iframe(IFRAME_SELECTOR);
 

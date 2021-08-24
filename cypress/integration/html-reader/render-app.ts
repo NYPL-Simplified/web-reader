@@ -1,4 +1,4 @@
-import { IFRAME_SELECTOR } from '../support/constants';
+import { IFRAME_SELECTOR } from '../../support/constants';
 
 describe('render app', () => {
   it('Renders content on the streamed epub page', () => {
@@ -9,6 +9,7 @@ describe('render app', () => {
     cy.findByRole('button', { name: 'Table of Contents' }).should('exist');
     cy.findByRole('button', { name: 'Settings' }).should('exist');
     cy.findByRole('button', { name: 'Toggle Fullscreen' }).should('exist');
+    // FIXME: ticket SFR-1275
     cy.findByRole('button', { name: '>' }).should('exist');
     cy.findByRole('button', { name: '<' }).should('exist');
 

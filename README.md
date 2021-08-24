@@ -155,6 +155,7 @@ We always start with a Webpub Manifest, which gives us metadata and the structur
 This is the folder structure:
 
 ```txt
+/cypress            # cypress tests will go in here
 /example            # example app packaged by Parcel
   index.html
   index.tsx         # entrypoint for the demo app
@@ -220,6 +221,24 @@ I have set up a small express-based CORS proxy that can be run for local develop
 - Run the proxy with `npm run cors-proxy`.
 - Pass the proxy url to the example app by setting the following env var in a `.env` file at the root of the project: `CORS_PROXY_URL="http://localhost:3001/?requestUrl="`.
 - In a separate terminal session, start the example app: `npm run example`.
+
+### Cypress
+
+The tests we have are located in the `cypress/integration` folder.
+
+To properly run the tests, make sure the example app is running (Instruction above on how to set up the example page), cypress will test against that page by default. Or if the app is hosted elsewhere, update the `baseUrl` value in the `cypress.json` file to match your host URL.
+
+To run and open an interactive testing envioment:
+
+```bash
+npm run cypress:open
+```
+
+To run tests on your terminal without a browser:
+
+```bash
+npm run cypress:cli
+```
 
 ### Other Scripts
 
