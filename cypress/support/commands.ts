@@ -19,10 +19,11 @@ Cypress.Commands.add('loadPage', (pageName) => {
   });
 });
 
-Cypress.Commands.add('iframe', (selector? :string) => {
+Cypress.Commands.add('iframe', (selector?: string) => {
   const DEFAULT_SELECTOR = 'iframe';
   return cy
-  .get(selector ?? DEFAULT_SELECTOR)
-  .its('0.contentDocument.body').should('not.be.empty')
-  .then(cy.wrap)
-})
+    .get(selector ?? DEFAULT_SELECTOR)
+    .its('0.contentDocument.body')
+    .should('not.be.empty')
+    .then(cy.wrap);
+});

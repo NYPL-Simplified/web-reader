@@ -12,9 +12,7 @@ describe('navigating an EPUB page', () => {
       })
       .should('exist');
 
-    cy.iframe(IFRAME_SELECTOR)
-    .find('.subtitle')
-    .should('not.exist');
+    cy.iframe(IFRAME_SELECTOR).find('.subtitle').should('not.exist');
 
     // Open TOC menu
     cy.findByRole('button', { name: 'Table of Contents' }).click();
