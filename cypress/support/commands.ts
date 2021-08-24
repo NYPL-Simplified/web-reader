@@ -2,8 +2,8 @@
 import '@testing-library/cypress/add-commands';
 import 'cypress-iframe';
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     interface Chainable<Subject = any> {
       loadPage(pageName: string): void;
