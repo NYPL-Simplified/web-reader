@@ -16,7 +16,7 @@ export type UseMeasureResult<E extends Element = Element> = [
 
 export default function useMeasure<
   E extends Element = Element
->(): UseMeasureResult {
+>(): UseMeasureResult<E> {
   // this is a little trick to get a reference to an HTML element. Using useRef wouldn't
   // work because we actually need rerenders when it changes, to update the useLayoutEffect
   const [element, ref] = React.useState<E | null>(null);

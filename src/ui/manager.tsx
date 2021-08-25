@@ -36,7 +36,7 @@ const WebReaderContent: React.FC<ReaderReturn> = ({
         width="100vw"
         bg={bgColor}
         // accounting for the prev/next buttons
-        // px={{ sm: 10, md: '5vw' }}
+        px={{ sm: 10, md: '5vw' }}
         flexDir="column"
         alignItems="stretch"
         flex="1 1 100%"

@@ -1,5 +1,4 @@
-import { Document, Page, PageProps } from 'react-pdf';
-import { pdfjs } from 'react-pdf';
+import { Document, Page, PageProps, pdfjs } from 'react-pdf';
 import * as React from 'react';
 import {
   ColorMode,
@@ -10,7 +9,7 @@ import {
 } from '../types';
 import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
 import useMeasure from './useMeasure';
-
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 type PdfState = ReaderState & {
   type: 'PDF';
   resourceIndex: number;
@@ -402,8 +401,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   }
 
   function onRenderSuccess(page: PageProps) {
-    if (!page.height || !page.width || !containerSize) return;
-
+    if (!page.height || !page.width || !containerSize)
+      throw new Error('Error rendering page from Reader');
     if (
       Math.round(page.height) !== state.pdfHeight ||
       Math.round(page.width) !== state.pdfWidth
