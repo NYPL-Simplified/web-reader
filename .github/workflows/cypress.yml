@@ -3,6 +3,7 @@ on: [deployment_status]
 
 jobs:
   cypress:
+    name: Run Integration Tests on Chrome / Firefox / Edge
     if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && github.event.deployment_status.environment == 'Preview – web-reader'
     runs-on: ubuntu-latest
     container:

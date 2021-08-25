@@ -45,6 +45,8 @@ describe('navigating an EPUB page', () => {
       })
       .should('not.exist');
 
+    cy.wait(100);
+
     cy.findByRole('button', { name: '<' }).click();
 
     cy.wait(100);
