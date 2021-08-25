@@ -23,16 +23,21 @@ export type Navigator = {
   goToPage: (href: Locator) => void;
 };
 
-export type ReaderType = 'HTML' | 'PDF';
-
 export type ReaderState = {
-  type: ReaderType;
   colorMode: ColorMode;
   isScrolling: boolean;
   fontSize: number;
   fontFamily: FontFamily;
-  currentTocUrl: string | null;
 };
+
+export type PDFReaderState = ReaderState & {
+  type: 'PDF'
+}
+
+export type HTMLReaderState = ReaderState & {
+  type: 'HTML'
+  currentTocUrl: string | null;
+}
 
 export type InactiveReader = null;
 
@@ -46,13 +51,20 @@ export type LoadingReader = {
 
 export type ActiveReader = {
   isLoading: false;
-  state: ReaderState;
   navigator: Navigator;
   content: JSX.Element;
   manifest: WebpubManifest;
 };
 
-export type ReaderReturn = InactiveReader | LoadingReader | ActiveReader;
+export type PDFActiveReader =  ActiveReader & {
+  state: PDFReaderState;
+};
+
+export type HTMLActiveReader = ActiveReader & {
+  state: HTMLReaderState;
+};
+
+export type ReaderReturn = InactiveReader | LoadingReader | PDFActiveReader | HTMLActiveReader;
 
 export type ActiveReaderArguments = {
   webpubManifestUrl: string;
