@@ -5,14 +5,13 @@ import {
   ColorMode,
   ReaderArguments,
   ReaderReturn,
-  ReaderState,
   WebpubManifest,
+  PDFReaderState,
 } from '../types';
 import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
 import useContainerWidth from '../ui/hooks/useContainerWidth';
 
-type PdfState = ReaderState & {
-  type: 'PDF';
+type PdfState = PDFReaderState & {
   resourceIndex: number;
   file: { data: Uint8Array } | null;
   // we only know the numPages once the file has been parsed
@@ -122,7 +121,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     isScrolling: false,
     fontSize: 16,
     fontFamily: 'sans-serif',
-    currentTocUrl: null,
     resourceIndex: 0,
     file: null,
     pageNumber: 1,

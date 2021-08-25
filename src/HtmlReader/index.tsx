@@ -3,7 +3,7 @@ import React from 'react';
 import injectables from './injectables';
 import {
   ColorMode,
-  ReaderState,
+  HTMLReaderState,
   ReaderReturn,
   ReaderArguments,
   FontFamily,
@@ -12,9 +12,8 @@ import HtmlReaderContent from './HtmlReaderContent';
 import { Locator } from '@d-i-t-a/reader/dist/model/Locator';
 import { HEADER_HEIGHT } from '../ui/Header';
 
-type HtmlState = ReaderState & {
+type HtmlState = HTMLReaderState & {
   reader: D2Reader | undefined;
-  type: 'HTML';
 };
 
 export type HtmlAction =
