@@ -27,7 +27,7 @@ export type HtmlAction =
 
 function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
   switch (action.type) {
-    case 'SET_READER':
+    case 'SET_READER': {
       // set all the initial settings taken from the reader
       const settings = action.reader.currentSettings;
       return {
@@ -39,6 +39,7 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
         fontFamily: r2FamilyToFamily[settings.fontFamily] ?? 'publisher',
         currentTocUrl: action.reader.mostRecentNavigatedTocItem(), // This returns a relative href
       };
+    }
 
     case 'SET_COLOR_MODE':
       return {

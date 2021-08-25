@@ -28,8 +28,8 @@ const getButtonStyle = (getColor: GetColor) => ({
  ** Hovered
  */
 const variantSolid = (getColor: GetColor) => (props: any) => {
-  let bgColor = getColor('ui.white', 'ui.black', 'ui.sepia');
-  let color = getColor('gray.800', 'ui.white', 'gray.800');
+  const bgColor = getColor('ui.white', 'ui.black', 'ui.sepia');
+  const color = getColor('gray.800', 'ui.white', 'gray.800');
 
   const _focus = { bgColor, color };
   const _hover = { bgColor, color, _disabled: { bgColor } };
