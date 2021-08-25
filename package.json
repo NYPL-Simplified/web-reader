@@ -129,7 +129,7 @@
     "workbox-window": "^6.1.5"
   },
   "lint-staged": {
-    "*.{ts,js}": "eslint --cache --fix",
-    "*.{ts,js,json,css,md}": "prettier --write --ignore-path .eslintignore"
+    "*.{ts,tsx,js,jsx}": "eslint --cache --fix",
+    "*.{ts,tsx,js,json,css,md}": "prettier --write --ignore-path .eslintignore"
   }
 }
