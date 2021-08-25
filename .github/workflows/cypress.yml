@@ -3,7 +3,7 @@ on: [deployment_status]
 
 jobs:
   cypress:
-    name: Run Integration Tests on Chrome / Firefox / Edge
+    name: Run Integration Tests on Chrome / Firefox
     if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && github.event.deployment_status.environment == 'Preview – web-reader'
     runs-on: ubuntu-latest
     container:
@@ -28,13 +28,6 @@ jobs:
           install: false
           config: baseUrl=${{ github.event.deployment_status.target_url }}
           browser: chrome
-
-      - name: Run Edge
-        uses: cypress-io/github-action@v2
-        with:
-          install: false
-          config: baseUrl=${{ github.event.deployment_status.target_url }}
-          browser: edge
 
       - name: Run Firefox
         uses: cypress-io/github-action@v2
