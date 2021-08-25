@@ -1,14 +1,19 @@
-name: Cypress Tests
+name: Cypress
 on: [deployment_status]
 
 jobs:
   cypress:
-    if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success'
+    if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && github.event.deployment_status.environment == 'Preview – web-reader'
     runs-on: ubuntu-20.04
+    container: cypress/browsers:node14.17.0-chrome88-ff89
     steps:
-      - name: Install deps and build (with cache)
-        uses: bahmutov/npm-install@v1
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Cypress
+        run: npm i cypress
+
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          env: CYPRESS_baseUrl=${{ github.event.deployment_status.target_url }}
+          env: CYPRESS_BASE_URL=${{ github.event.deployment_status.target_url }}
