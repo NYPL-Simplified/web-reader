@@ -183,7 +183,20 @@ This is the folder structure:
 
 ### Decryption
 
-In some instances, decryption of a resource must be performed upon receiving it. For this purpose you can pass an optional `getContent` function that will be used to fetch (and possibly decrypt) the resources to be displayed. It is suggested to perform heavy tasks such as decryption in a Web Worker. The example app shows an example of this being done using the private NYPL AxisNow decryptor (not available publicly). It sets up a WebWorker and communication channel using [Comlink](https://github.com/GoogleChromeLabs/comlink) to fetch, decrypt, and re-embed encrypted subresources.
+The web reader does support DRM via two possible routes:
+
+1. The default Readium suggested method is to have a server-side "streamer" between the content server and the application. This server would fetch the encrypted DRM content, decrypt it, and then serve the decrypted assets individually to the client alongside a webpub manifest pointing to these decrypted assets. One example of such a streamer is [readium/r2-streamer-js](https://github.com/readium/r2-streamer-js).
+1. If decryption cannot be performed in a streamer, the web-reader can support client-side decryption of licensed content. This is done by passing a `getContent` function to either the `<WebReader>` component or the `useWebReader` hook. It has the type signature `(resourceUrl: string) => Promise<string>`, and can thus be used to fetch and decrypt (or otherwise manipulate) content before it is passed to the iframe for rendering.
+
+The `AxisNow Encrypted EPUB` example shows how this is done using the private NYPL AxisNow decryptor. The AxisNow scheme is a specific DRM technique not publicly available and the repo and code for the decryptor cannot be shared. Thus this example will not work for the public, but you can read the example code to see how we use the private `Decryptor` package to:
+
+- Create a Web Worker using Comlink](https://github.com/GoogleChromeLabs/comlink) that will performe the fetching and decryption. This should help keep the main thread free while those heavy tasks are performed.
+- Fetch content from the network
+- Decrypt the HTML content
+- Search for embedded CSS and image assets
+- Fetch those assets and decrypt them
+- Re-embed the decrypted CSS and image assets as Object URLs into the decrypted HTML document.
+- Return the HTML string with fully decrypted reources for the web-reader to render in the iframe.
 
 ## Commands
 
