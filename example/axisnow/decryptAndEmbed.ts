@@ -1,5 +1,3 @@
-import Decryptor from '@nypl-simplified-packages/axisnow-access-control-web';
-
 type DecryptChapter = (resourceUrl: string) => Promise<string>;
 
 type DecryptorParams = {
@@ -7,11 +5,31 @@ type DecryptorParams = {
   book_vault_uuid: string;
 };
 
+type IDecryptorInstance = {
+  decrypt(val: Uint8Array): Promise<Uint8Array>;
+  decryptUrl(resourceUrl: string): Promise<Uint8Array>;
+  decryptToString(resourceUrl: string): Promise<string>;
+};
+
+type IDecryptor = {
+  createDecryptor(params: any): Promise<IDecryptorInstance>;
+};
+
 export default async function createChapterDecryptor(
   params: DecryptorParams
 ): Promise<DecryptChapter> {
-  const decryptor = await Decryptor.createDecryptor(params);
-  return decryptChapter(decryptor);
+  try {
+    // we have to type cast this because it is a dynamic, optional import.
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const Decryptor = require('@nypl-simplified-packages/axisnow-access-control-web') as IDecryptor;
+    const decryptor = await Decryptor.createDecryptor(params);
+    return decryptChapter(decryptor);
+  } catch (e) {
+    console.error(e);
+    throw new Error(
+      'Could not import or create an AxisNow Decryptor. You may not have access to the private package.'
+    );
+  }
 }
 
 /**
@@ -30,7 +48,7 @@ export default async function createChapterDecryptor(
  *  - css urls ?
  *  - js
  */
-const decryptChapter = (decryptor: Decryptor) => async (
+const decryptChapter = (decryptor: IDecryptorInstance) => async (
   url: string
 ): Promise<string> => {
   // get the chapter and decrypt it
@@ -52,7 +70,7 @@ const decryptChapter = (decryptor: Decryptor) => async (
 async function embedImageAssets(
   unembeddedXml: string,
   resourceUrl: string,
-  decryptor: Decryptor
+  decryptor: IDecryptorInstance
 ) {
   const images =
     unembeddedXml.match(
@@ -81,7 +99,10 @@ async function embedImageAssets(
 /**
  * Decrypts a Uint8Array and returns an objectUrl for the resulting blob
  */
-async function getDecryptedUrl(arrayBuffer: Uint8Array, decryptor: Decryptor) {
+async function getDecryptedUrl(
+  arrayBuffer: Uint8Array,
+  decryptor: IDecryptorInstance
+) {
   const decrypted = await decryptor.decrypt(arrayBuffer);
   const imgBlob = new Blob([decrypted]);
   return URL.createObjectURL(imgBlob);
@@ -104,7 +125,7 @@ async function fetchArrayBuffer(url: string): Promise<Uint8Array> {
 async function embedCssAssets(
   unembeddedXml: string,
   resourcePath: string,
-  decryptor: Decryptor
+  decryptor: IDecryptorInstance
 ) {
   const styles =
     unembeddedXml.match(/(href=")(?!https?:\/\/)\/?([^"]+\.(css))"/g) || [];
