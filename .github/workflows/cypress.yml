@@ -5,9 +5,9 @@ jobs:
   cypress:
     if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && github.event.deployment_status.environment == 'Preview – web-reader'
     runs-on: ubuntu-latest
-    container: 
+    container:
       image: cypress/browsers:node14.17.0-chrome88-ff89
-      optiosn: --user 1001 # https://github.com/cypress-io/github-action#firefox 
+      options: --user 1001 # https://github.com/cypress-io/github-action#firefox
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -19,26 +19,27 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           install: false
-          env: CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
+          config: baseUrl=${{ github.event.deployment_status.target_url }}
 
       - name: Run Chrome
         uses: cypress-io/github-action@v2
         with:
           install: false
-          env: CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
+          config: baseUrl=${{ github.event.deployment_status.target_url }}
           browser: chrome
 
       - name: Run Edge
         uses: cypress-io/github-action@v2
         with:
           install: false
-          env: CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
+          config: baseUrl=${{ github.event.deployment_status.target_url }}
           browser: edge
 
       - name: Run Firefox
         uses: cypress-io/github-action@v2
         with:
           install: false
-          # config: baseUrl=${{ github.event.deployment_status.target_url }}
-          env: CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
+          config: baseUrl=${{ github.event.deployment_status.target_url }}
+          # env:
+          #   CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
           browser: firefox
