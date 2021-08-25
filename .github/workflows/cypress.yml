@@ -7,6 +7,12 @@ jobs:
     runs-on: ubuntu-20.04
     container: cypress/browsers:node14.17.0-chrome88-ff89
     steps:
+      - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: |
+        echo "$GITHUB_CONTEXT"
+
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -16,4 +22,5 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          env: CYPRESS_BASE_URL=${{ github.event.deployment_status.target_url }}
+          install: false
+          config: baseUrl=${{ github.event.deployment_status.target_url }}
