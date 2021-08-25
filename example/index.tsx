@@ -162,6 +162,7 @@ const App = () => {
  */
 const AxisNowEncrypted: React.FC = () => {
   const [getContent, setGetContent] = React.useState<null | GetContent>(null);
+  const [error, setError] = React.useState<Error | undefined>(undefined);
 
   React.useEffect(() => {
     async function setupDecryptor(): Promise<
@@ -175,12 +176,28 @@ const AxisNowEncrypted: React.FC = () => {
       return decryptor;
     }
 
-    setupDecryptor().then((decr) => {
-      setGetContent(() => decr);
-    });
+    setupDecryptor()
+      .then((decr) => {
+        setGetContent(() => decr);
+      })
+      .catch(setError);
   }, []);
 
+  if (error) {
+    return (
+      <Box m={3} role="alert">
+        <Heading as="h1" fontSize="lg">
+          Something went wrong:
+        </Heading>
+        <Text>
+          {error.name}: {error.message}
+        </Text>
+      </Box>
+    );
+  }
+
   if (!getContent) return <div>loading...</div>;
+
   return (
     <WebReader
       webpubManifestUrl={`${origin}/samples/axisnow/encrypted/manifest.json`}
@@ -188,5 +205,10 @@ const AxisNowEncrypted: React.FC = () => {
     />
   );
 };
+
+async function getPlainContent(href: string) {
+  const resp = await fetch(href);
+  return await resp.text();
+}
 
 ReactDOM.render(<App />, document.getElementById('root'));
