@@ -4,23 +4,41 @@ on: [deployment_status]
 jobs:
   cypress:
     if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && github.event.deployment_status.environment == 'Preview – web-reader'
-    runs-on: ubuntu-20.04
-    container: cypress/browsers:node14.17.0-chrome88-ff89
+    runs-on: ubuntu-latest
+    container: 
+      image: cypress/browsers:node14.17.0-chrome88-ff89
+      optiosn: --user 1001 # https://github.com/cypress-io/github-action#firefox 
     steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: |
-          echo "$GITHUB_CONTEXT"
-
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Install Cypress
         run: npm i cypress
 
-      - name: Cypress run
+      - name: Run Default (Electron)
         uses: cypress-io/github-action@v2
         with:
           install: false
-          config: baseUrl=${{ github.event.deployment_status.target_url }}
+          env: CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
+
+      - name: Run Chrome
+        uses: cypress-io/github-action@v2
+        with:
+          install: false
+          env: CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
+          browser: chrome
+
+      - name: Run Edge
+        uses: cypress-io/github-action@v2
+        with:
+          install: false
+          env: CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
+          browser: edge
+
+      - name: Run Firefox
+        uses: cypress-io/github-action@v2
+        with:
+          install: false
+          # config: baseUrl=${{ github.event.deployment_status.target_url }}
+          env: CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
+          browser: firefox
