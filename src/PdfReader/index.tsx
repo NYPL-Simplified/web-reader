@@ -94,7 +94,7 @@ const loadResource = async (
 ) => {
   // Generate the resource URL using the proxy
   const resource: string =
-    proxyUrl + encodeURI(manifest.readingOrder![resourceIndex].href);
+    proxyUrl + encodeURI(manifest.readingOrder[resourceIndex].href);
   const response = await fetch(resource, { mode: 'cors' });
   const array = new Uint8Array(await response.arrayBuffer());
 

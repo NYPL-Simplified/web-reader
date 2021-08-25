@@ -21,7 +21,7 @@ export default function SettingsCard({
 }: {
   navigator: Navigator;
   readerState: ReaderState;
-}) {
+}): React.ReactElement {
   const [isOpen, setIsOpen] = React.useState(false);
   const open = () => setIsOpen(!isOpen);
   const close = () => setIsOpen(false);
