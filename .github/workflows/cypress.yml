@@ -8,10 +8,10 @@ jobs:
     container: cypress/browsers:node14.17.0-chrome88-ff89
     steps:
       - name: Dump GitHub context
-      env:
-        GITHUB_CONTEXT: ${{ toJson(github) }}
-      run: |
-        echo "$GITHUB_CONTEXT"
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: |
+          echo "$GITHUB_CONTEXT"
 
       - name: Checkout
         uses: actions/checkout@v2
