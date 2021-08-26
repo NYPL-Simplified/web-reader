@@ -19,7 +19,7 @@ describe('navigating an EPUB page', () => {
 
     // Open chapter 1
     cy.findByRole('menuitem', { name: 'I: Down the Rab­bit-Hole' }).click();
-    cy.wait(100); // wait for the nested iframe to render
+    cy.wait(1000); // wait for the nested iframe to render
 
     cy.iframe(IFRAME_SELECTOR)
       .find('.subtitle')
@@ -32,7 +32,7 @@ describe('navigating an EPUB page', () => {
 
     cy.findByRole('button', { name: '>' }).click();
 
-    cy.wait(100);
+    cy.wait(1000);
     cy.iframe(IFRAME_SELECTOR)
       .findByRole('img', {
         name: 'The Standard Ebooks logo',
@@ -45,11 +45,11 @@ describe('navigating an EPUB page', () => {
       })
       .should('not.exist');
 
-    cy.wait(100);
+    cy.wait(1000);
 
     cy.findByRole('button', { name: '<' }).click();
 
-    cy.wait(100);
+    cy.wait(1000);
     cy.iframe(IFRAME_SELECTOR)
       .findByRole('img', {
         name: "Alice's Adventures in Wonderland, by Lewis Carroll",
