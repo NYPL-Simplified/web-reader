@@ -30,7 +30,6 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
       // set all the initial settings taken from the reader
       const settings = action.reader.currentSettings;
       return {
-        type: 'HTML',
         reader: action.reader,
         isScrolling: settings.verticalScroll,
         colorMode: getColorMode(settings.appearance),
@@ -77,7 +76,6 @@ const FONT_SIZE_STEP = 4;
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const { webpubManifestUrl, manifest } = args ?? {};
   const [state, dispatch] = React.useReducer(htmlReducer, {
-    type: 'HTML',
     colorMode: 'day',
     isScrolling: false,
     fontSize: 16,
@@ -198,6 +196,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   // we are initializing the reader
   if (isLoading) {
     return {
+      type: null,
       isLoading: true,
       content: <HtmlReaderContent />,
       navigator: null,
@@ -208,6 +207,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
 
   // the reader is active
   return {
+    type: 'HTML',
     isLoading: false,
     content: <HtmlReaderContent />,
     state,

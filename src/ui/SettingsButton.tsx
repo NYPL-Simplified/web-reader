@@ -7,7 +7,13 @@ import {
   ButtonGroup,
   Text,
 } from '@chakra-ui/react';
-import { Navigator, PDFReaderState, HTMLReaderState } from '../types';
+import {
+  Navigator,
+  PDFReaderState,
+  HTMLReaderState,
+  PDFActiveReader,
+  HTMLActiveReader,
+} from '../types';
 import { Icon, IconNames } from '@nypl/design-system-react-components';
 
 import Button from './Button';
@@ -147,18 +153,18 @@ const HTMLSettings = ({
   );
 };
 
-export default function SettingsCard({
-  navigator,
-  readerState,
-}: {
-  navigator: Navigator;
-  readerState: PDFReaderState | HTMLReaderState;
-}): React.ReactElement {
+type SettingsCardProps =
+  | Pick<PDFActiveReader, 'navigator' | 'state' | 'type'>
+  | Pick<HTMLActiveReader, 'navigator' | 'state' | 'type'>;
+
+export default function SettingsCard(
+  props: SettingsCardProps
+): React.ReactElement {
   const [isOpen, setIsOpen] = React.useState(false);
   const open = () => setIsOpen(!isOpen);
   const close = () => setIsOpen(false);
 
-  const paginationValue = readerState?.isScrolling ? 'scrolling' : 'paginated';
+  const paginationValue = props.state?.isScrolling ? 'scrolling' : 'paginated';
   const contentBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.white');
 
   return (
@@ -181,17 +187,17 @@ export default function SettingsCard({
           bgColor={contentBgColor}
         >
           <PopoverBody p={0} maxWidth="95vw">
-            {readerState.type === 'PDF' && (
+            {props.type === 'PDF' && (
               <PDFSettings
-                navigator={navigator}
-                readerState={readerState}
+                navigator={props.navigator}
+                readerState={props.state}
                 paginationValue={paginationValue}
               />
             )}
-            {readerState.type === 'HTML' && (
+            {props.type === 'HTML' && (
               <HTMLSettings
-                navigator={navigator}
-                readerState={readerState}
+                navigator={props.navigator}
+                readerState={props.state}
                 paginationValue={paginationValue}
               />
             )}

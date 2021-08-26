@@ -116,7 +116,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   const { webpubManifestUrl, manifest, proxyUrl = '' } = args ?? {};
 
   const [state, dispatch] = React.useReducer(pdfReducer, {
-    type: 'PDF',
     colorMode: 'day',
     isScrolling: false,
     fontSize: 16,
@@ -125,6 +124,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     file: null,
     pageNumber: 1,
     numPages: null,
+    currentTocUrl: null,
   });
 
   // state we can derive from the state above
@@ -281,6 +281,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   if (isFetching) {
     // The Reader is fetching a PDF file
     return {
+      type: 'PDF',
       isLoading: false,
       content: (
         <Flex
@@ -319,6 +320,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
 
   // the reader is active but loading a page
   return {
+    type: 'PDF',
     isLoading: false,
     content: (
       <>

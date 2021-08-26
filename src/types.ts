@@ -28,16 +28,14 @@ export type ReaderState = {
   isScrolling: boolean;
   fontSize: number;
   fontFamily: FontFamily;
-};
-
-export type PDFReaderState = ReaderState & {
-  type: 'PDF';
-};
-
-export type HTMLReaderState = ReaderState & {
-  type: 'HTML';
   currentTocUrl: string | null;
 };
+
+// PDF specific reader state
+export type PDFReaderState = ReaderState;
+
+// HTML specific reader state
+export type HTMLReaderState = ReaderState;
 
 export type InactiveReader = null;
 
@@ -47,28 +45,30 @@ export type LoadingReader = {
   navigator: null;
   state: null;
   manifest: null;
+  type: null;
 };
 
-export type ActiveReader = {
+type CommonReader = {
   isLoading: false;
-  navigator: Navigator;
   content: JSX.Element;
   manifest: WebpubManifest;
 };
 
-export type PDFActiveReader = ActiveReader & {
+export type PDFActiveReader = CommonReader & {
   state: PDFReaderState;
+  navigator: Navigator;
+  type: 'PDF';
 };
 
-export type HTMLActiveReader = ActiveReader & {
+export type HTMLActiveReader = CommonReader & {
   state: HTMLReaderState;
+  navigator: Navigator; // HTMLNavigator
+  type: 'HTML';
 };
 
-export type ReaderReturn =
-  | InactiveReader
-  | LoadingReader
-  | PDFActiveReader
-  | HTMLActiveReader;
+export type ActiveReader = PDFActiveReader | HTMLActiveReader;
+
+export type ReaderReturn = InactiveReader | LoadingReader | ActiveReader;
 
 export type ActiveReaderArguments = {
   webpubManifestUrl: string;
