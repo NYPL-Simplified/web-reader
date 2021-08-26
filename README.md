@@ -2,8 +2,6 @@
 
 This project is a web reader built by NYPL for reading eBooks. It is built using the [Readium Architecture](https://github.com/readium/architecture), and specifically built for Webpubs. Webpub is a spec [defined by the Readium Foundation](https://github.com/readium/webpub-manifest) to provide a common abstraction between many types of web publications. Initially, this project will focus on HTML-based Webpubs and Webpubs that define PDF collections. An HTML-based Webpub can be generated from many types of eBooks, but most commonly ePubs.
 
-There is a full architecture proposal for this project available [here](https://docs.google.com/document/d/1TfmyDfCixNOwD4v50mtuCWC6GfFAkaSR00uUtelfmow/edit?usp=sharing).
-
 The project is bootstrapped with [TSDX](https://tsdx.io). It uses Typescript, React, Jest and Rollup, and features both a Storybook development environment and an example application under `/example`. The example is deployed here: https://nypl-web-reader.vercel.app.
 
 A big thanks to [R2D2BC](https://github.com/d-i-t-a/R2D2BC) for providing the underlying HTML navigator capabilities.
@@ -12,6 +10,23 @@ A big thanks to [R2D2BC](https://github.com/d-i-t-a/R2D2BC) for providing the un
 
 - [Example reader app](https://nypl-web-reader.vercel.app)
 - [Storybook deployment](https://web-reader-storybook.vercel.app)
+
+## Features
+
+- [x] HTML-based webpub support (for EPUB, MOBI, etc formats)
+- [x] PDF-based webpub support
+- [x] Customizable UI
+- [x] User settings
+  - [x] Font family (HTML only)
+  - [x] Font size (HTML only)
+  - [x] Color scheme (night, day, sepia)
+  - [x] Fullscreen
+  - [x] Paginated / Scrolling mode toggle
+  - [ ] Zoom (PDF only)
+- [x] Offline support (prefetch and cache desired content via Service Worker, along with host app shell.
+- [ ] Saving bookmarks / highlights
+- [ ] WAI-ARIA compliant accessibility (_pending accessibility review_)
+- [ ] Integration tested
 
 ## Example
 
