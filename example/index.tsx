@@ -10,6 +10,8 @@ import {
   Heading,
   UnorderedList,
   ListItem,
+  Box,
+  Text,
 } from '@chakra-ui/react';
 import { getTheme } from '../src/ui/theme';
 import usePublicationSW from '../src/ServiceWorker/client';
@@ -54,7 +56,7 @@ const App = () => {
               proxyUrl={pdfProxyUrl}
             />
           </Route>
-          <Route path="/pdfcollection">
+          <Route path="/pdf-collection">
             <WebReader
               webpubManifestUrl="/samples/pdf/muse1007.json"
               proxyUrl={pdfProxyUrl}
@@ -73,31 +75,75 @@ const App = () => {
               webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
             />
           </Route>
-          <Route path="/streamed-epub">
+          <Route path="/streamed-alice-epub">
             <WebReader webpubManifestUrl="https://alice.dita.digital/manifest.json" />
           </Route>
           <Route exact path="/">
-            <Heading as="h1">Web Reader Proof of Concept</Heading>
-            <UnorderedList p={4}>
-              <ListItem>
-                <Link to="/axisnow-encrypted">Encrypted EPUB Example</Link>
-              </ListItem>
-              <ListItem>
-                <Link to="/axisnow-decrypted">Manually Decrypted EPUB</Link>
-              </ListItem>
-              <ListItem>
-                <Link to="/moby-epub2">Moby EPUB2-based Webpub</Link>
-              </ListItem>
-              <ListItem>
-                <Link to="/streamed-epub">Regular (streamed) ePub Example</Link>
-              </ListItem>
-              <ListItem>
-                <Link to="/pdf">Pdf Example</Link>
-              </ListItem>
-              <ListItem>
-                <Link to="/pdfcollection">Pdf Collection Example</Link>
-              </ListItem>
-            </UnorderedList>
+            <Box m={2}>
+              <Heading as="h1">NYPL Web Reader</Heading>
+              <Heading as="h2" fontSize={2} mt={3}>
+                Generic Examples
+              </Heading>
+              <UnorderedList p={4}>
+                <ListItem>
+                  EPUB2 Based Webpubs
+                  <UnorderedList>
+                    <ListItem>
+                      <Link to="/moby-epub2">Moby Dick </Link>
+                    </ListItem>
+                  </UnorderedList>
+                </ListItem>
+                <ListItem>
+                  Remote hosted WebPubs
+                  <UnorderedList>
+                    <ListItem>
+                      <Link to="streamed-alice-epub">
+                        Alice's Adventures in Wonderland
+                      </Link>
+                      <Text as="i">
+                        &nbsp;(streamed from https://alice.dita.digital)
+                      </Text>
+                    </ListItem>
+                  </UnorderedList>
+                </ListItem>
+                <ListItem>
+                  PDFs
+                  <UnorderedList>
+                    <ListItem>
+                      <Link to="/pdf">Single-PDF Webpub</Link>
+                    </ListItem>
+                    <ListItem>
+                      <Link to="/pdf-collection">Multi-PDF Webpub</Link>
+                    </ListItem>
+                  </UnorderedList>
+                </ListItem>
+              </UnorderedList>
+              <Heading as="h2" fontSize={2} mt={3}>
+                AxisNow Examples
+              </Heading>
+              <Text fontSize="sm">
+                These examples are specific to NYPL, and may not work properly
+                without access to private packages.
+              </Text>
+              <UnorderedList p={4}>
+                <ListItem>
+                  <Link to="/axisnow-encrypted">AxisNow Encrypted EPUB</Link>
+                </ListItem>
+                <ListItem>
+                  <Link to="/axisnow-decrypted">Decrypted AxisNow EPUB</Link>
+                  <UnorderedList>
+                    <ListItem>
+                      <Text fontSize="sm" as="i">
+                        This sample is the same as the above, but manually
+                        decrypted on the server and served statically in a
+                        decrypted form. The encrypted example should match this
+                        one in the browser.
+                      </Text>
+                    </ListItem>
+                  </UnorderedList>
+                </ListItem>
+              </UnorderedList>
+            </Box>
           </Route>
           <Route path="*">
             <h1>404</h1>
@@ -116,6 +162,7 @@ const App = () => {
  */
 const AxisNowEncrypted: React.FC = () => {
   const [getContent, setGetContent] = React.useState<null | GetContent>(null);
+  const [error, setError] = React.useState<Error | undefined>(undefined);
 
   React.useEffect(() => {
     async function setupDecryptor(): Promise<
@@ -129,12 +176,28 @@ const AxisNowEncrypted: React.FC = () => {
       return decryptor;
     }
 
-    setupDecryptor().then((decr) => {
-      setGetContent(() => decr);
-    });
+    setupDecryptor()
+      .then((decr) => {
+        setGetContent(() => decr);
+      })
+      .catch(setError);
   }, []);
 
+  if (error) {
+    return (
+      <Box m={3} role="alert">
+        <Heading as="h1" fontSize="lg">
+          Something went wrong:
+        </Heading>
+        <Text>
+          {error.name}: {error.message}
+        </Text>
+      </Box>
+    );
+  }
+
   if (!getContent) return <div>loading...</div>;
+
   return (
     <WebReader
       webpubManifestUrl={`${origin}/samples/axisnow/encrypted/manifest.json`}
@@ -142,5 +205,10 @@ const AxisNowEncrypted: React.FC = () => {
     />
   );
 };
+
+async function getPlainContent(href: string) {
+  const resp = await fetch(href);
+  return await resp.text();
+}
 
 ReactDOM.render(<App />, document.getElementById('root'));
