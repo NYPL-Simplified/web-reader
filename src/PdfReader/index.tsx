@@ -1,6 +1,5 @@
-import { Document, Page } from 'react-pdf/dist/esm/entry.parcel';
-
-import React from 'react';
+import { Document, Page, PageProps, pdfjs } from 'react-pdf';
+import * as React from 'react';
 import {
   ColorMode,
   ReaderArguments,
@@ -9,8 +8,8 @@ import {
   WebpubManifest,
 } from '../types';
 import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
-import useContainerWidth from '../ui/hooks/useContainerWidth';
-
+import useMeasure from './useMeasure';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 type PdfState = ReaderState & {
   type: 'PDF';
   resourceIndex: number;
@@ -20,7 +19,14 @@ type PdfState = ReaderState & {
   // if pageNumber is -1, we will navigate to the end of the
   // resource once it is parsed
   pageNumber: number;
+  scale: number;
+  pdfHeight: number;
+  pdfWidth: number;
+  pageHeight: number | undefined;
+  pageWidth: number | undefined;
 };
+
+pdfjs.GlobalWorkerOptions.workerSrc = `pdf.worker.min.js`;
 
 type PdfReaderAction =
   | {
@@ -32,8 +38,14 @@ type PdfReaderAction =
   | { type: 'PDF_PARSED'; numPages: number }
   | { type: 'NAVIGATE_PAGE'; pageNum: number }
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
-  | { type: 'SET_SCROLL'; isScrolling: boolean };
-
+  | { type: 'SET_SCALE'; scale: number }
+  | { type: 'SET_SCROLL'; isScrolling: boolean }
+  | { type: 'PAGE_LOAD_SUCCESS'; height: number; width: number }
+  | {
+      type: 'RESIZE_PAGE';
+      height: number | undefined;
+      width: number | undefined;
+    };
 const IFRAME_WRAPPER_ID = 'iframe-wrapper';
 
 function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
@@ -84,6 +96,28 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
         ...state,
         isScrolling: action.isScrolling,
       };
+
+    case 'SET_SCALE':
+      return {
+        ...state,
+        scale: action.scale,
+      };
+
+    case 'PAGE_LOAD_SUCCESS':
+      return {
+        ...state,
+        pdfWidth: action.width,
+        pdfHeight: action.height,
+        pageWidth: action.width,
+        pageHeight: action.height,
+      };
+
+    case 'RESIZE_PAGE':
+      return {
+        ...state,
+        pageWidth: action.width,
+        pageHeight: action.height,
+      };
   }
 }
 
@@ -127,21 +161,23 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     file: null,
     pageNumber: 1,
     numPages: null,
+    scale: 1,
+    pdfWidth: 0,
+    pdfHeight: 0,
+    pageHeight: undefined,
+    pageWidth: undefined,
   });
 
   // state we can derive from the state above
   const isFetching = !state.file;
   const isParsed = typeof state.numPages === 'number';
-
-  // Width
-  // The PDF renderer needs pixel size to know how to render the PDF content
-  const width = useContainerWidth(IFRAME_WRAPPER_ID);
+  const [containerRef, containerSize] = useMeasure<HTMLDivElement>();
 
   // Wrap Page component so that we can pass it styles
   const ChakraPage = chakra(Page, {
     shouldForwardProp: (prop) => {
       // Definitely forward width and height
-      if (['width', 'height'].includes(prop)) return true;
+      if (['width', 'height', 'scale'].includes(prop)) return true;
       // don't forward the rest of Chakra's props
       const isChakraProp = !shouldForwardProp(prop);
       if (isChakraProp) return false;
@@ -149,8 +185,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       return true;
     },
     baseStyle: {
-      border: '1px',
-      borderColor: 'ui.gray.light-cool',
+      outline: '1px',
+      outlineColor: 'ui.gray.light-cool',
     },
   });
 
@@ -173,6 +209,41 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
 
     setPdfResource(manifest, proxyUrl);
   }, [proxyUrl, manifest]);
+
+  /**
+   * calculate the height or width of the pdf page in paginated mode.
+   *  - if the page's aspect ratio is taller than the container's, we will constrain
+   *    the page to the height of the container.
+   *  - if the page's aspect ratio is wider than the container's, we will constrain
+   *    the page to the width of the container
+   */
+
+  const resizePage = React.useCallback(
+    (
+      pdfWidth: number,
+      pdfHeight: number,
+      containerSize: { width: number; height: number }
+    ) => {
+      const wRatio = pdfWidth / containerSize.width;
+      const hRatio = pdfHeight / containerSize.height;
+
+      const fitHorizontal = wRatio > hRatio;
+      const width = fitHorizontal ? Math.round(containerSize.width) : undefined;
+      const height = !fitHorizontal
+        ? Math.round(containerSize.height)
+        : undefined;
+
+      dispatch({ type: 'RESIZE_PAGE', width, height });
+    },
+    []
+  );
+
+  //TODO: Somehow, this window size updates when height
+  React.useEffect(() => {
+    if (containerSize) {
+      resizePage(state.pdfWidth, state.pdfHeight, containerSize);
+    }
+  }, [containerSize, state.pdfWidth, state.pdfHeight, resizePage]);
 
   // prev and next page functions
   const goForward = React.useCallback(async () => {
@@ -262,12 +333,22 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     []
   );
 
+  /**
+   * TODO: Change this button into a different "scale" button
+   */
   const increaseFontSize = React.useCallback(async () => {
-    console.log('unimplemented');
-  }, []);
+    dispatch({
+      type: 'SET_SCALE',
+      scale: state.scale + 0.1,
+    });
+  }, [state.scale]);
+
   const decreaseFontSize = React.useCallback(async () => {
-    console.log('unimplemented');
-  }, []);
+    dispatch({
+      type: 'SET_SCALE',
+      scale: state.scale - 0.1,
+    });
+  }, [state.scale]);
 
   const setFontFamily = React.useCallback(async () => {
     console.log('unimplemented');
@@ -319,43 +400,63 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     });
   }
 
+  function onRenderSuccess(page: PageProps) {
+    if (!page.height || !page.width || !containerSize)
+      throw new Error('Error rendering page from Reader');
+    if (
+      Math.round(page.height) !== state.pdfHeight ||
+      Math.round(page.width) !== state.pdfWidth
+    ) {
+      dispatch({
+        type: 'PAGE_LOAD_SUCCESS',
+        height: Math.round(page.height),
+        width: Math.round(page.width),
+      });
+
+      resizePage(page.width, page.height, containerSize);
+    }
+  }
+
   // the reader is active but loading a page
   return {
     isLoading: false,
     content: (
-      <>
-        <Flex
-          as="main"
-          zIndex="base"
-          flex="1 0 auto"
-          justifyContent="center"
-          alignItems="center"
-          tabIndex={-1}
-          id={IFRAME_WRAPPER_ID}
-        >
-          <Document file={state.file} onLoadSuccess={onDocumentLoadSuccess}>
-            {isParsed && state.numPages && (
-              <>
-                {state.isScrolling &&
-                  Array.from(new Array(state.numPages), (_, index) => (
-                    <ChakraPage
-                      key={`page_${index + 1}`}
-                      width={width}
-                      pageNumber={index + 1}
-                    />
-                  ))}
-                {!state.isScrolling && (
+      <Flex
+        as="main"
+        zIndex="base"
+        flex="1 0 auto"
+        justifyContent="center"
+        alignItems="center"
+        tabIndex={-1}
+        id={IFRAME_WRAPPER_ID}
+        ref={containerRef}
+      >
+        <Document file={state.file} onLoadSuccess={onDocumentLoadSuccess}>
+          {isParsed && state.numPages && (
+            <>
+              {state.isScrolling &&
+                Array.from(new Array(state.numPages), (_, index) => (
                   <ChakraPage
-                    pageNumber={state.pageNumber}
-                    width={width}
-                    loading={<></>}
+                    key={`page_${index + 1}`}
+                    width={containerSize?.width}
+                    scale={state.scale}
+                    pageNumber={index + 1}
                   />
-                )}
-              </>
-            )}
-          </Document>
-        </Flex>
-      </>
+                ))}
+              {!state.isScrolling && (
+                <ChakraPage
+                  pageNumber={state.pageNumber}
+                  onLoadSuccess={onRenderSuccess}
+                  width={state.pageWidth}
+                  height={state.pageHeight}
+                  scale={state.scale}
+                  loading={<></>}
+                />
+              )}
+            </>
+          )}
+        </Document>
+      </Flex>
     ),
     state,
     manifest,
