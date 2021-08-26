@@ -1,4 +1,10 @@
-import { Navigator, ReaderState, WebpubManifest } from '../../src/types';
+import React from 'react';
+import {
+  ActiveReader,
+  Navigator,
+  ReaderState,
+  WebpubManifest,
+} from '../../src/types';
 
 const goForwardFn = jest.fn();
 const goBackwardFn = jest.fn();
@@ -44,3 +50,44 @@ export const MockWebpubManifest = {
 } as WebpubManifest;
 
 export const MockReaderState = {} as ReaderState;
+
+const MockComponent = (): React.ReactElement => <>Hello, world.</>;
+
+const MockHtmlReaderState = {
+  colorMode: 'day',
+  isScrolling: false,
+  fontSize: 16,
+  fontFamily: 'sans-serif',
+  reader: undefined,
+  currentTocUrl: null,
+};
+
+const MockPdfReaderState = {
+  colorMode: 'day',
+  isScrolling: false,
+  fontSize: 16,
+  fontFamily: 'sans-serif',
+  resourceIndex: 0,
+  file: null,
+  pageNumber: 1,
+  numPages: null,
+  currentTocUrl: null,
+};
+
+export const MockHtmlReaderProps = {
+  type: 'HTML',
+  isLoading: false,
+  content: <MockComponent />,
+  state: MockHtmlReaderState,
+  manifest: MockWebpubManifest,
+  navigator: MockNavigator,
+} as ActiveReader;
+
+export const MockPdfReaderProps = {
+  type: 'PDF',
+  isLoading: false,
+  content: <MockComponent />,
+  state: MockPdfReaderState,
+  manifest: MockWebpubManifest,
+  navigator: MockNavigator,
+} as ActiveReader;
