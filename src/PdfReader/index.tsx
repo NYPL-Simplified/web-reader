@@ -6,12 +6,12 @@ import {
   ReaderArguments,
   ReaderReturn,
   WebpubManifest,
-  PDFReaderState,
+  PdfReaderState,
 } from '../types';
 import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
 import useContainerWidth from '../ui/hooks/useContainerWidth';
 
-type PdfState = PDFReaderState & {
+type PdfState = PdfReaderState & {
   resourceIndex: number;
   file: { data: Uint8Array } | null;
   // we only know the numPages once the file has been parsed

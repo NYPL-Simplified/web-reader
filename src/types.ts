@@ -23,6 +23,11 @@ export type Navigator = {
   goToPage: (href: Locator) => void;
 };
 
+//  PDF specific navigator here
+export type PdfNavigator = Navigator;
+
+export type HtmlNavigator = Navigator;
+
 export type ReaderState = {
   colorMode: ColorMode;
   isScrolling: boolean;
@@ -32,10 +37,10 @@ export type ReaderState = {
 };
 
 // PDF specific reader state
-export type PDFReaderState = ReaderState;
+export type PdfReaderState = ReaderState;
 
 // HTML specific reader state
-export type HTMLReaderState = ReaderState;
+export type HtmlReaderState = ReaderState;
 
 export type InactiveReader = null;
 
@@ -55,14 +60,14 @@ type CommonReader = {
 };
 
 export type PDFActiveReader = CommonReader & {
-  state: PDFReaderState;
-  navigator: Navigator;
+  state: PdfReaderState;
+  navigator: PdfNavigator;
   type: 'PDF';
 };
 
 export type HTMLActiveReader = CommonReader & {
-  state: HTMLReaderState;
-  navigator: Navigator; // HTMLNavigator
+  state: HtmlReaderState;
+  navigator: HtmlNavigator;
   type: 'HTML';
 };
 

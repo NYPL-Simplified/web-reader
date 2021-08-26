@@ -9,8 +9,8 @@ import {
 } from '@chakra-ui/react';
 import {
   Navigator,
-  PDFReaderState,
-  HTMLReaderState,
+  PdfReaderState,
+  HtmlReaderState,
   PDFActiveReader,
   HTMLActiveReader,
 } from '../types';
@@ -27,7 +27,7 @@ const PDFSettings = ({
   paginationValue,
 }: {
   navigator: Navigator;
-  readerState: PDFReaderState;
+  readerState: PdfReaderState;
   paginationValue: string;
 }): React.ReactElement => {
   return (
@@ -78,7 +78,7 @@ const HTMLSettings = ({
   paginationValue,
 }: {
   navigator: Navigator;
-  readerState: HTMLReaderState;
+  readerState: HtmlReaderState;
   paginationValue: string;
 }): React.ReactElement => {
   return (
