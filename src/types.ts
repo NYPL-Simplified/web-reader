@@ -31,13 +31,13 @@ export type ReaderState = {
 };
 
 export type PDFReaderState = ReaderState & {
-  type: 'PDF'
-}
+  type: 'PDF';
+};
 
 export type HTMLReaderState = ReaderState & {
-  type: 'HTML'
+  type: 'HTML';
   currentTocUrl: string | null;
-}
+};
 
 export type InactiveReader = null;
 
@@ -56,7 +56,7 @@ export type ActiveReader = {
   manifest: WebpubManifest;
 };
 
-export type PDFActiveReader =  ActiveReader & {
+export type PDFActiveReader = ActiveReader & {
   state: PDFReaderState;
 };
 
@@ -64,7 +64,11 @@ export type HTMLActiveReader = ActiveReader & {
   state: HTMLReaderState;
 };
 
-export type ReaderReturn = InactiveReader | LoadingReader | PDFActiveReader | HTMLActiveReader;
+export type ReaderReturn =
+  | InactiveReader
+  | LoadingReader
+  | PDFActiveReader
+  | HTMLActiveReader;
 
 export type ActiveReaderArguments = {
   webpubManifestUrl: string;
