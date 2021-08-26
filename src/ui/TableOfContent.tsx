@@ -43,8 +43,6 @@ const TocItem = (props: TocItemProps) => {
   const _focus = {
     ..._hover,
     boxShadow: 'none',
-    background: isActive ? activeBgColor : bgColor,
-    color: isActive ? activeColor : color,
   };
 
   const styles = {
