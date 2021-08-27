@@ -63,7 +63,7 @@ const PDFSettings = ({
         </Button>
         <Button
           flexGrow={1}
-          aria-label="Zoom out"
+          aria-label="Zoom Out"
           onClick={navigator.increaseFontSize}
           variant="toggle"
         >
