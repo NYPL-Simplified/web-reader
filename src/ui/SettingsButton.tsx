@@ -6,6 +6,7 @@ import {
   PopoverBody,
   ButtonGroup,
   Text,
+  Circle,
 } from '@chakra-ui/react';
 import {
   Navigator,
@@ -49,7 +50,16 @@ const PDFSettings = ({
           onClick={navigator.decreaseFontSize}
           variant="toggle"
         >
-          Zoom In
+          Zoom
+          <Circle
+            border="1px solid"
+            p={1}
+            ml={1}
+            size="17px"
+            alignItems="baseline"
+          >
+            <Icon decorative name={IconNames.minus} modifiers={['small']} />{' '}
+          </Circle>
         </Button>
         <Button
           flexGrow={1}
@@ -57,7 +67,16 @@ const PDFSettings = ({
           onClick={navigator.increaseFontSize}
           variant="toggle"
         >
-          Zoom Out
+          Zoom
+          <Circle
+            border="1px solid"
+            p={1}
+            ml={1}
+            size="17px"
+            alignItems="baseline"
+          >
+            <Icon decorative name={IconNames.plus} modifiers={['small']} />{' '}
+          </Circle>
         </Button>
       </ButtonGroup>
       <ToggleGroup

@@ -48,6 +48,8 @@ function ToggleButton(props: React.PropsWithoutRef<ToggleButtonProps>) {
               transform="translateY(-50%)"
               borderColor="white"
               border="1px solid"
+              size="15px"
+              alignItems="baseline"
             >
               <Icon decorative name={IconNames.check} modifiers={['small']} />
             </Circle>
