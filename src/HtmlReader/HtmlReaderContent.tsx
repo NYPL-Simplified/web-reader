@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { HEADER_HEIGHT } from '../ui/Header';
+import { HEADER_HEIGHT } from '../ui/constants';
 
-const HtmlReaderContent = () => {
+const HtmlReaderContent: React.FC = () => {
   return (
     <div id="D2Reader-Container">
       <main
