@@ -6,7 +6,9 @@ export type PageButtonProps = React.ComponentPropsWithoutRef<typeof Box> & {
   children: React.ReactNode;
 };
 
-function PageButton(props: React.PropsWithoutRef<PageButtonProps>) {
+function PageButton(
+  props: React.PropsWithoutRef<PageButtonProps>
+): React.ReactElement {
   const { children, onClick, ...rest } = props;
   const circleColor = useColorModeValue('ui.black', 'ui.white', 'ui.black');
   const circleBgColor = useColorModeValue('ui.white', 'gray.700', 'ui.white');

@@ -11,13 +11,14 @@ import {
 import { Icon, IconNames } from '@nypl/design-system-react-components';
 import { Navigator, ReaderState, WebpubManifest } from '../types';
 import Button from './Button';
-import { HEADER_HEIGHT } from './Header';
 import useColorModeValue from './hooks/useColorModeValue';
+import { HEADER_HEIGHT } from './constants';
 
 type TocItemProps = React.ComponentPropsWithoutRef<typeof MenuItem> & {
   href: string;
   title: string | undefined;
   isActive: boolean;
+  onClick: React.MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>;
 };
 
 const TocItem = (props: TocItemProps) => {
@@ -70,11 +71,16 @@ export default function TableOfContent({
   navigator: Navigator;
   manifest: WebpubManifest;
   readerState: ReaderState;
-}) {
+}): React.ReactElement {
   const [isOpen, setIsOpen] = useState(false);
-  const tocLinkHandler = (evt: any) => {
+  const tocLinkHandler: React.MouseEventHandler<HTMLButtonElement> = (evt) => {
     evt.preventDefault();
-    navigator.goToPage(evt.target.getAttribute('href'));
+    const href = evt.currentTarget.getAttribute('href');
+    if (!href) {
+      console.warn('TOC Link clicked without an href');
+      return;
+    }
+    navigator.goToPage(href);
     setIsOpen(false);
   };
 

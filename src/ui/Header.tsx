@@ -8,13 +8,11 @@ import { toggleFullScreen } from '../utils/toggleFullScreen';
 import SettingsCard from './SettingsButton';
 import Button from './Button';
 import TableOfContent from './TableOfContent';
+import { HEADER_HEIGHT } from './constants';
 
 export type HeaderProps = ActiveReader & {
   headerLeft?: React.ReactNode; // Top-left header section
 };
-
-// we have to set a constant height to make this work with R2D2BC
-export const HEADER_HEIGHT = 48;
 
 export default function Header(props: HeaderProps): React.ReactElement {
   const { headerLeft, state, navigator, manifest } = props;
