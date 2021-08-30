@@ -20,7 +20,7 @@ export type Navigator = {
   increaseFontSize: () => Promise<void>;
   decreaseFontSize: () => Promise<void>;
   setFontFamily: (family: FontFamily) => Promise<void>;
-  goToPage: (href: Locator) => void;
+  goToPage: (href: string) => void;
 };
 
 export type ReaderType = 'HTML' | 'PDF';
