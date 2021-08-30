@@ -10,7 +10,7 @@ import {
 } from '../types';
 import HtmlReaderContent from './HtmlReaderContent';
 import { Locator } from '@d-i-t-a/reader/dist/model/Locator';
-import { HEADER_HEIGHT } from '../ui/Header';
+import { HEADER_HEIGHT } from '../ui/constants';
 
 type HtmlState = ReaderState & {
   reader: D2Reader | undefined;
