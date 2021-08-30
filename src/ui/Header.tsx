@@ -8,6 +8,7 @@ import { toggleFullScreen } from '../utils/toggleFullScreen';
 import SettingsCard from './SettingsButton';
 import Button from './Button';
 import TableOfContent from './TableOfContent';
+import { HEADER_HEIGHT } from './constants';
 
 export type HeaderProps = {
   headerLeft?: React.ReactNode; // Top-left header section
@@ -16,10 +17,7 @@ export type HeaderProps = {
   manifest: WebpubManifest;
 };
 
-// we have to set a constant height to make this work with R2D2BC
-export const HEADER_HEIGHT = 48;
-
-export default function Header(props: HeaderProps) {
+export default function Header(props: HeaderProps): React.ReactElement {
   const { headerLeft, readerState, navigator, manifest } = props;
   const linkColor = useColorModeValue('gray.700', 'gray.100', 'gray.700');
   const mainBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
