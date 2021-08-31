@@ -1,6 +1,6 @@
 import { IFRAME_SELECTOR } from '../../support/constants';
 
-describe('render app', () => {
+describe('render page content', () => {
   it('Renders content on the streamed epub page', () => {
     cy.loadPage('/streamed-epub');
 

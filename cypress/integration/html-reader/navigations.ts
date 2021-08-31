@@ -5,6 +5,14 @@ describe('navigating an EPUB page', () => {
     cy.loadPage('/streamed-epub');
   });
 
+  it('should contain the NYPL homepage url', () => {
+    cy.findByRole('link', { name: 'Return to NYPL' }).should(
+      'have.prop',
+      'href',
+      'https://www.nypl.org/'
+    );
+  });
+
   it('should update page content after clicking on TOC link', () => {
     cy.iframe(IFRAME_SELECTOR)
       .findByRole('img', {
