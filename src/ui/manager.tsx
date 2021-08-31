@@ -31,7 +31,11 @@ const WebReaderContent: React.FC<ReaderReturn> = ({
       {navigator && state && manifest && (
         <Header readerState={state} navigator={navigator} manifest={manifest} />
       )}
-      <PageButton onClick={navigator?.goBackward} left={0}>{`<`}</PageButton>
+      <PageButton
+        onClick={navigator?.goBackward}
+        left={0}
+        aria-label="Previous Page"
+      >{`<`}</PageButton>
       <Flex
         width="100vw"
         bg={bgColor}
@@ -43,7 +47,11 @@ const WebReaderContent: React.FC<ReaderReturn> = ({
       >
         {children}
       </Flex>
-      <PageButton onClick={navigator?.goForward} right={0}>{`>`}</PageButton>
+      <PageButton
+        onClick={navigator?.goForward}
+        right={0}
+        aria-label="Next Page"
+      >{`>`}</PageButton>
     </Flex>
   );
 };
