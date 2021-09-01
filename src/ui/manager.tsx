@@ -27,6 +27,7 @@ const WebReaderContent: React.FC<ReaderReturn> = ({ children, ...props }) => {
       <PageButton
         onClick={props.navigator?.goBackward}
         left={0}
+        aria-label="Previous Page"
       >{`<`}</PageButton>
       <Flex
         width="100vw"
@@ -42,6 +43,7 @@ const WebReaderContent: React.FC<ReaderReturn> = ({ children, ...props }) => {
       <PageButton
         onClick={props.navigator?.goForward}
         right={0}
+        aria-label="Next Page"
       >{`>`}</PageButton>
     </Flex>
   );
