@@ -38,7 +38,7 @@ describe('navigating an EPUB page', () => {
     // load iframe
     cy.iframe(IFRAME_SELECTOR);
 
-    cy.findByRole('button', { name: '>' }).click();
+    cy.findByRole('button', { name: 'Next Page' }).click();
 
     cy.wait(1000);
     cy.iframe(IFRAME_SELECTOR)
@@ -55,7 +55,7 @@ describe('navigating an EPUB page', () => {
 
     cy.wait(1000);
 
-    cy.findByRole('button', { name: '<' }).click();
+    cy.findByRole('button', { name: 'Previous Page' }).click();
 
     cy.wait(1000);
     cy.iframe(IFRAME_SELECTOR)
