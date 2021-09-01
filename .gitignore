@@ -16,3 +16,7 @@ storybook-static
 
 # the parcel built example app
 www
+
+# cypress
+cypress/screenshots
+cypress/videos
