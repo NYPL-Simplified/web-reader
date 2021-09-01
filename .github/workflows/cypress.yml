@@ -20,20 +20,24 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           install: false
-          config: baseUrl=${{ github.event.deployment_status.target_url }}
+          # config: baseUrl=${{ github.event.deployment_status.target_url }}
+          env:
+            CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
 
       - name: Run Chrome
         uses: cypress-io/github-action@v2
         with:
           install: false
-          config: baseUrl=${{ github.event.deployment_status.target_url }}
+          # config: baseUrl=${{ github.event.deployment_status.target_url }}
           browser: chrome
+          env:
+            CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
 
       - name: Run Firefox
         uses: cypress-io/github-action@v2
         with:
           install: false
-          config: baseUrl=${{ github.event.deployment_status.target_url }}
-          # env:
-          #   CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
+          # config: baseUrl=${{ github.event.deployment_status.target_url }}
           browser: firefox
+          env:
+            CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
