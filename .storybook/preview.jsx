@@ -1,8 +1,8 @@
-const React = require("react")
-const { ChakraProvider } = require("@chakra-ui/react")
-import { getTheme } from "../src/ui/theme"
-
-import '@nypl/design-system-react-components/dist/styles.css'
+const React = require('react');
+const { ChakraProvider } = require('@chakra-ui/react');
+import { getTheme } from '../src/ui/theme';
+import { useTheme } from '@chakra-ui/react';
+import '@nypl/design-system-react-components/dist/styles.css';
 
 // https://storybook.js.org/docs/react/writing-stories/parameters#global-parameters
 export const parameters = {
@@ -11,11 +11,12 @@ export const parameters = {
 };
 
 const withChakra = (StoryFn, _context) => {
+  const { args } = _context;
   return (
-    <ChakraProvider theme={getTheme('day')} >
-        <StoryFn />
+    <ChakraProvider theme={getTheme(args.colorMode ?? 'day')}>
+      <StoryFn />
     </ChakraProvider>
-  )
-}
+  );
+};
 
 export const decorators = [withChakra];

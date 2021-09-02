@@ -12,6 +12,12 @@ const meta: Meta = {
     readerState: {},
   },
   argTypes: {
+    colorMode: {
+      options: ['day', 'sepia', 'night'],
+      control: { type: 'radio' },
+      defaultValue: 'day',
+      description: 'Select between day / sepia / night mode',
+    },
     headerLeft: {
       description: '[Optional]',
     },
@@ -32,4 +38,6 @@ const meta: Meta = {
 
 export default meta;
 
-export const HeaderBar = (args: HeaderProps) => <Header {...args} />;
+export const HeaderBar = (args: HeaderProps): React.ReactElement => (
+  <Header {...args} />
+);

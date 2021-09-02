@@ -1,6 +1,8 @@
 import React from 'react';
 import { Meta, Story } from '@storybook/react';
 import Button, { ButtonProps } from '../src/ui/Button';
+import { ChakraProvider } from '@chakra-ui/react';
+import { getTheme } from '../src/ui/theme';
 
 const meta: Meta = {
   title: 'Button',
@@ -19,7 +21,11 @@ const meta: Meta = {
 
 export default meta;
 
-const Template: Story<ButtonProps> = (args) => <Button {...args} />;
+const Template: Story<ButtonProps> = (args) => (
+  <ChakraProvider theme={getTheme(args.colormode ?? 'day')}>
+    <Button {...args} />
+  </ChakraProvider>
+);
 
 // By passing using the Args format for exported stories, you can control the props for a component for reuse in a test
 // https://storybook.js.org/docs/react/workflows/unit-testing
@@ -27,7 +33,7 @@ export const Light = Template.bind({});
 
 Light.args = {
   children: 'Hello world',
-  colorScheme: 'light',
+  colormode: 'light',
 };
 
 export const LightDisabled = Template.bind({});
@@ -41,7 +47,7 @@ export const Dark = Template.bind({});
 
 Dark.args = {
   children: 'Hello world',
-  colorScheme: 'dark',
+  colormode: 'dark',
 };
 
 export const DarkDisabled = Template.bind({});
@@ -55,7 +61,7 @@ export const Sepia = Template.bind({});
 
 Sepia.args = {
   children: 'Hello world',
-  colorScheme: 'sepia',
+  colormode: 'sepia',
 };
 
 export const SepiaDisable = Template.bind({});

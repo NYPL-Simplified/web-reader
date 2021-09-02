@@ -9,6 +9,13 @@ const meta: Meta = {
   parameters: {
     controls: { expanded: true },
   },
+  argTypes: {
+    colorMode: {
+      options: ['day', 'sepia', 'night'],
+      control: { type: 'radio' },
+      defaultValue: 'day',
+    },
+  },
 };
 
 export default meta;
