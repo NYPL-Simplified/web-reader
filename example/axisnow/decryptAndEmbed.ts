@@ -21,7 +21,9 @@ export default async function createChapterDecryptor(
   try {
     // we have to type cast this because it is a dynamic, optional import.
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const Decryptor = require('@nypl-simplified-packages/axisnow-access-control-web') as IDecryptor;
+    const Decryptor = require('@nypl-simplified-packages/axisnow-access-control-web')
+      .default as IDecryptor;
+    console.log(Decryptor);
     const decryptor = await Decryptor.createDecryptor(params);
     return decryptChapter(decryptor);
   } catch (e) {
