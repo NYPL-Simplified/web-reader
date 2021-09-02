@@ -18,23 +18,23 @@ jobs:
 
       - name: Run Default (Electron)
         uses: cypress-io/github-action@v2
+        env:
+          CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
         with:
           install: false
-          env:
-            CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
 
       - name: Run Chrome
         uses: cypress-io/github-action@v2
+        env:
+          CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
         with:
           install: false
-          env:
-            CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
           browser: chrome
 
       - name: Run Firefox
         uses: cypress-io/github-action@v2
+        env:
+          CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
         with:
           install: false
-          env:
-            CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
           browser: firefox
