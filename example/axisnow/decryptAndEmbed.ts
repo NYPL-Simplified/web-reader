@@ -23,7 +23,6 @@ export default async function createChapterDecryptor(
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const Decryptor = require('@nypl-simplified-packages/axisnow-access-control-web')
       .default as IDecryptor;
-    console.log(Decryptor);
     const decryptor = await Decryptor.createDecryptor(params);
     return decryptChapter(decryptor);
   } catch (e) {
