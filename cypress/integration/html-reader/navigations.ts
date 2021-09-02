@@ -3,6 +3,7 @@ import { IFRAME_SELECTOR } from '../../support/constants';
 describe('navigating an EPUB page', () => {
   beforeEach(() => {
     cy.loadPage('/streamed-epub');
+    cy.iframe(IFRAME_SELECTOR, { timeout: 5000 });
   });
 
   it('should contain the NYPL homepage url', () => {
@@ -37,9 +38,6 @@ describe('navigating an EPUB page', () => {
   });
 
   it('should navigate forward and backwards with page buttons', () => {
-    // load iframe
-    cy.iframe(IFRAME_SELECTOR);
-
     cy.findByRole('button', { name: 'Next Page' }).click();
     cy.get('#reader-loading').should('be.visible');
 

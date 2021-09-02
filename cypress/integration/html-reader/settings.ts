@@ -3,10 +3,10 @@ import { IFRAME_SELECTOR } from '../../support/constants';
 describe('display dettings', () => {
   beforeEach(() => {
     cy.loadPage('/streamed-epub');
+    cy.iframe(IFRAME_SELECTOR, { timeout: 5000 });
   });
 
   it('should have the default settings', () => {
-    cy.wait(1000); // wait for the iframe, needed this for Firefox
     cy.iframe(IFRAME_SELECTOR, { getDocument: true }).within(() => {
       // We need to wrap it with wwithin to get the proper context
       cy.get('html')
