@@ -14,6 +14,7 @@ describe('navigating an EPUB page', () => {
   });
 
   it('should update page content after clicking on TOC link', () => {
+    cy.get('#reader-loading').should('not.be.visible');
     cy.iframe(IFRAME_SELECTOR)
       .findByRole('img', {
         name: "Alice's Adventures in Wonderland, by Lewis Carroll",
@@ -27,7 +28,8 @@ describe('navigating an EPUB page', () => {
 
     // Open chapter 1
     cy.findByRole('menuitem', { name: 'I: Down the Rab­bit-Hole' }).click();
-    cy.wait(1000); // wait for the nested iframe to render
+
+    cy.get('#reader-loading').should('not.be.visible');
 
     cy.iframe(IFRAME_SELECTOR)
       .find('.subtitle')
@@ -39,8 +41,8 @@ describe('navigating an EPUB page', () => {
     cy.iframe(IFRAME_SELECTOR);
 
     cy.findByRole('button', { name: 'Next Page' }).click();
+    cy.get('#reader-loading').should('be.visible');
 
-    cy.wait(1000);
     cy.iframe(IFRAME_SELECTOR)
       .findByRole('img', {
         name: 'The Standard Ebooks logo',
@@ -53,11 +55,10 @@ describe('navigating an EPUB page', () => {
       })
       .should('not.exist');
 
-    cy.wait(1000);
-
     cy.findByRole('button', { name: 'Previous Page' }).click();
+    cy.get('#reader-loading').should('be.visible');
 
-    cy.wait(1000);
+    cy.get('#reader-loading').should('not.be.visible');
     cy.iframe(IFRAME_SELECTOR)
       .findByRole('img', {
         name: "Alice's Adventures in Wonderland, by Lewis Carroll",
