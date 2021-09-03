@@ -32,7 +32,8 @@ describe('Render settings for different media type', () => {
     expect(getByLabelText('Day')).toBeChecked();
     expect(getByLabelText('Paginated')).toBeChecked();
 
-    // TODO: pdf specific tests
+    // TODO: pdf specific tests, create tests for PDF specific settings and make sure they don't
+    // show up for the HTML reader. This should also apply to Cypress tests.
     expect(queryByLabelText('Zoom In')).toBeNull();
     expect(queryByLabelText('Zoom Out')).toBeNull();
   });
@@ -60,5 +61,7 @@ describe('Render settings for different media type', () => {
     // default checked values
     expect(getByLabelText('Sans-Serif')).toBeChecked();
     expect(getByLabelText('Paginated')).toBeChecked();
+
+    // TODO: HTML specific tests. Same as above, make sure HTML settings/buttons do not show up on the page when a PDF is being rendered.
   });
 });
