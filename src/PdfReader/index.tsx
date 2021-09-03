@@ -8,7 +8,6 @@ import {
   PdfReaderState,
 } from '../types';
 import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
-import useContainerWidth from '../ui/hooks/useContainerWidth';
 import useMeasure from './useMeasure';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 
