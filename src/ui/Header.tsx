@@ -1,7 +1,7 @@
 import React from 'react';
 import { Flex, Link, HStack, Text } from '@chakra-ui/react';
 import { Icon, IconNames } from '@nypl/design-system-react-components';
-import { ReaderState, Navigator, WebpubManifest } from '../types';
+import { ActiveReader } from '../types';
 import useColorModeValue from '../ui/hooks/useColorModeValue';
 import { toggleFullScreen } from '../utils/toggleFullScreen';
 
@@ -10,15 +10,12 @@ import Button from './Button';
 import TableOfContent from './TableOfContent';
 import { HEADER_HEIGHT } from './constants';
 
-export type HeaderProps = {
+export type HeaderProps = ActiveReader & {
   headerLeft?: React.ReactNode; // Top-left header section
-  readerState: ReaderState;
-  navigator: Navigator;
-  manifest: WebpubManifest;
 };
 
 export default function Header(props: HeaderProps): React.ReactElement {
-  const { headerLeft, readerState, navigator, manifest } = props;
+  const { headerLeft, state, navigator, manifest } = props;
   const linkColor = useColorModeValue('gray.700', 'gray.100', 'gray.700');
   const mainBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
   return (
@@ -62,9 +59,9 @@ export default function Header(props: HeaderProps): React.ReactElement {
         <TableOfContent
           navigator={navigator}
           manifest={manifest}
-          readerState={readerState}
+          readerState={state}
         />
-        <SettingsCard navigator={navigator} readerState={readerState} />
+        <SettingsCard {...props} />
         <Button border="none" onClick={toggleFullScreen}>
           <Icon decorative name={IconNames.search} modifiers={['small']} />
           <Text variant="headerNav">Toggle Fullscreen</Text>

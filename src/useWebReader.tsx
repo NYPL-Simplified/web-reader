@@ -3,7 +3,12 @@ import { fetchJson } from './utils/fetch';
 import HtmlReaderContent from './HtmlReader/HtmlReaderContent';
 import usePdfReader from './PdfReader';
 import useHtmlReader from './HtmlReader';
-import { ActiveReader, LoadingReader, WebpubManifest } from './types';
+import {
+  HTMLActiveReader,
+  LoadingReader,
+  PDFActiveReader,
+  WebpubManifest,
+} from './types';
 import {
   AxisNowEpubConformsTo,
   WebpubPdfConformsTo,
@@ -38,7 +43,7 @@ function getReaderType(conformsTo: ConformsTo | null | undefined) {
 export default function useWebReader(
   webpubManifestUrl: string,
   options: UseWebReaderOptions = {}
-): ActiveReader | LoadingReader {
+): HTMLActiveReader | PDFActiveReader | LoadingReader {
   const [manifest, setManifest] = React.useState<WebpubManifest | null>(null);
   const readerType = getReaderType(
     manifest ? manifest.metadata.conformsTo : null
@@ -81,6 +86,7 @@ export default function useWebReader(
       manifest: null,
       navigator: null,
       state: null,
+      type: null,
     };
   }
 
