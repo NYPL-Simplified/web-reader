@@ -12,10 +12,9 @@ const meta: Meta = {
     readerState: {},
   },
   argTypes: {
-    colorMode: {
+    currentColorMode: {
       options: ['day', 'sepia', 'night'],
       control: { type: 'radio' },
-      defaultValue: 'day',
       description: 'Select between day / sepia / night mode',
     },
     headerLeft: {

@@ -1,7 +1,6 @@
 const React = require('react');
 const { ChakraProvider } = require('@chakra-ui/react');
 import { getTheme } from '../src/ui/theme';
-import { useTheme } from '@chakra-ui/react';
 import '@nypl/design-system-react-components/dist/styles.css';
 
 // https://storybook.js.org/docs/react/writing-stories/parameters#global-parameters
@@ -14,7 +13,8 @@ export const parameters = {
 const withChakra = (StoryFn, _context) => {
   const { args } = _context;
   return (
-    <ChakraProvider theme={getTheme(args.colorMode ?? 'day')}>
+    // theme name needs to be `currentColorMode` to match our getTheme setup
+    <ChakraProvider theme={getTheme(args.currentColorMode ?? 'day')}>
       <StoryFn />
     </ChakraProvider>
   );
