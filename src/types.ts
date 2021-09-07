@@ -22,16 +22,24 @@ export type Navigator = {
   goToPage: (href: string) => void;
 };
 
-export type ReaderType = 'HTML' | 'PDF';
+//  PDF specific navigator here
+export type PdfNavigator = Navigator;
+
+export type HtmlNavigator = Navigator;
 
 export type ReaderState = {
-  type: ReaderType;
   colorMode: ColorMode;
   isScrolling: boolean;
   fontSize: number;
   fontFamily: FontFamily;
   currentTocUrl: string | null;
 };
+
+// PDF specific reader state
+export type PdfReaderState = ReaderState;
+
+// HTML specific reader state
+export type HtmlReaderState = ReaderState;
 
 export type InactiveReader = null;
 
@@ -41,15 +49,28 @@ export type LoadingReader = {
   navigator: null;
   state: null;
   manifest: null;
+  type: null;
 };
 
-export type ActiveReader = {
+type CommonReader = {
   isLoading: false;
-  state: ReaderState;
-  navigator: Navigator;
   content: JSX.Element;
   manifest: WebpubManifest;
 };
+
+export type PDFActiveReader = CommonReader & {
+  state: PdfReaderState;
+  navigator: PdfNavigator;
+  type: 'PDF';
+};
+
+export type HTMLActiveReader = CommonReader & {
+  state: HtmlReaderState;
+  navigator: HtmlNavigator;
+  type: 'HTML';
+};
+
+export type ActiveReader = PDFActiveReader | HTMLActiveReader;
 
 export type ReaderReturn = InactiveReader | LoadingReader | ActiveReader;
 

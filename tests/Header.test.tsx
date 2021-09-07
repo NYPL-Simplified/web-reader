@@ -1,20 +1,10 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import Header from '../src/ui/Header';
-import {
-  MockNavigator,
-  MockReaderState,
-  MockWebpubManifest,
-} from './utils/MockData';
+import { MockHtmlReaderProps } from './utils/MockData';
 
 test('render header bar', () => {
-  render(
-    <Header
-      readerState={MockReaderState}
-      navigator={MockNavigator}
-      manifest={MockWebpubManifest}
-    />
-  );
+  render(<Header {...MockHtmlReaderProps} />);
 
   expect(
     screen.getByRole('link', { name: 'Return to NYPL' })
@@ -32,7 +22,7 @@ test('render header bar', () => {
   ).toBeInTheDocument();
 });
 
-test('render custom left header', () => {
+test('render header bar with custom left header', () => {
   const IconComponent = () => (
     <span data-testid="custom-icon">
       <svg viewBox="0 0 18 19" xmlns="http://www.w3.org/2000/svg">
@@ -50,14 +40,7 @@ test('render custom left header', () => {
     );
   };
 
-  render(
-    <Header
-      headerLeft={<HeaderLeft />}
-      readerState={MockReaderState}
-      navigator={MockNavigator}
-      manifest={MockWebpubManifest}
-    />
-  );
+  render(<Header headerLeft={<HeaderLeft />} {...MockHtmlReaderProps} />);
 
   expect(screen.getByText('My Custom Header Text')).toBeInTheDocument();
   expect(screen.getByTestId('custom-icon')).toBeInTheDocument();
