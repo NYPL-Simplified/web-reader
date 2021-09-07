@@ -28,22 +28,30 @@ pdfjs.GlobalWorkerOptions.workerSrc = `${origin}/pdf-worker/pdf.worker.min.js`;
 const pdfProxyUrl = process.env.CORS_PROXY_URL as string | undefined;
 
 const App = () => {
+  /**
+   * For the example app we will only cache one publication by default.
+   * Uncomment to cache others if desired. Note that the SW is disabled
+   * by default also, so even though they are cached, they will not be
+   * served from the cache. Disabling them just limits the number of network
+   * requests we make in dev. To enable the service worker in development,
+   * run `npm run example:sw`.
+   */
   usePublicationSW([
-    {
-      manifestUrl: `${origin}/samples/pdf/degruyter.json`,
-      proxyUrl: pdfProxyUrl,
-    },
-    {
-      manifestUrl: `${origin}/samples/pdf/muse1007.json`,
-      proxyUrl: pdfProxyUrl,
-    },
-    { manifestUrl: 'https://alice.dita.digital/manifest.json' },
     {
       manifestUrl: `${origin}/samples/moby-epub2-exploded/manifest.json`,
     },
-    {
-      manifestUrl: `${origin}/samples/axisnow/decrypted/manifest.json`,
-    },
+    // {
+    //   manifestUrl: `${origin}/samples/pdf/degruyter.json`,
+    //   proxyUrl: pdfProxyUrl,
+    // },
+    // {
+    //   manifestUrl: `${origin}/samples/pdf/muse1007.json`,
+    //   proxyUrl: pdfProxyUrl,
+    // },
+    // { manifestUrl: 'https://alice.dita.digital/manifest.json' },
+    // {
+    //   manifestUrl: `${origin}/samples/axisnow/decrypted/manifest.json`,
+    // },
   ]);
 
   return (
@@ -149,6 +157,10 @@ const App = () => {
             <h1>404</h1>
             <p>Page not found.</p>
           </Route>
+          <Route path="*">
+            <h1>404</h1>
+            <p>Page not found.</p>
+          </Route>
         </Switch>
       </BrowserRouter>
     </ChakraProvider>
@@ -205,10 +217,5 @@ const AxisNowEncrypted: React.FC = () => {
     />
   );
 };
-
-async function getPlainContent(href: string) {
-  const resp = await fetch(href);
-  return await resp.text();
-}
 
 ReactDOM.render(<App />, document.getElementById('root'));

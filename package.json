@@ -106,6 +106,8 @@
     "husky": "^7.0.2",
     "jest": "^27.0.5",
     "jest-watch-typeahead": "^0.5.0",
+    "parcel": "^2.0.0-rc.0",
+    "parcel-config-precache-manifest": "^0.0.4",
     "lint-staged": "^11.1.2",
     "parcel": "^2.0.0-rc.0",
     "parcel-config-precache-manifest": "^0.0.4",
