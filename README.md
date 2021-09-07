@@ -113,6 +113,29 @@ Finally, to use in a vanilla Javascript app:
 </script>
 ```
 
+## Offline
+
+The web reader is set up to allow offline reading via a custom cache and a service-worker. Setting up the SW takes some work on the part of the host application, because the service worker code we export has to run _within your application's service worker_. This provides you the flexibility to cache your app code however you want while still using our pre-built utilities to cache publication resources. Here are the recommended steps to set this up:
+
+1. Create a `serviceWorker.ts` file that will hold your un-bundled service worker code.
+1. Register the service worker. You can see `/example/registerSW.ts` for how we suggest doing this.
+1. Make sure the service worker file is bundled as a separate entrypoiunt (eg. "serviceWorker.js") at the root of your domain. Most bundlers know how to handle this by recognizing `navigator.serviceWorker.register(...)`.
+1. In your `serviceWorker.ts` file, write code to pre-cache your application code. This will likely include an html file, a JS bundle, and possibly some CSS resources. Also precache the CSS resources you import from this library. You can see `/example/serviceWorker.ts` for how we suggest doing this. In our case, we used a parcel plugin to generate a manifest of build files. Similar plugins exist for other build systems like webpack.
+1. Call `initWebReaderSW()` **as the last item in your file**. This must be the last item because it registers a `fetch` event listener that will handle _all_ fetch events that reach it. If you try to register a fetch event handler after the `initWebReaderSW()` line, it will never be called.
+1. In your application code, when you know what publications should be cached, call `usePublicationSW()` and pass it a list of `manifestUrls`. The hook will then fetch the manifest, and subsequently cache the manifest and all of the resources listed within. When the SW eventually sees a request for one of the resources, it will have it on hand in the cache and can respond immediately.
+
+### Cache expiration
+
+You control the caching of your application files. For the publication files, we have implemented a default 1 week cache expiration. To change this, you can pass a configuration:
+
+```ts
+// serviceWorker.ts
+initWebReaderSW({
+  // cache for one day
+  cacheExpirationSeconds: 24 * 60 * 60,
+});
+```
+
 # Development
 
 ## Architecture
@@ -209,6 +232,18 @@ npm run example
 ```
 
 The example will rebundle on change, but you have to refresh your browser to see changes (no hot reloading currently).
+
+#### Service Worker on localhost
+
+To develop with the service worker in the example app, you will need to run the app using HTTPS locally, and you will need to enable the service worker. We have disabled it by default because otherwise your development changes will never be reflected in the browser (since old JS will be served from the cache). You can run the app with https and the service worker enabled via the script:
+
+```
+npm run example:sw
+```
+
+If this HTTPS setup doesn't work for you, you may need to follow [this guide](https://web.dev/how-to-use-local-https/) to generate your own certificates or trust ours.
+
+**NOTE:** Developing with the SW can be tricky. You will need to clear the CacheStorage of your browser whenever you make changes to your JS in dev mode. Hard refreshing your browser is not enough. I also suggest enabling `update on reload` in Chrome dev tools under `Application>Service Worker`.
 
 ### CORS Proxy
 

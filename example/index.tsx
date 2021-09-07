@@ -12,33 +12,43 @@ import {
   ListItem,
 } from '@chakra-ui/react';
 import { getTheme } from '../src/ui/theme';
+import usePublicationSW from '../src/ServiceWorker/client';
+import { pdfjs } from 'react-pdf';
 
-const pdfProxyUrl: string = process.env.CORS_PROXY_URL as string | undefined;
+const origin = window.location.origin;
 
-const AxisNowEpub = () => {
-  React.useEffect(() => {
-    // get content
-  }, []);
+// react-pdf web worker config with their default CDN version
+pdfjs.GlobalWorkerOptions.workerSrc = `${origin}/pdf-worker/pdf.worker.min.js`;
 
-  return (
-    <WebReader webpubManifestUrl="http://localhost:1234/samples/axisnow/encrypted/manifest.json" />
-  );
-};
-
-const SWTest = () => {
-  const [value, setValue] = React.useState<null | string>(null);
-  React.useEffect(() => {
-    fetch('http://localhost:1234/samples/pdf/degruyter.json').then((res) => {
-      res.text().then((text) => {
-        setValue(text);
-      });
-    });
-  });
-
-  return <div>{value}</div>;
-};
+const pdfProxyUrl = process.env.CORS_PROXY_URL as string | undefined;
 
 const App = () => {
+  /**
+   * For the example app we will only cache one publication by default.
+   * Uncomment to cache others if desired. Note that the SW is disabled
+   * by default also, so even though they are cached, they will not be
+   * served from the cache. Disabling them just limits the number of network
+   * requests we make in dev. To enable the service worker in development,
+   * run `npm run example:sw`.
+   */
+  usePublicationSW([
+    {
+      manifestUrl: `${origin}/samples/moby-epub2-exploded/manifest.json`,
+    },
+    // {
+    //   manifestUrl: `${origin}/samples/pdf/degruyter.json`,
+    //   proxyUrl: pdfProxyUrl,
+    // },
+    // {
+    //   manifestUrl: `${origin}/samples/pdf/muse1007.json`,
+    //   proxyUrl: pdfProxyUrl,
+    // },
+    // { manifestUrl: 'https://alice.dita.digital/manifest.json' },
+    // {
+    //   manifestUrl: `${origin}/samples/axisnow/decrypted/manifest.json`,
+    // },
+  ]);
+
   return (
     <ChakraProvider theme={getTheme('day')}>
       <BrowserRouter>
@@ -55,29 +65,24 @@ const App = () => {
               proxyUrl={pdfProxyUrl}
             />
           </Route>
-          <Route path="/swtest">
-            <SWTest />
-          </Route>
-          <Route path="/axisnow-encrypted">
-            <AxisNowEpub />
-          </Route>
           <Route path="/axisnow-decrypted">
-            <WebReader webpubManifestUrl="http://localhost:1234/samples/axisnow/decrypted/manifest.json" />
+            <WebReader
+              webpubManifestUrl={`${origin}/samples/axisnow/decrypted/manifest.json`}
+            />
           </Route>
           <Route path="/moby-epub2">
-            <WebReader webpubManifestUrl="http://localhost:1234/samples/moby-epub2-exploded/manifest.json" />
+            <WebReader
+              webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
+            />
           </Route>
           <Route path="/streamed-epub">
             <WebReader webpubManifestUrl="https://alice.dita.digital/manifest.json" />
           </Route>
-          <Route path="/">
+          <Route exact path="/">
             <Heading as="h1">Web Reader Proof of Concept</Heading>
             <UnorderedList p={4}>
               <ListItem>
                 <Link to="/axisnow-encrypted">Encrypted EPUB Example</Link>
-              </ListItem>
-              <ListItem>
-                <Link to="/swtest">SW Test</Link>
               </ListItem>
               <ListItem>
                 <Link to="/axisnow-decrypted">Manually Decrypted EPUB</Link>
@@ -95,6 +100,10 @@ const App = () => {
                 <Link to="/pdfcollection">Pdf Collection Example</Link>
               </ListItem>
             </UnorderedList>
+          </Route>
+          <Route path="*">
+            <h1>404</h1>
+            <p>Page not found.</p>
           </Route>
         </Switch>
       </BrowserRouter>

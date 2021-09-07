@@ -148,7 +148,7 @@ const loadResource = async (
  * @returns
  */
 export default function usePdfReader(args: ReaderArguments): ReaderReturn {
-  const { webpubManifestUrl, manifest, proxyUrl = '' } = args ?? {};
+  const { webpubManifestUrl, manifest, proxyUrl } = args ?? {};
 
   const [state, dispatch] = React.useReducer(pdfReducer, {
     colorMode: 'day',
@@ -191,7 +191,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
 
   // initialize the pdf reader
   React.useEffect(() => {
-    async function setPdfResource(manifest: WebpubManifest, proxyUrl: string) {
+    async function setPdfResource(manifest: WebpubManifest, proxyUrl?: string) {
       const data = await loadResource(manifest, 0, proxyUrl);
       dispatch({
         type: 'RESOURCE_FETCH_SUCCESS',
