@@ -22,7 +22,7 @@ const meta: Meta = {
 export default meta;
 
 const Template: Story<ButtonProps> = (args) => (
-  <ChakraProvider theme={getTheme(args.colormode ?? 'day')}>
+  <ChakraProvider theme={getTheme(args.currentColorMode ?? 'day')}>
     <Button {...args} />
   </ChakraProvider>
 );
@@ -33,7 +33,7 @@ export const Light = Template.bind({});
 
 Light.args = {
   children: 'Hello world',
-  colormode: 'light',
+  currentColorMode: 'day',
 };
 
 export const LightDisabled = Template.bind({});
@@ -47,7 +47,7 @@ export const Dark = Template.bind({});
 
 Dark.args = {
   children: 'Hello world',
-  colormode: 'dark',
+  currentColorMode: 'night',
 };
 
 export const DarkDisabled = Template.bind({});
@@ -61,7 +61,7 @@ export const Sepia = Template.bind({});
 
 Sepia.args = {
   children: 'Hello world',
-  colormode: 'sepia',
+  currentColorMode: 'sepia',
 };
 
 export const SepiaDisable = Template.bind({});
