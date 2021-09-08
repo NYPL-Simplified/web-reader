@@ -10,6 +10,7 @@ import {
 import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
 import useMeasure from './useMeasure';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 type PdfState = ReaderState & {
   type: 'PDF';
   resourceIndex: number;
@@ -121,14 +122,22 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
   }
 }
 
-const loadResource = async (
-  manifest: WebpubManifest,
-  resourceIndex: number,
-  proxyUrl?: string
-) => {
+const getResourceUrl = (
+  index: number,
+  readingOrder: ReadiumLink[] | undefined
+): string => {
+  if (!readingOrder || !readingOrder.length) {
+    throw new Error('A manifest has been returned, but has no reading order');
+  }
+
+  // If it has no children, return the link href
+  return readingOrder[index].href;
+};
+
+const loadResource = async (resourceUrl: string, proxyUrl?: string) => {
+  console.log('loading Resource', resourceUrl);
   // Generate the resource URL using the proxy
-  const resource: string =
-    proxyUrl + encodeURI(manifest.readingOrder![resourceIndex].href);
+  const resource: string = proxyUrl + encodeURI(resourceUrl);
   const response = await fetch(resource, { mode: 'cors' });
   const array = new Uint8Array(await response.arrayBuffer());
 
@@ -193,7 +202,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   // initialize the pdf reader
   React.useEffect(() => {
     async function setPdfResource(manifest: WebpubManifest, proxyUrl: string) {
-      const data = await loadResource(manifest, 0, proxyUrl);
+      const resourceUrl = getResourceUrl(0, manifest.readingOrder);
+      const data = await loadResource(resourceUrl, proxyUrl);
       dispatch({
         type: 'RESOURCE_FETCH_SUCCESS',
         file: { data: data },
@@ -267,7 +277,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         shouldNavigateToEnd: false,
       });
 
-      const data = await loadResource(manifest, nextIndex, proxyUrl);
+      const resourceUrl = getResourceUrl(nextIndex, manifest.readingOrder);
+      const data = await loadResource(resourceUrl, proxyUrl);
       dispatch({
         type: 'RESOURCE_FETCH_SUCCESS',
         file: { data },
@@ -300,7 +311,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         shouldNavigateToEnd: !state.isScrolling,
       });
 
-      const data = await loadResource(manifest, nextIndex, proxyUrl);
+      const resourceUrl = getResourceUrl(nextIndex, manifest.readingOrder);
+      const data = await loadResource(resourceUrl, proxyUrl);
 
       dispatch({
         type: 'RESOURCE_FETCH_SUCCESS',
@@ -354,9 +366,31 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     console.log('unimplemented');
   }, []);
 
-  const goToPage = React.useCallback(async () => {
-    console.log('unimplemented');
-  }, []);
+  const goToPage = React.useCallback(
+    async (href) => {
+      const getIndexFromHref = (href: string): number => {
+        const index = manifest?.readingOrder?.findIndex((link) => {
+          return link.href === href;
+        });
+        if (!index) {
+          throw new Error('Cannot find resource in readingOrder');
+        }
+        return index;
+      };
+
+      dispatch({
+        type: 'SET_CURRENT_RESOURCE',
+        index: getIndexFromHref(href),
+        shouldNavigateToEnd: false,
+      });
+      const data = await loadResource(href, proxyUrl);
+      dispatch({
+        type: 'RESOURCE_FETCH_SUCCESS',
+        file: { data },
+      });
+    },
+    [manifest?.readingOrder, proxyUrl]
+  );
 
   // this format is inactive, return null
   if (!webpubManifestUrl || !manifest) return null;

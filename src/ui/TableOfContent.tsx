@@ -13,6 +13,7 @@ import { Navigator, ReaderState, WebpubManifest } from '../types';
 import Button from './Button';
 import { HEADER_HEIGHT } from './Header';
 import useColorModeValue from './hooks/useColorModeValue';
+import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 
 type TocItemProps = React.ComponentPropsWithoutRef<typeof MenuItem> & {
   href: string;
@@ -73,6 +74,7 @@ export default function TableOfContent({
   manifest: WebpubManifest;
   readerState: ReaderState;
 }) {
+  console.log('readerStaet', readerState);
   const [isOpen, setIsOpen] = useState(false);
   const tocLinkHandler = (evt: any) => {
     evt.preventDefault();
@@ -81,6 +83,11 @@ export default function TableOfContent({
   };
 
   const tocBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
+
+  const getLinkHref = (link: ReadiumLink): string => {
+    if (!link.children) return link.href;
+    return getLinkHref(link.children[0]);
+  };
 
   return (
     <Menu
@@ -104,10 +111,10 @@ export default function TableOfContent({
             mt="-2px" // Move the popover slightly higher to hide Header border
             overflow="auto"
           >
-            {manifest.toc.map((content) => (
+            {manifest.toc.map((content: ReadiumLink) => (
               <React.Fragment key={content.title}>
                 <TocItem
-                  href={content.href}
+                  href={getLinkHref(content)}
                   title={content.title}
                   isActive={readerState?.currentTocUrl === content.href}
                   onClick={tocLinkHandler}
@@ -116,7 +123,7 @@ export default function TableOfContent({
                   content.children.map((subLink) => (
                     <TocItem
                       key={subLink.title}
-                      href={subLink.href}
+                      href={getLinkHref(subLink)}
                       title={subLink.title}
                       isActive={readerState?.currentTocUrl === subLink.href}
                       onClick={tocLinkHandler}
