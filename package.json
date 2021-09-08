@@ -19,8 +19,6 @@
     "test:ci": "jest --ci --coverage --maxWorkers=2",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "cypress:run:html": "cypress run --spec './cypress/integration/html-reader/*'",
-    "cypress:run:pdf": "cypress run --spec './cypress/integration/pdf-reader/*'",
     "prettier": "prettier --write --ignore-path .eslintignore .",
     "prettier:check": "prettier --check --ignore-path .eslintignore .",
     "lint": "eslint --fix .",

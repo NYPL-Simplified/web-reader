@@ -2,13 +2,16 @@ import { IFRAME_SELECTOR } from '../../support/constants';
 
 describe('display dettings', () => {
   beforeEach(() => {
-    cy.loadPage('/streamed-epub');
-    cy.iframe(IFRAME_SELECTOR, { timeout: 5000 });
+    cy.loadPage('/streamed-alice-epub');
   });
 
   it('should have the default settings', () => {
-    cy.iframe(IFRAME_SELECTOR, { getDocument: true }).within(() => {
-      // We need to wrap it with wwithin to get the proper context
+    cy.log('briefly see the loading indicator');
+    cy.get('#reader-loading').should('be.visible');
+    cy.get('#reader-loading').should('not.be.visible');
+
+    cy.iframe(IFRAME_SELECTOR).within(() => {
+      // We need to wrap it with within to get the proper context
       cy.get('html')
         .should('have.attr', 'data-viewer-font', 'publisher')
         .should('have.css', '--USER__appearance', 'readium-default-on')
@@ -25,7 +28,7 @@ describe('display dettings', () => {
     cy.findByText('Paginated').click();
     cy.findByText('Sepia').click();
 
-    cy.iframe(IFRAME_SELECTOR, { getDocument: true }).within(() => {
+    cy.iframe(IFRAME_SELECTOR).within(() => {
       cy.get('html')
         .should('have.attr', 'data-viewer-font', 'serif')
         .should('have.css', '--USER__appearance', 'readium-sepia-on')
@@ -34,14 +37,14 @@ describe('display dettings', () => {
   });
 
   it('should trigger font size setting', () => {
-    cy.iframe(IFRAME_SELECTOR, { getDocument: true }).within(() => {
+    cy.iframe(IFRAME_SELECTOR).within(() => {
       cy.get('html').should('not.have.css', '--USER__fontSize'); // by default, there's no font size set on the page
     });
 
     cy.findByRole('button', { name: 'Settings' }).click();
     cy.findByRole('button', { name: 'Decrease font size' }).click();
 
-    cy.iframe(IFRAME_SELECTOR, { getDocument: true }).within(() => {
+    cy.iframe(IFRAME_SELECTOR).within(() => {
       cy.get('html').should('have.css', '--USER__fontSize', '96%'); // 4% per step?
     });
   });

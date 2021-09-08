@@ -2,8 +2,7 @@ import { IFRAME_SELECTOR } from '../../support/constants';
 
 describe('navigating an EPUB page', () => {
   beforeEach(() => {
-    cy.loadPage('/streamed-epub');
-    cy.iframe(IFRAME_SELECTOR, { timeout: 5000 });
+    cy.loadPage('/streamed-alice-epub');
   });
 
   it('should contain the NYPL homepage url', () => {
@@ -15,13 +14,15 @@ describe('navigating an EPUB page', () => {
   });
 
   it('should update page content after clicking on TOC link', () => {
-    cy.iframe(IFRAME_SELECTOR, { getDocument: true })
+    cy.iframe(IFRAME_SELECTOR)
       .findByRole('img', {
         name: "Alice's Adventures in Wonderland, by Lewis Carroll",
       })
       .should('exist');
 
-    cy.iframe(IFRAME_SELECTOR).find('.subtitle').should('not.exist');
+    cy.iframe(IFRAME_SELECTOR)
+      .findByText('Down the Rab­bit-Hole')
+      .should('not.exist');
 
     // Open TOC menu
     cy.findByRole('button', { name: 'Table of Contents' }).click();
@@ -34,21 +35,30 @@ describe('navigating an EPUB page', () => {
     cy.get('#reader-loading').should('not.be.visible');
 
     cy.iframe(IFRAME_SELECTOR)
-      .find('.subtitle')
-      .contains('Down the Rab­bit-Hole');
+      .findByText('Down the Rab­bit-Hole')
+      .should('exist');
   });
 
   it('should navigate forward and backwards with page buttons', () => {
     cy.log('make sure we are on the homepage');
-    cy.iframe(IFRAME_SELECTOR, { getDocument: true })
+    cy.iframe(IFRAME_SELECTOR)
       .findByRole('img', {
         name: "Alice's Adventures in Wonderland, by Lewis Carroll",
       })
       .should('exist');
 
+    cy.findByRole('button', { name: 'Settings' }).click();
+    // let's make sure we are on paginated mode
+    cy.findByText('Paginated').click();
+
     cy.findByRole('button', { name: 'Next Page' }).click();
 
-    cy.iframe(IFRAME_SELECTOR, { timeout: 10000, getDocument: true })
+    cy.log('Should briefly see the Loading indicator');
+    cy.get('#reader-loading').should('be.visible');
+    cy.get('#reader-loading').should('not.be.visible');
+
+    cy.log('Then we see the next page');
+    cy.iframe(IFRAME_SELECTOR, { timeout: 10000 })
       .findByRole('img', {
         name: 'The Standard Ebooks logo',
         timeout: 20000,
@@ -68,7 +78,7 @@ describe('navigating an EPUB page', () => {
     cy.get('#reader-loading').should('not.be.visible');
 
     cy.log('Then we see the next page');
-    cy.iframe(IFRAME_SELECTOR, { getDocument: true })
+    cy.iframe(IFRAME_SELECTOR)
       .findByRole('img', {
         name: "Alice's Adventures in Wonderland, by Lewis Carroll",
       })

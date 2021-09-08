@@ -2,7 +2,6 @@
 import '@testing-library/cypress/add-commands';
 
 type IframeOptions = {
-  getDocument?: boolean;
   timeout?: number;
 };
 
@@ -26,8 +25,6 @@ Cypress.Commands.add('loadPage', (pageName) => {
 
 Cypress.Commands.add('iframe', (selector: string, options?: IframeOptions) => {
   const DEFAULT_OPTIONS = {
-    // By default, it returns the iframe 'body' content instead of the iframe document object
-    getDocument: false,
     // Cypress default timeout
     timeout: 4000,
   };
@@ -36,7 +33,7 @@ Cypress.Commands.add('iframe', (selector: string, options?: IframeOptions) => {
 
   return cy
     .get(selector, { timeout: ops.timeout })
-    .its(`0.contentDocument${ops.getDocument ? '' : '.body'}`)
+    .its(`0.contentDocument`)
     .should('not.be.empty')
     .then(cy.wrap);
 });
