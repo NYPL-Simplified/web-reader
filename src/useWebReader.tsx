@@ -4,6 +4,8 @@ import HtmlReaderContent from './HtmlReader/HtmlReaderContent';
 import usePdfReader from './PdfReader';
 import useHtmlReader from './HtmlReader';
 import {
+  ActiveReader,
+  UseWebReaderArguments,
   HTMLActiveReader,
   LoadingReader,
   PDFActiveReader,
@@ -14,10 +16,6 @@ import {
   WebpubPdfConformsTo,
   ConformsTo,
 } from './WebpubManifestTypes/ConformsTo';
-
-type UseWebReaderOptions = {
-  proxyUrl?: string;
-};
 
 function getReaderType(conformsTo: ConformsTo | null | undefined) {
   switch (conformsTo) {
@@ -41,9 +39,9 @@ function getReaderType(conformsTo: ConformsTo | null | undefined) {
  * for that type.
  */
 export default function useWebReader(
-  webpubManifestUrl: string,
-  options: UseWebReaderOptions = {}
+  args: UseWebReaderArguments
 ): HTMLActiveReader | PDFActiveReader | LoadingReader {
+  const { webpubManifestUrl, getContent, proxyUrl } = args;
   const [manifest, setManifest] = React.useState<WebpubManifest | null>(null);
   const readerType = getReaderType(
     manifest ? manifest.metadata.conformsTo : null
@@ -59,6 +57,7 @@ export default function useWebReader(
       ? {
           webpubManifestUrl,
           manifest,
+          getContent,
         }
       : undefined
   );
@@ -68,7 +67,7 @@ export default function useWebReader(
       ? {
           webpubManifestUrl,
           manifest,
-          proxyUrl: options.proxyUrl,
+          proxyUrl,
         }
       : undefined
   );
