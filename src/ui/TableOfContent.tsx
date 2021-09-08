@@ -88,7 +88,8 @@ export default function TableOfContent({
   const tocBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
 
   const getLinkHref = (link: ReadiumLink): string => {
-    if (!link.children) return link.href;
+    if (link.href) return link.href;
+    if (!link.children) throw new Error('Manifest is not well formed');
     return getLinkHref(link.children[0]);
   };
 
