@@ -11,14 +11,15 @@ import {
 import { Icon, IconNames } from '@nypl/design-system-react-components';
 import { Navigator, ReaderState, WebpubManifest } from '../types';
 import Button from './Button';
-import { HEADER_HEIGHT } from './Header';
 import useColorModeValue from './hooks/useColorModeValue';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
+import { HEADER_HEIGHT } from './constants';
 
 type TocItemProps = React.ComponentPropsWithoutRef<typeof MenuItem> & {
   href: string;
   title: string | undefined;
   isActive: boolean;
+  onClick: React.MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>;
 };
 
 const TocItem = (props: TocItemProps) => {
@@ -44,8 +45,6 @@ const TocItem = (props: TocItemProps) => {
   const _focus = {
     ..._hover,
     boxShadow: 'none',
-    background: isActive ? activeBgColor : bgColor,
-    color: isActive ? activeColor : color,
   };
 
   const styles = {
@@ -73,12 +72,16 @@ export default function TableOfContent({
   navigator: Navigator;
   manifest: WebpubManifest;
   readerState: ReaderState;
-}) {
-  console.log('readerStaet', readerState);
+}): React.ReactElement {
   const [isOpen, setIsOpen] = useState(false);
-  const tocLinkHandler = (evt: any) => {
+  const tocLinkHandler: React.MouseEventHandler<HTMLButtonElement> = (evt) => {
     evt.preventDefault();
-    navigator.goToPage(evt.target.getAttribute('href'));
+    const href = evt.currentTarget.getAttribute('href');
+    if (!href) {
+      console.warn('TOC Link clicked without an href');
+      return;
+    }
+    navigator.goToPage(href);
     setIsOpen(false);
   };
 

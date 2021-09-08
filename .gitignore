@@ -4,6 +4,7 @@ node_modules
 .cache
 dist
 
+.eslintcache
 .parcel-cache
 .cache
 
@@ -15,3 +16,7 @@ storybook-static
 
 # the parcel built example app
 www
+
+# cypress
+cypress/screenshots
+cypress/videos

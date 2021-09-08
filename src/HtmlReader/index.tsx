@@ -3,18 +3,17 @@ import React from 'react';
 import injectables from './injectables';
 import {
   ColorMode,
-  ReaderState,
+  HtmlReaderState,
   ReaderReturn,
   ReaderArguments,
   FontFamily,
 } from '../types';
 import HtmlReaderContent from './HtmlReaderContent';
 import { Locator } from '@d-i-t-a/reader/dist/model/Locator';
-import { HEADER_HEIGHT } from '../ui/Header';
+import { HEADER_HEIGHT } from '../ui/constants';
 
-type HtmlState = ReaderState & {
+type HtmlState = HtmlReaderState & {
   reader: D2Reader | undefined;
-  type: 'HTML';
 };
 
 export type HtmlAction =
@@ -31,7 +30,6 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
       // set all the initial settings taken from the reader
       const settings = action.reader.currentSettings;
       return {
-        type: 'HTML',
         reader: action.reader,
         isScrolling: settings.verticalScroll,
         colorMode: getColorMode(settings.appearance),
@@ -76,9 +74,8 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
 const FONT_SIZE_STEP = 4;
 
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
-  const { webpubManifestUrl, manifest } = args ?? {};
+  const { webpubManifestUrl, manifest, getContent } = args ?? {};
   const [state, dispatch] = React.useReducer(htmlReducer, {
-    type: 'HTML',
     colorMode: 'day',
     isScrolling: false,
     fontSize: 16,
@@ -103,10 +100,13 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
         navHeight: HEADER_HEIGHT,
         margin: 0,
       },
+      api: {
+        getContent: getContent as any, //TODO: fix this casting,
+      } as any, //TODO: fix this casting,,
     }).then((reader) => {
       dispatch({ type: 'SET_READER', reader });
     });
-  }, [webpubManifestUrl]);
+  }, [webpubManifestUrl, getContent]);
 
   // prev and next page functions
   const goForward = React.useCallback(() => {
@@ -199,6 +199,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   // we are initializing the reader
   if (isLoading) {
     return {
+      type: null,
       isLoading: true,
       content: <HtmlReaderContent />,
       navigator: null,
@@ -209,6 +210,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
 
   // the reader is active
   return {
+    type: 'HTML',
     isLoading: false,
     content: <HtmlReaderContent />,
     state,
