@@ -25,11 +25,6 @@ function ToggleButton(
   const { isChecked, children, colorMode, ...rest } = props;
   const { getInputProps, getCheckboxProps } = useRadio(props);
 
-  /**
-   * scheduleMicrotask is causing the onFocus bug in the console
-   * (Which interrupts the Keyboard Tab key for navigating the buttons)
-   * https://github.com/chakra-ui/chakra-ui/issues/4259 should fix the issue if closed.
-   */
   const input = getInputProps();
   const checkbox = getCheckboxProps();
   const theme = useTheme();
@@ -50,6 +45,8 @@ function ToggleButton(
               transform="translateY(-50%)"
               borderColor="white"
               border="1px solid"
+              size="15px"
+              alignItems="baseline"
             >
               <Icon decorative name={IconNames.check} modifiers={['small']} />
             </Circle>
