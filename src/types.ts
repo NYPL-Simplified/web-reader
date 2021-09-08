@@ -75,11 +75,19 @@ export type ActiveReader = PDFActiveReader | HTMLActiveReader;
 
 export type ReaderReturn = InactiveReader | LoadingReader | ActiveReader;
 
-export type ActiveReaderArguments = {
+// should fetch and decrypt a resource
+export type GetContent = (href: string) => Promise<string>;
+
+export type UseWebReaderArguments = {
   webpubManifestUrl: string;
-  manifest: WebpubManifest;
   proxyUrl?: string;
+  getContent?: GetContent;
 };
+
+export type ActiveReaderArguments = UseWebReaderArguments & {
+  manifest: WebpubManifest;
+};
+
 export type InactiveReaderArguments = undefined;
 
 export type ReaderArguments = ActiveReaderArguments | InactiveReaderArguments;
