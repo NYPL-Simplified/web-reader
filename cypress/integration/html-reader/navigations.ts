@@ -15,8 +15,7 @@ describe('navigating an EPUB page', () => {
   });
 
   it('should update page content after clicking on TOC link', () => {
-    cy.get('#reader-loading').should('not.be.visible');
-    cy.iframe(IFRAME_SELECTOR)
+    cy.iframe(IFRAME_SELECTOR, { getDocument: true })
       .findByRole('img', {
         name: "Alice's Adventures in Wonderland, by Lewis Carroll",
       })
@@ -30,6 +29,8 @@ describe('navigating an EPUB page', () => {
     // Open chapter 1
     cy.findByRole('menuitem', { name: 'I: Down the Rab­bit-Hole' }).click();
 
+    cy.log('briefly see the loading indicator');
+    cy.get('#reader-loading').should('be.visible');
     cy.get('#reader-loading').should('not.be.visible');
 
     cy.iframe(IFRAME_SELECTOR)
@@ -38,12 +39,19 @@ describe('navigating an EPUB page', () => {
   });
 
   it('should navigate forward and backwards with page buttons', () => {
-    cy.findByRole('button', { name: 'Next Page' }).click();
-    cy.get('#reader-loading').should('be.visible');
+    cy.log('make sure we are on the homepage');
+    cy.iframe(IFRAME_SELECTOR, { getDocument: true })
+      .findByRole('img', {
+        name: "Alice's Adventures in Wonderland, by Lewis Carroll",
+      })
+      .should('exist');
 
-    cy.iframe(IFRAME_SELECTOR)
+    cy.findByRole('button', { name: 'Next Page' }).click();
+
+    cy.iframe(IFRAME_SELECTOR, { timeout: 10000, getDocument: true })
       .findByRole('img', {
         name: 'The Standard Ebooks logo',
+        timeout: 20000,
       })
       .should('exist');
 
@@ -54,10 +62,13 @@ describe('navigating an EPUB page', () => {
       .should('not.exist');
 
     cy.findByRole('button', { name: 'Previous Page' }).click();
-    cy.get('#reader-loading').should('be.visible');
 
+    cy.log('Should briefly see the Loading indicator');
+    cy.get('#reader-loading').should('be.visible');
     cy.get('#reader-loading').should('not.be.visible');
-    cy.iframe(IFRAME_SELECTOR)
+
+    cy.log('Then we see the next page');
+    cy.iframe(IFRAME_SELECTOR, { getDocument: true })
       .findByRole('img', {
         name: "Alice's Adventures in Wonderland, by Lewis Carroll",
       })
