@@ -135,7 +135,6 @@ const getResourceUrl = (
 };
 
 const loadResource = async (resourceUrl: string, proxyUrl?: string) => {
-  console.log('loading Resource', resourceUrl);
   // Generate the resource URL using the proxy
   const resource: string = proxyUrl + encodeURI(resourceUrl);
   const response = await fetch(resource, { mode: 'cors' });
