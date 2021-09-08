@@ -4,14 +4,14 @@ import {
   ColorMode,
   ReaderArguments,
   ReaderReturn,
-  ReaderState,
   WebpubManifest,
+  PdfReaderState,
 } from '../types';
 import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
 import useMeasure from './useMeasure';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
-type PdfState = ReaderState & {
-  type: 'PDF';
+
+type PdfState = PdfReaderState & {
   resourceIndex: number;
   file: { data: Uint8Array } | null;
   // we only know the numPages once the file has been parsed
@@ -148,19 +148,18 @@ const loadResource = async (
  * @returns
  */
 export default function usePdfReader(args: ReaderArguments): ReaderReturn {
-  const { webpubManifestUrl, manifest, proxyUrl = '' } = args ?? {};
+  const { webpubManifestUrl, manifest, proxyUrl } = args ?? {};
 
   const [state, dispatch] = React.useReducer(pdfReducer, {
-    type: 'PDF',
     colorMode: 'day',
     isScrolling: false,
     fontSize: 16,
     fontFamily: 'sans-serif',
-    currentTocUrl: null,
     resourceIndex: 0,
     file: null,
     pageNumber: 1,
     numPages: null,
+    currentTocUrl: null,
     scale: 1,
     pdfWidth: 0,
     pdfHeight: 0,
@@ -192,7 +191,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
 
   // initialize the pdf reader
   React.useEffect(() => {
-    async function setPdfResource(manifest: WebpubManifest, proxyUrl: string) {
+    async function setPdfResource(manifest: WebpubManifest, proxyUrl?: string) {
       const data = await loadResource(manifest, 0, proxyUrl);
       dispatch({
         type: 'RESOURCE_FETCH_SUCCESS',
@@ -364,6 +363,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   if (isFetching) {
     // The Reader is fetching a PDF file
     return {
+      type: 'PDF',
       isLoading: false,
       content: (
         <Flex
@@ -419,6 +419,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
 
   // the reader is active but loading a page
   return {
+    type: 'PDF',
     isLoading: false,
     content: (
       <Flex

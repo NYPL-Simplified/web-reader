@@ -19,20 +19,13 @@ const ManagerUI: React.FC<ReaderReturn> = (props) => {
   );
 };
 
-const WebReaderContent: React.FC<ReaderReturn> = ({
-  children,
-  navigator,
-  state,
-  manifest,
-}) => {
+const WebReaderContent: React.FC<ReaderReturn> = ({ children, ...props }) => {
   const bgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
   return (
     <Flex flexDir="column" minHeight="100vh" w="100vw">
-      {navigator && state && manifest && (
-        <Header readerState={state} navigator={navigator} manifest={manifest} />
-      )}
+      {!props.isLoading && <Header {...props} />}
       <PageButton
-        onClick={navigator?.goBackward}
+        onClick={props.navigator?.goBackward}
         left={0}
         aria-label="Previous Page"
       >{`<`}</PageButton>
@@ -48,7 +41,7 @@ const WebReaderContent: React.FC<ReaderReturn> = ({
         {children}
       </Flex>
       <PageButton
-        onClick={navigator?.goForward}
+        onClick={props.navigator?.goForward}
         right={0}
         aria-label="Next Page"
       >{`>`}</PageButton>
