@@ -14,8 +14,8 @@ import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 
 type PdfState = PdfReaderState & {
   resourceIndex: number;
-  file: { data: Uint8Array } | null;
-  // we only know the numPages once the file has been parsed
+  resource: { data: Uint8Array } | null;
+  // we only know the numPages once the resource has been parsed
   numPages: number | null;
   // if pageNumber is -1, we will navigate to the end of the
   // resource once it is parsed
@@ -35,7 +35,7 @@ type PdfReaderAction =
       index: number;
       shouldNavigateToEnd: boolean;
     }
-  | { type: 'RESOURCE_FETCH_SUCCESS'; file: { data: Uint8Array } }
+  | { type: 'RESOURCE_FETCH_SUCCESS'; resource: { data: Uint8Array } }
   | { type: 'PDF_PARSED'; numPages: number }
   | { type: 'NAVIGATE_PAGE'; pageNum: number }
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
@@ -52,13 +52,13 @@ const IFRAME_WRAPPER_ID = 'iframe-wrapper';
 function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
   switch (action.type) {
     /**
-     * Cleares the current file and sets the current index, which will cause
+     * Cleares the current resource and sets the current index, which will cause
      * the useEffect hook to load a new resource.
      */
     case 'SET_CURRENT_RESOURCE':
       return {
         ...state,
-        file: null,
+        resource: null,
         resourceIndex: action.index,
         pageNumber: action.shouldNavigateToEnd ? -1 : 1,
         numPages: null,
@@ -67,10 +67,10 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
     case 'RESOURCE_FETCH_SUCCESS':
       return {
         ...state,
-        file: action.file,
+        resource: action.resource,
       };
 
-    // called when the file has been parsed by react-pdf
+    // called when the resource has been parsed by react-pdf
     // and we know the number of pages
     case 'PDF_PARSED':
       return {
@@ -152,7 +152,7 @@ const loadResource = async (resourceUrl: string, proxyUrl?: string) => {
 /**
  * The PDF reader
  *
- * The PDF reader loads files in two stages:  First, it fetches the PDF file as an Uint8Array
+ * The PDF reader loads resources in two stages:  First, it fetches the PDF resource as an Uint8Array
  * Then, it passes this array into the <Document> object, which loads the PDF inside an iframe
  *
  * @param args T
@@ -166,7 +166,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     fontSize: 16,
     fontFamily: 'sans-serif',
     resourceIndex: 0,
-    file: null,
+    resource: null,
     pageNumber: 1,
     numPages: null,
     currentTocUrl: null,
@@ -178,7 +178,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   });
 
   // state we can derive from the state above
-  const isFetching = !state.file;
+  const isFetching = !state.resource;
   const isParsed = typeof state.numPages === 'number';
   const [containerRef, containerSize] = useMeasure<HTMLDivElement>();
 
@@ -219,7 +219,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     loadResource(resourceUrl, proxyUrl).then((data) => {
       dispatch({
         type: 'RESOURCE_FETCH_SUCCESS',
-        file: { data },
+        resource: { data },
       });
     });
   }, [state.resourceIndex, manifest, proxyUrl]);
@@ -378,7 +378,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   if (!webpubManifestUrl || !manifest) return null;
 
   if (isFetching) {
-    // The Reader is fetching a PDF file
+    // The Reader is fetching a PDF resource
     return {
       type: 'PDF',
       isLoading: false,
@@ -449,7 +449,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         id={IFRAME_WRAPPER_ID}
         ref={containerRef}
       >
-        <Document file={state.file} onLoadSuccess={onDocumentLoadSuccess}>
+        <Document file={state.resource} onLoadSuccess={onDocumentLoadSuccess}>
           {isParsed && state.numPages && (
             <>
               {state.isScrolling &&
