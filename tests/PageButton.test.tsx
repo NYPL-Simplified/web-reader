@@ -4,8 +4,12 @@ import PageButton from '../src/ui/PageButton';
 
 test('render PageButton', () => {
   const onClickHandler = jest.fn();
-  render(<PageButton onClick={onClickHandler}>Page</PageButton>);
-  const pageBtn = screen.getByRole('button', { name: 'Page' });
+  render(
+    <PageButton onClick={onClickHandler} aria-label="Next Page">
+      {'>'}
+    </PageButton>
+  );
+  const pageBtn = screen.getByRole('button', { name: 'Next Page' });
   expect(pageBtn).toBeInTheDocument();
 
   fireEvent.click(pageBtn);
