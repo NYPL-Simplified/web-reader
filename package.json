@@ -8,9 +8,9 @@
     "src"
   ],
   "scripts": {
-    "example:build": "parcel build",
+    "example:build": "parcel build example/index.html",
     "example:nocache": "parcel --no-cache",
-    "example": "parcel",
+    "example": "parcel example/index.html",
     "example:https": "parcel --cert localhost.pem --key localhost-key.pem",
     "example:sw": "ENABLE_SW=true npm run example:https",
     "start": "tsdx watch --tsconfig tsconfig.build.json",
@@ -109,8 +109,6 @@
     "parcel": "^2.0.0-rc.0",
     "parcel-config-precache-manifest": "^0.0.4",
     "lint-staged": "^11.1.2",
-    "parcel": "^2.0.0-rc.0",
-    "parcel-config-precache-manifest": "^0.0.4",
     "parcel-plugin-static-files-copy": "^2.6.0",
     "parcel-reporter-static-files-copy": "^1.3.0",
     "prettier": "2.2.1",

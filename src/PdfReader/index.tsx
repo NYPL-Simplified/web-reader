@@ -1,4 +1,12 @@
-import { Document, Page, PageProps, pdfjs } from 'react-pdf';
+import {
+  Document,
+  Outline,
+  OutlineProps,
+  Page,
+  PageProps,
+  pdfjs,
+} from 'react-pdf';
+import { PDFDocumentProxy } from 'pdfjs-dist/types/display/api';
 import * as React from 'react';
 import {
   ColorMode,
@@ -35,7 +43,7 @@ type PdfReaderAction =
       shouldNavigateToEnd: boolean;
     }
   | { type: 'RESOURCE_FETCH_SUCCESS'; file: { data: Uint8Array } }
-  | { type: 'PDF_PARSED'; numPages: number }
+  | { type: 'PDF_PARSED'; pdf: PDFDocumentProxy }
   | { type: 'NAVIGATE_PAGE'; pageNum: number }
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
   | { type: 'SET_SCALE'; scale: number }
@@ -71,11 +79,11 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
     case 'PDF_PARSED':
       return {
         ...state,
-        numPages: action.numPages,
+        numPages: action.pdf.numPages,
         // if the state.pageNumber is -1, we know to navigate to the
         // end of the PDF that was just parsed
         pageNumber:
-          state.pageNumber === -1 ? action.numPages : state.pageNumber,
+          state.pageNumber === -1 ? action.pdf.numPages : state.pageNumber,
       };
 
     // Navigates to page in resource
@@ -161,6 +169,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     numPages: null,
     currentTocUrl: null,
     scale: 1,
+    pdf: null,
     pdfWidth: 0,
     pdfHeight: 0,
     pageHeight: undefined,
@@ -393,10 +402,27 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     };
   }
 
-  function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
+  type OutlineType = {
+    title: string;
+    bold: boolean;
+    italic: boolean;
+    /**
+     * - The color in RGB format to use for
+     * display purposes.
+     */
+    color: Uint8ClampedArray;
+    dest: string | Array<any> | null;
+    url: string | null;
+    unsafeUrl: string | undefined;
+    newWindow: boolean | undefined;
+    count: number | undefined;
+    items: any[];
+  }[];
+
+  function onDocumentLoadSuccess(pdf: PDFDocumentProxy) {
     dispatch({
       type: 'PDF_PARSED',
-      numPages: numPages,
+      pdf: pdf,
     });
   }
 

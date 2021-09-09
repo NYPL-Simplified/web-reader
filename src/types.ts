@@ -1,5 +1,6 @@
 import { Locator } from '@d-i-t-a/reader/dist/model/Locator';
 import { WebpubManifest } from './WebpubManifestTypes/WebpubManifest';
+import { PDFDocumentProxy } from 'pdfjs-dist/types/display/api';
 
 export { WebpubManifest };
 
@@ -37,7 +38,7 @@ export type ReaderState = {
 };
 
 // PDF specific reader state
-export type PdfReaderState = ReaderState;
+export type PdfReaderState = ReaderState & { pdf: PDFDocumentProxy };
 
 // HTML specific reader state
 export type HtmlReaderState = ReaderState;

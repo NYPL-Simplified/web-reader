@@ -9,12 +9,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { Icon, IconNames } from '@nypl/design-system-react-components';
-import {
-  Navigator,
-  PdfReaderState,
-  ReaderState,
-  WebpubManifest,
-} from '../types';
+import { Navigator, ReaderState, WebpubManifest } from '../types';
 import Button from './Button';
 import useColorModeValue from './hooks/useColorModeValue';
 import { HEADER_HEIGHT } from './constants';
@@ -76,7 +71,7 @@ export default function TableOfContent({
 }: {
   navigator: Navigator;
   manifest: WebpubManifest;
-  readerState: ReaderState | PdfReaderState;
+  readerState: ReaderState;
 }): React.ReactElement {
   const [isOpen, setIsOpen] = useState(false);
   const tocLinkHandler: React.MouseEventHandler<HTMLButtonElement> = (evt) => {
@@ -101,14 +96,10 @@ export default function TableOfContent({
         <Icon decorative name={IconNames.download} modifiers={['small']} />
         <Text variant="headerNav">Table of Contents</Text>
       </MenuButton>
-      {(readerState as PdfReaderState).pdf && (
-        <Portal>
-          <Outline pdf={(readerState as PdfReaderState).pdf}></Outline>
-        </Portal>
-      )}
       {isOpen && manifest?.toc && (
         <Portal>
-          <MenuList
+          <Outline pdf={pdf}></Outline>
+          {/* <MenuList
             width="100vw"
             height={`calc(100vh - ${HEADER_HEIGHT}px)`}
             background={tocBgColor}
@@ -140,7 +131,7 @@ export default function TableOfContent({
                   ))}
               </React.Fragment>
             ))}
-          </MenuList>
+          </MenuList> */}
         </Portal>
       )}
     </Menu>
