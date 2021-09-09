@@ -11,11 +11,10 @@ const meta: Meta = {
         type: 'text',
       },
     },
-    colorScheme: {
-      control: {
-        type: 'select',
-        options: ['light', 'sepia', 'dark'],
-      },
+    currentColorMode: {
+      options: ['day', 'sepia', 'night'],
+      control: { type: 'radio' },
+      description: 'Select between day / sepia / night mode',
     },
   },
   parameters: {
@@ -47,6 +46,5 @@ export const CheckedSettingButton = Template.bind({});
 
 CheckedSettingButton.args = {
   ...Default.args,
-  variant: 'toggle',
   isChecked: true,
 };
