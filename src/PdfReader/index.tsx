@@ -14,8 +14,8 @@ import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 
 type PdfState = PdfReaderState & {
   resourceIndex: number;
-  file: { data: Uint8Array } | null;
-  // we only know the numPages once the file has been parsed
+  resource: { data: Uint8Array } | null;
+  // we only know the numPages once the resource has been parsed
   numPages: number | null;
   // if pageNumber is -1, we will navigate to the end of the
   // resource once it is parsed
@@ -35,7 +35,7 @@ type PdfReaderAction =
       index: number;
       shouldNavigateToEnd: boolean;
     }
-  | { type: 'RESOURCE_FETCH_SUCCESS'; file: { data: Uint8Array } }
+  | { type: 'RESOURCE_FETCH_SUCCESS'; resource: { data: Uint8Array } }
   | { type: 'PDF_PARSED'; numPages: number }
   | { type: 'NAVIGATE_PAGE'; pageNum: number }
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
@@ -51,11 +51,14 @@ const IFRAME_WRAPPER_ID = 'iframe-wrapper';
 
 function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
   switch (action.type) {
-    // Changes reader to be in "loading" state
+    /**
+     * Cleares the current resource and sets the current index, which will cause
+     * the useEffect hook to load a new resource.
+     */
     case 'SET_CURRENT_RESOURCE':
       return {
         ...state,
-        file: null,
+        resource: null,
         resourceIndex: action.index,
         pageNumber: action.shouldNavigateToEnd ? -1 : 1,
         numPages: null,
@@ -64,10 +67,10 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
     case 'RESOURCE_FETCH_SUCCESS':
       return {
         ...state,
-        file: action.file,
+        resource: action.resource,
       };
 
-    // called when the file has been parsed by react-pdf
+    // called when the resource has been parsed by react-pdf
     // and we know the number of pages
     case 'PDF_PARSED':
       return {
@@ -149,7 +152,7 @@ const loadResource = async (resourceUrl: string, proxyUrl?: string) => {
 /**
  * The PDF reader
  *
- * The PDF reader loads files in two stages:  First, it fetches the PDF file as an Uint8Array
+ * The PDF reader loads resources in two stages:  First, it fetches the PDF resource as an Uint8Array
  * Then, it passes this array into the <Document> object, which loads the PDF inside an iframe
  *
  * @param args T
@@ -157,14 +160,13 @@ const loadResource = async (resourceUrl: string, proxyUrl?: string) => {
  */
 export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   const { webpubManifestUrl, manifest, proxyUrl } = args ?? {};
-
   const [state, dispatch] = React.useReducer(pdfReducer, {
     colorMode: 'day',
     isScrolling: false,
     fontSize: 16,
     fontFamily: 'sans-serif',
     resourceIndex: 0,
-    file: null,
+    resource: null,
     pageNumber: 1,
     numPages: null,
     currentTocUrl: null,
@@ -176,7 +178,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   });
 
   // state we can derive from the state above
-  const isFetching = !state.file;
+  const isFetching = !state.resource;
   const isParsed = typeof state.numPages === 'number';
   const [containerRef, containerSize] = useMeasure<HTMLDivElement>();
 
@@ -197,16 +199,11 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     },
   });
 
-  // initialize the pdf reader
+  /**
+   * Load the current resource and set it in state,
+   * and reload whenever it changes (via navigation)
+   */
   React.useEffect(() => {
-    async function setPdfResource(manifest: WebpubManifest, proxyUrl?: string) {
-      const resourceUrl = getResourceUrl(0, manifest.readingOrder);
-      const data = await loadResource(resourceUrl, proxyUrl);
-      dispatch({
-        type: 'RESOURCE_FETCH_SUCCESS',
-        file: { data: data },
-      });
-    }
     // bail out if there is not manifest passed in,
     // that indicates that this format is inactive
     if (!manifest) return;
@@ -215,8 +212,17 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       throw new Error('Manifest has no Reading Order');
     }
 
-    setPdfResource(manifest, proxyUrl);
-  }, [proxyUrl, manifest]);
+    const resourceUrl = getResourceUrl(
+      state.resourceIndex,
+      manifest.readingOrder
+    );
+    loadResource(resourceUrl, proxyUrl).then((data) => {
+      dispatch({
+        type: 'RESOURCE_FETCH_SUCCESS',
+        resource: { data },
+      });
+    });
+  }, [state.resourceIndex, manifest, proxyUrl]);
 
   /**
    * calculate the height or width of the pdf page in paginated mode.
@@ -274,18 +280,10 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         index: nextIndex,
         shouldNavigateToEnd: false,
       });
-
-      const resourceUrl = getResourceUrl(nextIndex, manifest.readingOrder);
-      const data = await loadResource(resourceUrl, proxyUrl);
-      dispatch({
-        type: 'RESOURCE_FETCH_SUCCESS',
-        file: { data },
-      });
     }
     // Do nothing if it's at the last page of the last resource
   }, [
     manifest,
-    proxyUrl,
     state.isScrolling,
     state.numPages,
     state.pageNumber,
@@ -308,18 +306,9 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         index: nextIndex,
         shouldNavigateToEnd: !state.isScrolling,
       });
-
-      const resourceUrl = getResourceUrl(nextIndex, manifest.readingOrder);
-      const data = await loadResource(resourceUrl, proxyUrl);
-
-      dispatch({
-        type: 'RESOURCE_FETCH_SUCCESS',
-        file: { data },
-      });
     }
   }, [
     manifest,
-    proxyUrl,
     isParsed,
     state.isScrolling,
     state.pageNumber,
@@ -381,20 +370,15 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         index: getIndexFromHref(href),
         shouldNavigateToEnd: false,
       });
-      const data = await loadResource(href, proxyUrl);
-      dispatch({
-        type: 'RESOURCE_FETCH_SUCCESS',
-        file: { data },
-      });
     },
-    [manifest?.readingOrder, proxyUrl]
+    [manifest?.readingOrder]
   );
 
   // this format is inactive, return null
   if (!webpubManifestUrl || !manifest) return null;
 
   if (isFetching) {
-    // The Reader is fetching a PDF file
+    // The Reader is fetching a PDF resource
     return {
       type: 'PDF',
       isLoading: false,
@@ -465,7 +449,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         id={IFRAME_WRAPPER_ID}
         ref={containerRef}
       >
-        <Document file={state.file} onLoadSuccess={onDocumentLoadSuccess}>
+        <Document file={state.resource} onLoadSuccess={onDocumentLoadSuccess}>
           {isParsed && state.numPages && (
             <>
               {state.isScrolling &&
