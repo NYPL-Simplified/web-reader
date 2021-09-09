@@ -1,6 +1,10 @@
 import React from 'react';
-import { Flex, Link, HStack, Text } from '@chakra-ui/react';
-import { Icon, IconNames } from '@nypl/design-system-react-components';
+import { Flex, Link, HStack, Text, chakra } from '@chakra-ui/react';
+import {
+  Icon,
+  IconNames,
+  LogoNames,
+} from '@nypl/design-system-react-components';
 import { ActiveReader } from '../types';
 import useColorModeValue from '../ui/hooks/useColorModeValue';
 import { toggleFullScreen } from '../utils/toggleFullScreen';
@@ -18,6 +22,14 @@ export default function Header(props: HeaderProps): React.ReactElement {
   const { headerLeft, state, navigator, manifest } = props;
   const linkColor = useColorModeValue('gray.700', 'gray.100', 'gray.700');
   const mainBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
+
+  // had to wrap this because I was having trouble adding custom styles to the NYPL Icon
+  const ChakraIcon = chakra(Icon, {
+    baseStyle: {
+      height: '100%',
+    },
+  });
+
   return (
     <Flex
       as="header"
@@ -46,12 +58,17 @@ export default function Header(props: HeaderProps): React.ReactElement {
           textTransform="uppercase"
           d="flex"
           color={linkColor}
+          height="100%"
           alignItems="center"
           _hover={{
             textDecoration: 'none',
           }}
         >
-          <Icon decorative name={IconNames.headset} modifiers={['small']} />
+          <ChakraIcon
+            decorative
+            name={LogoNames.logo_nypl}
+            modifiers={['xlarge']}
+          />
           <Text variant="headerNav">Return to NYPL</Text>
         </Link>
       )}
