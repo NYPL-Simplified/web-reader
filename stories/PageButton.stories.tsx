@@ -11,6 +11,11 @@ const meta: Meta = {
         type: 'text',
       },
     },
+    currentColorMode: {
+      options: ['day', 'sepia', 'night'],
+      control: { type: 'radio' },
+      description: 'Select between day / sepia / night mode',
+    },
   },
 };
 

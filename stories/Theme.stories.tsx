@@ -48,7 +48,7 @@ const ColorRow = ({ color }: { color: SingleColor | MultiColor }) => {
   );
 };
 
-export const Colors = () => {
+export const Colors = (): React.ReactElement => {
   const theme = useTheme();
 
   const themeColors: Record<string, string | Record<string, string>> =
