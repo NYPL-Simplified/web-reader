@@ -51,7 +51,10 @@ const IFRAME_WRAPPER_ID = 'iframe-wrapper';
 
 function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
   switch (action.type) {
-    // Changes reader to be in "loading" state
+    /**
+     * Cleares the current file and sets the current index, which will cause
+     * the useEffect hook to load a new resource.
+     */
     case 'SET_CURRENT_RESOURCE':
       return {
         ...state,
@@ -157,7 +160,6 @@ const loadResource = async (resourceUrl: string, proxyUrl?: string) => {
  */
 export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   const { webpubManifestUrl, manifest, proxyUrl } = args ?? {};
-
   const [state, dispatch] = React.useReducer(pdfReducer, {
     colorMode: 'day',
     isScrolling: false,
@@ -197,16 +199,11 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     },
   });
 
-  // initialize the pdf reader
+  /**
+   * Load the current resource and set it in state,
+   * and reload whenever it changes (via navigation)
+   */
   React.useEffect(() => {
-    async function setPdfResource(manifest: WebpubManifest, proxyUrl?: string) {
-      const resourceUrl = getResourceUrl(0, manifest.readingOrder);
-      const data = await loadResource(resourceUrl, proxyUrl);
-      dispatch({
-        type: 'RESOURCE_FETCH_SUCCESS',
-        file: { data: data },
-      });
-    }
     // bail out if there is not manifest passed in,
     // that indicates that this format is inactive
     if (!manifest) return;
@@ -215,8 +212,17 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       throw new Error('Manifest has no Reading Order');
     }
 
-    setPdfResource(manifest, proxyUrl);
-  }, [proxyUrl, manifest]);
+    const resourceUrl = getResourceUrl(
+      state.resourceIndex,
+      manifest.readingOrder
+    );
+    loadResource(resourceUrl, proxyUrl).then((data) => {
+      dispatch({
+        type: 'RESOURCE_FETCH_SUCCESS',
+        file: { data },
+      });
+    });
+  }, [state.resourceIndex, manifest, proxyUrl]);
 
   /**
    * calculate the height or width of the pdf page in paginated mode.
@@ -274,18 +280,10 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         index: nextIndex,
         shouldNavigateToEnd: false,
       });
-
-      const resourceUrl = getResourceUrl(nextIndex, manifest.readingOrder);
-      const data = await loadResource(resourceUrl, proxyUrl);
-      dispatch({
-        type: 'RESOURCE_FETCH_SUCCESS',
-        file: { data },
-      });
     }
     // Do nothing if it's at the last page of the last resource
   }, [
     manifest,
-    proxyUrl,
     state.isScrolling,
     state.numPages,
     state.pageNumber,
@@ -308,18 +306,9 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         index: nextIndex,
         shouldNavigateToEnd: !state.isScrolling,
       });
-
-      const resourceUrl = getResourceUrl(nextIndex, manifest.readingOrder);
-      const data = await loadResource(resourceUrl, proxyUrl);
-
-      dispatch({
-        type: 'RESOURCE_FETCH_SUCCESS',
-        file: { data },
-      });
     }
   }, [
     manifest,
-    proxyUrl,
     isParsed,
     state.isScrolling,
     state.pageNumber,
@@ -381,13 +370,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         index: getIndexFromHref(href),
         shouldNavigateToEnd: false,
       });
-      const data = await loadResource(href, proxyUrl);
-      dispatch({
-        type: 'RESOURCE_FETCH_SUCCESS',
-        file: { data },
-      });
     },
-    [manifest?.readingOrder, proxyUrl]
+    [manifest?.readingOrder]
   );
 
   // this format is inactive, return null
