@@ -8,6 +8,7 @@ type IframeOptions = {
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     interface Chainable<Subject = any> {
       loadPage(pageName: string): void;
       iframe(selector: string, options?: IframeOptions): Chainable<Subject>;
