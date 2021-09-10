@@ -23,7 +23,7 @@ export default function Header(props: HeaderProps): React.ReactElement {
   const linkColor = useColorModeValue('gray.700', 'gray.100', 'gray.700');
   const mainBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
 
-  // had to wrap this because I was having trouble adding custom styles to the NYPL Icon
+  // Add custom styles to the NYPL Icon
   const ChakraIcon = chakra(Icon, {
     baseStyle: {
       height: '100%',
