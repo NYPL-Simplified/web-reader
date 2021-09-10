@@ -12,6 +12,7 @@ import { Icon, IconNames } from '@nypl/design-system-react-components';
 import { Navigator, ReaderState, WebpubManifest } from '../types';
 import Button from './Button';
 import useColorModeValue from './hooks/useColorModeValue';
+import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 import { HEADER_HEIGHT } from './constants';
 
 type TocItemProps = React.ComponentPropsWithoutRef<typeof MenuItem> & {
@@ -86,6 +87,12 @@ export default function TableOfContent({
 
   const tocBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
 
+  const getLinkHref = (link: ReadiumLink): string => {
+    if (link.href) return link.href;
+    if (!link.children) throw new Error('Manifest is not well formed');
+    return getLinkHref(link.children[0]);
+  };
+
   return (
     <Menu
       onOpen={() => setIsOpen(true)}
@@ -108,10 +115,10 @@ export default function TableOfContent({
             mt="-2px" // Move the popover slightly higher to hide Header border
             overflow="auto"
           >
-            {manifest.toc.map((content) => (
+            {manifest.toc.map((content: ReadiumLink) => (
               <React.Fragment key={content.title}>
                 <TocItem
-                  href={content.href}
+                  href={getLinkHref(content)}
                   title={content.title}
                   isActive={readerState?.currentTocUrl === content.href}
                   onClick={tocLinkHandler}
@@ -120,7 +127,7 @@ export default function TableOfContent({
                   content.children.map((subLink) => (
                     <TocItem
                       key={subLink.title}
-                      href={subLink.href}
+                      href={getLinkHref(subLink)}
                       title={subLink.title}
                       isActive={readerState?.currentTocUrl === subLink.href}
                       onClick={tocLinkHandler}
