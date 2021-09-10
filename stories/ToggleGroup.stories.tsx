@@ -9,6 +9,12 @@ const meta: Meta = {
   parameters: {
     controls: { expanded: true },
   },
+  argTypes: {
+    currentColorMode: {
+      options: ['day', 'sepia', 'night'],
+      control: { type: 'radio' },
+    },
+  },
 };
 
 export default meta;
@@ -21,12 +27,17 @@ export const Light = Template.bind({});
 
 Light.args = {
   children: [
-    <ToggleButton value="sedona">Sedona</ToggleButton>,
-    <ToggleButton value="santa_fe">Santa Fe</ToggleButton>,
-    <ToggleButton value="las_cruces">Las Cruces</ToggleButton>,
+    <ToggleButton key="sedona" value="sedona">
+      Sedona
+    </ToggleButton>,
+    <ToggleButton key="santa_fe" value="santa_fe">
+      Santa Fe
+    </ToggleButton>,
+    <ToggleButton key="las_cruces" value="las_cruces">
+      Las Cruces
+    </ToggleButton>,
   ],
   name: 'southwest',
-  defaultValue: 'sedona',
 };
 
 export const OneOption = Template.bind({});
@@ -34,5 +45,4 @@ export const OneOption = Template.bind({});
 OneOption.args = {
   children: <ToggleButton value="sedona">Sedona</ToggleButton>,
   name: 'southwest',
-  defaultValue: 'Sedona',
 };

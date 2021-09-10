@@ -1,4 +1,3 @@
-import { Locator } from '@d-i-t-a/reader/dist/model/Locator';
 import { WebpubManifest } from './WebpubManifestTypes/WebpubManifest';
 
 export { WebpubManifest };
