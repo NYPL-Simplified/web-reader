@@ -9,7 +9,13 @@
     {
       "href": "OEBPS/fonts/im-fell-double-pica-pro.otf",
       "type": "application/vnd.ms-opentype",
-      "id": "im-fell-double-pica-pro-otf"
+      "id": "im-fell-double-pica-pro-otf",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/toc.ncx",
@@ -19,51 +25,125 @@
     {
       "href": "OEBPS/images/rtc_ataleoftwocities_alexislampley.jpg",
       "type": "image/jpeg",
-      "id": "cover-image"
+      "id": "cover-image",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/images/recovering-the-classics-stacked-logo-black-on-white.jpg",
       "type": "image/jpeg",
-      "id": "recovering-the-classics-stacked-logo-black-on-white-jpg"
+      "id": "recovering-the-classics-stacked-logo-black-on-white-jpg",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/images/fell-flower-abc-fixed.png",
       "type": "image/png",
-      "id": "fell-flower-abc-fixed-png"
+      "id": "fell-flower-abc-fixed-png",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/images/fell-flower-d-fixed.png",
       "type": "image/png",
-      "id": "fell-flower-d-fixed-png"
+      "id": "fell-flower-d-fixed-png",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/images/fell-flower-kj-fixed.png",
       "type": "image/png",
-      "id": "fell-flower-kj-fixed-png"
+      "id": "fell-flower-kj-fixed-png",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/images/vellum-created-fixed.png",
       "type": "image/png",
-      "id": "vellum-created-fixed-png"
+      "id": "vellum-created-fixed-png",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
-    { "href": "OEBPS/css/media.css", "type": "text/css", "id": "media-css" },
-    { "href": "OEBPS/css/style.css", "type": "text/css", "id": "style-css" },
+    {
+      "href": "OEBPS/css/media.css",
+      "type": "text/css",
+      "id": "media-css",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
+    },
+    {
+      "href": "OEBPS/css/style.css",
+      "type": "text/css",
+      "id": "style-css",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
+    },
     {
       "href": "OEBPS/fonts/SIL-Open-Font-License-1.1.txt",
       "type": "text/plain",
-      "id": "sil-open-font-license-11-txt"
+      "id": "sil-open-font-license-11-txt",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     }
   ],
   "readingOrder": [
     {
       "href": "OEBPS/cover.xhtml",
       "type": "application/xhtml+xml",
-      "id": "Cover"
+      "id": "Cover",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/title-page.xhtml",
       "type": "application/xhtml+xml",
-      "id": "title-page-xhtml"
+      "id": "title-page-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/toc-display.xhtml",
@@ -73,252 +153,552 @@
     {
       "href": "OEBPS/copyright.xhtml",
       "type": "application/xhtml+xml",
-      "id": "copyright-xhtml"
+      "id": "copyright-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-001.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-001-xhtml"
+      "id": "vol-001-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-001-chapter-001.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-001-chapter-001-xhtml"
+      "id": "vol-001-chapter-001-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-001-chapter-002.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-001-chapter-002-xhtml"
+      "id": "vol-001-chapter-002-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-001-chapter-003.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-001-chapter-003-xhtml"
+      "id": "vol-001-chapter-003-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-001-chapter-004.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-001-chapter-004-xhtml"
+      "id": "vol-001-chapter-004-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-001-chapter-005.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-001-chapter-005-xhtml"
+      "id": "vol-001-chapter-005-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-001-chapter-006.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-001-chapter-006-xhtml"
+      "id": "vol-001-chapter-006-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-xhtml"
+      "id": "vol-002-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-001.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-001-xhtml"
+      "id": "vol-002-chapter-001-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-002.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-002-xhtml"
+      "id": "vol-002-chapter-002-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-003.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-003-xhtml"
+      "id": "vol-002-chapter-003-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-004.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-004-xhtml"
+      "id": "vol-002-chapter-004-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-005.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-005-xhtml"
+      "id": "vol-002-chapter-005-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-006.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-006-xhtml"
+      "id": "vol-002-chapter-006-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-007.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-007-xhtml"
+      "id": "vol-002-chapter-007-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-008.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-008-xhtml"
+      "id": "vol-002-chapter-008-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-009.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-009-xhtml"
+      "id": "vol-002-chapter-009-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-010.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-010-xhtml"
+      "id": "vol-002-chapter-010-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-011.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-011-xhtml"
+      "id": "vol-002-chapter-011-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-012.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-012-xhtml"
+      "id": "vol-002-chapter-012-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-013.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-013-xhtml"
+      "id": "vol-002-chapter-013-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-014.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-014-xhtml"
+      "id": "vol-002-chapter-014-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-015.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-015-xhtml"
+      "id": "vol-002-chapter-015-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-016.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-016-xhtml"
+      "id": "vol-002-chapter-016-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-017.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-017-xhtml"
+      "id": "vol-002-chapter-017-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-018.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-018-xhtml"
+      "id": "vol-002-chapter-018-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-019.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-019-xhtml"
+      "id": "vol-002-chapter-019-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-020.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-020-xhtml"
+      "id": "vol-002-chapter-020-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-021.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-021-xhtml"
+      "id": "vol-002-chapter-021-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-022.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-022-xhtml"
+      "id": "vol-002-chapter-022-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-023.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-023-xhtml"
+      "id": "vol-002-chapter-023-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-002-chapter-024.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-002-chapter-024-xhtml"
+      "id": "vol-002-chapter-024-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-003.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-003-xhtml"
+      "id": "vol-003-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-003-chapter-001.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-003-chapter-001-xhtml"
+      "id": "vol-003-chapter-001-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-003-chapter-002.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-003-chapter-002-xhtml"
+      "id": "vol-003-chapter-002-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-003-chapter-003.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-003-chapter-003-xhtml"
+      "id": "vol-003-chapter-003-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-003-chapter-004.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-003-chapter-004-xhtml"
+      "id": "vol-003-chapter-004-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-003-chapter-005.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-003-chapter-005-xhtml"
+      "id": "vol-003-chapter-005-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-003-chapter-006.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-003-chapter-006-xhtml"
+      "id": "vol-003-chapter-006-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-003-chapter-007.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-003-chapter-007-xhtml"
+      "id": "vol-003-chapter-007-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-003-chapter-008.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-003-chapter-008-xhtml"
+      "id": "vol-003-chapter-008-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-003-chapter-009.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-003-chapter-009-xhtml"
+      "id": "vol-003-chapter-009-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-003-chapter-010.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-003-chapter-010-xhtml"
+      "id": "vol-003-chapter-010-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-003-chapter-011.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-003-chapter-011-xhtml"
+      "id": "vol-003-chapter-011-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-003-chapter-012.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-003-chapter-012-xhtml"
+      "id": "vol-003-chapter-012-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-003-chapter-013.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-003-chapter-013-xhtml"
+      "id": "vol-003-chapter-013-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-003-chapter-014.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-003-chapter-014-xhtml"
+      "id": "vol-003-chapter-014-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/vol-003-chapter-015.xhtml",
       "type": "application/xhtml+xml",
-      "id": "vol-003-chapter-015-xhtml"
+      "id": "vol-003-chapter-015-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     },
     {
       "href": "OEBPS/recovering-the-classics.xhtml",
       "type": "application/xhtml+xml",
-      "id": "recovering-the-classics-xhtml"
+      "id": "recovering-the-classics-xhtml",
+      "properties": {
+        "encrypted": {
+          "algorithm": "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+          "scheme": "http://librarysimplified.org/terms/drm/scheme/AxisNow"
+        }
+      }
     }
   ],
   "toc": [
