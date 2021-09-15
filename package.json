@@ -1,6 +1,8 @@
 {
+  "name": "@nypl/web-reader",
   "version": "0.1.0",
   "license": "MIT",
+  "repository": "https://github.com/NYPL-Simplified/web-reader",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
@@ -40,7 +42,6 @@
     "trailingComma": "es5",
     "endOfLine": "lf"
   },
-  "name": "web-reader",
   "author": "kristojorg",
   "module": "dist/web-reader.esm.js",
   "size-limit": [

@@ -75,7 +75,7 @@ const App = () => {
           </Route>
           <Route path="/axisnow-decrypted">
             <WebReader
-              webpubManifestUrl={`${origin}/samples/axisnow/decrypted/manifest.json`}
+              webpubManifestUrl={`${origin}/samples/dickens-axisnow/decrypted/manifest.json`}
             />
           </Route>
           <Route path="/moby-epub2">
@@ -176,24 +176,30 @@ const AxisNowEncrypted: React.FC = () => {
   const [getContent, setGetContent] = React.useState<null | GetContent>(null);
   const [error, setError] = React.useState<Error | undefined>(undefined);
 
+  const book_vault_uuid = process.env.AXISNOW_VAULT_UUID;
+  const isbn = process.env.AXISNOW_ISBN;
+
   React.useEffect(() => {
-    async function setupDecryptor(): Promise<
-      (href: string) => Promise<string>
-    > {
-      const params = {
-        book_vault_uuid: '6734F7F5-C48F-4A38-9AE5-9DF4ADCFBF0A',
-        isbn: '9781467784870',
-      };
-      const decryptor = await createDecryptor(params);
-      return decryptor;
+    if (!book_vault_uuid || !isbn) {
+      setError(
+        new Error(
+          'Book cannot be decrypted without process.env.AXISNOW_VAULT_UUID and process.env.AXISNOW_ISBN'
+        )
+      );
+      return;
     }
 
-    setupDecryptor()
+    const params = {
+      book_vault_uuid,
+      isbn,
+    };
+
+    createDecryptor(params)
       .then((decr) => {
         setGetContent(() => decr);
       })
       .catch(setError);
-  }, []);
+  }, [book_vault_uuid, isbn]);
 
   if (error) {
     return (
@@ -212,7 +218,7 @@ const AxisNowEncrypted: React.FC = () => {
 
   return (
     <WebReader
-      webpubManifestUrl={`${origin}/samples/axisnow/encrypted/manifest.json`}
+      webpubManifestUrl={`${origin}/samples/dickens-axisnow/encrypted/manifest.json`}
       getContent={getContent}
     />
   );
