@@ -1,4 +1,9 @@
 import { ThemeProvider, Flex } from '@chakra-ui/react';
+import {
+  Icon,
+  IconNames,
+  IconRotationTypes,
+} from '@nypl/design-system-react-components';
 import * as React from 'react';
 import { ReaderReturn } from '../types';
 import Header from './Header';
@@ -27,8 +32,16 @@ const WebReaderContent: React.FC<ReaderReturn> = ({ children, ...props }) => {
       <PageButton
         onClick={props.navigator?.goBackward}
         left={0}
+        pr={2}
         aria-label="Previous Page"
-      >{`<`}</PageButton>
+      >
+        <Icon
+          decorative
+          name={IconNames.arrow}
+          modifiers={['small']}
+          iconRotation={IconRotationTypes.rotate90}
+        />
+      </PageButton>
       <Flex
         width="100vw"
         bg={bgColor}
@@ -43,8 +56,16 @@ const WebReaderContent: React.FC<ReaderReturn> = ({ children, ...props }) => {
       <PageButton
         onClick={props.navigator?.goForward}
         right={0}
+        pl={2}
         aria-label="Next Page"
-      >{`>`}</PageButton>
+      >
+        <Icon
+          decorative
+          name={IconNames.arrow}
+          modifiers={['small']}
+          iconRotation={IconRotationTypes.rotate270}
+        />
+      </PageButton>
     </Flex>
   );
 };

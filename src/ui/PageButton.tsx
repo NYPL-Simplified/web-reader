@@ -1,8 +1,8 @@
 import React from 'react';
-import { Circle as ChakraCircle, Box } from '@chakra-ui/react';
+import { Circle as ChakraCircle, Button } from '@chakra-ui/react';
 import useColorModeValue from './hooks/useColorModeValue';
 
-export type PageButtonProps = React.ComponentPropsWithoutRef<typeof Box> & {
+export type PageButtonProps = React.ComponentPropsWithoutRef<typeof Button> & {
   children: React.ReactNode;
 };
 
@@ -27,7 +27,7 @@ function PageButton(
       size={{ sm: '40px', md: '50px' }}
       mx={{ sm: 2, md: 6 }}
       top="50%"
-      cursor="cursor"
+      cursor="pointer"
       onClick={onClick}
       {...rest}
     >
