@@ -44,16 +44,6 @@
   },
   "author": "kristojorg",
   "module": "dist/web-reader.esm.js",
-  "size-limit": [
-    {
-      "path": "dist/web-reader.cjs.production.min.js",
-      "limit": "700 KB"
-    },
-    {
-      "path": "dist/web-reader.esm.js",
-      "limit": "700 KB"
-    }
-  ],
   "staticFiles": {
     "staticPath": "example/static"
   },
@@ -74,7 +64,6 @@
     "@babel/core": "^7.12.10",
     "@emotion/jest": "^11.3.0",
     "@parcel/transformer-typescript-tsc": "^2.0.0-alpha.3",
-    "@size-limit/preset-small-lib": "^4.9.1",
     "@storybook/addon-actions": "^6.3.1",
     "@storybook/addon-essentials": "^6.3.1",
     "@storybook/addon-info": "^5.3.21",
@@ -120,7 +109,6 @@
     "react-is": "^17.0.1",
     "react-router-dom": "^5.2.0",
     "request": "^2.88.2",
-    "size-limit": "^4.9.1",
     "ts-jest": "^27.0.3",
     "ts-node": "^10.1.0",
     "tsdx": "^0.14.1",
