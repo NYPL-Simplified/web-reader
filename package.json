@@ -28,7 +28,7 @@
     "build": "tsdx build --tsconfig tsconfig.build.json",
     "prepublishOnly": "npm run build",
     "test": "jest --watch",
-    "test:ci": "jest --ci --coverage --maxWorkers=2",
+    "test:ci": "jest --ci --silent --coverage --maxWorkers=2",
     "test:integration": "",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
