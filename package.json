@@ -1,6 +1,6 @@
 {
   "name": "@nypl/web-reader",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
   "repository": "https://github.com/NYPL-Simplified/web-reader",
   "homepage": "https://github.com/NYPL-Simplified/web-reader",
@@ -26,10 +26,9 @@
     "example:sw": "ENABLE_SW=true npm run example:https",
     "start": "tsdx watch --tsconfig tsconfig.build.json",
     "build": "tsdx build --tsconfig tsconfig.build.json",
-    "prepublishOnly": "npm run build",
     "test": "jest --watch",
     "test:ci": "jest --ci --silent --coverage --maxWorkers=2",
-    "test:integration": "",
+    "test:ci:integration": "start-server-and-test example http://localhost:1234 cypress:run",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "prettier": "prettier --write --ignore-path .eslintignore .",
@@ -42,7 +41,7 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "cors-proxy": "node example/cors-proxy.js",
-    "release": "np"
+    "release": "release-it --verbose"
   },
   "peerDependencies": {
     "react": ">=16"
@@ -134,6 +133,7 @@
     "release-it": "^14.11.5",
     "request": "^2.88.2",
     "size-limit": "^4.9.1",
+    "start-server-and-test": "^1.14.0",
     "ts-jest": "^27.0.3",
     "ts-node": "^10.1.0",
     "tsdx": "^0.14.1",
@@ -170,7 +170,9 @@
     "hooks": {
       "before:init": [
         "npm run lint",
-        "npm run test:ci"
+        "npm run test:ci",
+        "npm run test:ci:integration",
+        "npm run build"
       ]
     }
   }
