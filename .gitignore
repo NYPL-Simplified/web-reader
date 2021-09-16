@@ -3,6 +3,7 @@
 node_modules
 .cache
 dist
+coverage
 
 .eslintcache
 .parcel-cache

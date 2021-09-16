@@ -29,7 +29,6 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
     case 'SET_READER': {
       // set all the initial settings taken from the reader
       const settings = action.reader.currentSettings();
-      console.log(action.reader);
       return {
         reader: action.reader,
         isScrolling: settings.verticalScroll,
