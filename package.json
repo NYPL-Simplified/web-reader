@@ -163,8 +163,7 @@
   },
   "release-it": {
     "github": {
-      "update": true,
-      "releaseName": "v${version}",
+      "release": true,
       "releaseNotes": "git log --pretty=format:\"* %s (%h)\" ${from}...${to}"
     },
     "hooks": {
