@@ -2,6 +2,8 @@ import React from 'react';
 import {
   ActiveReader,
   Navigator,
+  HtmlNavigator,
+  PdfNavigator,
   ReaderState,
   WebpubManifest,
 } from '../../src/types';
@@ -12,6 +14,8 @@ const setColorModeFn = jest.fn();
 const setScrollFn = jest.fn();
 const increaseFontSizeFn = jest.fn();
 const decreaseFontSizeFn = jest.fn();
+const zoomInFn = jest.fn();
+const zoomOutFn = jest.fn();
 const setFontFamilyFn = jest.fn();
 const goToPageFn = jest.fn();
 
@@ -25,6 +29,28 @@ export const MockNavigator = {
   setFontFamily: setFontFamilyFn,
   goToPage: goToPageFn,
 } as Navigator;
+
+export const MockHtmlNavigator = {
+  goForward: goForwardFn,
+  goBackward: goBackwardFn,
+  setColorMode: setColorModeFn,
+  setScroll: setScrollFn,
+  increaseFontSize: increaseFontSizeFn,
+  decreaseFontSize: decreaseFontSizeFn,
+  setFontFamily: setFontFamilyFn,
+  goToPage: goToPageFn,
+} as HtmlNavigator;
+
+export const MockPdfNavigator = {
+  goForward: goForwardFn,
+  goBackward: goBackwardFn,
+  setColorMode: setColorModeFn,
+  setScroll: setScrollFn,
+  zoomIn: zoomInFn,
+  zoomOut: zoomOutFn,
+  setFontFamily: setFontFamilyFn,
+  goToPage: goToPageFn,
+} as PdfNavigator;
 
 export const MockWebpubManifest = {
   readingOrder: [
@@ -148,7 +174,7 @@ export const MockHtmlReaderProps = {
   content: <MockComponent />,
   state: MockHtmlReaderState,
   manifest: MockWebpubManifest,
-  navigator: MockNavigator,
+  navigator: MockHtmlNavigator,
 } as ActiveReader;
 
 export const MockPdfReaderProps = {
@@ -157,5 +183,5 @@ export const MockPdfReaderProps = {
   content: <MockComponent />,
   state: MockPdfReaderState,
   manifest: MockWebpubManifest,
-  navigator: MockNavigator,
+  navigator: MockPdfNavigator,
 } as ActiveReader;

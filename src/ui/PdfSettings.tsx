@@ -15,35 +15,19 @@ type PdfSettingsProps = {
 export default function PdfSettings(
   props: PdfSettingsProps
 ): React.ReactElement {
-  const { navigator, readerState, paginationValue } = props;
-  const { fontFamily } = readerState;
-  const {
-    setFontFamily,
-    decreaseFontSize,
-    increaseFontSize,
-    setScroll,
-  } = navigator;
+  const { navigator, paginationValue } = props;
+  const { zoomOut, zoomIn, setScroll } = navigator;
 
   return (
     <>
-      <ToggleGroup
-        value={fontFamily}
-        label="text font options"
-        onChange={setFontFamily}
-      >
-        <ToggleButton value="publisher">Publisher</ToggleButton>
-        <ToggleButton value="serif">Serif</ToggleButton>
-        <ToggleButton value="sans-serif">Sans-Serif</ToggleButton>
-        <ToggleButton value="open-dyslexic">Dyslexia-Friendly</ToggleButton>
-      </ToggleGroup>
       <ButtonGroup d="flex" spacing={0}>
         <Button
           flexGrow={1}
           aria-label="Zoom In"
-          onClick={decreaseFontSize}
+          onClick={zoomIn}
           variant="toggle"
         >
-          Zoom
+          Zoom In
           <Circle
             border="1px solid"
             p={1}
@@ -51,16 +35,16 @@ export default function PdfSettings(
             size="17px"
             alignItems="baseline"
           >
-            <Icon decorative name={IconNames.minus} modifiers={['small']} />{' '}
+            <Icon decorative name={IconNames.plus} modifiers={['small']} />
           </Circle>
         </Button>
         <Button
           flexGrow={1}
           aria-label="Zoom Out"
-          onClick={increaseFontSize}
+          onClick={zoomOut}
           variant="toggle"
         >
-          Zoom
+          Zoom Out
           <Circle
             border="1px solid"
             p={1}
@@ -68,7 +52,7 @@ export default function PdfSettings(
             size="17px"
             alignItems="baseline"
           >
-            <Icon decorative name={IconNames.plus} modifiers={['small']} />{' '}
+            <Icon decorative name={IconNames.minus} modifiers={['small']} />
           </Circle>
         </Button>
       </ButtonGroup>

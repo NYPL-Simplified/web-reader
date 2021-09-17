@@ -4,7 +4,6 @@ import {
   ColorMode,
   ReaderArguments,
   ReaderReturn,
-  WebpubManifest,
   PdfReaderState,
 } from '../types';
 import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
@@ -335,14 +334,14 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   /**
    * TODO: Change this button into a different "scale" button
    */
-  const increaseFontSize = React.useCallback(async () => {
+  const zoomIn = React.useCallback(async () => {
     dispatch({
       type: 'SET_SCALE',
       scale: state.scale + 0.1,
     });
   }, [state.scale]);
 
-  const decreaseFontSize = React.useCallback(async () => {
+  const zoomOut = React.useCallback(async () => {
     dispatch({
       type: 'SET_SCALE',
       scale: state.scale - 0.1,
@@ -400,8 +399,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       navigator: {
         goForward,
         goBackward,
-        increaseFontSize,
-        decreaseFontSize,
+        zoomIn,
+        zoomOut,
         setFontFamily,
         setColorMode,
         setScroll,
@@ -483,8 +482,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       goBackward,
       setColorMode,
       setScroll,
-      increaseFontSize,
-      decreaseFontSize,
+      zoomIn,
+      zoomOut,
       setFontFamily,
       goToPage,
     },

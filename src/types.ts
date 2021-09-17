@@ -16,16 +16,19 @@ export type Navigator = {
   goBackward: () => void;
   setColorMode: (mode: ColorMode) => Promise<void>;
   setScroll: (val: 'scrolling' | 'paginated') => Promise<void>;
-  increaseFontSize: () => Promise<void>;
-  decreaseFontSize: () => Promise<void>;
   setFontFamily: (family: FontFamily) => Promise<void>;
   goToPage: (href: string) => void;
 };
 
-//  PDF specific navigator here
-export type PdfNavigator = Navigator;
+export type PdfNavigator = Navigator & {
+  zoomIn: () => Promise<void>;
+  zoomOut: () => Promise<void>;
+};
 
-export type HtmlNavigator = Navigator;
+export type HtmlNavigator = Navigator & {
+  increaseFontSize: () => Promise<void>;
+  decreaseFontSize: () => Promise<void>;
+};
 
 export type ReaderState = {
   colorMode: ColorMode;
