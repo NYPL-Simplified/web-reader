@@ -1,12 +1,23 @@
 {
-  "version": "0.1.0",
+  "name": "@nypl/web-reader",
+  "version": "0.1.4",
   "license": "MIT",
+  "repository": "https://github.com/NYPL-Simplified/web-reader",
+  "homepage": "https://github.com/NYPL-Simplified/web-reader",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist",
     "src"
   ],
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./dist/web-reader.esm.js",
+      "require": "./dist/index.cjs.production.min.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
     "example:build": "parcel build example/index.html",
     "example:nocache": "parcel --no-cache",
@@ -16,7 +27,8 @@
     "start": "tsdx watch --tsconfig tsconfig.build.json",
     "build": "tsdx build --tsconfig tsconfig.build.json",
     "test": "jest --watch",
-    "test:ci": "jest --ci --coverage --maxWorkers=2",
+    "test:ci": "jest --ci --silent --coverage --maxWorkers=2",
+    "test:ci:integration": "start-server-and-test example http://localhost:1234 cypress:run",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "prettier": "prettier --write --ignore-path .eslintignore .",
@@ -28,7 +40,8 @@
     "analyze": "size-limit --why",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "cors-proxy": "node example/cors-proxy.js"
+    "cors-proxy": "node example/cors-proxy.js",
+    "release": "release-it --verbose"
   },
   "peerDependencies": {
     "react": ">=16"
@@ -40,7 +53,6 @@
     "trailingComma": "es5",
     "endOfLine": "lf"
   },
-  "name": "web-reader",
   "author": "kristojorg",
   "module": "dist/web-reader.esm.js",
   "size-limit": [
@@ -118,8 +130,10 @@
     "react-dom": "^17.0.2",
     "react-is": "^17.0.1",
     "react-router-dom": "^5.2.0",
+    "release-it": "^14.11.5",
     "request": "^2.88.2",
     "size-limit": "^4.9.1",
+    "start-server-and-test": "^1.14.0",
     "ts-jest": "^27.0.3",
     "ts-node": "^10.1.0",
     "tsdx": "^0.14.1",
@@ -147,5 +161,18 @@
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": "eslint --cache --fix",
     "*.{ts,tsx,js,json,css,md}": "prettier --write --ignore-path .eslintignore"
+  },
+  "release-it": {
+    "github": {
+      "release": true
+    },
+    "hooks": {
+      "before:init": [
+        "npm run lint",
+        "npm run test:ci",
+        "npm run test:ci:integration",
+        "npm run build"
+      ]
+    }
   }
 }
