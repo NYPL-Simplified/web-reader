@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Link,
   Menu,
@@ -10,15 +10,20 @@ import {
 } from '@chakra-ui/react';
 import { Icon, IconNames } from '@nypl/design-system-react-components';
 import {
+  HtmlNavigator,
   Navigator,
+  PdfNavigator,
   PdfReaderState,
+  PDFTreeNode,
   ReaderState,
   WebpubManifest,
 } from '../types';
 import Button from './Button';
 import useColorModeValue from './hooks/useColorModeValue';
+import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 import { HEADER_HEIGHT } from './constants';
-import { Outline } from 'react-pdf';
+import { url } from 'inspector';
+import { PDFDocumentProxy } from 'pdfjs-dist/types/display/api';
 
 type TocItemProps = React.ComponentPropsWithoutRef<typeof MenuItem> & {
   href: string;
@@ -28,7 +33,7 @@ type TocItemProps = React.ComponentPropsWithoutRef<typeof MenuItem> & {
 };
 
 const TocItem = (props: TocItemProps) => {
-  const { href, title, isActive, ...rest } = props;
+  const { href, title, isActive, onItemClick, ...rest } = props;
 
   const bgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
   const color = useColorModeValue('ui.black', 'ui.white', 'ui.black');
@@ -74,23 +79,96 @@ export default function TableOfContent({
   manifest,
   readerState,
 }: {
-  navigator: Navigator;
+  navigator: PdfNavigator | HtmlNavigator;
   manifest: WebpubManifest;
   readerState: ReaderState | PdfReaderState;
 }): React.ReactElement {
   const [isOpen, setIsOpen] = useState(false);
-  const tocLinkHandler: React.MouseEventHandler<HTMLButtonElement> = (evt) => {
+  const [outline, setOutline] = useState<JSX.Element[]>([]);
+
+  const tocLinkHandler = (
+    evt: React.MouseEvent<Element, MouseEvent>,
+    item?: PDFTreeNode
+  ) => {
     evt.preventDefault();
     const href = evt.currentTarget.getAttribute('href');
-    if (!href) {
-      console.warn('TOC Link clicked without an href');
-      return;
+    if (href && (navigator as HtmlNavigator).setFontFamily) {
+      navigator.goToPage(href);
+      setIsOpen(false);
+    } else {
+      if (item && item.dest) {
+        (navigator as PdfNavigator).goToPage(item.dest);
+        setIsOpen(false);
+      } else if (href) {
+        (navigator as PdfNavigator).goToPage(href);
+        setIsOpen(false);
+      }
     }
-    navigator.goToPage(href);
-    setIsOpen(false);
   };
 
+  const pdfResource = (readerState as PdfReaderState).pdf;
+
+  const usePdfToc =
+    pdfResource &&
+    manifest &&
+    manifest.resources &&
+    manifest.resources.length === 1;
+
+  if (usePdfToc) {
+    const getPdfOutline = (outline: PDFTreeNode[] | undefined) => {
+      // PDF reader
+      if (!outline)
+        throw new Error(
+          'Cannot call getPdfOutline when there is no PDF Reader'
+        );
+      return outline.map((content: PDFTreeNode) => (
+        <React.Fragment key={content.title}>
+          <TocItem
+            href="#"
+            title={content.title}
+            isActive={false}
+            onClick={(e) => {
+              tocLinkHandler(e, content);
+            }}
+          />
+          {content.items &&
+            content.items.map((subLink: PDFTreeNode) => (
+              <TocItem
+                key={subLink.title}
+                href="#"
+                title={subLink.title}
+                isActive={false}
+                onClick={(e) => tocLinkHandler(e, content)}
+                pl={10}
+              />
+            ))}
+        </React.Fragment>
+      ));
+    };
+
+    const getOutline = async () => {
+      if (pdfResource) {
+        const outline: PDFTreeNode[] = await pdfResource.getOutline();
+
+        const pdfOutline = getPdfOutline(outline);
+        setOutline(pdfOutline);
+      } else {
+        throw new Error('trying to get state');
+      }
+    };
+
+    if (outline.length === 0) {
+      getOutline();
+    }
+  }
+
   const tocBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
+
+  const getLinkHref = (link: ReadiumLink): string => {
+    if (link.href) return link.href;
+    if (!link.children) throw new Error('Manifest is not well formed');
+    return getLinkHref(link.children[0]);
+  };
 
   return (
     <Menu
@@ -101,11 +179,6 @@ export default function TableOfContent({
         <Icon decorative name={IconNames.download} modifiers={['small']} />
         <Text variant="headerNav">Table of Contents</Text>
       </MenuButton>
-      {(readerState as PdfReaderState).pdf && (
-        <Portal>
-          <Outline pdf={(readerState as PdfReaderState).pdf}></Outline>
-        </Portal>
-      )}
       {isOpen && manifest?.toc && (
         <Portal>
           <MenuList
@@ -119,27 +192,29 @@ export default function TableOfContent({
             mt="-2px" // Move the popover slightly higher to hide Header border
             overflow="auto"
           >
-            {manifest.toc.map((content) => (
-              <React.Fragment key={content.title}>
-                <TocItem
-                  href={content.href}
-                  title={content.title}
-                  isActive={readerState?.currentTocUrl === content.href}
-                  onClick={tocLinkHandler}
-                />
-                {content.children &&
-                  content.children.map((subLink) => (
-                    <TocItem
-                      key={subLink.title}
-                      href={subLink.href}
-                      title={subLink.title}
-                      isActive={readerState?.currentTocUrl === subLink.href}
-                      onClick={tocLinkHandler}
-                      pl={10}
-                    />
-                  ))}
-              </React.Fragment>
-            ))}
+            {usePdfToc && outline}
+            {!usePdfToc &&
+              manifest.toc.map((content: ReadiumLink) => (
+                <React.Fragment key={content.title}>
+                  <TocItem
+                    href={getLinkHref(content)}
+                    title={content.title}
+                    isActive={readerState?.currentTocUrl === content.href}
+                    onClick={tocLinkHandler}
+                  />
+                  {content.children &&
+                    content.children.map((subLink) => (
+                      <TocItem
+                        key={subLink.title}
+                        href={getLinkHref(subLink)}
+                        title={subLink.title}
+                        isActive={readerState?.currentTocUrl === subLink.href}
+                        onClick={tocLinkHandler}
+                        pl={10}
+                      />
+                    ))}
+                </React.Fragment>
+              ))}
           </MenuList>
         </Portal>
       )}

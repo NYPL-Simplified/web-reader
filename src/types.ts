@@ -1,6 +1,5 @@
-import { Locator } from '@d-i-t-a/reader/dist/model/Locator';
-import { WebpubManifest } from './WebpubManifestTypes/WebpubManifest';
 import { PDFDocumentProxy } from 'pdfjs-dist/types/display/api';
+import { WebpubManifest } from './WebpubManifestTypes/WebpubManifest';
 
 export { WebpubManifest };
 
@@ -18,16 +17,19 @@ export type Navigator = {
   goBackward: () => void;
   setColorMode: (mode: ColorMode) => Promise<void>;
   setScroll: (val: 'scrolling' | 'paginated') => Promise<void>;
+};
+
+//  PDF specific navigator here
+export type PdfNavigator = Navigator & {
+  goToPage: (target: string | any[]) => void;
+};
+
+export type HtmlNavigator = Navigator & {
   increaseFontSize: () => Promise<void>;
   decreaseFontSize: () => Promise<void>;
   setFontFamily: (family: FontFamily) => Promise<void>;
   goToPage: (href: string) => void;
 };
-
-//  PDF specific navigator here
-export type PdfNavigator = Navigator;
-
-export type HtmlNavigator = Navigator;
 
 export type ReaderState = {
   colorMode: ColorMode;
@@ -37,8 +39,22 @@ export type ReaderState = {
   currentTocUrl: string | null;
 };
 
+// Deals with an error where this type is missing from pdfjs
+export type PDFTreeNode = {
+  title: string;
+  bold: boolean;
+  italic: boolean;
+  color: Uint8ClampedArray;
+  dest: string | any[] | null;
+  url: string | null;
+  unsafeUrl: string | undefined;
+  newWindow: boolean | undefined;
+  count: number | undefined;
+  items: PDFTreeNode[];
+};
+
 // PDF specific reader state
-export type PdfReaderState = ReaderState & { pdf: PDFDocumentProxy };
+export type PdfReaderState = ReaderState & { pdf?: PDFDocumentProxy };
 
 // HTML specific reader state
 export type HtmlReaderState = ReaderState;
