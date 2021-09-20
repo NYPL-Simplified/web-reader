@@ -23,23 +23,6 @@ export default function PdfSettings(
       <ButtonGroup d="flex" spacing={0}>
         <Button
           flexGrow={1}
-          aria-label="Zoom In"
-          onClick={zoomIn}
-          variant="toggle"
-        >
-          Zoom In
-          <Circle
-            border="1px solid"
-            p={1}
-            ml={1}
-            size="17px"
-            alignItems="baseline"
-          >
-            <Icon decorative name={IconNames.plus} modifiers={['small']} />
-          </Circle>
-        </Button>
-        <Button
-          flexGrow={1}
           aria-label="Zoom Out"
           onClick={zoomOut}
           variant="toggle"
@@ -53,6 +36,23 @@ export default function PdfSettings(
             alignItems="baseline"
           >
             <Icon decorative name={IconNames.minus} modifiers={['small']} />
+          </Circle>
+        </Button>
+        <Button
+          flexGrow={1}
+          aria-label="Zoom In"
+          onClick={zoomIn}
+          variant="toggle"
+        >
+          Zoom In
+          <Circle
+            border="1px solid"
+            p={1}
+            ml={1}
+            size="17px"
+            alignItems="baseline"
+          >
+            <Icon decorative name={IconNames.plus} modifiers={['small']} />
           </Circle>
         </Button>
       </ButtonGroup>
