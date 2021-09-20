@@ -56,16 +56,6 @@
   },
   "author": "kristojorg",
   "module": "dist/web-reader.esm.js",
-  "size-limit": [
-    {
-      "path": "dist/web-reader.cjs.production.min.js",
-      "limit": "700 KB"
-    },
-    {
-      "path": "dist/web-reader.esm.js",
-      "limit": "700 KB"
-    }
-  ],
   "staticFiles": {
     "staticPath": "example/static"
   },
@@ -86,7 +76,6 @@
     "@babel/core": "^7.12.10",
     "@emotion/jest": "^11.3.0",
     "@parcel/transformer-typescript-tsc": "^2.0.0-alpha.3",
-    "@size-limit/preset-small-lib": "^4.9.1",
     "@storybook/addon-actions": "^6.3.1",
     "@storybook/addon-essentials": "^6.3.1",
     "@storybook/addon-info": "^5.3.21",
@@ -133,8 +122,6 @@
     "react-router-dom": "^5.2.0",
     "release-it": "^14.11.5",
     "request": "^2.88.2",
-    "size-limit": "^4.9.1",
-    "start-server-and-test": "^1.14.0",
     "ts-jest": "^27.0.3",
     "ts-node": "^10.1.0",
     "tsdx": "^0.14.1",
@@ -143,7 +130,7 @@
   },
   "dependencies": {
     "@chakra-ui/react": "^1.6.6",
-    "@d-i-t-a/reader": "2.0.0-alpha.2",
+    "@d-i-t-a/reader": "2.0.0-alpha.7",
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
     "@nypl/design-system-react-components": "^0.21.2",
