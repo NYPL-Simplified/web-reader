@@ -10,6 +10,14 @@ import child_process from 'child_process';
 const rimraf = util.promisify(origRimraf);
 const exec = util.promisify(child_process.exec);
 
+/**
+ * @todo
+ *
+ * - Figure out how to export the fonts and include them with dynamic urls in the css?
+ * - Possibly export a CJS or IIFE version?
+ * - Possibly add postcss or something to support namespaces?
+ */
+
 const isWatchEnabled = process.argv[2] === '-w';
 // for now we bundle for production whenever we aren't in watch mode
 const isProduction = !isWatchEnabled;
@@ -20,7 +28,7 @@ const isProduction = !isWatchEnabled;
 async function generateDts() {
   try {
     return await exec(
-      `tsc --declaration --emitDeclarationOnly --declarationDir dist`
+      `tsc --declaration --emitDeclarationOnly --declarationDir dist/types`
     );
   } catch (e) {
     return Promise.reject(e.stdout);
@@ -42,6 +50,10 @@ async function buildTs(
     external: [
       'react-dom',
       'react',
+      /**
+       * @todo - We currently ignore these fonts, but we need to figure out a better way
+       * to include them
+       */
       'fonts/AccessibleDfA.otf',
       'fonts/iAWriterDuospace-Regular.ttf',
     ],
@@ -77,21 +89,6 @@ async function buildAll() {
   await fs.mkdir('dist');
   console.log('🧹 Cleaned output folder -', chalk.blue('dist/'));
 
-  // build the main entrypoint as an IIFE module for use in a
-  // <script> tag. This is built at dist/reader.js for backwards
-  // compatibility
-  // const p1 = buildTs(
-  //   {
-  //     format: 'iife',
-  //     entryPoints: ['src/index.tsx'],
-  //     globalName: 'WebReader',
-  //     outfile: 'dist/iife.js',
-  //     minify: isProduction,
-  //   },
-  //   'Compiled IIFE (for <script> tags)',
-  //   'dist/iife.js'
-  // );
-
   // build the main entrypoint as an ES Module.
   // This one doesn't need to be minified because it will
   // be rebundled by the consumer's bundler
@@ -113,7 +110,9 @@ async function buildAll() {
 
   // generate type declarations
   const p3 = generateDts()
-    .then(() => logBundled('Generated TS Declarations', 'dist/index.d.ts'))
+    .then(() =>
+      logBundled('Generated TS Declarations', 'dist/types/index.d.ts')
+    )
     .catch((e) => err('TS Error', e));
 
   // wait for everything to finish running in parallel
