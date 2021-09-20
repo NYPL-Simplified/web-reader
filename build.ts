@@ -89,34 +89,54 @@ async function buildAll() {
   await fs.mkdir('dist');
   console.log('🧹 Cleaned output folder -', chalk.blue('dist/'));
 
+  const entryPoints = ['src/index.tsx', 'src/ServiceWorker/sw.ts'];
+
+  // build the main entrypoint as a CommonJS module
+  const p1 = buildTs(
+    {
+      format: 'cjs',
+      entryPoints,
+      outdir: 'dist/cjs',
+      minify: isProduction,
+    },
+    'Compiled CommonJS Module (for node `require` statements)',
+    'dist/cjs/index.js'
+  );
+
   // build the main entrypoint as an ES Module.
   // This one doesn't need to be minified because it will
   // be rebundled by the consumer's bundler
   const p2 = buildTs(
     {
       format: 'esm',
-      entryPoints: [
-        'src/index.tsx',
-        'src/ServiceWorker/sw.ts',
-        'src/PdfReader/styles.css',
-        'src/HtmlReader/styles.css',
-      ],
-      outdir: 'dist',
+      entryPoints,
+      outdir: 'dist/esm',
       minify: false,
     },
     "Compiled ESM (for 'import WebReader' uses)",
-    'dist/index.js'
+    'dist/esm/index.js'
+  );
+
+  // compile the CSS to the root
+  const p3 = buildTs(
+    {
+      entryPoints: ['src/PdfReader/styles.css', 'src/HtmlReader/styles.css'],
+      outdir: 'dist/css',
+      minify: true,
+    },
+    'Compiled CSS',
+    'dist/css/**'
   );
 
   // generate type declarations
-  const p3 = generateDts()
+  const p4 = generateDts()
     .then(() =>
       logBundled('Generated TS Declarations', 'dist/types/index.d.ts')
     )
     .catch((e) => err('TS Error', e));
 
   // wait for everything to finish running in parallel
-  await Promise.all([p2, p3]);
+  await Promise.all([p1, p2, p3, p4]);
   console.log('🔥 Build finished.');
 }
 

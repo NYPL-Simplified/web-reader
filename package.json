@@ -4,12 +4,29 @@
   "license": "MIT",
   "repository": "https://github.com/NYPL-Simplified/web-reader",
   "homepage": "https://github.com/NYPL-Simplified/web-reader",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "typings": "dist/types/index.d.ts",
   "files": [
     "dist"
   ],
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "typings": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "default": "./dist/esm/index.js"
+    },
+    "./service-worker": {
+      "require": "./dist/cjs/ServiceWorker/sw.js",
+      "default": "./dist/esm/ServiceWorker/sw.js"
+    },
+    "./pdf-styles.css": {
+      "default": "./dist/css/PdfReader/styles.css"
+    },
+    "./html-styles.css": {
+      "default": "./dist/css/HtmlReader/styles.css"
+    }
+  },
   "scripts": {
     "example:build": "parcel build",
     "example:nocache": "parcel --no-cache",
