@@ -9,7 +9,7 @@ import {
   FontFamily,
 } from '../types';
 import HtmlReaderContent from './HtmlReaderContent';
-import { Locator } from '@d-i-t-a/reader/dist/model/Locator';
+import { Locator } from '@d-i-t-a/reader';
 import { HEADER_HEIGHT } from '../ui/constants';
 
 type HtmlState = HtmlReaderState & {
@@ -28,7 +28,7 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
   switch (action.type) {
     case 'SET_READER': {
       // set all the initial settings taken from the reader
-      const settings = action.reader.currentSettings;
+      const settings = action.reader.currentSettings();
       return {
         reader: action.reader,
         isScrolling: settings.verticalScroll,
@@ -109,11 +109,13 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   }, [webpubManifestUrl, getContent]);
 
   // prev and next page functions
-  const goForward = React.useCallback(() => {
+  const goForward = React.useCallback(async () => {
     if (!reader) return;
-    const isLastPage = reader.atEnd();
+    const isLastPage = await reader.atEnd();
     reader.nextPage();
     if (isLastPage) {
+      // FIXME: This will not work for links containing sub-links
+      // b/c reader.nextPage saves the raw toc link without the elementID
       dispatch({
         type: 'SET_CURRENT_TOC_URL',
         currentTocUrl: reader.mostRecentNavigatedTocItem(),
@@ -121,9 +123,9 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     }
   }, [reader]);
 
-  const goBackward = React.useCallback(() => {
+  const goBackward = React.useCallback(async () => {
     if (!reader) return;
-    const isFirstPage = reader.atStart();
+    const isFirstPage = await reader.atStart();
     reader.previousPage();
     if (isFirstPage) {
       dispatch({
