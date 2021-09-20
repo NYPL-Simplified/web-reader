@@ -1,11 +1,6 @@
 import { Document, Page, PageProps, pdfjs } from 'react-pdf';
 import * as React from 'react';
-import {
-  ColorMode,
-  ReaderArguments,
-  ReaderReturn,
-  PdfReaderState,
-} from '../types';
+import { ReaderArguments, ReaderReturn, PdfReaderState } from '../types';
 import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
 import useMeasure from './useMeasure';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
@@ -37,7 +32,6 @@ type PdfReaderAction =
   | { type: 'RESOURCE_FETCH_SUCCESS'; resource: { data: Uint8Array } }
   | { type: 'PDF_PARSED'; numPages: number }
   | { type: 'NAVIGATE_PAGE'; pageNum: number }
-  | { type: 'SET_COLOR_MODE'; mode: ColorMode }
   | { type: 'SET_SCALE'; scale: number }
   | { type: 'SET_SCROLL'; isScrolling: boolean }
   | { type: 'PAGE_LOAD_SUCCESS'; height: number; width: number }
@@ -86,12 +80,6 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
       return {
         ...state,
         pageNumber: action.pageNum,
-      };
-
-    case 'SET_COLOR_MODE':
-      return {
-        ...state,
-        colorMode: action.mode,
       };
 
     case 'SET_SCROLL':
@@ -314,15 +302,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     state.resourceIndex,
   ]);
 
-  /**
-   * These ones don't make sense in the PDF case I dont think. I'm still
-   * deciding how we will separate the types of Navigators and States, so
-   * for now just pass dummies through.
-   */
-  const setColorMode = React.useCallback(async () => {
-    console.log('unimplemented');
-  }, []);
-
   const setScroll = React.useCallback(
     async (val: 'scrolling' | 'paginated') => {
       const isScrolling = val === 'scrolling';
@@ -347,10 +326,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       scale: state.scale - 0.1,
     });
   }, [state.scale]);
-
-  const setFontFamily = React.useCallback(async () => {
-    console.log('unimplemented');
-  }, []);
 
   const goToPage = React.useCallback(
     async (href) => {
@@ -401,8 +376,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         goBackward,
         zoomIn,
         zoomOut,
-        setFontFamily,
-        setColorMode,
         setScroll,
         goToPage,
       },
@@ -480,11 +453,9 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     navigator: {
       goForward,
       goBackward,
-      setColorMode,
       setScroll,
       zoomIn,
       zoomOut,
-      setFontFamily,
       goToPage,
     },
   };

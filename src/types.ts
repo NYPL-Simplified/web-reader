@@ -14,9 +14,7 @@ export type FontFamily = 'publisher' | 'serif' | 'sans-serif' | 'open-dyslexic';
 export type Navigator = {
   goForward: () => void;
   goBackward: () => void;
-  setColorMode: (mode: ColorMode) => Promise<void>;
   setScroll: (val: 'scrolling' | 'paginated') => Promise<void>;
-  setFontFamily: (family: FontFamily) => Promise<void>;
   goToPage: (href: string) => void;
 };
 
@@ -28,6 +26,8 @@ export type PdfNavigator = Navigator & {
 export type HtmlNavigator = Navigator & {
   increaseFontSize: () => Promise<void>;
   decreaseFontSize: () => Promise<void>;
+  setFontFamily: (family: FontFamily) => Promise<void>;
+  setColorMode: (mode: ColorMode) => Promise<void>;
 };
 
 export type ReaderState = {
