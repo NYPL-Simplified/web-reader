@@ -27,7 +27,7 @@ Cypress.Commands.add('loadPage', (pageName) => {
 Cypress.Commands.add('iframe', (selector: string, options?: IframeOptions) => {
   const DEFAULT_OPTIONS = {
     // Cypress default timeout
-    timeout: 4000,
+    timeout: 15000,
   };
 
   const ops = { ...DEFAULT_OPTIONS, ...options };
