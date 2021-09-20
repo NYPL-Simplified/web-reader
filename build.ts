@@ -120,12 +120,15 @@ async function buildAll() {
   // compile the CSS to the root
   const p3 = buildTs(
     {
-      entryPoints: ['src/PdfReader/styles.css', 'src/HtmlReader/styles.css'],
-      outdir: 'dist/css',
-      minify: true,
+      entryPoints: {
+        'pdf-styles': 'src/PdfReader/styles.css',
+        'html-styles': 'src/HtmlReader/styles.css',
+      },
+      outdir: 'dist',
+      minify: isProduction,
     },
     'Compiled CSS',
-    'dist/css/**'
+    'dist/*-styles.css'
   );
 
   // generate type declarations
