@@ -47,11 +47,6 @@ describe('Render settings for different media type', () => {
 
     expect(getByRole('button', { name: 'Settings' })).toBeInTheDocument();
 
-    expect(getByLabelText('Publisher')).toBeInTheDocument();
-    expect(getByLabelText('Serif')).toBeInTheDocument();
-    expect(getByLabelText('Sans-Serif')).toBeInTheDocument();
-    expect(getByLabelText('Dyslexia-Friendly')).toBeInTheDocument();
-
     expect(getByLabelText('Paginated')).toBeInTheDocument();
     expect(getByLabelText('Scrolling')).toBeInTheDocument();
 
@@ -59,7 +54,6 @@ describe('Render settings for different media type', () => {
     expect(getByLabelText('Zoom Out')).toBeInTheDocument();
 
     // default checked values
-    expect(getByLabelText('Sans-Serif')).toBeChecked();
     expect(getByLabelText('Paginated')).toBeChecked();
 
     // TODO: HTML specific tests. Same as above, make sure HTML settings/buttons do not show up on the page when a PDF is being rendered.
