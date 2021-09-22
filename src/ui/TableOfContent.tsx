@@ -11,7 +11,6 @@ import {
 import { Icon, IconNames } from '@nypl/design-system-react-components';
 import {
   HtmlNavigator,
-  Navigator,
   PdfNavigator,
   PdfReaderState,
   PDFTreeNode,
@@ -22,8 +21,6 @@ import Button from './Button';
 import useColorModeValue from './hooks/useColorModeValue';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 import { HEADER_HEIGHT } from './constants';
-import { url } from 'inspector';
-import { PDFDocumentProxy } from 'pdfjs-dist/types/display/api';
 
 type TocItemProps = React.ComponentPropsWithoutRef<typeof MenuItem> & {
   href: string;
@@ -116,7 +113,6 @@ export default function TableOfContent({
 
   if (usePdfToc) {
     const getPdfOutline = (outline: PDFTreeNode[] | undefined) => {
-      // PDF reader
       if (!outline)
         throw new Error(
           'Cannot call getPdfOutline when there is no PDF Reader'

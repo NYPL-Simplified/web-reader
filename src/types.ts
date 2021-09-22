@@ -15,18 +15,20 @@ export type FontFamily = 'publisher' | 'serif' | 'sans-serif' | 'open-dyslexic';
 export type Navigator = {
   goForward: () => void;
   goBackward: () => void;
-  setColorMode: (mode: ColorMode) => Promise<void>;
   setScroll: (val: 'scrolling' | 'paginated') => Promise<void>;
 };
 
 //  PDF specific navigator here
 export type PdfNavigator = Navigator & {
-  goToPage: (target: string | any[]) => void;
+  increaseScale: () => Promise<void>;
+  decreaseScale: () => Promise<void>;
+  goToPage: (target: string | unknown[]) => void;
 };
 
 export type HtmlNavigator = Navigator & {
   increaseFontSize: () => Promise<void>;
   decreaseFontSize: () => Promise<void>;
+  setColorMode: (mode: ColorMode) => Promise<void>;
   setFontFamily: (family: FontFamily) => Promise<void>;
   goToPage: (href: string) => void;
 };
@@ -45,7 +47,7 @@ export type PDFTreeNode = {
   bold: boolean;
   italic: boolean;
   color: Uint8ClampedArray;
-  dest: string | any[] | null;
+  dest: string | unknown[] | null;
   url: string | null;
   unsafeUrl: string | undefined;
   newWindow: boolean | undefined;

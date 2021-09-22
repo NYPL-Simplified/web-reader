@@ -319,15 +319,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     state.resourceIndex,
   ]);
 
-  /**
-   * These ones don't make sense in the PDF case I dont think. I'm still
-   * deciding how we will separate the types of Navigators and States, so
-   * for now just pass dummies through.
-   */
-  const setColorMode = React.useCallback(async () => {
-    console.log('unimplemented');
-  }, []);
-
   const setScroll = React.useCallback(
     async (val: 'scrolling' | 'paginated') => {
       const isScrolling = val === 'scrolling';
@@ -336,17 +327,14 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     []
   );
 
-  /**
-   * TODO: Change this button into a different "scale" button
-   */
-  const increaseFontSize = React.useCallback(async () => {
+  const increaseScale = React.useCallback(async () => {
     dispatch({
       type: 'SET_SCALE',
       scale: state.scale + 0.1,
     });
   }, [state.scale]);
 
-  const decreaseFontSize = React.useCallback(async () => {
+  const decreaseScale = React.useCallback(async () => {
     dispatch({
       type: 'SET_SCALE',
       scale: state.scale - 0.1,
@@ -428,9 +416,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       navigator: {
         goForward,
         goBackward,
-        increaseFontSize,
-        decreaseFontSize,
-        setColorMode,
+        increaseScale,
+        decreaseScale,
         setScroll,
         goToPage,
       },
@@ -509,10 +496,9 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     navigator: {
       goForward,
       goBackward,
-      setColorMode,
       setScroll,
-      increaseFontSize,
-      decreaseFontSize,
+      increaseScale,
+      decreaseScale,
       goToPage,
     },
   };
