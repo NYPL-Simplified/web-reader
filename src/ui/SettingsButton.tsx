@@ -25,8 +25,7 @@ export default function SettingsCard(
   const open = () => setIsOpen(!isOpen);
   const close = () => setIsOpen(false);
 
-  const { navigator, state, type } = props;
-  const paginationValue = state?.isScrolling ? 'scrolling' : 'paginated';
+  const paginationValue = props.state?.isScrolling ? 'scrolling' : 'paginated';
   const contentBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.white');
 
   return (
@@ -49,17 +48,18 @@ export default function SettingsCard(
           bgColor={contentBgColor}
         >
           <PopoverBody p={0} maxWidth="95vw">
-            {type === 'PDF' && (
+            {props.type === 'PDF' && (
               <PdfSettings
-                navigator={navigator}
-                readerState={state}
+                // Destructuring props before type check causes Typescript warning.
+                navigator={props.navigator}
+                readerState={props.state}
                 paginationValue={paginationValue}
               />
             )}
-            {type === 'HTML' && (
+            {props.type === 'HTML' && (
               <HtmlSettings
-                navigator={navigator}
-                readerState={state}
+                navigator={props.navigator}
+                readerState={props.state}
                 paginationValue={paginationValue}
               />
             )}
