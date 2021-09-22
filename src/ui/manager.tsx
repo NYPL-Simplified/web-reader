@@ -5,7 +5,7 @@ import {
   IconRotationTypes,
 } from '@nypl/design-system-react-components';
 import * as React from 'react';
-import { ReaderReturn } from '../types';
+import { ReaderManagerArguments, ReaderReturn } from '../types';
 import Header from './Header';
 import useColorModeValue from './hooks/useColorModeValue';
 import PageButton from './PageButton';
@@ -16,7 +16,7 @@ import { getTheme } from './theme';
  * that can be imported and used separately or in a customized setup.
  * It takes the return value of useWebReader as props
  */
-const ManagerUI: React.FC<ReaderReturn> = (props) => {
+const ManagerUI: React.FC<ReaderReturn & ReaderManagerArguments> = (props) => {
   return (
     <ThemeProvider theme={getTheme(props.state?.colorMode ?? 'day')}>
       <WebReaderContent {...props} />
@@ -24,11 +24,15 @@ const ManagerUI: React.FC<ReaderReturn> = (props) => {
   );
 };
 
-const WebReaderContent: React.FC<ReaderReturn> = ({ children, ...props }) => {
+const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
+  children,
+  headerLeft,
+  ...props
+}) => {
   const bgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
   return (
     <Flex flexDir="column" minHeight="100vh" w="100vw">
-      {!props.isLoading && <Header {...props} />}
+      {!props.isLoading && <Header headerLeft={headerLeft} {...props} />}
       <PageButton
         onClick={props.navigator?.goBackward}
         left={0}
