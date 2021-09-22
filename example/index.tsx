@@ -2,7 +2,13 @@ import 'react-app-polyfill/ie11';
 import 'regenerator-runtime/runtime';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Switch,
+  Route,
+  Link,
+  useParams,
+} from 'react-router-dom';
 import WebReader from '../src';
 import '@nypl/design-system-react-components/dist/styles.css';
 import {
@@ -12,6 +18,9 @@ import {
   ListItem,
   Box,
   Text,
+  Input,
+  Flex,
+  Button,
 } from '@chakra-ui/react';
 import { getTheme } from '../src/ui/theme';
 import usePublicationSW from '../src/ServiceWorker/client';
@@ -28,6 +37,9 @@ pdfjs.GlobalWorkerOptions.workerSrc = `${origin}/pdf-worker/pdf.worker.min.js`;
 const pdfProxyUrl = process.env.CORS_PROXY_URL as string | undefined;
 
 const App = () => {
+  const [dynamicHref, setValue] = React.useState('');
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setValue(event.target.value);
   /**
    * For the example app we will only cache one publication by default.
    * Uncomment to cache others if desired. Note that the SW is disabled
@@ -86,6 +98,9 @@ const App = () => {
           <Route path="/streamed-alice-epub">
             <WebReader webpubManifestUrl="https://alice.dita.digital/manifest.json" />
           </Route>
+          <Route path="/url/:manifestUrl">
+            <DynamicReader />
+          </Route>
           <Route exact path="/">
             <Box m={2}>
               <Heading as="h1">NYPL Web Reader</Heading>
@@ -124,6 +139,24 @@ const App = () => {
                       <Link to="/pdf-collection">Multi-PDF Webpub</Link>
                     </ListItem>
                   </UnorderedList>
+                </ListItem>
+                <ListItem>
+                  Bring your own manifest:
+                  <Flex alignItems="center">
+                    <Input
+                      maxW={500}
+                      value={dynamicHref}
+                      onChange={handleChange}
+                      placeholder="Webpub Manifest URL"
+                    />
+                    <Button
+                      ml={2}
+                      as={Link}
+                      to={`/url/${encodeURIComponent(dynamicHref)}`}
+                    >
+                      Go
+                    </Button>
+                  </Flex>
                 </ListItem>
               </UnorderedList>
               <Heading as="h2" fontSize={2} mt={3}>
@@ -165,6 +198,12 @@ const App = () => {
       </BrowserRouter>
     </ChakraProvider>
   );
+};
+
+const DynamicReader: React.FC = () => {
+  const { manifestUrl } = useParams<{ manifestUrl: string }>();
+  const decoded = decodeURIComponent(manifestUrl);
+  return <WebReader webpubManifestUrl={decoded} />;
 };
 
 /**
