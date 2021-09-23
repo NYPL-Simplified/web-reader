@@ -5,11 +5,11 @@ describe('navigating an EPUB page', () => {
     cy.loadPage('/streamed-alice-epub');
   });
 
-  it('should contain the NYPL homepage url', () => {
-    cy.findByRole('link', { name: 'Return to NYPL' }).should(
+  it('should contain a link to return to the homepage', () => {
+    cy.findByRole('link', { name: 'Return to Homepage' }).should(
       'have.prop',
       'href',
-      'https://www.nypl.org/'
+      '/'
     );
   });
 

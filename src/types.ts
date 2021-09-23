@@ -80,6 +80,10 @@ export type ReaderReturn = InactiveReader | LoadingReader | ActiveReader;
 // should fetch and decrypt a resource
 export type GetContent = (href: string) => Promise<string>;
 
+export type ReaderManagerArguments = {
+  headerLeft?: JSX.Element; // Top-left header section
+};
+
 export type UseWebReaderArguments = {
   webpubManifestUrl: string;
   proxyUrl?: string;
