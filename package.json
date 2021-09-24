@@ -157,8 +157,6 @@
     "hooks": {
       "before:init": [
         "npm run lint",
-        "npm run test:ci",
-        "npm run test:ci:integration",
         "npm run build"
       ]
     }
