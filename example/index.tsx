@@ -15,15 +15,11 @@ import {
 } from '@chakra-ui/react';
 import { getTheme } from '../src/ui/theme';
 import usePublicationSW from '../src/ServiceWorker/client';
-import { pdfjs } from 'react-pdf';
 // import createDecryptor from './axisnow/createWorkerlessDecryptor';
 import createDecryptor from './axisnow/createWorkerDecryptor';
 import { GetContent } from '../src/types';
 
 const origin = window.location.origin;
-
-// react-pdf web worker config with their default CDN version
-pdfjs.GlobalWorkerOptions.workerSrc = `${origin}/pdf-worker/pdf.worker.min.js`;
 
 const pdfProxyUrl = process.env.CORS_PROXY_URL as string | undefined;
 
@@ -62,12 +58,14 @@ const App = () => {
             <WebReader
               webpubManifestUrl="/samples/pdf/degruyter.json"
               proxyUrl={pdfProxyUrl}
+              pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
             />
           </Route>
           <Route path="/pdf-collection">
             <WebReader
               webpubManifestUrl="/samples/pdf/muse1007.json"
               proxyUrl={pdfProxyUrl}
+              pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
             />
           </Route>
           <Route path="/axisnow-encrypted">

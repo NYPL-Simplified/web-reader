@@ -20,8 +20,6 @@ type PdfState = PdfReaderState & {
   pageWidth: number | undefined;
 };
 
-pdfjs.GlobalWorkerOptions.workerSrc = `pdf.worker.min.js`;
-
 type PdfReaderAction =
   | {
       type: 'SET_CURRENT_RESOURCE';
@@ -145,6 +143,11 @@ const loadResource = async (resourceUrl: string, proxyUrl?: string) => {
  * @returns
  */
 export default function usePdfReader(args: ReaderArguments): ReaderReturn {
+  // use a passed in src for the pdf worker
+  if (args?.pdfWorkerSrc) {
+    pdfjs.GlobalWorkerOptions.workerSrc = args.pdfWorkerSrc;
+  }
+
   const { webpubManifestUrl, manifest, proxyUrl } = args ?? {};
   const [state, dispatch] = React.useReducer(pdfReducer, {
     colorMode: 'day',
