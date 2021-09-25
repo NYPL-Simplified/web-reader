@@ -1,3 +1,4 @@
+import { Injectable } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
 import { WebpubManifest } from './WebpubManifestTypes/WebpubManifest';
 
 export { WebpubManifest };
@@ -85,6 +86,8 @@ export type ReaderManagerArguments = {
 };
 
 export type UseWebReaderArguments = {
+  injectables?: Array<Injectable>;
+  injectablesFixed?: Array<Injectable>;
   webpubManifestUrl: string;
   proxyUrl?: string;
   getContent?: GetContent;
