@@ -1,6 +1,6 @@
 import D2Reader from '@d-i-t-a/reader';
 import React from 'react';
-import injectables from './injectables';
+import defaultInjectables from './injectables';
 import {
   ColorMode,
   HtmlReaderState,
@@ -74,7 +74,13 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
 const FONT_SIZE_STEP = 4;
 
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
-  const { webpubManifestUrl, manifest, getContent } = args ?? {};
+  const {
+    webpubManifestUrl,
+    manifest,
+    injectables,
+    injectablesFixed,
+    getContent,
+  } = args ?? {};
   const [state, dispatch] = React.useReducer(htmlReducer, {
     colorMode: 'day',
     isScrolling: false,
@@ -94,8 +100,8 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
 
     D2Reader.build({
       url,
-      injectables: injectables,
-      injectablesFixed: [],
+      injectables: injectables || defaultInjectables,
+      injectablesFixed: injectablesFixed || [],
       attributes: {
         navHeight: HEADER_HEIGHT,
         margin: 0,
