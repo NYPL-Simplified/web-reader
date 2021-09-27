@@ -1,6 +1,6 @@
 {
   "name": "@nypl/web-reader",
-  "version": "0.2.0-alpha.3",
+  "version": "0.2.0-alpha.5",
   "license": "MIT",
   "repository": "https://github.com/NYPL-Simplified/web-reader",
   "homepage": "https://github.com/NYPL-Simplified/web-reader",
@@ -102,6 +102,7 @@
     "eslint-plugin-flowtype": "^5.9.0",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.26.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "express": "^4.17.1",
     "husky": "^7.0.2",
@@ -158,7 +159,6 @@
       "before:init": [
         "npm run lint",
         "npm run test:ci",
-        "npm run test:ci:integration",
         "npm run build"
       ]
     }
