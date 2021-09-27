@@ -7,8 +7,9 @@ declare global {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     interface Chainable<Subject = any> {
       loadPage(pageName: string): void;
-      getIframeBody(selector: string): Chainable<Subject>;
       getIframeHtml(selector: string): Chainable<Subject>;
+      getIframeHead(selector: string): Chainable<Subject>;
+      getIframeBody(selector: string): Chainable<Subject>;
     }
   }
 }
@@ -21,18 +22,26 @@ Cypress.Commands.add('loadPage', (pageName) => {
   });
 });
 
-Cypress.Commands.add('getIframeBody', (selector: string) => {
-  return cy
-    .get(selector, { timeout: 15000 })
-    .its(`0.contentDocument.body`)
-    .should('not.be.empty')
-    .then(cy.wrap);
-});
-
 Cypress.Commands.add('getIframeHtml', (selector: string) => {
   return cy
     .get(selector, { timeout: 15000 })
     .its('0.contentDocument.documentElement')
+    .should('not.be.empty')
+    .then(cy.wrap);
+});
+
+Cypress.Commands.add('getIframeHead', (selector: string) => {
+  return cy
+    .get(selector, { timeout: 15000 })
+    .its(`0.contentDocument.head`)
+    .should('not.be.empty')
+    .then(cy.wrap);
+});
+
+Cypress.Commands.add('getIframeBody', (selector: string) => {
+  return cy
+    .get(selector, { timeout: 15000 })
+    .its(`0.contentDocument.body`)
     .should('not.be.empty')
     .then(cy.wrap);
 });

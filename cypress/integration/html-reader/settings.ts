@@ -18,7 +18,7 @@ describe('display settings', () => {
   });
 
   it('should update the font family to serif, paginated mode, and on sepia theme', () => {
-    // Open the settings
+    cy.log('open the settings menu');
     cy.findByRole('button', { name: 'Settings' }).click();
 
     cy.findByText('Serif').click();

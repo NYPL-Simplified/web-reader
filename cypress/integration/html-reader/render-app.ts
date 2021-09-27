@@ -4,7 +4,7 @@ describe('render page content', () => {
   it('Renders content on the streamed epub page', () => {
     cy.loadPage('/streamed-alice-epub');
 
-    // check that all the essential buttons are on the page.
+    cy.log('check that all the essential buttons are on the page');
     cy.findByRole('link', { name: 'Return to Homepage' }).should('exist');
     cy.findByRole('button', { name: 'Table of Contents' }).should('exist');
     cy.findByRole('button', { name: 'Settings' }).should('exist');
@@ -12,7 +12,7 @@ describe('render page content', () => {
     cy.findByRole('button', { name: 'Next Page' }).should('exist');
     cy.findByRole('button', { name: 'Previous Page' }).should('exist');
 
-    // Page one contains an image
+    cy.log('page one contains an image');
     cy.getIframeBody(IFRAME_SELECTOR)
       .find('img')
       .should(
