@@ -9,18 +9,18 @@ describe('navigating an EPUB page', () => {
     cy.findByRole('link', { name: 'Return to Homepage' }).should(
       'have.prop',
       'href',
-      '/'
+      `${Cypress.config().baseUrl}/`
     );
   });
 
   it('should update page content after clicking on TOC link', () => {
-    cy.iframe(IFRAME_SELECTOR)
+    cy.getIframeBody(IFRAME_SELECTOR)
       .findByRole('img', {
         name: "Alice's Adventures in Wonderland, by Lewis Carroll",
       })
       .should('exist');
 
-    cy.iframe(IFRAME_SELECTOR)
+    cy.getIframeBody(IFRAME_SELECTOR)
       .findByText('Down the Rab­bit-Hole')
       .should('not.exist');
 
@@ -34,14 +34,14 @@ describe('navigating an EPUB page', () => {
     cy.get('#reader-loading').should('be.visible');
     cy.get('#reader-loading').should('not.be.visible');
 
-    cy.iframe(IFRAME_SELECTOR)
+    cy.getIframeBody(IFRAME_SELECTOR)
       .findByText('Down the Rab­bit-Hole')
       .should('exist');
   });
 
   it('should navigate forward and backwards with page buttons', () => {
     cy.log('make sure we are on the homepage');
-    cy.iframe(IFRAME_SELECTOR)
+    cy.getIframeBody(IFRAME_SELECTOR)
       .findByRole('img', {
         name: "Alice's Adventures in Wonderland, by Lewis Carroll",
       })
@@ -58,14 +58,14 @@ describe('navigating an EPUB page', () => {
     cy.get('#reader-loading').should('not.be.visible');
 
     cy.log('Then we see the next page');
-    cy.iframe(IFRAME_SELECTOR, { timeout: 10000 })
+    cy.getIframeBody(IFRAME_SELECTOR)
       .findByRole('img', {
         name: 'The Standard Ebooks logo',
         timeout: 20000,
       })
       .should('exist');
 
-    cy.iframe(IFRAME_SELECTOR)
+    cy.getIframeBody(IFRAME_SELECTOR)
       .findByRole('img', {
         name: "Alice's Adventures in Wonderland, by Lewis Carroll",
       })
@@ -78,7 +78,7 @@ describe('navigating an EPUB page', () => {
     cy.get('#reader-loading').should('not.be.visible');
 
     cy.log('Then we see the next page');
-    cy.iframe(IFRAME_SELECTOR)
+    cy.getIframeBody(IFRAME_SELECTOR)
       .findByRole('img', {
         name: "Alice's Adventures in Wonderland, by Lewis Carroll",
       })

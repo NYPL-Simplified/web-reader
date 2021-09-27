@@ -1,17 +1,14 @@
 /// <reference types="cypress" />
 import '@testing-library/cypress/add-commands';
 
-type IframeOptions = {
-  timeout?: number;
-};
-
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     interface Chainable<Subject = any> {
       loadPage(pageName: string): void;
-      iframe(selector: string, options?: IframeOptions): Chainable<Subject>;
+      getIframeBody(selector: string): Chainable<Subject>;
+      getIframeHtml(selector: string): Chainable<Subject>;
     }
   }
 }
@@ -24,17 +21,18 @@ Cypress.Commands.add('loadPage', (pageName) => {
   });
 });
 
-Cypress.Commands.add('iframe', (selector: string, options?: IframeOptions) => {
-  const DEFAULT_OPTIONS = {
-    // Cypress default timeout
-    timeout: 15000,
-  };
-
-  const ops = { ...DEFAULT_OPTIONS, ...options };
-
+Cypress.Commands.add('getIframeBody', (selector: string) => {
   return cy
-    .get(selector, { timeout: ops.timeout })
-    .its(`0.contentDocument`)
+    .get(selector, { timeout: 15000 })
+    .its(`0.contentDocument.body`)
+    .should('not.be.empty')
+    .then(cy.wrap);
+});
+
+Cypress.Commands.add('getIframeHtml', (selector: string) => {
+  return cy
+    .get(selector, { timeout: 15000 })
+    .its('0.contentDocument.documentElement')
     .should('not.be.empty')
     .then(cy.wrap);
 });

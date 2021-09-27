@@ -1,25 +1,25 @@
-# name: Cypress
-# on: [deployment_status]
+name: Cypress
+on: [deployment_status]
 
-# jobs:
-#   cypress:
-#     name: Run Integration Tests
-#     if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && github.event.deployment_status.environment == 'Preview – web-reader'
-#     runs-on: ubuntu-latest
-#     container:
-#       image: cypress/browsers:node14.17.0-chrome88-ff89
-#       options: --user 1001 # https://github.com/cypress-io/github-action#firefox
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v2
+jobs:
+  cypress:
+    name: Run Integration Tests
+    if: github.event.deployment_status.state == 'success' && github.event.deployment_status.environment == 'Preview – web-reader'
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:node14.17.0-chrome88-ff89
+      options: --user 1001 # https://github.com/cypress-io/github-action#firefox
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-#       - name: Install Cypress
-#         run: npm i cypress
+      - name: Install Cypress
+        run: npm i cypress
 
-#       - name: Run Chrome
-#         uses: cypress-io/github-action@v2
-#         env:
-#           CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
-#         with:
-#           install: false
-#           browser: chrome
+      - name: Run Chrome
+        uses: cypress-io/github-action@v2
+        env:
+          CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
+        with:
+          install: false
+          browser: chrome
