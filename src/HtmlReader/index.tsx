@@ -100,6 +100,13 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
         navHeight: HEADER_HEIGHT,
         margin: 0,
       },
+      rights: {
+        /**
+         * Makes the reader fetch every resource before rendering, which
+         * takes forever.
+         */
+        autoGeneratePositions: false,
+      },
       api: {
         getContent: getContent as any, //TODO: fix this casting,
       } as any, //TODO: fix this casting,,

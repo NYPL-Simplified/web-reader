@@ -224,4 +224,53 @@ const AxisNowEncrypted: React.FC = () => {
   );
 };
 
+// const url =
+//   'http://localhost:3000/api/axisnow/{isbn}/{vault_uuid}';
+// const RemoteAxisNowEncrypted: React.FC = () => {
+//   const [getContent, setGetContent] = React.useState<null | GetContent>(null);
+//   const [error, setError] = React.useState<Error | undefined>(undefined);
+
+//   const book_vault_uuid = "vault_uuid";
+//   const isbn = 'isbn';
+
+//   React.useEffect(() => {
+//     if (!book_vault_uuid || !isbn) {
+//       setError(
+//         new Error(
+//           'Book cannot be decrypted without process.env.AXISNOW_VAULT_UUID and process.env.AXISNOW_ISBN'
+//         )
+//       );
+//       return;
+//     }
+
+//     const params = {
+//       book_vault_uuid,
+//       isbn,
+//     };
+
+//     createDecryptor(params)
+//       .then((decr) => {
+//         setGetContent(() => decr);
+//       })
+//       .catch(setError);
+//   }, [book_vault_uuid, isbn]);
+
+//   if (error) {
+//     return (
+//       <Box m={3} role="alert">
+//         <Heading as="h1" fontSize="lg">
+//           Something went wrong:
+//         </Heading>
+//         <Text>
+//           {error.name}: {error.message}
+//         </Text>
+//       </Box>
+//     );
+//   }
+
+//   if (!getContent) return <div>loading...</div>;
+
+//   return <WebReader webpubManifestUrl={url} getContent={getContent} />;
+// };
+
 ReactDOM.render(<App />, document.getElementById('root'));

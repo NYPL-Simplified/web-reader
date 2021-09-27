@@ -1,31 +1,24 @@
 {
   "name": "@nypl/web-reader",
-  "version": "0.1.4",
+  "version": "0.2.0-alpha.5",
   "license": "MIT",
   "repository": "https://github.com/NYPL-Simplified/web-reader",
   "homepage": "https://github.com/NYPL-Simplified/web-reader",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
-  "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "import": "./dist/web-reader.esm.js",
-      "require": "./dist/web-reader.cjs.production.min.js",
-      "types": "./dist/index.d.ts"
-    }
-  },
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "typings": "dist/types/index.d.ts",
   "scripts": {
     "example:build": "parcel build",
     "example:nocache": "parcel --no-cache",
     "example": "parcel",
     "example:https": "parcel --cert localhost.pem --key localhost-key.pem",
     "example:sw": "ENABLE_SW=true npm run example:https",
-    "start": "tsdx watch --tsconfig tsconfig.build.json",
-    "build": "tsdx build --tsconfig tsconfig.build.json",
+    "start": "ts-node -T build.ts -w",
+    "build": "ts-node -T build.ts",
     "test": "jest --watch",
     "test:ci": "jest --ci --silent --coverage --maxWorkers=2",
     "test:ci:integration": "start-server-and-test example http://localhost:1234 cypress:run",
@@ -41,7 +34,8 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "cors-proxy": "node example/cors-proxy.js",
-    "release": "release-it --verbose"
+    "release": "release-it --verbose",
+    "release:alpha": "release-it --verbose --preRelease=alpha"
   },
   "peerDependencies": {
     "react": "^16.8.0 || 17.x",
@@ -55,7 +49,6 @@
     "endOfLine": "lf"
   },
   "author": "kristojorg",
-  "module": "dist/web-reader.esm.js",
   "staticFiles": {
     "staticPath": "example/static"
   },
@@ -87,22 +80,29 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/react-hooks": "^7.0.1",
+    "@types/debounce": "^1.2.0",
     "@types/http-proxy": "^1.17.7",
     "@types/node": "^14.17.10",
     "@types/react": "^17.0.19",
     "@types/react-dom": "^17.0.0",
     "@types/react-pdf": "^5.0.5",
     "@types/react-router-dom": "^5.1.7",
+    "@types/rimraf": "^3.0.2",
     "@typescript-eslint/eslint-plugin": "^4.29.2",
     "@typescript-eslint/parser": "^4.29.2",
     "babel-jest": "^27.0.5",
     "babel-loader": "^8.2.2",
     "cypress": "^8.3.0",
+    "debounce": "^1.2.1",
+    "esbuild": "^0.12.28",
     "esbuild-jest": "^0.5.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-react-app": "^6.0.0",
     "eslint-plugin-flowtype": "^5.9.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.26.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "express": "^4.17.1",
     "husky": "^7.0.2",
@@ -122,9 +122,11 @@
     "react-router-dom": "^5.2.0",
     "release-it": "^14.11.5",
     "request": "^2.88.2",
+    "rimraf": "^3.0.2",
+    "size-limit": "^4.9.1",
+    "start-server-and-test": "^1.14.0",
     "ts-jest": "^27.0.3",
     "ts-node": "^10.1.0",
-    "tsdx": "^0.14.1",
     "tslib": "^2.3.1",
     "typescript": "^4.3.5"
   },
@@ -157,7 +159,6 @@
       "before:init": [
         "npm run lint",
         "npm run test:ci",
-        "npm run test:ci:integration",
         "npm run build"
       ]
     }
