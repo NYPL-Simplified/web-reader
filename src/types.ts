@@ -18,18 +18,17 @@ export type Navigator = {
   setScroll: (val: 'scrolling' | 'paginated') => Promise<void>;
 };
 
-//  PDF specific navigator here
 export type PdfNavigator = Navigator & {
-  increaseScale: () => Promise<void>;
-  decreaseScale: () => Promise<void>;
+  zoomIn: () => Promise<void>;
+  zoomOut: () => Promise<void>;
   goToPage: (target: string | unknown[]) => void;
 };
 
 export type HtmlNavigator = Navigator & {
   increaseFontSize: () => Promise<void>;
   decreaseFontSize: () => Promise<void>;
-  setColorMode: (mode: ColorMode) => Promise<void>;
   setFontFamily: (family: FontFamily) => Promise<void>;
+  setColorMode: (mode: ColorMode) => Promise<void>;
   goToPage: (href: string) => void;
 };
 
@@ -96,6 +95,10 @@ export type ReaderReturn = InactiveReader | LoadingReader | ActiveReader;
 
 // should fetch and decrypt a resource
 export type GetContent = (href: string) => Promise<string>;
+
+export type ReaderManagerArguments = {
+  headerLeft?: JSX.Element; // Top-left header section
+};
 
 export type UseWebReaderArguments = {
   webpubManifestUrl: string;

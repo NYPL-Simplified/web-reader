@@ -13,10 +13,10 @@ const setColorModeFn = jest.fn();
 const setScrollFn = jest.fn();
 const increaseFontSizeFn = jest.fn();
 const decreaseFontSizeFn = jest.fn();
+const zoomInFn = jest.fn();
+const zoomOutFn = jest.fn();
 const setFontFamilyFn = jest.fn();
 const goToPageFn = jest.fn();
-const increaseScaleFn = jest.fn();
-const decreaseScaleFn = jest.fn();
 
 export const MockHtmlNavigator = {
   goForward: goForwardFn,
@@ -32,9 +32,11 @@ export const MockHtmlNavigator = {
 export const MockPdfNavigator = {
   goForward: goForwardFn,
   goBackward: goBackwardFn,
+  setColorMode: setColorModeFn,
   setScroll: setScrollFn,
-  increaseScale: increaseScaleFn,
-  decreaseScale: decreaseScaleFn,
+  zoomIn: zoomInFn,
+  zoomOut: zoomOutFn,
+  setFontFamily: setFontFamilyFn,
   goToPage: goToPageFn,
 } as PdfNavigator;
 

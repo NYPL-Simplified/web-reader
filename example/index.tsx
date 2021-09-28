@@ -2,7 +2,13 @@ import 'react-app-polyfill/ie11';
 import 'regenerator-runtime/runtime';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Switch,
+  Route,
+  Link,
+  useParams,
+} from 'react-router-dom';
 import WebReader from '../src';
 import '@nypl/design-system-react-components/dist/styles.css';
 import {
@@ -12,6 +18,9 @@ import {
   ListItem,
   Box,
   Text,
+  Input,
+  Flex,
+  Button,
 } from '@chakra-ui/react';
 import { getTheme } from '../src/ui/theme';
 import usePublicationSW from '../src/ServiceWorker/client';
@@ -28,6 +37,9 @@ pdfjs.GlobalWorkerOptions.workerSrc = `${origin}/pdf-worker/pdf.worker.min.js`;
 const pdfProxyUrl = process.env.CORS_PROXY_URL as string | undefined;
 
 const App = () => {
+  const [dynamicHref, setValue] = React.useState('');
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setValue(event.target.value);
   /**
    * For the example app we will only cache one publication by default.
    * Uncomment to cache others if desired. Note that the SW is disabled
@@ -86,6 +98,9 @@ const App = () => {
           <Route path="/streamed-alice-epub">
             <WebReader webpubManifestUrl="https://alice.dita.digital/manifest.json" />
           </Route>
+          <Route path="/url/:manifestUrl">
+            <DynamicReader />
+          </Route>
           <Route exact path="/">
             <Box m={2}>
               <Heading as="h1">NYPL Web Reader</Heading>
@@ -124,6 +139,24 @@ const App = () => {
                       <Link to="/pdf-collection">Multi-PDF Webpub</Link>
                     </ListItem>
                   </UnorderedList>
+                </ListItem>
+                <ListItem>
+                  Bring your own manifest:
+                  <Flex alignItems="center">
+                    <Input
+                      maxW={500}
+                      value={dynamicHref}
+                      onChange={handleChange}
+                      placeholder="Webpub Manifest URL"
+                    />
+                    <Button
+                      ml={2}
+                      as={Link}
+                      to={`/url/${encodeURIComponent(dynamicHref)}`}
+                    >
+                      Go
+                    </Button>
+                  </Flex>
                 </ListItem>
               </UnorderedList>
               <Heading as="h2" fontSize={2} mt={3}>
@@ -165,6 +198,12 @@ const App = () => {
       </BrowserRouter>
     </ChakraProvider>
   );
+};
+
+const DynamicReader: React.FC = () => {
+  const { manifestUrl } = useParams<{ manifestUrl: string }>();
+  const decoded = decodeURIComponent(manifestUrl);
+  return <WebReader webpubManifestUrl={decoded} />;
 };
 
 /**
@@ -223,5 +262,54 @@ const AxisNowEncrypted: React.FC = () => {
     />
   );
 };
+
+// const url =
+//   'http://localhost:3000/api/axisnow/{isbn}/{vault_uuid}';
+// const RemoteAxisNowEncrypted: React.FC = () => {
+//   const [getContent, setGetContent] = React.useState<null | GetContent>(null);
+//   const [error, setError] = React.useState<Error | undefined>(undefined);
+
+//   const book_vault_uuid = "vault_uuid";
+//   const isbn = 'isbn';
+
+//   React.useEffect(() => {
+//     if (!book_vault_uuid || !isbn) {
+//       setError(
+//         new Error(
+//           'Book cannot be decrypted without process.env.AXISNOW_VAULT_UUID and process.env.AXISNOW_ISBN'
+//         )
+//       );
+//       return;
+//     }
+
+//     const params = {
+//       book_vault_uuid,
+//       isbn,
+//     };
+
+//     createDecryptor(params)
+//       .then((decr) => {
+//         setGetContent(() => decr);
+//       })
+//       .catch(setError);
+//   }, [book_vault_uuid, isbn]);
+
+//   if (error) {
+//     return (
+//       <Box m={3} role="alert">
+//         <Heading as="h1" fontSize="lg">
+//           Something went wrong:
+//         </Heading>
+//         <Text>
+//           {error.name}: {error.message}
+//         </Text>
+//       </Box>
+//     );
+//   }
+
+//   if (!getContent) return <div>loading...</div>;
+
+//   return <WebReader webpubManifestUrl={url} getContent={getContent} />;
+// };
 
 ReactDOM.render(<App />, document.getElementById('root'));

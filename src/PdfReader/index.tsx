@@ -2,15 +2,9 @@ import { Document, Page, PageProps, pdfjs } from 'react-pdf';
 import { PDFDocumentProxy } from 'pdfjs-dist/types/display/api';
 
 import * as React from 'react';
-import {
-  ColorMode,
-  ReaderArguments,
-  ReaderReturn,
-  PdfReaderState,
-} from '../types';
+import { ReaderArguments, ReaderReturn, PdfReaderState } from '../types';
 import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
 import useMeasure from './useMeasure';
-import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 
 type PdfState = PdfReaderState & {
@@ -39,7 +33,6 @@ type PdfReaderAction =
   | { type: 'RESOURCE_FETCH_SUCCESS'; resource: { data: Uint8Array } }
   | { type: 'PDF_PARSED'; numPages: number; pdf?: PDFDocumentProxy }
   | { type: 'NAVIGATE_PAGE'; pageNum: number }
-  | { type: 'SET_COLOR_MODE'; mode: ColorMode }
   | { type: 'SET_SCALE'; scale: number }
   | { type: 'SET_SCROLL'; isScrolling: boolean }
   | { type: 'PAGE_LOAD_SUCCESS'; height: number; width: number }
@@ -90,12 +83,6 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
       return {
         ...state,
         pageNumber: action.pageNum,
-      };
-
-    case 'SET_COLOR_MODE':
-      return {
-        ...state,
-        colorMode: action.mode,
       };
 
     case 'SET_SCROLL':
@@ -327,14 +314,14 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     []
   );
 
-  const increaseScale = React.useCallback(async () => {
+  const zoomIn = React.useCallback(async () => {
     dispatch({
       type: 'SET_SCALE',
       scale: state.scale + 0.1,
     });
   }, [state.scale]);
 
-  const decreaseScale = React.useCallback(async () => {
+  const zoomOut = React.useCallback(async () => {
     dispatch({
       type: 'SET_SCALE',
       scale: state.scale - 0.1,
@@ -416,8 +403,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       navigator: {
         goForward,
         goBackward,
-        increaseScale,
-        decreaseScale,
+        zoomIn,
+        zoomOut,
         setScroll,
         goToPage,
       },
@@ -497,8 +484,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       goForward,
       goBackward,
       setScroll,
-      increaseScale,
-      decreaseScale,
+      zoomIn,
+      zoomOut,
       goToPage,
     },
   };

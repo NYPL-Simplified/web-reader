@@ -2,7 +2,15 @@ import { IFRAME_SELECTOR } from '../../support/constants';
 
 describe('navigating an EPUB page', () => {
   beforeEach(() => {
-    cy.loadPage('/streamed-epub');
+    cy.loadPage('/streamed-alice-epub');
+  });
+
+  it('should contain a link to return to the homepage', () => {
+    cy.findByRole('link', { name: 'Return to Homepage' }).should(
+      'have.prop',
+      'href',
+      '/'
+    );
   });
 
   it('should update page content after clicking on TOC link', () => {

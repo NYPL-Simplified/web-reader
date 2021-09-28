@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { UseWebReaderArguments } from './types';
+import { ReaderManagerArguments, UseWebReaderArguments } from './types';
 import ManagerUI from './ui/manager';
 import useWebReader from './useWebReader';
 
@@ -7,10 +7,11 @@ import useWebReader from './useWebReader';
  * The main React component export.
  */
 
-const WebReader: FC<UseWebReaderArguments> = ({
+const WebReader: FC<UseWebReaderArguments & ReaderManagerArguments> = ({
   webpubManifestUrl,
   proxyUrl,
   getContent,
+  headerLeft,
 }) => {
   const webReader = useWebReader({
     webpubManifestUrl,
@@ -19,7 +20,11 @@ const WebReader: FC<UseWebReaderArguments> = ({
   });
   const { content } = webReader;
 
-  return <ManagerUI {...webReader}>{content}</ManagerUI>;
+  return (
+    <ManagerUI headerLeft={headerLeft} {...webReader}>
+      {content}
+    </ManagerUI>
+  );
 };
 
 export default WebReader;
