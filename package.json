@@ -22,9 +22,9 @@
     }
   },
   "scripts": {
-    "example:build": "parcel build example/index.html",
+    "example:build": "parcel buildl",
     "example:nocache": "parcel --no-cache",
-    "example": "parcel example/index.html",
+    "example": "parcel",
     "example:https": "parcel --cert localhost.pem --key localhost-key.pem",
     "example:sw": "ENABLE_SW=true npm run example:https",
     "start": "ts-node -T build.ts -w",

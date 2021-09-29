@@ -82,7 +82,7 @@ describe('navigating an EPUB page', () => {
     cy.log('then we see the imprint page');
     cy.getIframeHead(IFRAME_SELECTOR).contains('title', 'Imprint');
 
-    cy.wait(1000);
+    cy.findByRole('button', { name: 'Previous Page' }).click();
 
     cy.wait('@titlePage', { timeout: 10000 }).then((interception) => {
       assert.isNotNull(

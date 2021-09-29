@@ -4,6 +4,7 @@ import '@testing-library/cypress/add-commands';
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     interface Chainable<Subject = any> {
       loadPage(pageName: string): void;
       getIframeHtml(selector: string): Chainable<Subject>;
