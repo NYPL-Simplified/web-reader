@@ -11,6 +11,16 @@
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
   "typings": "dist/types/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "dist/esm/*": [
+        "dist/types/*"
+      ],
+      "dist/cjs/*": [
+        "dist/types/*"
+      ]
+    }
+  },
   "scripts": {
     "example:build": "parcel build",
     "example:nocache": "parcel --no-cache",
