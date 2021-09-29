@@ -1,25 +1,76 @@
-# name: Cypress
-# on: [deployment_status]
+name: Cypress
+on: [deployment_status]
 
-# jobs:
-#   cypress:
-#     name: Run Integration Tests
-#     if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && github.event.deployment_status.environment == 'Preview – web-reader'
-#     runs-on: ubuntu-latest
-#     container:
-#       image: cypress/browsers:node14.17.0-chrome88-ff89
-#       options: --user 1001 # https://github.com/cypress-io/github-action#firefox
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v2
+jobs:
+  cypress:
+    name: Run Integration Tests
+    if: github.event.deployment_status.state == 'success' && github.event.deployment_status.environment == 'Preview – web-reader'
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:node14.17.0-chrome88-ff89
+      options: --user 1001 # https://github.com/cypress-io/github-action#firefox
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-#       - name: Install Cypress
-#         run: npm i cypress
+      - name: Install Cypress
+        run: npm i cypress
 
-#       - name: Run Chrome
-#         uses: cypress-io/github-action@v2
-#         env:
-#           CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
-#         with:
-#           install: false
-#           browser: chrome
+      - name: Run Chrome
+        uses: cypress-io/github-action@v2
+        env:
+          CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # Recommended: pass the GitHub token lets this action correctly
+          # determine the unique run id necessary to re-run the checks
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          install: false
+          browser: chrome
+          record: true
+        
+      - name: Upload failure screenshots
+        uses: actions/upload-artifact@v2
+        if: ${{ failure() }}
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+
+      - name: Upload failure videos
+        uses: actions/upload-artifact@v2
+        if: ${{ failure() }}
+        with:
+          name: cypress-videos
+          path: cypress/videos
+      
+      # https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#job-status-check-functions
+      - name: Cypress tests ✅
+        if: ${{ success() }}
+        # set the merge commit status check
+        # using GitHub REST API
+        # see https://docs.github.com/en/rest/reference/repos#create-a-commit-status
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
+          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'Accept: application/vnd.github.v3+json' \
+          --data '{
+            "context": "Cypress Tests - Web Reader",
+            "state": "success",
+            "description": "Cypress tests passed",
+            "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }'
+
+      - name: Cypress tests 🚨
+        if: ${{ failure() }}
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
+          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'Accept: application/vnd.github.v3+json' \
+          --data '{
+            "context": "Cypress Tests - Open Web Reader",
+            "state": "failure",
+            "description": "Cypress tests failed",
+            "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }'

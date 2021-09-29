@@ -25,9 +25,7 @@ import {
 import { getTheme } from '../src/ui/theme';
 import usePublicationSW from '../src/ServiceWorker/client';
 import { pdfjs } from 'react-pdf';
-// import createDecryptor from './axisnow/createWorkerlessDecryptor';
-import createDecryptor from './axisnow/createWorkerDecryptor';
-import { GetContent } from '../src/types';
+import AxisNowEncrypted from './axisnow-encrypted';
 
 const origin = window.location.origin;
 
@@ -169,6 +167,19 @@ const App = () => {
               <UnorderedList p={4}>
                 <ListItem>
                   <Link to="/axisnow-encrypted">AxisNow Encrypted EPUB</Link>
+                  <UnorderedList>
+                    <ListItem>
+                      <Text fontSize="sm" as="i">
+                        This example uses a real book in the NYPL Open eBooks
+                        catalog. You will need to have process.env.VAULT_UUID
+                        and process.env.ISBN set properly to read this book.
+                        Read example/README.txt for more info. If the example
+                        stops working, your loan likely expired and you will
+                        need to run the commands listed there with a proper
+                        username and password to check it out again.
+                      </Text>
+                    </ListItem>
+                  </UnorderedList>
                 </ListItem>
                 <ListItem>
                   <Link to="/axisnow-decrypted">Decrypted AxisNow EPUB</Link>
@@ -205,111 +216,5 @@ const DynamicReader: React.FC = () => {
   const decoded = decodeURIComponent(manifestUrl);
   return <WebReader webpubManifestUrl={decoded} />;
 };
-
-/**
- * This sample shows setting up a decryptor for this specific book and then passing a
- * getContent function to the Web Reader. This getContent function runs in a separate
- * WebWorker thread to decrypt the HTML and any embedded resources within.
- */
-const AxisNowEncrypted: React.FC = () => {
-  const [getContent, setGetContent] = React.useState<null | GetContent>(null);
-  const [error, setError] = React.useState<Error | undefined>(undefined);
-
-  const book_vault_uuid = process.env.AXISNOW_VAULT_UUID;
-  const isbn = process.env.AXISNOW_ISBN;
-
-  React.useEffect(() => {
-    if (!book_vault_uuid || !isbn) {
-      setError(
-        new Error(
-          'Book cannot be decrypted without process.env.AXISNOW_VAULT_UUID and process.env.AXISNOW_ISBN'
-        )
-      );
-      return;
-    }
-
-    const params = {
-      book_vault_uuid,
-      isbn,
-    };
-
-    createDecryptor(params)
-      .then((decr) => {
-        setGetContent(() => decr);
-      })
-      .catch(setError);
-  }, [book_vault_uuid, isbn]);
-
-  if (error) {
-    return (
-      <Box m={3} role="alert">
-        <Heading as="h1" fontSize="lg">
-          Something went wrong:
-        </Heading>
-        <Text>
-          {error.name}: {error.message}
-        </Text>
-      </Box>
-    );
-  }
-
-  if (!getContent) return <div>loading...</div>;
-
-  return (
-    <WebReader
-      webpubManifestUrl={`${origin}/samples/dickens-axisnow/encrypted/manifest.json`}
-      getContent={getContent}
-    />
-  );
-};
-
-// const url =
-//   'http://localhost:3000/api/axisnow/{isbn}/{vault_uuid}';
-// const RemoteAxisNowEncrypted: React.FC = () => {
-//   const [getContent, setGetContent] = React.useState<null | GetContent>(null);
-//   const [error, setError] = React.useState<Error | undefined>(undefined);
-
-//   const book_vault_uuid = "vault_uuid";
-//   const isbn = 'isbn';
-
-//   React.useEffect(() => {
-//     if (!book_vault_uuid || !isbn) {
-//       setError(
-//         new Error(
-//           'Book cannot be decrypted without process.env.AXISNOW_VAULT_UUID and process.env.AXISNOW_ISBN'
-//         )
-//       );
-//       return;
-//     }
-
-//     const params = {
-//       book_vault_uuid,
-//       isbn,
-//     };
-
-//     createDecryptor(params)
-//       .then((decr) => {
-//         setGetContent(() => decr);
-//       })
-//       .catch(setError);
-//   }, [book_vault_uuid, isbn]);
-
-//   if (error) {
-//     return (
-//       <Box m={3} role="alert">
-//         <Heading as="h1" fontSize="lg">
-//           Something went wrong:
-//         </Heading>
-//         <Text>
-//           {error.name}: {error.message}
-//         </Text>
-//       </Box>
-//     );
-//   }
-
-//   if (!getContent) return <div>loading...</div>;
-
-//   return <WebReader webpubManifestUrl={url} getContent={getContent} />;
-// };
 
 ReactDOM.render(<App />, document.getElementById('root'));
