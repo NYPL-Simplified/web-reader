@@ -11,6 +11,16 @@
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
   "typings": "dist/types/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "dist/esm/*": [
+        "dist/types/*"
+      ],
+      "dist/cjs/*": [
+        "dist/types/*"
+      ]
+    }
+  },
   "scripts": {
     "example:build": "parcel build example/index.html",
     "example:nocache": "parcel --no-cache",
@@ -24,6 +34,7 @@
     "test:ci:integration": "start-server-and-test example http://localhost:1234 cypress:run",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
+    "cypress:run:chrome": "cypress run --browser chrome",
     "prettier": "prettier --write --ignore-path .eslintignore .",
     "prettier:check": "prettier --check --ignore-path .eslintignore .",
     "lint": "eslint --fix .",

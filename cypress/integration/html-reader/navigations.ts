@@ -9,60 +9,91 @@ describe('navigating an EPUB page', () => {
     cy.findByRole('link', { name: 'Return to Homepage' }).should(
       'have.prop',
       'href',
-      '/'
+      `${Cypress.config().baseUrl}/`
     );
   });
 
   it('should update page content after clicking on TOC link', () => {
-    cy.iframe(IFRAME_SELECTOR)
-      .findByRole('img', {
-        name: "Alice's Adventures in Wonderland, by Lewis Carroll",
-      })
-      .should('exist');
+    cy.intercept('GET', 'https://alice.dita.digital/text/chapter-1.xhtml').as(
+      'chapterOne'
+    );
 
-    cy.iframe(IFRAME_SELECTOR).find('.subtitle').should('not.exist');
+    cy.getIframeBody(IFRAME_SELECTOR)
+      .find('img', { timeout: 10000 })
+      .should(
+        'have.attr',
+        'alt',
+        "Alice's Adventures in Wonderland, by Lewis Carroll"
+      );
 
-    // Open TOC menu
+    cy.log('open TOC menu');
     cy.findByRole('button', { name: 'Table of Contents' }).click();
 
-    // Open chapter 1
+    cy.log('open chapter 1');
     cy.findByRole('menuitem', { name: 'I: Down the Rab­bit-Hole' }).click();
-    cy.wait(1000); // wait for the nested iframe to render
 
-    cy.iframe(IFRAME_SELECTOR)
-      .find('.subtitle')
-      .contains('Down the Rab­bit-Hole');
+    cy.wait('@chapterOne', { timeout: 10000 }).then((interception) => {
+      assert.isNotNull(
+        interception?.response?.body,
+        'chapter one API call has data'
+      );
+    });
+
+    cy.wait(3000);
+
+    cy.getIframeHead(IFRAME_SELECTOR).contains(
+      'title',
+      'Chapter 1: Down the Rabbit-Hole'
+    );
   });
 
   it('should navigate forward and backwards with page buttons', () => {
-    // load iframe
-    cy.iframe(IFRAME_SELECTOR);
+    cy.intercept('GET', 'https://alice.dita.digital/text/imprint.xhtml').as(
+      'imprint'
+    );
+    cy.intercept('GET', 'https://alice.dita.digital/text/titlepage.xhtml').as(
+      'titlePage'
+    );
 
-    cy.findByRole('button', { name: '>' }).click();
+    cy.log('make sure we are on the homepage');
+    cy.getIframeBody(IFRAME_SELECTOR)
+      .find('img')
+      .should(
+        'have.attr',
+        'alt',
+        "Alice's Adventures in Wonderland, by Lewis Carroll"
+      );
+
+    cy.findByRole('button', { name: 'Settings' }).click();
+    cy.log('make sure we are on paginated mode');
+    cy.findByText('Paginated').click();
+
+    cy.findByRole('button', { name: 'Next Page' }).click();
+
+    cy.wait('@imprint', { timeout: 10000 }).then((interception) => {
+      assert.isNotNull(
+        interception?.response?.body,
+        'imprint API call has data'
+      );
+    });
+
+    cy.wait(3000);
+
+    cy.log('then we see the imprint page');
+    cy.getIframeHead(IFRAME_SELECTOR).contains('title', 'Imprint');
 
     cy.wait(1000);
-    cy.iframe(IFRAME_SELECTOR)
-      .findByRole('img', {
-        name: 'The Standard Ebooks logo',
-      })
-      .should('exist');
 
-    cy.iframe(IFRAME_SELECTOR)
-      .findByRole('img', {
-        name: "Alice's Adventures in Wonderland, by Lewis Carroll",
-      })
-      .should('not.exist');
+    cy.wait('@titlePage', { timeout: 10000 }).then((interception) => {
+      assert.isNotNull(
+        interception?.response?.body,
+        'imprint API call has data'
+      );
+    });
 
-    cy.wait(1000);
+    cy.wait(3000);
 
-    cy.findByRole('button', { name: '<' }).click();
-
-    cy.wait(1000);
-    cy.iframe(IFRAME_SELECTOR)
-      .findByRole('img', {
-        name: "Alice's Adventures in Wonderland, by Lewis Carroll",
-      })
-      .should('exist');
+    cy.getIframeHead(IFRAME_SELECTOR).contains('title', 'Title Page');
 
     // TODO: Test whether the next or the previous button is visible when
     // we are on the first page or last page, respectively.
