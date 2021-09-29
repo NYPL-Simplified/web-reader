@@ -22,7 +22,7 @@
     }
   },
   "scripts": {
-    "example:build": "parcel buildl",
+    "example:build": "parcel build",
     "example:nocache": "parcel --no-cache",
     "example": "parcel",
     "example:https": "parcel --cert localhost.pem --key localhost-key.pem",
