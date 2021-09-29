@@ -66,7 +66,7 @@ const TocItem = (props: TocItemProps) => {
 
   return (
     <MenuItem as={Link} href={href} {...styles} {...rest}>
-      {title}
+      <RenderHtml title={title ?? ''} />
     </MenuItem>
   );
 };
@@ -88,16 +88,18 @@ export default function TableOfContent({
     item?: PDFTreeNode
   ) => {
     evt.preventDefault();
-    const href = evt.currentTarget.getAttribute('href');
+    const href: string | null = evt.currentTarget.getAttribute('href');
     if (href && (navigator as HtmlNavigator).setFontFamily) {
-      navigator.goToPage(href);
+      const htmlNavigator = navigator as HtmlNavigator;
+      htmlNavigator.goToPage(href);
       setIsOpen(false);
     } else {
+      const pdfNavigator = navigator as PdfNavigator;
       if (item && item.dest) {
-        (navigator as PdfNavigator).goToPage(item.dest);
+        pdfNavigator.goToPage(item.dest);
         setIsOpen(false);
       } else if (href) {
-        (navigator as PdfNavigator).goToPage(href);
+        pdfNavigator.goToPage(href);
         setIsOpen(false);
       }
     }
@@ -217,55 +219,6 @@ export default function TableOfContent({
     </Menu>
   );
 }
-
-type TocItemProps = React.ComponentPropsWithoutRef<typeof MenuItem> & {
-  href: string;
-  title: string | undefined;
-  isActive: boolean;
-  onClick: React.MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>;
-};
-
-const TocItem = (props: TocItemProps) => {
-  const { href, title, isActive, ...rest } = props;
-
-  const bgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
-  const color = useColorModeValue('ui.black', 'ui.white', 'ui.black');
-  const borderColor = useColorModeValue(
-    'ui.gray.medium',
-    'gray.500',
-    'yellow.600'
-  );
-
-  const activeColor = 'ui.black';
-  const activeBgColor = 'ui.gray.light-cool';
-
-  const _hover = {
-    textDecoration: 'none',
-    background: isActive ? 'ui.black' : 'ui.gray.x-dark',
-    color: 'ui.white',
-  };
-
-  const _focus = {
-    ..._hover,
-    boxShadow: 'none',
-  };
-
-  const styles = {
-    background: isActive ? activeBgColor : bgColor,
-    color: isActive ? activeColor : color,
-    borderBottom: `1px solid`,
-    borderColor: borderColor,
-    py: 3,
-    _hover,
-    _focus,
-  };
-
-  return (
-    <MenuItem as={Link} href={href} {...styles} {...rest}>
-      <RenderHtml title={title ?? ''} />
-    </MenuItem>
-  );
-};
 
 const RenderHtml = ({ title }: { title: string }) => (
   <span dangerouslySetInnerHTML={{ __html: title }}></span>
