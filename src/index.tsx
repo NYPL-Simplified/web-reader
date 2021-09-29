@@ -12,11 +12,13 @@ const WebReader: FC<UseWebReaderArguments & ReaderManagerArguments> = ({
   proxyUrl,
   getContent,
   headerLeft,
+  ...props
 }) => {
   const webReader = useWebReader({
     webpubManifestUrl,
     proxyUrl,
     getContent,
+    ...props,
   });
   const { content } = webReader;
 

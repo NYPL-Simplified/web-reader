@@ -104,6 +104,7 @@ export type UseWebReaderArguments = {
   webpubManifestUrl: string;
   proxyUrl?: string;
   getContent?: GetContent;
+  pdfWorkerSrc?: string;
 };
 
 export type ActiveReaderArguments = UseWebReaderArguments & {
