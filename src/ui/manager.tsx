@@ -47,7 +47,6 @@ const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
         />
       </PageButton>
       <Flex
-        width="100vw"
         bg={bgColor}
         // accounting for the prev/next buttons
         px={{ sm: 10, md: '5vw' }}
