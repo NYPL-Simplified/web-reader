@@ -12,7 +12,7 @@ const meta: Meta = {
 
 export default meta;
 
-export const SettingsCard = () => {
+export const SettingsCard = (): React.ReactElement => {
   return (
     <div>
       <ToggleGroup value="publisher" label="text font options">
