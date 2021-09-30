@@ -35,7 +35,7 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
         colorMode: getColorMode(settings.appearance),
         fontSize: settings.fontSize,
         fontFamily: r2FamilyToFamily[settings.fontFamily] ?? 'publisher',
-        currentTocUrl: action.reader.mostRecentNavigatedTocItem(), // This returns a relative href
+        currentTocLocation: action.reader.mostRecentNavigatedTocItem(), // This returns a relative href
       };
     }
 
@@ -66,7 +66,7 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
     case 'SET_CURRENT_TOC_URL':
       return {
         ...state,
-        currentTocUrl: action.currentTocUrl,
+        currentTocLocation: action.currentTocUrl,
       };
   }
 }
@@ -81,7 +81,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     fontSize: 16,
     fontFamily: 'sans-serif',
     reader: undefined,
-    currentTocUrl: null,
+    currentTocLocation: null,
   });
 
   const { reader, fontSize } = state;

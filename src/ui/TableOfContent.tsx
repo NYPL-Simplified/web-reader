@@ -89,7 +89,6 @@ export default function TableOfContent({
   ) => {
     evt.preventDefault();
     const href: string | null = evt.currentTarget.getAttribute('href');
-    console.log('href', href);
     if (href && href !== '#') {
       navigator.goToPage(href);
       setIsOpen(false);
@@ -191,7 +190,7 @@ export default function TableOfContent({
                   <TocItem
                     href={getLinkHref(content)}
                     title={content.title}
-                    isActive={readerState?.currentTocUrl === content.href}
+                    isActive={readerState?.currentTocLocation === content.href}
                     onClick={tocLinkHandler}
                   />
                   {content.children &&
@@ -200,7 +199,9 @@ export default function TableOfContent({
                         key={subLink.title}
                         href={getLinkHref(subLink)}
                         title={subLink.title}
-                        isActive={readerState?.currentTocUrl === subLink.href}
+                        isActive={
+                          readerState?.currentTocLocation === subLink.href
+                        }
                         onClick={tocLinkHandler}
                         pl={10}
                       />

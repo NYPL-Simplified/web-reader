@@ -16,7 +16,7 @@ export type Navigator = {
   goForward: () => void;
   goBackward: () => void;
   setScroll: (val: 'scrolling' | 'paginated') => Promise<void>;
-  goToPage: (target: string | unknown[]) => void;
+  goToPage: (target: string | PDFDest) => void;
 };
 
 export type PdfNavigator = Navigator & {
@@ -36,16 +36,24 @@ export type ReaderState = {
   isScrolling: boolean;
   fontSize: number;
   fontFamily: FontFamily;
-  currentTocUrl: string | null;
+  currentTocLocation: string | PDFDest | null;
 };
 
-// Deals with an error where this type is missing from pdfjs
+/** PDF TOC Specific Types.  pdfjs does not provide complete types, so these are derived from what we know */
+
+// PDF TOC Destination reference.  This is a strange type because pdfjs doesn't use typescript
+export type DestArrayFirstEntry = { num: number; gen: number };
+type _DestArraySecondEntry = { name: string };
+
+export type PDFDest = (DestArrayFirstEntry | _DestArraySecondEntry)[];
+
+// The PDF TOC item
 export type PDFTreeNode = {
   title: string;
   bold: boolean;
   italic: boolean;
   color: Uint8ClampedArray;
-  dest: string | unknown[] | null;
+  dest: string | PDFDest | null;
   url: string | null;
   unsafeUrl: string | undefined;
   newWindow: boolean | undefined;

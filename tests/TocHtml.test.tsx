@@ -1,11 +1,8 @@
 import * as React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import TableOfContent from '../src/ui/TableOfContent';
-import {
-  MockHtmlNavigator,
-  MockWebpubManifest,
-  MockReaderState,
-} from './utils/MockData';
+import { MockHtmlNavigator, MockReaderState } from './utils/MockData';
+import { MockWebpubManifest } from './utils/MockWebpubManifest';
 
 describe('HTML Table of Contents', () => {
   beforeEach(() => {
@@ -36,6 +33,13 @@ describe('HTML Table of Contents', () => {
     const chapterOneElm = screen.getByRole('menuitem', { name: 'Chapter 1' });
     fireEvent.click(chapterOneElm);
     expect(MockHtmlNavigator.goToPage).toHaveBeenCalledWith('chapter/one/url');
+
+    // The TOC disappears
+    expect(chapterOneElm).not.toBeInTheDocument();
+
+    // The Chapter is highlighted
+    fireEvent.click(toggleBtn);
+    expect(chapterOneElm);
   });
 
   test('navigation should call chapter and subchapters separately if both are provided', () => {

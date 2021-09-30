@@ -2,7 +2,13 @@ import { Document, Outline, Page, PageProps, pdfjs } from 'react-pdf';
 import { PDFDocumentProxy } from 'pdfjs-dist/types/display/api';
 
 import * as React from 'react';
-import { ReaderArguments, ReaderReturn, PdfReaderState } from '../types';
+import {
+  ReaderArguments,
+  ReaderReturn,
+  PdfReaderState,
+  PDFDest,
+  DestArrayFirstEntry,
+} from '../types';
 import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
 import useMeasure from './useMeasure';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
@@ -162,7 +168,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     resource: null,
     pageNumber: 1,
     numPages: null,
-    currentTocUrl: null,
+    currentTocLocation: null,
     scale: 1,
     pdf: undefined,
     pdfWidth: 0,
@@ -334,7 +340,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   // If this is a single PDF webpub, goToPage navigates to the page using the destination array.
   // If this is a multi PDF webpub, goToPage loads the new resource.
   const goToPage = React.useCallback(
-    (target: string | any[]) => {
+    (target: string | PDFDest) => {
       // If a link is passed, that resource should be loaded
       if (typeof target === 'string') {
         const getIndexFromHref = (href: string): number => {
@@ -353,9 +359,15 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
           shouldNavigateToEnd: false,
         });
       } else {
-        const destRef = target[0];
+        // The "dest" item is an array of two different object types.
+        // This method below makes sure the first item has the correct type assigned.
+        const firstEntry = target.find((destItem) => {
+          return (destItem as DestArrayFirstEntry).gen !== undefined;
+        });
 
-        if (destRef instanceof Object) {
+        const destRef = firstEntry as DestArrayFirstEntry;
+
+        if (destRef) {
           state.pdf
             ?.getPageIndex(destRef)
             .then((pageIndex: number) => {
@@ -367,11 +379,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
             .catch(() => {
               throw new Error(`"${destRef}" is not a valid page reference.`);
             });
-        } else if (typeof destRef === 'number') {
-          dispatch({
-            type: 'NAVIGATE_PAGE',
-            pageNum: destRef + 1,
-          });
         } else {
           throw new Error(`"${destRef}" is not a valid destination reference.`);
         }

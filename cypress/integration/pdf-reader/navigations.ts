@@ -2,7 +2,7 @@ import { IFRAME_SELECTOR } from '../../support/constants';
 
 describe('navigating an EPUB page', () => {
   beforeEach(() => {
-    cy.loadPage('/streamed-alice-epub');
+    cy.loadPage('/pdf');
   });
 
   it('should contain a link to return to the homepage', () => {
@@ -19,18 +19,14 @@ describe('navigating an EPUB page', () => {
     );
 
     cy.getIframeBody(IFRAME_SELECTOR)
-      .find('img', { timeout: 10000 })
-      .should(
-        'have.attr',
-        'alt',
-        "Alice's Adventures in Wonderland, by Lewis Carroll"
-      );
+      .find('text', { timeout: 10000 })
+      .should('have.text', 'Pioneers of Zionism: Hess, Pinsker, Rülf');
 
     cy.log('open TOC menu');
     cy.findByRole('button', { name: 'Table of Contents' }).click();
 
     cy.log('open chapter 1');
-    cy.findByRole('menuitem', { name: 'I: Down the Rab­bit-Hole' }).click();
+    cy.findByRole('menuitem', { name: 'Rejection of “Russification"' }).click();
 
     cy.wait('@chapterOne', { timeout: 10000 }).then((interception) => {
       assert.isNotNull(
@@ -43,16 +39,7 @@ describe('navigating an EPUB page', () => {
 
     cy.getIframeHead(IFRAME_SELECTOR).contains(
       'title',
-      'Chapter 1: Down the Rabbit-Hole'
-    );
-
-    cy.log('open TOC menu again');
-    cy.findByRole('button', { name: 'Table of Contents' }).click();
-
-    cy.findByRole('menuitem', { name: 'I: Down the Rab­bit-Hole' }).should(
-      ($el) => {
-        expect($el).to.have.css('background');
-      }
+      'Rejection of “Russification"'
     );
   });
 
