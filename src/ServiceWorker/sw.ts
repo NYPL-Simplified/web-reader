@@ -2,8 +2,14 @@ import { clientsClaim } from 'workbox-core';
 import { ExpirationPlugin } from 'workbox-expiration';
 import { CacheFirst } from 'workbox-strategies';
 import { IS_DEV } from '../constants';
-import { CACHE_EXPIRATION_SECONDS, WEBPUB_CACHE_NAME } from './constants';
-import { WebReaderSWConfig } from './types';
+import { WebpubManifest } from '../types';
+import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
+import {
+  CACHE_EXPIRATION_SECONDS,
+  PRECACHE_PUBLICATIONS,
+  WEBPUB_CACHE_NAME,
+} from './constants';
+import { PublicationConfig, WebReaderSWConfig } from './types';
 
 declare let self: ServiceWorkerGlobalScope;
 
@@ -34,6 +40,21 @@ export default function initWebReaderSW({
       log('INSTALLED');
     }
     event.waitUntil(installSW);
+  });
+
+  /**
+   * Allow the client to send a message telling us to pre-cache
+   * webpub manifests and resources within them.
+   */
+  self.addEventListener('message', async (event) => {
+    if (event.data.type === PRECACHE_PUBLICATIONS) {
+      log('Precaching publications');
+      if (typeof event.data.publications !== 'object') {
+        console.error('Precache event missing publications');
+        return;
+      }
+      await cachePublications(event.data.publications);
+    }
   });
 
   /**
@@ -76,6 +97,127 @@ export default function initWebReaderSW({
     // we have to make the event wait if we want to use async work
     event.respondWith(matchOrFetch());
   });
+}
+
+type PubWithManifest = PublicationConfig & { manifest: WebpubManifest };
+
+/**
+ * First cache all the manifests in parallel. They're top priority.
+ * Then cache all their resources.
+ * Only cache items that don't already exist in the cache.
+ */
+async function cachePublications(publications: PublicationConfig[]) {
+  const cache = await caches.open(WEBPUB_CACHE_NAME);
+
+  // first request all the manifests and cache them. They are top priority.
+  const pubResults: PromiseSettledResult<PubWithManifest>[] = await Promise.allSettled(
+    publications.map(async (pub) => {
+      const finalManifestUrl = getProxiedUrl(pub.manifestUrl, pub.proxyUrl);
+      // bail out if it already exists
+      const match = await cache.match(finalManifestUrl);
+      if (match) {
+        log(`Manifest match found for ${finalManifestUrl}`);
+        return { ...pub, manifest: await match.json() };
+      }
+
+      // otherwise fetch it
+      const manifestResponse = await fetch(finalManifestUrl);
+      handleBadResponse(finalManifestUrl, manifestResponse);
+      // add the manifest response to the cache
+      await cache.put(finalManifestUrl, manifestResponse.clone());
+
+      const manifest: WebpubManifest = await manifestResponse.json();
+
+      return { ...pub, manifest };
+    })
+  );
+
+  const pubs = pubResults
+    .map((result) => (result.status === 'fulfilled' ? result.value : undefined))
+    .filter(isPub);
+
+  // then cache all the resources in each
+  const promises = pubs.map(async (pub) => {
+    // make a list of resources with proxy included
+    const resourceHrefs = extractHrefs(
+      pub.manifest.resources ?? [],
+      pub.manifestUrl,
+      pub.proxyUrl
+    );
+
+    const readingOrderHrefs = extractHrefs(
+      pub.manifest.readingOrder ?? [],
+      pub.manifestUrl,
+      pub.proxyUrl
+    );
+
+    // make sure array is deduped using set or we may get a cache error
+    const allResourcesToCache = Array.from(
+      new Set([...resourceHrefs, ...readingOrderHrefs])
+    );
+    // add them all to the cache
+    await Promise.all(
+      allResourcesToCache.map(async (url) => {
+        // bail out if it already exists
+        const match = await cache.match(url);
+        if (match) {
+          log(`Resource match found for ${url}`);
+          return;
+        }
+        const response = await fetch(url);
+        handleBadResponse(url, response);
+        return await cache.put(url, response);
+      })
+    );
+  });
+
+  return await Promise.allSettled(promises);
+}
+
+function isPub(maybe: PubWithManifest | undefined): maybe is PubWithManifest {
+  return !!maybe;
+}
+
+function handleBadResponse(url: string, response: Response) {
+  if (!response.ok) {
+    const message = `Bad response status for: ${url}. Status: ${response.status}`;
+    console.warn(message);
+    throw new Error(message);
+  }
+}
+
+/**
+ * Prepends the proxy url if there is one
+ */
+function getProxiedUrl(url: string, proxyUrl: string | undefined) {
+  return proxyUrl ? `${proxyUrl}${encodeURIComponent(url)}` : url;
+}
+
+/**
+ * If the passed in url is relative, it will resolve it relative to the
+ * manifest url. Otherwise it should stay the same. Finally, the proxy is
+ * conditionally added
+ */
+function getAbsoluteUrl(
+  maybeRelative: string,
+  manifestUrl: string,
+  proxyUrl?: string
+) {
+  return getProxiedUrl(
+    new URL(maybeRelative, manifestUrl).toString(),
+    proxyUrl
+  );
+}
+
+/**
+ * Gets an array of raw href values from an array of readium links
+ */
+function extractHrefs(
+  links: ReadiumLink[],
+  manifestUrl: string,
+  proxyUrl: string | undefined
+): string[] {
+  return links.map((res) => getAbsoluteUrl(res.href, manifestUrl, proxyUrl));
 }
 
 // each logging line will be prepended with the service worker version
