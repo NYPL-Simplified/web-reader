@@ -30,3 +30,6 @@ const WebReader: FC<UseWebReaderArguments & ReaderManagerArguments> = ({
 };
 
 export default WebReader;
+
+export { usePublicationSW } from './ServiceWorker/index';
+export { default as useWebReader } from './useWebReader';
