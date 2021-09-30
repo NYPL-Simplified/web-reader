@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Link,
   Menu,
@@ -89,31 +89,26 @@ export default function TableOfContent({
   ) => {
     evt.preventDefault();
     const href: string | null = evt.currentTarget.getAttribute('href');
-    if (href && (navigator as HtmlNavigator).setFontFamily) {
-      const htmlNavigator = navigator as HtmlNavigator;
-      htmlNavigator.goToPage(href);
+    console.log('href', href);
+    if (href && href !== '#') {
+      navigator.goToPage(href);
       setIsOpen(false);
-    } else {
-      const pdfNavigator = navigator as PdfNavigator;
-      if (item && item.dest) {
-        pdfNavigator.goToPage(item.dest);
-        setIsOpen(false);
-      } else if (href) {
-        pdfNavigator.goToPage(href);
-        setIsOpen(false);
-      }
+    } else if (item && item.dest) {
+      console.log('item', item);
+      navigator.goToPage(item.dest);
+      setIsOpen(false);
     }
   };
 
   const pdfResource = (readerState as PdfReaderState).pdf;
 
-  const usePdfToc =
+  const pdfToc =
     pdfResource &&
     manifest &&
     manifest.resources &&
     manifest.resources.length === 1;
 
-  if (usePdfToc) {
+  if (pdfToc) {
     const getPdfOutline = (outline: PDFTreeNode[] | undefined) => {
       if (!outline)
         throw new Error(
@@ -136,7 +131,7 @@ export default function TableOfContent({
                 href="#"
                 title={subLink.title}
                 isActive={false}
-                onClick={(e) => tocLinkHandler(e, content)}
+                onClick={(e) => tocLinkHandler(e, subLink)}
                 pl={10}
               />
             ))}
@@ -147,7 +142,6 @@ export default function TableOfContent({
     const getOutline = async () => {
       if (pdfResource) {
         const outline: PDFTreeNode[] = await pdfResource.getOutline();
-
         const pdfOutline = getPdfOutline(outline);
         setOutline(pdfOutline);
       } else {
@@ -190,8 +184,8 @@ export default function TableOfContent({
             mt="-2px" // Move the popover slightly higher to hide Header border
             overflow="auto"
           >
-            {usePdfToc && outline}
-            {!usePdfToc &&
+            {pdfToc && outline}
+            {!pdfToc &&
               manifest.toc.map((content: ReadiumLink) => (
                 <React.Fragment key={content.title}>
                   <TocItem

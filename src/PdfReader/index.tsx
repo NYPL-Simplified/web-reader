@@ -1,4 +1,4 @@
-import { Document, Page, PageProps, pdfjs } from 'react-pdf';
+import { Document, Outline, Page, PageProps, pdfjs } from 'react-pdf';
 import { PDFDocumentProxy } from 'pdfjs-dist/types/display/api';
 
 import * as React from 'react';

@@ -16,12 +16,12 @@ export type Navigator = {
   goForward: () => void;
   goBackward: () => void;
   setScroll: (val: 'scrolling' | 'paginated') => Promise<void>;
+  goToPage: (target: string | unknown[]) => void;
 };
 
 export type PdfNavigator = Navigator & {
   zoomIn: () => Promise<void>;
   zoomOut: () => Promise<void>;
-  goToPage: (target: string | unknown[]) => void;
 };
 
 export type HtmlNavigator = Navigator & {
@@ -29,7 +29,6 @@ export type HtmlNavigator = Navigator & {
   decreaseFontSize: () => Promise<void>;
   setFontFamily: (family: FontFamily) => Promise<void>;
   setColorMode: (mode: ColorMode) => Promise<void>;
-  goToPage: (href: string) => void;
 };
 
 export type ReaderState = {
