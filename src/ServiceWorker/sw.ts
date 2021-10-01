@@ -94,7 +94,10 @@ export default function initWebReaderSW({
       return fetch(event.request);
     }
 
-    // we have to make the event wait if we want to use async work
+    // we have to make the event wait if we want to use async work. This will
+    // make the network tab show "ServiceWorker" in all requests, despite the
+    // fact that not every request actually goes through the service worker:
+    // https://stackoverflow.com/questions/33590378/status-code200-ok-from-serviceworker-in-chrome-network-devtools/33655173
     event.respondWith(matchOrFetch());
   });
 }
