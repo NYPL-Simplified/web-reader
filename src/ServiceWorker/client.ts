@@ -11,7 +11,6 @@ export default function usePublicationSW(
 ): void {
   React.useEffect(() => {
     // send a message to the SW to pre-cache our publications
-    // cachePublications();
     if ('serviceWorker' in navigator) {
       const message: PrecachePublicationsMessage = {
         type: PRECACHE_PUBLICATIONS,
