@@ -7,6 +7,10 @@ export type WebReaderSWConfig = {
 export type PublicationConfig = {
   manifestUrl: string;
   proxyUrl?: string;
+  // users can pass in a list of additonal urls
+  // we will route with a stale-while-revalidate
+  // strategy. Useful in CPW for the heavy fulfillment link.
+  swrUrls?: string[];
 };
 
 export type PrecachePublicationsMessage = {
