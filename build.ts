@@ -122,7 +122,7 @@ async function buildAll() {
     {
       entryPoints: {
         'pdf-styles': 'src/PdfReader/styles.css',
-        'html-styles': 'src/HtmlReader/styles.css',
+        'injectable-html-styles': 'src/HtmlReader/injectable-styles.css',
       },
       outdir: 'dist',
       minify: isProduction,
