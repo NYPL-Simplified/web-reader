@@ -25,8 +25,7 @@ import {
 import { getTheme } from '../src/ui/theme';
 import usePublicationSW from '../src/ServiceWorker/client';
 import AxisNowEncrypted from './axisnow-encrypted';
-import htmlStyles from 'url:../src/HtmlReader/styles.css';
-import '../node_modules/@d-i-t-a/reader/dist/reader.css';
+import htmlStyles from 'url:../src/HtmlReader/injectable-styles.css';
 import { Injectable } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
 
 const origin = window.location.origin;

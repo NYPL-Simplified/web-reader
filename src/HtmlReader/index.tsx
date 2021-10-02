@@ -11,6 +11,7 @@ import {
 import HtmlReaderContent from './HtmlReaderContent';
 import { Locator } from '@d-i-t-a/reader';
 import { HEADER_HEIGHT } from '../ui/constants';
+import '../../node_modules/@d-i-t-a/reader/dist/reader.css';
 
 type HtmlState = HtmlReaderState & {
   reader: D2Reader | undefined;
