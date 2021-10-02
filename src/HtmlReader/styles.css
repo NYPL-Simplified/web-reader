@@ -1,3 +1,4 @@
 @import './ReadiumCss/ReadiumCSS-before.css';
 @import './ReadiumCss/ReadiumCSS-after.css';
 @import './ReadiumCss/ReadiumCSS-default.css';
+@import '../../node_modules/@d-i-t-a/reader/dist/reader.css';
