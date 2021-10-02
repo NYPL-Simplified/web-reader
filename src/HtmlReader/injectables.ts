@@ -3,18 +3,7 @@ const origin = window.location.origin;
 const injectables = [
   {
     type: 'style',
-    url: `${origin}/css/ReadiumCSS-before.css`,
-    r2before: true,
-  },
-  {
-    type: 'style',
-    url: `${origin}/css/ReadiumCSS-default.css`,
-    r2default: true,
-  },
-  {
-    type: 'style',
-    url: `${origin}/css/ReadiumCSS-after.css`,
-    r2after: true,
+    url: `${origin}/css/html-reader.css`,
   },
   {
     type: 'style',
