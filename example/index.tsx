@@ -25,10 +25,25 @@ import {
 import { getTheme } from '../src/ui/theme';
 import usePublicationSW from '../src/ServiceWorker/client';
 import AxisNowEncrypted from './axisnow-encrypted';
+import htmlStyles from 'url:../src/HtmlReader/styles.css';
+import '../node_modules/@d-i-t-a/reader/dist/reader.css';
+import { Injectable } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
 
 const origin = window.location.origin;
 
 const pdfProxyUrl = process.env.CORS_PROXY_URL as string | undefined;
+
+const cssInjectable: Injectable = {
+  type: 'style',
+  url: htmlStyles,
+};
+const fontInjectable: Injectable = {
+  type: 'style',
+  url: `${origin}/fonts/opendyslexic/opendyslexic.css`,
+  fontFamily: 'opendyslexic',
+};
+
+const htmlInjectables = [cssInjectable, fontInjectable];
 
 const App = () => {
   const [dynamicHref, setValue] = React.useState('');
@@ -83,16 +98,21 @@ const App = () => {
           </Route>
           <Route path="/axisnow-decrypted">
             <WebReader
+              injectables={htmlInjectables}
               webpubManifestUrl={`${origin}/samples/dickens-axisnow/decrypted/manifest.json`}
             />
           </Route>
           <Route path="/moby-epub2">
             <WebReader
+              injectables={htmlInjectables}
               webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
             />
           </Route>
           <Route path="/streamed-alice-epub">
-            <WebReader webpubManifestUrl="https://alice.dita.digital/manifest.json" />
+            <WebReader
+              injectables={htmlInjectables}
+              webpubManifestUrl="https://alice.dita.digital/manifest.json"
+            />
           </Route>
           <Route path="/url/:manifestUrl">
             <DynamicReader />
@@ -212,7 +232,9 @@ const App = () => {
 const DynamicReader: React.FC = () => {
   const { manifestUrl } = useParams<{ manifestUrl: string }>();
   const decoded = decodeURIComponent(manifestUrl);
-  return <WebReader webpubManifestUrl={decoded} />;
+  return (
+    <WebReader injectables={htmlInjectables} webpubManifestUrl={decoded} />
+  );
 };
 
 ReactDOM.render(<App />, document.getElementById('root'));
