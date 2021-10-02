@@ -1,6 +1,6 @@
 const origin = window.location.origin;
 
-const injectables = [
+export const defaultInjectables = [
   {
     type: 'style',
     url: `${origin}/css/html-reader.css`,
@@ -12,4 +12,4 @@ const injectables = [
   },
 ];
 
-export default injectables;
+export const defaultInjectablesFixed = [];

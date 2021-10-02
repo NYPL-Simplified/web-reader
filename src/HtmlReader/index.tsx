@@ -1,6 +1,6 @@
 import D2Reader from '@d-i-t-a/reader';
 import React from 'react';
-import injectables from './injectables';
+import { defaultInjectables, defaultInjectablesFixed } from './injectables';
 import {
   ColorMode,
   HtmlReaderState,
@@ -74,7 +74,14 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
 const FONT_SIZE_STEP = 4;
 
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
-  const { webpubManifestUrl, manifest, getContent } = args ?? {};
+  const {
+    webpubManifestUrl,
+    manifest,
+    getContent,
+    injectables = defaultInjectables,
+    injectablesFixed = defaultInjectablesFixed,
+  } = args ?? {};
+
   const [state, dispatch] = React.useReducer(htmlReducer, {
     colorMode: 'day',
     isScrolling: false,
@@ -95,7 +102,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     D2Reader.build({
       url,
       injectables: injectables,
-      injectablesFixed: [],
+      injectablesFixed: injectablesFixed,
       attributes: {
         navHeight: HEADER_HEIGHT,
         margin: 0,
@@ -113,7 +120,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     }).then((reader) => {
       dispatch({ type: 'SET_READER', reader });
     });
-  }, [webpubManifestUrl, getContent]);
+  }, [webpubManifestUrl, getContent, injectables, injectablesFixed]);
 
   // prev and next page functions
   const goForward = React.useCallback(async () => {
