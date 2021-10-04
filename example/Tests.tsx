@@ -34,6 +34,17 @@ export default function Tests(): JSX.Element {
           ]}
         />
       </Route>
+      <Route path={`${path}/unparseable-manifest`}>
+        <WebReader
+          webpubManifestUrl={`${origin}/samples/test/unparseable-manifest.json`}
+        />
+      </Route>
     </>
   );
 }
+
+const InvalidManifest = () => {
+  return (
+    <WebReader webpubManifestUrl={`${origin}/samples/test/invalid-manifest`} />
+  );
+};
