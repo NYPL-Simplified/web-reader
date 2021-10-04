@@ -2,7 +2,7 @@
 
 This project is a web reader built by NYPL for reading eBooks. It is built using the [Readium Architecture](https://github.com/readium/architecture), and specifically built for Webpubs. Webpub is a spec [defined by the Readium Foundation](https://github.com/readium/webpub-manifest) to provide a common abstraction between many types of web publications. Initially, this project will focus on HTML-based Webpubs and Webpubs that define PDF collections. An HTML-based Webpub can be generated from many types of eBooks, but most commonly ePubs.
 
-The project is bootstrapped with [TSDX](https://tsdx.io). It uses Typescript, React, Jest and Rollup, and features both a Storybook development environment and an example application under `/example`. The example is deployed here: https://nypl-web-reader.vercel.app.
+The project is build with [esbuild](https://esbuild.github.io/). It uses Typescript, React, Jest and Cypress, and features both a Storybook development environment and an example application under `/example`. The example is deployed here: https://nypl-web-reader.vercel.app.
 
 A big thanks to [R2D2BC](https://github.com/d-i-t-a/R2D2BC) for providing the underlying HTML navigator capabilities.
 
@@ -22,7 +22,7 @@ A big thanks to [R2D2BC](https://github.com/d-i-t-a/R2D2BC) for providing the un
   - [x] Color scheme (night, day, sepia)
   - [x] Fullscreen
   - [x] Paginated / Scrolling mode toggle
-  - [ ] Zoom (PDF only)
+  - [x] Zoom (PDF only)
 - [x] Offline support (prefetch and cache desired content via Service Worker, along with host app shell.
 - [ ] Saving bookmarks / highlights
 - [ ] WAI-ARIA compliant accessibility (_pending accessibility review_)
@@ -36,7 +36,12 @@ Basic usage within a React app, using the default UI:
 import WebReader from 'nypl/web-reader';
 
 const ReaderPage = ({ manifestUrl }) => {
-  return <WebReader webpubManifest={manifestUrl} />;
+  return (
+    <WebReader
+      webpubManifest={manifestUrl}
+      headerLeft={<button>Back to app</button>}
+    />
+  );
 };
 ```
 
@@ -112,6 +117,18 @@ Finally, to use in a vanilla Javascript app:
   });
 </script>
 ```
+
+## Styling
+
+We ship a css file with each entrypoint that should be imported. This is necessary
+
+## Injectables
+
+The HTML Reader has the ability to inject custom elements into the reader iframe. This is most useful for passing
+
+## Errors
+
+We make every effort to throw useful errors. Your app should probably wrap the web reader component in a React `<ErrorBoundary>` to either display the thrown errors or a custom error state for your users in the case one is thrown. See the example app for an example using an Error Boundary.
 
 ## Offline
 
@@ -216,8 +233,6 @@ The `AxisNow Encrypted EPUB` example shows how this is done using the private NY
 
 ## Commands
 
-TSDX scaffolds our library inside `/src`, sets up a [Parcel-based](https://parceljs.org) playground for it inside `/example`, and a storybook app with stories in `/stories`.
-
 Before getting started, be sure to run `npm install`.
 
 The recommended workflow is to either run the storybook app, or the example app:
@@ -304,7 +319,7 @@ Code quality enforcement is set up with `prettier`, `husky`, and `lint-staged`. 
 
 ## Styling / CSS
 
-We have not yet made a firm decision on styles, but we will probably use css modules for the UI components we ship with the package.
+We are using [Chakra](https://chakra-ui.com/) to style our default UI components. You can wrap our UI components in your own `<ThemeProvider>` to pass your own custom theme.
 
 ## Continuous Integration
 
@@ -333,7 +348,7 @@ You can also choose to install and use [invariant](https://github.com/palmerhq/t
 
 ## Module Formats
 
-CJS, ESModules, and UMD module formats are supported.
+CJS and ESModules module formats are supported.
 
 The appropriate paths are configured in `package.json` and `dist/index.js` accordingly. Please report if any issues are found.
 
@@ -348,4 +363,4 @@ npm run build # builds to dist
 
 ## Publishing to NPM
 
-Not done yet, but we will probable use [np](https://github.com/sindresorhus/np) or otherwise integrate it into our Github Workflow.
+Run `npm run release`.
