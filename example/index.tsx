@@ -27,6 +27,7 @@ import usePublicationSW from '../src/ServiceWorker/client';
 import AxisNowEncrypted from './axisnow-encrypted';
 import htmlStyles from 'url:../src/HtmlReader/injectable-styles.css';
 import { Injectable } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
+import Tests from './Tests';
 
 const origin = window.location.origin;
 
@@ -114,7 +115,10 @@ const App = () => {
             <DynamicReader />
           </Route>
           <Route exact path="/">
-            <DisplayList />
+            <HomePage />
+          </Route>
+          <Route path="/test">
+            <Tests />
           </Route>
           <Route path="*">
             <h1>404</h1>
@@ -126,7 +130,7 @@ const App = () => {
   );
 };
 
-const DisplayList = () => {
+const HomePage = () => {
   const [dynamicHref, setValue] = React.useState('');
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     setValue(event.target.value);
