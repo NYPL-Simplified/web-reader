@@ -1,6 +1,5 @@
 import D2Reader from '@d-i-t-a/reader';
 import React from 'react';
-import { defaultInjectables, defaultInjectablesFixed } from './injectables';
 import {
   ColorMode,
   HtmlReaderState,
@@ -12,10 +11,18 @@ import HtmlReaderContent from './HtmlReaderContent';
 import { Locator } from '@d-i-t-a/reader';
 import { HEADER_HEIGHT } from '../ui/constants';
 import '../../node_modules/@d-i-t-a/reader/dist/reader.css';
+import { Injectable } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
 
 type HtmlState = HtmlReaderState & {
   reader: D2Reader | undefined;
 };
+
+/**
+ * If we provide injectables that are not found, the app won't load at all.
+ * Therefore we will not provide any default injectables.
+ */
+const defaultInjectables: Injectable[] = [];
+const defaultInjectablesFixed: Injectable[] = [];
 
 export type HtmlAction =
   | { type: 'SET_READER'; reader: D2Reader }
