@@ -45,9 +45,6 @@ const fontInjectable: Injectable = {
 const htmlInjectables = [cssInjectable, fontInjectable];
 
 const App = () => {
-  const [dynamicHref, setValue] = React.useState('');
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setValue(event.target.value);
   /**
    * For the example app we will only cache one publication by default.
    * Uncomment to cache others if desired. Note that the SW is disabled
@@ -117,106 +114,7 @@ const App = () => {
             <DynamicReader />
           </Route>
           <Route exact path="/">
-            <Box m={2}>
-              <Heading as="h1">NYPL Web Reader</Heading>
-              <Heading as="h2" fontSize={2} mt={3}>
-                Generic Examples
-              </Heading>
-              <UnorderedList p={4}>
-                <ListItem>
-                  EPUB2 Based Webpubs
-                  <UnorderedList>
-                    <ListItem>
-                      <Link to="/moby-epub2">Moby Dick </Link>
-                    </ListItem>
-                  </UnorderedList>
-                </ListItem>
-                <ListItem>
-                  Remote hosted WebPubs
-                  <UnorderedList>
-                    <ListItem>
-                      <Link to="streamed-alice-epub">
-                        Alice's Adventures in Wonderland
-                      </Link>
-                      <Text as="i">
-                        &nbsp;(streamed from https://alice.dita.digital)
-                      </Text>
-                    </ListItem>
-                  </UnorderedList>
-                </ListItem>
-                <ListItem>
-                  PDFs
-                  <UnorderedList>
-                    <ListItem>
-                      <Link to="/pdf">Single-PDF Webpub</Link>
-                    </ListItem>
-                    <ListItem>
-                      <Link to="/pdf-collection">Multi-PDF Webpub</Link>
-                    </ListItem>
-                  </UnorderedList>
-                </ListItem>
-                <ListItem>
-                  Bring your own manifest:
-                  <Flex alignItems="center">
-                    <Input
-                      maxW={500}
-                      value={dynamicHref}
-                      onChange={handleChange}
-                      placeholder="Webpub Manifest URL"
-                    />
-                    <Button
-                      ml={2}
-                      as={Link}
-                      to={`/url/${encodeURIComponent(dynamicHref)}`}
-                    >
-                      Go
-                    </Button>
-                  </Flex>
-                </ListItem>
-              </UnorderedList>
-              <Heading as="h2" fontSize={2} mt={3}>
-                AxisNow Examples
-              </Heading>
-              <Text fontSize="sm">
-                These examples are specific to NYPL, and may not work properly
-                without access to private packages.
-              </Text>
-              <UnorderedList p={4}>
-                <ListItem>
-                  <Link to="/axisnow-encrypted">AxisNow Encrypted EPUB</Link>
-                  <UnorderedList>
-                    <ListItem>
-                      <Text fontSize="sm" as="i">
-                        This example uses a real book in the NYPL Open eBooks
-                        catalog. You will need to have process.env.VAULT_UUID
-                        and process.env.ISBN set properly to read this book.
-                        Read example/README.txt for more info. If the example
-                        stops working, your loan likely expired and you will
-                        need to run the commands listed there with a proper
-                        username and password to check it out again.
-                      </Text>
-                    </ListItem>
-                  </UnorderedList>
-                </ListItem>
-                <ListItem>
-                  <Link to="/axisnow-decrypted">Decrypted AxisNow EPUB</Link>
-                  <UnorderedList>
-                    <ListItem>
-                      <Text fontSize="sm" as="i">
-                        This sample is the same as the above, but manually
-                        decrypted on the server and served statically in a
-                        decrypted form. The encrypted example should match this
-                        one in the browser.
-                      </Text>
-                    </ListItem>
-                  </UnorderedList>
-                </ListItem>
-              </UnorderedList>
-            </Box>
-          </Route>
-          <Route path="*">
-            <h1>404</h1>
-            <p>Page not found.</p>
+            <DisplayList />
           </Route>
           <Route path="*">
             <h1>404</h1>
@@ -225,6 +123,109 @@ const App = () => {
         </Switch>
       </BrowserRouter>
     </ChakraProvider>
+  );
+};
+
+const DisplayList = () => {
+  const [dynamicHref, setValue] = React.useState('');
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setValue(event.target.value);
+  return (
+    <Box m={2}>
+      <Heading as="h1">NYPL Web Reader</Heading>
+      <Heading as="h2" fontSize={2} mt={3}>
+        Generic Examples
+      </Heading>
+      <UnorderedList p={4}>
+        <ListItem>
+          EPUB2 Based Webpubs
+          <UnorderedList>
+            <ListItem>
+              <Link to="/moby-epub2">Moby Dick </Link>
+            </ListItem>
+          </UnorderedList>
+        </ListItem>
+        <ListItem>
+          Remote hosted WebPubs
+          <UnorderedList>
+            <ListItem>
+              <Link to="streamed-alice-epub">
+                Alice's Adventures in Wonderland
+              </Link>
+              <Text as="i">
+                &nbsp;(streamed from https://alice.dita.digital)
+              </Text>
+            </ListItem>
+          </UnorderedList>
+        </ListItem>
+        <ListItem>
+          PDFs
+          <UnorderedList>
+            <ListItem>
+              <Link to="/pdf">Single-PDF Webpub</Link>
+            </ListItem>
+            <ListItem>
+              <Link to="/pdf-collection">Multi-PDF Webpub</Link>
+            </ListItem>
+          </UnorderedList>
+        </ListItem>
+        <ListItem>
+          Bring your own manifest:
+          <Flex alignItems="center">
+            <Input
+              maxW={500}
+              value={dynamicHref}
+              onChange={handleChange}
+              placeholder="Webpub Manifest URL"
+            />
+            <Button
+              ml={2}
+              as={Link}
+              to={`/url/${encodeURIComponent(dynamicHref)}`}
+            >
+              Go
+            </Button>
+          </Flex>
+        </ListItem>
+      </UnorderedList>
+      <Heading as="h2" fontSize={2} mt={3}>
+        AxisNow Examples
+      </Heading>
+      <Text fontSize="sm">
+        These examples are specific to NYPL, and may not work properly without
+        access to private packages.
+      </Text>
+      <UnorderedList p={4}>
+        <ListItem>
+          <Link to="/axisnow-encrypted">AxisNow Encrypted EPUB</Link>
+          <UnorderedList>
+            <ListItem>
+              <Text fontSize="sm" as="i">
+                This example uses a real book in the NYPL Open eBooks catalog.
+                You will need to have process.env.VAULT_UUID and
+                process.env.ISBN set properly to read this book. Read
+                example/README.txt for more info. If the example stops working,
+                your loan likely expired and you will need to run the commands
+                listed there with a proper username and password to check it out
+                again.
+              </Text>
+            </ListItem>
+          </UnorderedList>
+        </ListItem>
+        <ListItem>
+          <Link to="/axisnow-decrypted">Decrypted AxisNow EPUB</Link>
+          <UnorderedList>
+            <ListItem>
+              <Text fontSize="sm" as="i">
+                This sample is the same as the above, but manually decrypted on
+                the server and served statically in a decrypted form. The
+                encrypted example should match this one in the browser.
+              </Text>
+            </ListItem>
+          </UnorderedList>
+        </ListItem>
+      </UnorderedList>
+    </Box>
   );
 };
 
