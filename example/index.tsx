@@ -28,6 +28,7 @@ import AxisNowEncrypted from './axisnow-encrypted';
 import htmlStyles from 'url:../src/HtmlReader/injectable-styles.css';
 import { Injectable } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
 import Tests from './Tests';
+import ErrorBoundary from './ErrorBoundary';
 
 const origin = window.location.origin;
 
@@ -75,56 +76,58 @@ const App = () => {
   return (
     <ChakraProvider theme={getTheme('day')}>
       <BrowserRouter>
-        <Switch>
-          <Route path="/pdf">
-            <WebReader
-              webpubManifestUrl="/samples/pdf/degruyter.json"
-              proxyUrl={pdfProxyUrl}
-              pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
-            />
-          </Route>
-          <Route path="/pdf-collection">
-            <WebReader
-              webpubManifestUrl="/samples/pdf/muse1007.json"
-              proxyUrl={pdfProxyUrl}
-              pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
-            />
-          </Route>
-          <Route path="/axisnow-encrypted">
-            <AxisNowEncrypted />
-          </Route>
-          <Route path="/axisnow-decrypted">
-            <WebReader
-              injectables={htmlInjectables}
-              webpubManifestUrl={`${origin}/samples/dickens-axisnow/decrypted/manifest.json`}
-            />
-          </Route>
-          <Route path="/moby-epub2">
-            <WebReader
-              injectables={htmlInjectables}
-              webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
-            />
-          </Route>
-          <Route path="/streamed-alice-epub">
-            <WebReader
-              injectables={htmlInjectables}
-              webpubManifestUrl="https://alice.dita.digital/manifest.json"
-            />
-          </Route>
-          <Route path="/url/:manifestUrl">
-            <DynamicReader />
-          </Route>
-          <Route exact path="/">
-            <HomePage />
-          </Route>
-          <Route path="/test">
-            <Tests />
-          </Route>
-          <Route path="*">
-            <h1>404</h1>
-            <p>Page not found.</p>
-          </Route>
-        </Switch>
+        <ErrorBoundary>
+          <Switch>
+            <Route path="/pdf">
+              <WebReader
+                webpubManifestUrl="/samples/pdf/degruyter.json"
+                proxyUrl={pdfProxyUrl}
+                pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
+              />
+            </Route>
+            <Route path="/pdf-collection">
+              <WebReader
+                webpubManifestUrl="/samples/pdf/muse1007.json"
+                proxyUrl={pdfProxyUrl}
+                pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
+              />
+            </Route>
+            <Route path="/axisnow-encrypted">
+              <AxisNowEncrypted />
+            </Route>
+            <Route path="/axisnow-decrypted">
+              <WebReader
+                injectables={htmlInjectables}
+                webpubManifestUrl={`${origin}/samples/dickens-axisnow/decrypted/manifest.json`}
+              />
+            </Route>
+            <Route path="/moby-epub2">
+              <WebReader
+                injectables={htmlInjectables}
+                webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
+              />
+            </Route>
+            <Route path="/streamed-alice-epub">
+              <WebReader
+                injectables={htmlInjectables}
+                webpubManifestUrl="https://alice.dita.digital/manifest.json"
+              />
+            </Route>
+            <Route path="/url/:manifestUrl">
+              <DynamicReader />
+            </Route>
+            <Route exact path="/">
+              <HomePage />
+            </Route>
+            <Route path="/test">
+              <Tests />
+            </Route>
+            <Route path="*">
+              <h1>404</h1>
+              <p>Page not found.</p>
+            </Route>
+          </Switch>
+        </ErrorBoundary>
       </BrowserRouter>
     </ChakraProvider>
   );
