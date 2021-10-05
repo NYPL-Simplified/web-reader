@@ -16,13 +16,14 @@ export interface ToggleButtonProps
   extends React.ComponentPropsWithoutRef<typeof ChakraBox> {
   isChecked?: false;
   colorMode?: ColorMode;
+  label?: string;
   value: string;
 }
 
 function ToggleButton(
   props: React.PropsWithoutRef<ToggleButtonProps>
 ): React.ReactElement {
-  const { isChecked, children, colorMode, ...rest } = props;
+  const { isChecked, children, colorMode, label, ...rest } = props;
   const { getInputProps, getCheckboxProps } = useRadio(props);
 
   const input = getInputProps();
@@ -32,7 +33,7 @@ function ToggleButton(
   return (
     // This will override the default theme if we specify the colorMode to the toggle button.
     <ThemeProvider theme={getTheme(colorMode ?? theme.currentColorMode)}>
-      <ChakraBox as="label" d="flex" flexGrow={1}>
+      <ChakraBox as="label" d="flex" flexGrow={1} aria-label={label}>
         <input {...input} />
         <Button as="div" {...checkbox} variant="toggle" {...rest} flexGrow={1}>
           {children}

@@ -5,7 +5,7 @@ import Button from './Button';
 import ToggleButton from './ToggleButton';
 import ToggleGroup from './ToggleGroup';
 
-type HtmlSettingsProps = {
+export type HtmlSettingsProps = {
   navigator: HtmlNavigator;
   readerState: HtmlReaderState;
   paginationValue: string;
@@ -31,10 +31,18 @@ export default function HtmlSettings(
         label="text font options"
         onChange={setFontFamily}
       >
-        <ToggleButton value="publisher">Publisher</ToggleButton>
-        <ToggleButton value="serif">Serif</ToggleButton>
-        <ToggleButton value="sans-serif">Sans-Serif</ToggleButton>
-        <ToggleButton value="open-dyslexic">Dyslexia-Friendly</ToggleButton>
+        <ToggleButton value="publisher" label="Publisher">
+          Publisher
+        </ToggleButton>
+        <ToggleButton value="serif" label="Serif">
+          Serif
+        </ToggleButton>
+        <ToggleButton value="sans-serif" label="Sans-Serif">
+          Sans-Serif
+        </ToggleButton>
+        <ToggleButton value="open-dyslexic" label="Dyslexia-Friendly">
+          Dyslexia-Friendly
+        </ToggleButton>
       </ToggleGroup>
       <ButtonGroup d="flex" spacing={0}>
         <Button
@@ -62,6 +70,7 @@ export default function HtmlSettings(
         <ToggleButton
           colorMode="day"
           value="day"
+          label="Day"
           _checked={{ bg: 'ui.white' }} // default _checked color is green for toggles
         >
           Day
@@ -69,6 +78,7 @@ export default function HtmlSettings(
         <ToggleButton
           colorMode="sepia"
           value="sepia"
+          label="Sepia"
           bg="ui.sepia" // distinct case where default needs to be sepia
           _active={{ bg: 'ui.sepia' }}
           _hover={{ bg: 'ui.sepia' }}
@@ -79,6 +89,7 @@ export default function HtmlSettings(
         <ToggleButton
           colorMode="night"
           value="night"
+          label="Night"
           _checked={{ bg: 'ui.black' }}
         >
           Night
@@ -89,8 +100,12 @@ export default function HtmlSettings(
         value={paginationValue}
         label="pagination options"
       >
-        <ToggleButton value="paginated">Paginated</ToggleButton>
-        <ToggleButton value="scrolling">Scrolling</ToggleButton>
+        <ToggleButton value="paginated" label="Paginated">
+          Paginated
+        </ToggleButton>
+        <ToggleButton value="scrolling" label="Scrolling">
+          Scrolling
+        </ToggleButton>
       </ToggleGroup>
     </>
   );
