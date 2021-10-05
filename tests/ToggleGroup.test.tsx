@@ -6,9 +6,15 @@ import ToggleGroup from '../src/ui/ToggleGroup';
 const renderComponent = () => {
   return render(
     <ToggleGroup value="sedona" label="test">
-      <ToggleButton value="sedona">Sedona</ToggleButton>
-      <ToggleButton value="santa_fe">Santa Fe</ToggleButton>
-      <ToggleButton value="las_cruces">Las Cruces</ToggleButton>
+      <ToggleButton value="sedona" label="Sedona">
+        Sedona
+      </ToggleButton>
+      <ToggleButton value="santa_fe" label="Santa Fe">
+        Santa Fe
+      </ToggleButton>
+      <ToggleButton value="las_cruces" label="Las Cruces">
+        Las Cruces
+      </ToggleButton>
     </ToggleGroup>
   );
 };
@@ -24,26 +30,32 @@ test('toggle group should contain all radio buttons', () => {
 });
 
 test('respect value props', () => {
-  const { getByLabelText } = renderComponent();
+  const { getByRole } = renderComponent();
 
-  expect(getByLabelText('Sedona')).toBeChecked();
+  expect(getByRole('radio', { name: /sedona/i })).toBeChecked();
 
-  fireEvent.click(getByLabelText('Santa Fe'));
+  fireEvent.click(getByRole('radio', { name: /santa Fe/i }));
 
-  expect(getByLabelText('Sedona')).toBeChecked();
+  expect(getByRole('radio', { name: /sedona/i })).toBeChecked();
 });
 
 test('onChange callback function should be called', () => {
   const onChangeHandler = jest.fn();
-  const { getByLabelText } = render(
+  const { getByRole } = render(
     <ToggleGroup value="sedona" onChange={onChangeHandler} label="test">
-      <ToggleButton value="sedona">Sedona</ToggleButton>
-      <ToggleButton value="santa_fe">Santa Fe</ToggleButton>
-      <ToggleButton value="las_cruces">Las Cruces</ToggleButton>
+      <ToggleButton value="sedona" label="Sedona">
+        Sedona
+      </ToggleButton>
+      <ToggleButton value="santa_fe" label="Santa Fe">
+        Santa Fe
+      </ToggleButton>
+      <ToggleButton value="las_cruces" label="Las Cruces">
+        Las Cruces
+      </ToggleButton>
     </ToggleGroup>
   );
 
-  fireEvent.click(getByLabelText('Santa Fe'));
+  fireEvent.click(getByRole('radio', { name: /santa fe/i }));
 
   expect(onChangeHandler).toHaveBeenCalledWith('santa_fe');
 });
