@@ -5,6 +5,9 @@ import {
   PdfNavigator,
   ReaderState,
 } from '../../src/types';
+import { HtmlSettingsProps } from '../../src/ui/HtmlSettings';
+import { PdfSettingsProps } from '../../src/ui/PdfSettings';
+
 import { MockWebpubManifest } from './MockWebpubManifest';
 
 const goForwardFn = jest.fn();
@@ -64,6 +67,18 @@ const MockPdfReaderState = {
   numPages: null,
   currentTocLocation: null,
 };
+
+export const MockHtmlSettingsProps = {
+  navigator: MockHtmlNavigator,
+  readerState: MockHtmlReaderState,
+  paginationValue: 'paginated',
+} as HtmlSettingsProps;
+
+export const MockPdfSettingsProps = {
+  navigator: MockPdfNavigator,
+  readerState: MockPdfReaderState,
+  paginationValue: 'paginated',
+} as PdfSettingsProps;
 
 export const MockHtmlReaderProps = {
   type: 'HTML',

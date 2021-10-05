@@ -62,7 +62,7 @@ export type PDFTreeNode = {
 };
 
 // PDF specific reader state
-export type PdfReaderState = ReaderState & { pdf?: PDFDocumentProxy };
+export type PdfReaderState = ReaderState;
 
 // HTML specific reader state
 export type HtmlReaderState = ReaderState;

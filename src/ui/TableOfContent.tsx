@@ -21,6 +21,7 @@ import Button from './Button';
 import useColorModeValue from './hooks/useColorModeValue';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 import { HEADER_HEIGHT } from './constants';
+import { PdfState } from '../PdfReader';
 
 type TocItemProps = React.ComponentPropsWithoutRef<typeof MenuItem> & {
   href: string;
@@ -78,7 +79,7 @@ export default function TableOfContent({
 }: {
   navigator: PdfNavigator | HtmlNavigator;
   manifest: WebpubManifest;
-  readerState: ReaderState | PdfReaderState;
+  readerState: ReaderState | PdfState;
 }): React.ReactElement {
   const [isOpen, setIsOpen] = useState(false);
   const [outline, setOutline] = useState<JSX.Element[]>([]);
@@ -99,7 +100,7 @@ export default function TableOfContent({
     }
   };
 
-  const pdfResource = (readerState as PdfReaderState).pdf;
+  const pdfResource = (readerState as PdfState).pdf;
 
   const pdfToc =
     pdfResource &&

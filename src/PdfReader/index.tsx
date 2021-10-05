@@ -13,7 +13,7 @@ import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
 import useMeasure from './useMeasure';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 
-type PdfState = PdfReaderState & {
+export type PdfState = PdfReaderState & {
   resourceIndex: number;
   resource: { data: Uint8Array } | null;
   // we only know the numPages once the resource has been parsed
@@ -26,6 +26,7 @@ type PdfState = PdfReaderState & {
   pdfWidth: number;
   pageHeight: number | undefined;
   pageWidth: number | undefined;
+  pdf?: PDFDocumentProxy;
 };
 
 type PdfReaderAction =
