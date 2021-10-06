@@ -1,6 +1,6 @@
 {
   "name": "@nypl/web-reader",
-  "version": "0.2.0-alpha.8",
+  "version": "0.2.0-alpha.10",
   "license": "MIT",
   "repository": "https://github.com/NYPL-Simplified/web-reader",
   "homepage": "https://github.com/NYPL-Simplified/web-reader",
@@ -153,7 +153,8 @@
     "react-pdf": "^5.3.2",
     "workbox-expiration": "^6.2.4",
     "workbox-precaching": "^6.2.4",
-    "workbox-strategies": "^6.2.4"
+    "workbox-routing": "^6.3.0",
+    "workbox-strategies": "^6.3.0"
   },
   "optionalDependencies": {
     "@nypl-simplified-packages/axisnow-access-control-web": "^1.3.0"
