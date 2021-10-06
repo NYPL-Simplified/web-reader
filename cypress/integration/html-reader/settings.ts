@@ -51,6 +51,7 @@ describe('display settings', () => {
 describe('useHtmlReader configuration settings', () => {
   it('should have no injectables by default', () => {
     cy.loadPage('/test/no-injectables');
+    cy.wait(3000);
     cy.getIframeHead(IFRAME_SELECTOR).contains('link');
     // make sure there is a title, the query does in fact work
     cy.getIframeHead(IFRAME_SELECTOR).contains('title');
@@ -58,7 +59,7 @@ describe('useHtmlReader configuration settings', () => {
 
   it('should render css injectables when provided', () => {
     cy.loadPage('/test/with-injectables');
-
+    cy.wait(3000);
     cy.getIframeHead(IFRAME_SELECTOR).contains('title');
     cy.getIframeHead(IFRAME_SELECTOR).contains(
       'link[href$="/fonts/opensyslexic/opendyslexic.css"]'
