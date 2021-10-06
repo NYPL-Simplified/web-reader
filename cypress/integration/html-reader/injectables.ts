@@ -1,10 +1,12 @@
+import { IFRAME_SELECTOR } from '../../support/constants';
+
 describe('useHtmlReader configuration settings', () => {
   it('should have no injectables by default', () => {
     cy.visit('/test/no-injectables');
     cy.wait(3000);
     //   cy.getIframeHead(IFRAME_SELECTOR).find('link').should('not.exist');
     // make sure there is a title, the query does in fact work
-    //   cy.getIframeHead(IFRAME_SELECTOR).contains('title', 'Cover');
+    cy.getIframeHead(IFRAME_SELECTOR).contains('title', 'Cover');
   });
 
   it('should render css injectables when provided', () => {
