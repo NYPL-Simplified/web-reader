@@ -1,3 +1,20 @@
+import { useCallback, useState } from 'react';
+
+export default function useFullscreen(): [boolean, () => void] {
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+
+  const updateFullScreenStatus = useCallback(() => {
+    setIsFullscreen(!!isOnFullscreen());
+  }, []);
+
+  document.addEventListener('fullscreenchange', updateFullScreenStatus);
+  document.addEventListener('webkitfullscreenchange', updateFullScreenStatus);
+  document.addEventListener('mozfullscreenchange', updateFullScreenStatus);
+  document.addEventListener('MSFullscreenChange', updateFullScreenStatus);
+
+  return [isFullscreen, toggleFullScreen];
+}
+
 // Methods for Firefox / Safari / Edge
 // We have to cast these types so typescript doesn't complain
 interface FullSpecDocument extends Document {
@@ -47,23 +64,25 @@ const exitFullScreen = () => {
     doc.mozCancelFullScreen ||
     doc.webkitExitFullscreen ||
     doc.msExitFullscreen;
-
   if (typeof exitFunc === 'function') {
     exitFunc.call(doc);
   }
 };
 
-/**
- * Toggles fullscreen mode on the <html> element.
- */
-export function toggleFullScreen() {
-  const isFullscreen =
+export const isOnFullscreen = (() => {
+  const doc = document as FullSpecDocument;
+  return () =>
     doc.fullscreenElement ||
     doc.mozFullScreenElement ||
     doc.webkitFullscreenElement ||
     doc.msFullscreenElement;
+})();
 
-  if (isFullscreen) {
+/**
+ * Toggles fullscreen mode on the <html> element.
+ */
+export function toggleFullScreen(): void {
+  if (isOnFullscreen()) {
     exitFullScreen();
   } else {
     enterFullScreen();
