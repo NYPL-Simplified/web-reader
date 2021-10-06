@@ -69,7 +69,7 @@ jobs:
           --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
           --header 'Accept: application/vnd.github.v3+json' \
           --data '{
-            "context": "Cypress Tests - Open Web Reader",
+            "context": "Cypress Tests - Web Reader",
             "state": "failure",
             "description": "Cypress tests failed",
             "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
