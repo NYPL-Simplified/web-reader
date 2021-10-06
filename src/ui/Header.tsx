@@ -1,14 +1,15 @@
 import React from 'react';
-import { Flex, Link, HStack, Text } from '@chakra-ui/react';
-import { Icon, IconNames } from '@nypl/design-system-react-components';
+import { Flex, Link, HStack, Text, Icon } from '@chakra-ui/react';
+import { MdHome } from 'react-icons/md';
 import { ActiveReader, ReaderManagerArguments } from '../types';
 import useColorModeValue from '../ui/hooks/useColorModeValue';
-import { toggleFullScreen } from '../utils/toggleFullScreen';
 
 import SettingsCard from './SettingsButton';
 import Button from './Button';
 import TableOfContent from './TableOfContent';
 import { HEADER_HEIGHT } from './constants';
+import { MdOutlineFullscreenExit, MdOutlineFullscreen } from 'react-icons/md';
+import useFullscreen from './hooks/useFullScreen';
 
 const DefaultHeaderLeft = (): React.ReactElement => {
   const linkColor = useColorModeValue('gray.700', 'gray.100', 'gray.700');
@@ -28,6 +29,7 @@ const DefaultHeaderLeft = (): React.ReactElement => {
         textDecoration: 'none',
       }}
     >
+      <Icon as={MdHome} w={6} h={6} />
       <Text variant="headerNav">Back to Homepage</Text>
     </Link>
   );
@@ -36,6 +38,7 @@ const DefaultHeaderLeft = (): React.ReactElement => {
 export default function Header(
   props: ActiveReader & ReaderManagerArguments
 ): React.ReactElement {
+  const [isFullscreen, toggleFullScreen] = useFullscreen();
   const { headerLeft, state, navigator, manifest } = props;
   const mainBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
 
@@ -64,7 +67,11 @@ export default function Header(
         />
         <SettingsCard {...props} />
         <Button border="none" onClick={toggleFullScreen}>
-          <Icon decorative name={IconNames.search} modifiers={['small']} />
+          <Icon
+            as={isFullscreen ? MdOutlineFullscreenExit : MdOutlineFullscreen}
+            w={6}
+            h={6}
+          />
           <Text variant="headerNav">Toggle Fullscreen</Text>
         </Button>
       </HStack>
