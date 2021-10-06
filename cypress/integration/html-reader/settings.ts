@@ -51,33 +51,25 @@ describe('display settings', () => {
 describe('useHtmlReader configuration settings', () => {
   it('should have no injectables by default', () => {
     cy.loadPage('/test/no-injectables');
-
-    // cy.getIframeHtml().within(() => {
-    //   cy.get('head > link').should('not.exist');
-    //   // make sure there is a title, the query does in fact work
-    //   cy.get('head > title').should('exist');
-    // });
-
-    // cy.getIframeHtml().within(() => {
-    //   cy.get('head > link').should('not.exist');
-    //   // make sure there is a title, the query does in fact work
-    //   cy.get('head > title').should('exist');
-    // });
-
-    // cy.getIframeHead(IFRAME_SELECTOR).find('link').should('not.exist');
+    cy.getIframeHead(IFRAME_SELECTOR).find('link').should('not.exist');
+    // make sure there is a title, the query does in fact work
+    cy.getIframeHead(IFRAME_SELECTOR).find('title').should('exist');
   });
 
   it('should render css injectables when provided', () => {
     cy.loadPage('/test/with-injectables');
 
-    // cy.getIframeHtml().within(() => {
-    //   cy.get('head > title').should('exist');
-    //   cy.get(
-    //     'head > link[href$="/fonts/opensyslexic/opendyslexic.css"]'
-    //   ).should('exist');
-    //   cy.get('head > link[href$="/css/sample.css"]').should('exist');
-    //   // make sure the css was applied
-    //   cy.get('body').should('have.css', 'color', 'rgb(0, 0, 255)');
-    // });
+    cy.getIframeHead(IFRAME_SELECTOR).find('title').should('exist');
+    cy.getIframeHead(IFRAME_SELECTOR)
+      .find('link[href$="/fonts/opensyslexic/opendyslexic.css"]')
+      .should('exist');
+    cy.getIframeHead(IFRAME_SELECTOR)
+      .find('link[href$="/css/sample.css"]')
+      .should('exist');
+    cy.getIframeBody(IFRAME_SELECTOR).should(
+      'have.css',
+      'color',
+      'rgb(0, 0, 255)'
+    );
   });
 });
