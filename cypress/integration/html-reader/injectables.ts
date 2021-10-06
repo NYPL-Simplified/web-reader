@@ -11,21 +11,21 @@ describe('useHtmlReader configuration settings', () => {
 
   it('should render css injectables when provided', () => {
     cy.visit('/test/with-injectables');
-    // cy.getIframeHead(IFRAME_SELECTOR).contains('title', 'Cover');
-    // cy.getIframeHead(IFRAME_SELECTOR)
-    //   .find(
-    //     `link[href="${
-    //       Cypress.config().baseUrl
-    //     }/fonts/opensyslexic/opendyslexic.css"]`
-    //   )
-    //   .should('exist');
-    // cy.getIframeHead(IFRAME_SELECTOR)
-    //   .find(`link[href="${Cypress.config().baseUrl}/css/sample.css"]`)
-    //   .should('exist');
-    // cy.getIframeBody(IFRAME_SELECTOR).should(
-    //   'have.css',
-    //   'color',
-    //   'rgb(0, 0, 255)'
-    // );
+    cy.getIframeHead(IFRAME_SELECTOR).contains('title', 'Cover');
+    cy.getIframeHead(IFRAME_SELECTOR)
+      .find(
+        `link[href="${
+          Cypress.config().baseUrl
+        }/fonts/opensyslexic/opendyslexic.css"]`
+      )
+      .should('exist');
+    cy.getIframeHead(IFRAME_SELECTOR)
+      .find(`link[href="${Cypress.config().baseUrl}/css/sample.css"]`)
+      .should('exist');
+    cy.getIframeBody(IFRAME_SELECTOR).should(
+      'have.css',
+      'color',
+      'rgb(0, 0, 255)'
+    );
   });
 });
