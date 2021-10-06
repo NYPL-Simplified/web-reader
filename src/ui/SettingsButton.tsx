@@ -5,9 +5,10 @@ import {
   PopoverContent,
   PopoverBody,
   Text,
+  Icon,
 } from '@chakra-ui/react';
 import { PDFActiveReader, HTMLActiveReader } from '../types';
-import { Icon, IconNames } from '@nypl/design-system-react-components';
+import { MdOutlineSettings, MdOutlineCancel } from 'react-icons/md';
 
 import Button from './Button';
 import useColorModeValue from './hooks/useColorModeValue';
@@ -22,7 +23,7 @@ export default function SettingsCard(
   props: SettingsCardProps
 ): React.ReactElement {
   const [isOpen, setIsOpen] = React.useState(false);
-  const open = () => setIsOpen(!isOpen);
+  const open = () => setIsOpen(true);
   const close = () => setIsOpen(false);
 
   const paginationValue = props.state?.isScrolling ? 'scrolling' : 'paginated';
@@ -33,12 +34,17 @@ export default function SettingsCard(
       <Popover
         placement="bottom"
         isOpen={isOpen}
+        onOpen={open}
         onClose={close}
         autoFocus={true}
       >
         <PopoverTrigger>
           <Button onClick={open} border="none">
-            <Icon decorative name={IconNames.plus} modifiers={['small']} />{' '}
+            <Icon
+              as={isOpen ? MdOutlineCancel : MdOutlineSettings}
+              w={6}
+              h={6}
+            />
             <Text variant="headerNav">Settings</Text>
           </Button>
         </PopoverTrigger>
