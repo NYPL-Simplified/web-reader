@@ -7,12 +7,12 @@ import {
   MenuList,
   Portal,
   Text,
+  Icon,
 } from '@chakra-ui/react';
-import { Icon, IconNames } from '@nypl/design-system-react-components';
+import { MdOutlineToc, MdOutlineCancel } from 'react-icons/md';
 import {
   HtmlNavigator,
   PdfNavigator,
-  PdfReaderState,
   PDFTreeNode,
   ReaderState,
   WebpubManifest,
@@ -168,7 +168,7 @@ export default function TableOfContent({
       onClose={() => setIsOpen(false)} // To account for "close by lose focus"
     >
       <MenuButton as={Button} border="none">
-        <Icon decorative name={IconNames.download} modifiers={['small']} />
+        <Icon as={isOpen ? MdOutlineCancel : MdOutlineToc} w={6} h={6} />
         <Text variant="headerNav">Table of Contents</Text>
       </MenuButton>
       {isOpen && manifest?.toc && (

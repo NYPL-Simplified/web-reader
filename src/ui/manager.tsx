@@ -1,10 +1,6 @@
-import { ThemeProvider, Flex } from '@chakra-ui/react';
-import {
-  Icon,
-  IconNames,
-  IconRotationTypes,
-} from '@nypl/design-system-react-components';
+import { ThemeProvider, Flex, Icon } from '@chakra-ui/react';
 import * as React from 'react';
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import { ReaderManagerArguments, ReaderReturn } from '../types';
 import Header from './Header';
 import useColorModeValue from './hooks/useColorModeValue';
@@ -36,15 +32,9 @@ const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
       <PageButton
         onClick={props.navigator?.goBackward}
         left={0}
-        pr={2}
         aria-label="Previous Page"
       >
-        <Icon
-          decorative
-          name={IconNames.arrow}
-          modifiers={['small']}
-          iconRotation={IconRotationTypes.rotate90}
-        />
+        <Icon as={MdKeyboardArrowLeft} w={6} h={6} />
       </PageButton>
       <Flex
         bg={bgColor}
@@ -59,15 +49,9 @@ const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
       <PageButton
         onClick={props.navigator?.goForward}
         right={0}
-        pl={2}
         aria-label="Next Page"
       >
-        <Icon
-          decorative
-          name={IconNames.arrow}
-          modifiers={['small']}
-          iconRotation={IconRotationTypes.rotate270}
-        />
+        <Icon as={MdKeyboardArrowRight} w={6} h={6} />
       </PageButton>
     </Flex>
   );

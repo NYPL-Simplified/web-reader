@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { ButtonGroup, Circle } from '@chakra-ui/react';
-import { Icon, IconNames } from '@nypl/design-system-react-components';
+import { ButtonGroup, Icon } from '@chakra-ui/react';
 import { PdfNavigator, PdfReaderState } from '../types';
 import Button from './Button';
 import ToggleButton from './ToggleButton';
 import ToggleGroup from './ToggleGroup';
+import { MdOutlineZoomIn, MdOutlineZoomOut } from 'react-icons/md';
 
 export type PdfSettingsProps = {
   navigator: PdfNavigator;
@@ -28,15 +28,7 @@ export default function PdfSettings(
           variant="toggle"
         >
           Zoom Out
-          <Circle
-            border="1px solid"
-            p={1}
-            ml={1}
-            size="17px"
-            alignItems="baseline"
-          >
-            <Icon decorative name={IconNames.minus} modifiers={['small']} />
-          </Circle>
+          <Icon as={MdOutlineZoomOut} w={7} h={7} pl={1} />
         </Button>
         <Button
           flexGrow={1}
@@ -45,15 +37,7 @@ export default function PdfSettings(
           variant="toggle"
         >
           Zoom In
-          <Circle
-            border="1px solid"
-            p={1}
-            ml={1}
-            size="17px"
-            alignItems="baseline"
-          >
-            <Icon decorative name={IconNames.plus} modifiers={['small']} />
-          </Circle>
+          <Icon as={MdOutlineZoomIn} w={7} h={7} pl={1} />
         </Button>
       </ButtonGroup>
       <ToggleGroup

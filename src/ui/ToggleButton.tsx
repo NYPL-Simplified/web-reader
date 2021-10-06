@@ -1,16 +1,16 @@
 import React from 'react';
 import {
   Box as ChakraBox,
-  Circle,
   ThemeProvider,
   useRadio,
   useTheme,
+  Icon,
 } from '@chakra-ui/react';
-import { Icon, IconNames } from '@nypl/design-system-react-components';
 
 import Button from './Button';
 import { getTheme } from './theme';
 import { ColorMode } from '../types';
+import { MdOutlineCheckCircle } from 'react-icons/md';
 
 export interface ToggleButtonProps
   extends React.ComponentPropsWithoutRef<typeof ChakraBox> {
@@ -38,19 +38,17 @@ function ToggleButton(
         <Button as="div" {...checkbox} variant="toggle" {...rest} flexGrow={1}>
           {children}
           {isChecked && (
-            <Circle
+            <Icon
+              as={MdOutlineCheckCircle}
               position="absolute"
               verticalAlign="middle"
               right={2}
               top="50%"
               transform="translateY(-50%)"
-              borderColor="white"
-              border="1px solid"
-              size="15px"
               alignItems="baseline"
-            >
-              <Icon decorative name={IconNames.check} modifiers={['small']} />
-            </Circle>
+              w={5}
+              h={5}
+            />
           )}
         </Button>
       </ChakraBox>
