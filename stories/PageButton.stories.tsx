@@ -1,12 +1,8 @@
 import React from 'react';
 import { Meta, Story } from '@storybook/react';
 import PageButton, { PageButtonProps } from '../src/ui/PageButton';
-import {
-  Icon,
-  IconNames,
-  IconRotationTypes,
-} from '@nypl/design-system-react-components';
-
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
+import { Icon } from '@chakra-ui/react';
 const meta: Meta = {
   title: 'PageButton',
   component: PageButton,
@@ -30,26 +26,10 @@ const Template: Story<PageButtonProps> = (args) => <PageButton {...args} />;
 export const PreviousButton = Template.bind({});
 
 PreviousButton.args = {
-  children: (
-    <Icon
-      decorative
-      name={IconNames.arrow}
-      modifiers={['small']}
-      iconRotation={IconRotationTypes.rotate90}
-    />
-  ),
-  pr: 2,
+  children: <Icon as={MdKeyboardArrowLeft} w={6} h={6} />,
 };
 
 export const NextButton = Template.bind({});
 NextButton.args = {
-  children: (
-    <Icon
-      decorative
-      name={IconNames.arrow}
-      modifiers={['small']}
-      iconRotation={IconRotationTypes.rotate270}
-    />
-  ),
-  pl: 2,
+  children: <Icon as={MdKeyboardArrowRight} w={6} h={6} />,
 };

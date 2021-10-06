@@ -10,7 +10,6 @@ import {
   useParams,
 } from 'react-router-dom';
 import WebReader from '../src';
-import '@nypl/design-system-react-components/dist/styles.css';
 import {
   ChakraProvider,
   Heading,
