@@ -59,7 +59,7 @@ describe('useHtmlReader configuration settings', () => {
     });
   });
 
-  it.only('should render css injectables when provided', () => {
+  it('should render css injectables when provided', () => {
     cy.loadPage('/test/with-injectables');
     cy.getIframeHtml().within(() => {
       cy.get('head > title').should('exist');
