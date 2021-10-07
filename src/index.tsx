@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { ReaderManagerArguments, UseWebReaderArguments } from './types';
+import ErrorBoundary from './ui/ErrorBoundary';
 import ManagerUI from './ui/manager';
 import useWebReader from './useWebReader';
 
@@ -7,7 +8,9 @@ import useWebReader from './useWebReader';
  * The main React component export.
  */
 
-const WebReader: FC<UseWebReaderArguments & ReaderManagerArguments> = ({
+export type WebReaderProps = UseWebReaderArguments & ReaderManagerArguments;
+
+export const WebReaderWithoutBoundary: FC<WebReaderProps> = ({
   webpubManifestUrl,
   proxyUrl,
   getContent,
@@ -26,6 +29,14 @@ const WebReader: FC<UseWebReaderArguments & ReaderManagerArguments> = ({
     <ManagerUI headerLeft={headerLeft} {...webReader}>
       {content}
     </ManagerUI>
+  );
+};
+
+const WebReader: FC<WebReaderProps> = (props) => {
+  return (
+    <ErrorBoundary {...props}>
+      <WebReaderWithoutBoundary {...props} />
+    </ErrorBoundary>
   );
 };
 
