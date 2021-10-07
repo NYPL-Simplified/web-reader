@@ -52,8 +52,10 @@ class ErrorBoundary extends React.Component<WebReaderProps, ErrorState> {
               maxW="600px"
             >
               <AlertIcon />
-              <AlertTitle>An error occurred</AlertTitle>
-              <AlertDescription>{error.message}</AlertDescription>
+              <AlertTitle as="h1">An error occurred</AlertTitle>
+              <AlertDescription role="alert" aria-label={error.message}>
+                {error.message}
+              </AlertDescription>
             </Alert>
           </Flex>
         </ThemeProvider>
