@@ -5,6 +5,7 @@ import nyplTheme from '../nypl-base-theme';
 import { ColorMode } from '../../types';
 import { getColor } from '../../utils/getColor';
 import getButtonStyle from './components/button';
+import Alert from './components/alert';
 
 /**
  * See Chakra default theme for shape of theme object:
@@ -15,7 +16,7 @@ import getButtonStyle from './components/button';
  *
  * Returns the chakra theme object with an additional property `currentColorMode`
  */
-export function getTheme(colorMode: ColorMode) {
+export function getTheme(colorMode: ColorMode = 'day') {
   return extendTheme(
     {
       colors,
@@ -26,6 +27,7 @@ export function getTheme(colorMode: ColorMode) {
       components: {
         Button: getButtonStyle(getColor(colorMode)),
         Text,
+        Alert,
       },
       currentColorMode: colorMode,
     },
