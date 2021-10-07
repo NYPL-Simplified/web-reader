@@ -4,7 +4,6 @@ import HtmlReaderContent from './HtmlReader/HtmlReaderContent';
 import usePdfReader from './PdfReader';
 import useHtmlReader from './HtmlReader';
 import {
-  ActiveReader,
   UseWebReaderArguments,
   HTMLActiveReader,
   LoadingReader,
@@ -41,7 +40,14 @@ function getReaderType(conformsTo: ConformsTo | null | undefined) {
 export default function useWebReader(
   args: UseWebReaderArguments
 ): HTMLActiveReader | PDFActiveReader | LoadingReader {
-  const { webpubManifestUrl, getContent, proxyUrl, pdfWorkerSrc } = args;
+  const {
+    webpubManifestUrl,
+    getContent,
+    proxyUrl,
+    pdfWorkerSrc,
+    injectables,
+    injectablesFixed,
+  } = args;
   const [manifest, setManifest] = React.useState<WebpubManifest | null>(null);
   const readerType = getReaderType(
     manifest ? manifest.metadata.conformsTo : null
@@ -58,6 +64,8 @@ export default function useWebReader(
           webpubManifestUrl,
           manifest,
           getContent,
+          injectables,
+          injectablesFixed,
         }
       : undefined
   );

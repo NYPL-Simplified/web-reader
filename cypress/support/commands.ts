@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import '@testing-library/cypress/add-commands';
+import { IFRAME_SELECTOR } from './constants';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -7,9 +8,9 @@ declare global {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     interface Chainable<Subject = any> {
       loadPage(pageName: string): void;
-      getIframeHtml(selector: string): Chainable<Subject>;
-      getIframeHead(selector: string): Chainable<Subject>;
-      getIframeBody(selector: string): Chainable<Subject>;
+      getIframeHtml(selector?: string): Chainable<Subject>;
+      getIframeHead(selector?: string): Chainable<Subject>;
+      getIframeBody(selector?: string): Chainable<Subject>;
     }
   }
 }
@@ -22,7 +23,7 @@ Cypress.Commands.add('loadPage', (pageName) => {
   });
 });
 
-Cypress.Commands.add('getIframeHtml', (selector: string) => {
+Cypress.Commands.add('getIframeHtml', (selector: string = IFRAME_SELECTOR) => {
   return cy
     .get(selector, { timeout: 15000 })
     .its('0.contentDocument.documentElement')
