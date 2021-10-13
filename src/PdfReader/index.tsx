@@ -182,6 +182,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   const isFetching = !state.resource;
   const isParsed = typeof state.numPages === 'number';
   const [containerRef, containerSize] = useMeasure<HTMLDivElement>();
+  //Refs for each page, used in scrolling mode
+  const pageRefs: React.MutableRefObject<HTMLElement[]> = React.useRef([]);
 
   // Wrap Page component so that we can pass it styles
   const ChakraPage = chakra(Page, {
@@ -376,6 +378,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
                 type: 'NAVIGATE_PAGE',
                 pageNum: pageIndex + 1,
               });
+              pageRefs.current[pageIndex].scrollIntoView();
             })
             .catch(() => {
               throw new Error(`"${destRef}" is not a valid page reference.`);
@@ -469,6 +472,9 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
                 Array.from(new Array(state.numPages), (_, index) => (
                   <ChakraPage
                     key={`page_${index + 1}`}
+                    ref={(element: HTMLElement) =>
+                      pageRefs.current.push(element)
+                    }
                     width={containerSize?.width}
                     scale={state.scale}
                     pageNumber={index + 1}
