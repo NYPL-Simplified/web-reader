@@ -8,11 +8,11 @@ describe('Multi PDF navigation', () => {
     cy.findByRole('radio', { name: 'Paginated' }).should('be.checked');
     cy.findByRole('button', { name: 'Table of Contents' }).click();
     cy.findByRole('menuitem', { name: 'Foreword' }).click();
-    cy.findByText('Anthropology without Informants', { timeout: 5000 }).should(
+    cy.findByText('Anthropology without Informants', { timeout: 10000 }).should(
       'be.visible'
     );
     cy.findByRole('button', { name: 'Next Page' }).click();
-    cy.findByText('Foreword', { timeout: 5000 }).should('exist');
+    cy.findByText('Foreword', { timeout: 10000 }).should('exist');
   });
 
   it('Scrolling mode & TOC: should update page content after clicking on TOC link', () => {
@@ -22,10 +22,12 @@ describe('Multi PDF navigation', () => {
     cy.findByRole('radio', { name: 'Scrolling' }).should('be.checked');
     cy.findByRole('button', { name: 'Table of Contents' }).click();
     cy.findByRole('menuitem', { name: 'Foreword' }).click();
-    cy.findByText('Anthropology without Informants', { timeout: 5000 }).should(
+    cy.findByText('Anthropology without Informants', { timeout: 10000 }).should(
       'be.visible'
     );
-    cy.get('div[data-page-number="2"]').contains('Foreword', { timeout: 5000 });
+    cy.get('div[data-page-number="2"]').contains('Foreword', {
+      timeout: 10000,
+    });
   });
 
   it('should navigate forward and backwards with page buttons', () => {
