@@ -4,13 +4,17 @@ import { GetContent } from '../src/types';
 // import createDecryptor from './axisnow/createWorkerlessDecryptor';
 import createDecryptor from './axisnow/createWorkerDecryptor';
 import { Heading, Box, Text } from '@chakra-ui/react';
+import { Injectable } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
 
+type AxisNowEncryptedProps = {
+  injectables: Injectable[];
+};
 /**
  * This sample shows setting up a decryptor for this specific book and then passing a
  * getContent function to the Web Reader. This getContent function runs in a separate
  * WebWorker thread to decrypt the HTML and any embedded resources within.
  */
-const AxisNowEncrypted: React.FC = () => {
+const AxisNowEncrypted: React.FC<AxisNowEncryptedProps> = (props) => {
   const [getContent, setGetContent] = React.useState<null | GetContent>(null);
   const [error, setError] = React.useState<Error | undefined>(undefined);
 
@@ -56,6 +60,7 @@ const AxisNowEncrypted: React.FC = () => {
 
   return (
     <WebReader
+      injectables={props.injectables}
       webpubManifestUrl={`${origin}/samples/dickens-axisnow/encrypted/manifest.json`}
       getContent={getContent}
     />
