@@ -90,7 +90,7 @@ const App = () => {
             />
           </Route>
           <Route path="/axisnow-encrypted">
-            <AxisNowEncrypted />
+            <AxisNowEncrypted injectables={htmlInjectables} />
           </Route>
           <Route path="/axisnow-decrypted">
             <WebReader
