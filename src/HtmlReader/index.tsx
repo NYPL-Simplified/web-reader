@@ -1,6 +1,5 @@
 import D2Reader from '@d-i-t-a/reader';
 import React from 'react';
-import injectables from './injectables';
 import {
   ColorMode,
   HtmlReaderState,
@@ -11,10 +10,19 @@ import {
 import HtmlReaderContent from './HtmlReaderContent';
 import { Locator } from '@d-i-t-a/reader';
 import { HEADER_HEIGHT } from '../ui/constants';
+import '../../node_modules/@d-i-t-a/reader/dist/reader.css';
+import { Injectable } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
 
 type HtmlState = HtmlReaderState & {
   reader: D2Reader | undefined;
 };
+
+/**
+ * If we provide injectables that are not found, the app won't load at all.
+ * Therefore we will not provide any default injectables.
+ */
+const defaultInjectables: Injectable[] = [];
+const defaultInjectablesFixed: Injectable[] = [];
 
 export type HtmlAction =
   | { type: 'SET_READER'; reader: D2Reader }
@@ -74,7 +82,14 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
 const FONT_SIZE_STEP = 4;
 
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
-  const { webpubManifestUrl, manifest, getContent } = args ?? {};
+  const {
+    webpubManifestUrl,
+    manifest,
+    getContent,
+    injectables = defaultInjectables,
+    injectablesFixed = defaultInjectablesFixed,
+  } = args ?? {};
+
   const [state, dispatch] = React.useReducer(htmlReducer, {
     colorMode: 'day',
     isScrolling: false,
@@ -95,7 +110,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     D2Reader.build({
       url,
       injectables: injectables,
-      injectablesFixed: [],
+      injectablesFixed: injectablesFixed,
       attributes: {
         navHeight: HEADER_HEIGHT,
         margin: 0,
@@ -113,7 +128,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     }).then((reader) => {
       dispatch({ type: 'SET_READER', reader });
     });
-  }, [webpubManifestUrl, getContent]);
+  }, [webpubManifestUrl, getContent, injectables, injectablesFixed]);
 
   // prev and next page functions
   const goForward = React.useCallback(async () => {

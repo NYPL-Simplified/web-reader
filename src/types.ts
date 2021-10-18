@@ -1,4 +1,4 @@
-import { PDFDocumentProxy } from 'pdfjs-dist/types/display/api';
+import { Injectable } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
 import { WebpubManifest } from './WebpubManifestTypes/WebpubManifest';
 
 export { WebpubManifest };
@@ -112,6 +112,8 @@ export type UseWebReaderArguments = {
   proxyUrl?: string;
   getContent?: GetContent;
   pdfWorkerSrc?: string;
+  injectables?: Injectable[];
+  injectablesFixed?: Injectable[];
 };
 
 export type ActiveReaderArguments = UseWebReaderArguments & {
