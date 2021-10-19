@@ -26,6 +26,7 @@ jobs:
           # Disable running of tests within install job
           runTests: false
           # build: yarn build
+          install-command: npm i
 
   chrome:
     name: Run Chrome Tests
