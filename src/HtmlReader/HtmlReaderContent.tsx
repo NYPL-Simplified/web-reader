@@ -7,7 +7,10 @@ const HtmlReaderContent: React.FC = () => {
       <main
         tabIndex={-1}
         id="iframe-wrapper"
-        style={{ height: `calc(100vh - ${HEADER_HEIGHT}px)` }}
+        style={{
+          height: `calc(100vh - ${HEADER_HEIGHT}px)`,
+          overflow: 'hidden',
+        }}
       >
         <div id="reader-loading" className="loading"></div>
         <div id="reader-error" className="error"></div>
