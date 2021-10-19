@@ -265,7 +265,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   }, [containerSize, state.pdfWidth, state.pdfHeight, resizePage]);
 
   /**
-   * Hide Or Show Page button
+   * Hide Or Show Page Button
    */
   React.useEffect(() => {
     if (!manifest) return;
@@ -289,7 +289,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         state.resourceIndex === manifest?.readingOrder?.length - 1;
       const isResourceEnd =
         (isLastResource && state.pageNumber === state.numPages) ||
-        (state.isScrolling && isLastResource); // on scroll mode, next page button takes you to the next resource. So we can just hide it on last resource.
+        // On scroll mode, next page button takes you to the next resource. So we can just hide the next button on last resource.
+        (state.isScrolling && isLastResource);
 
       dispatch({
         type: 'SET_READING_LOCATION',
