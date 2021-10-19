@@ -23,18 +23,13 @@ describe('error states', () => {
     });
   });
 
+  // @TODO - Improve this error UX. Requires change in R2D2BC.
   it('throws error for missing resource', () => {
     cy.loadPage('/test/missing-resource');
 
-    cy.findByRole('heading', { name: 'An error occurred' });
-    cy.findByRole('alert', {
-      name: `Network Error: Unparseable JSON file found at ${
-        Cypress.config().baseUrl
-      }/samples/test/unparseable-manifest.json.`,
-    });
+    cy.getIframeBody().contains('Page not found.', { timeout: 10000 });
   });
 
-  // it('throws error for missing resource', () => {});
-
+  // @TODO - this requires change in R2D2BC.
   // it('throws error for missing injectable', () => {});
 });

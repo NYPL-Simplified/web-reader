@@ -31,7 +31,7 @@ Cypress.Commands.add('getIframeHtml', (selector: string = IFRAME_SELECTOR) => {
     .then(cy.wrap);
 });
 
-Cypress.Commands.add('getIframeHead', (selector: string) => {
+Cypress.Commands.add('getIframeHead', (selector: string = IFRAME_SELECTOR) => {
   return cy
     .get(selector, { timeout: 15000 })
     .its(`0.contentDocument.head`)
@@ -39,7 +39,7 @@ Cypress.Commands.add('getIframeHead', (selector: string) => {
     .then(cy.wrap);
 });
 
-Cypress.Commands.add('getIframeBody', (selector: string) => {
+Cypress.Commands.add('getIframeBody', (selector: string = IFRAME_SELECTOR) => {
   return cy
     .get(selector, { timeout: 15000 })
     .its(`0.contentDocument.body`)
