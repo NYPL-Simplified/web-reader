@@ -33,13 +33,13 @@ jobs:
       # to make sure we use the precise Cypress version
       # (which is important when using ^ version in package.json)
       # see https://github.com/actions/cache
-      - name: Cache NPM and Cypress 📦
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.cache/Cypress
-            node_modules
-          key: my-cache-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      # - name: Cache NPM and Cypress 📦
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: |
+      #       ~/.cache/Cypress
+      #       node_modules
+      #     key: my-cache-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
       - name: Install Cypress 📥
         run: npm i cypress
