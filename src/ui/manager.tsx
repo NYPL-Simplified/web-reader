@@ -26,16 +26,21 @@ const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
   ...props
 }) => {
   const bgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
+  const loading = props.isLoading;
+  const startReading = props.state?.readingLocation.start;
+  const endReading = props.state?.readingLocation.end;
   return (
     <Flex flexDir="column" minHeight="100vh" w="100vw">
-      {!props.isLoading && <Header headerLeft={headerLeft} {...props} />}
-      <PageButton
-        onClick={props.navigator?.goBackward}
-        left={0}
-        aria-label="Previous Page"
-      >
-        <Icon as={MdKeyboardArrowLeft} w={6} h={6} />
-      </PageButton>
+      {!loading && <Header headerLeft={headerLeft} {...props} />}
+      {!startReading && (
+        <PageButton
+          onClick={props.navigator?.goBackward}
+          left={0}
+          aria-label="Previous Page"
+        >
+          <Icon as={MdKeyboardArrowLeft} w={6} h={6} />
+        </PageButton>
+      )}
       <Flex
         bg={bgColor}
         // accounting for the prev/next buttons
@@ -46,13 +51,15 @@ const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
       >
         {children}
       </Flex>
-      <PageButton
-        onClick={props.navigator?.goForward}
-        right={0}
-        aria-label="Next Page"
-      >
-        <Icon as={MdKeyboardArrowRight} w={6} h={6} />
-      </PageButton>
+      {!endReading && (
+        <PageButton
+          onClick={props.navigator?.goForward}
+          right={0}
+          aria-label="Next Page"
+        >
+          <Icon as={MdKeyboardArrowRight} w={6} h={6} />
+        </PageButton>
+      )}
     </Flex>
   );
 };

@@ -1,6 +1,11 @@
 import { Document, Page, PageProps, pdfjs } from 'react-pdf';
 import * as React from 'react';
-import { ReaderArguments, ReaderReturn, PdfReaderState } from '../types';
+import {
+  ReaderArguments,
+  ReaderReturn,
+  PdfReaderState,
+  ReadingLocation,
+} from '../types';
 import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
 import useMeasure from './useMeasure';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
@@ -36,7 +41,8 @@ type PdfReaderAction =
       type: 'RESIZE_PAGE';
       height: number | undefined;
       width: number | undefined;
-    };
+    }
+  | { type: 'SET_READING_LOCATION'; readingLocation: ReadingLocation };
 const IFRAME_WRAPPER_ID = 'iframe-wrapper';
 
 function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
@@ -106,6 +112,12 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
         pageWidth: action.width,
         pageHeight: action.height,
       };
+
+    case 'SET_READING_LOCATION':
+      return {
+        ...state,
+        readingLocation: action.readingLocation,
+      };
   }
 }
 
@@ -164,6 +176,10 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     pdfHeight: 0,
     pageHeight: undefined,
     pageWidth: undefined,
+    readingLocation: {
+      start: true,
+      end: false,
+    },
   });
 
   // state we can derive from the state above
@@ -247,6 +263,49 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       resizePage(state.pdfWidth, state.pdfHeight, containerSize);
     }
   }, [containerSize, state.pdfWidth, state.pdfHeight, resizePage]);
+
+  /**
+   * Hide Or Show Page button
+   */
+  React.useEffect(() => {
+    if (!manifest) return;
+
+    const isSinglePDF = manifest?.readingOrder.length <= 1;
+
+    // Hide all buttons for single PDF on scroll mode
+    if (isSinglePDF && state.isScrolling) {
+      dispatch({
+        type: 'SET_READING_LOCATION',
+        readingLocation: {
+          start: true,
+          end: true,
+        },
+      });
+    } else {
+      const isFirstResource = state.resourceIndex === 0;
+      const isResourceStart = isFirstResource && state.pageNumber === 1;
+
+      const isLastResource =
+        state.resourceIndex === manifest?.readingOrder?.length - 1;
+      const isResourceEnd =
+        (isLastResource && state.pageNumber === state.numPages) ||
+        (state.isScrolling && isLastResource); // on scroll mode, next page button takes you to the next resource. So we can just hide it on last resource.
+
+      dispatch({
+        type: 'SET_READING_LOCATION',
+        readingLocation: {
+          start: isResourceStart,
+          end: isResourceEnd,
+        },
+      });
+    }
+  }, [
+    manifest,
+    state.isScrolling,
+    state.numPages,
+    state.pageNumber,
+    state.resourceIndex,
+  ]);
 
   // prev and next page functions
   const goForward = React.useCallback(async () => {

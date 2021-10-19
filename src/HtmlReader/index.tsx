@@ -6,15 +6,21 @@ import {
   ReaderReturn,
   ReaderArguments,
   FontFamily,
+  ReadingLocation,
+  GetContent,
 } from '../types';
 import HtmlReaderContent from './HtmlReaderContent';
 import { Locator } from '@d-i-t-a/reader';
 import { HEADER_HEIGHT } from '../ui/constants';
 import '../../node_modules/@d-i-t-a/reader/dist/reader.css';
-import { Injectable } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
+import {
+  Injectable,
+  NavigatorAPI,
+} from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
 
 type HtmlState = HtmlReaderState & {
   reader: D2Reader | undefined;
+  location: undefined | Locator;
 };
 
 /**
@@ -30,7 +36,9 @@ export type HtmlAction =
   | { type: 'SET_SCROLL'; isScrolling: boolean }
   | { type: 'SET_FONT_SIZE'; size: number }
   | { type: 'SET_FONT_FAMILY'; family: FontFamily }
-  | { type: 'SET_CURRENT_TOC_URL'; currentTocUrl: string };
+  | { type: 'SET_CURRENT_TOC_URL'; currentTocUrl: string }
+  | { type: 'LOCATION_CHANGED'; location: Locator }
+  | { type: 'SET_READING_LOCATION'; readingLocation: ReadingLocation };
 
 function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
   switch (action.type) {
@@ -43,7 +51,12 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
         colorMode: getColorMode(settings.appearance),
         fontSize: settings.fontSize,
         fontFamily: r2FamilyToFamily[settings.fontFamily] ?? 'publisher',
-        currentTocUrl: action.reader.mostRecentNavigatedTocItem(), // This returns a relative href
+        currentTocUrl: action.reader.mostRecentNavigatedTocItem(),
+        location: undefined,
+        readingLocation: {
+          start: true,
+          end: false,
+        },
       };
     }
 
@@ -76,6 +89,18 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
         ...state,
         currentTocUrl: action.currentTocUrl,
       };
+
+    case 'LOCATION_CHANGED':
+      return {
+        ...state,
+        location: action.location,
+      };
+
+    case 'SET_READING_LOCATION':
+      return {
+        ...state,
+        readingLocation: action.readingLocation,
+      };
   }
 }
 
@@ -97,9 +122,14 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     fontFamily: 'sans-serif',
     reader: undefined,
     currentTocUrl: null,
+    location: undefined,
+    readingLocation: {
+      start: true,
+      end: false,
+    },
   });
 
-  const { reader, fontSize } = state;
+  const { reader, fontSize, location } = state;
 
   // initialize the reader
   React.useEffect(() => {
@@ -123,12 +153,25 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
         autoGeneratePositions: false,
       },
       api: {
-        getContent: getContent as any, //TODO: fix this casting,
-      } as any, //TODO: fix this casting,,
+        getContent: getContent as GetContent,
+        updateCurrentLocation: (location: Locator) => {
+          // This is needed so that setReadingLocation has the updated "reader" value.
+          dispatch({ type: 'LOCATION_CHANGED', location: location });
+          return new Promise(function (resolve, reject) {
+            resolve(location);
+          });
+        },
+      } as NavigatorAPI,
     }).then((reader) => {
       dispatch({ type: 'SET_READER', reader });
     });
   }, [webpubManifestUrl, getContent, injectables, injectablesFixed]);
+
+  // Re-calculate page location on scroll/TOC navigation/page button press
+  React.useEffect(() => {
+    if (!location || !reader) return;
+    setReadingLocation(reader, dispatch);
+  }, [location, reader]);
 
   // prev and next page functions
   const goForward = React.useCallback(async () => {
@@ -284,3 +327,25 @@ const r2FamilyToFamily: Record<string, FontFamily | undefined> = {
   'sans-serif': 'sans-serif',
   opendyslexic: 'open-dyslexic',
 };
+
+async function setReadingLocation(
+  reader: D2Reader | undefined,
+  dispatch: React.Dispatch<HtmlAction>
+): Promise<void> {
+  if (!reader) return;
+
+  const isFirstResource = (await reader.currentResource()) === 0;
+  const isResourceStart = (await reader.atStart()) && isFirstResource;
+
+  const isLastResource =
+    (await reader.currentResource()) === (await reader.totalResources()) - 1; // resource index starts with 0
+  const isResourceEnd = (await reader.atEnd()) && isLastResource;
+
+  dispatch({
+    type: 'SET_READING_LOCATION',
+    readingLocation: {
+      start: isResourceStart,
+      end: isResourceEnd,
+    },
+  });
+}
