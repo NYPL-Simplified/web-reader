@@ -57,11 +57,6 @@ jobs:
           record: true
           parallel: true
           group: 'UI - Chrome'
-        env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          # Recommended: pass the GitHub token lets this action correctly
-          # determine the unique run id necessary to re-run the checks
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload failure screenshots
         uses: actions/upload-artifact@v2
