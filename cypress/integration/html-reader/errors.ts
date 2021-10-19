@@ -23,7 +23,16 @@ describe('error states', () => {
     });
   });
 
-  // it('throws error for malformed manifest', () => {});
+  it('throws error for missing resource', () => {
+    cy.loadPage('/test/missing-resource');
+
+    cy.findByRole('heading', { name: 'An error occurred' });
+    cy.findByRole('alert', {
+      name: `Network Error: Unparseable JSON file found at ${
+        Cypress.config().baseUrl
+      }/samples/test/unparseable-manifest.json.`,
+    });
+  });
 
   // it('throws error for missing resource', () => {});
 
