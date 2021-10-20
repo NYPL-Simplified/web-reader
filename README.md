@@ -124,7 +124,39 @@ We ship a css file with each entrypoint that should be imported. This is necessa
 
 ## Injectables
 
-The HTML Reader has the ability to inject custom elements into the reader iframe. This is most useful for passing
+The HTML Reader has the ability to inject custom elements into the reader iframe. This is most useful for passing stylesheets and fonts, but other elements can be injected too. It is recommended to pass the `opendyslexic` font and the default Readium stylesheets as injectables to the iframe.
+
+In the below example, we show two different ways to do this.
+
+1. The `cssInjectableUrl` is loaded via webpack loaders. We export the Readium CSS stylesheets compiled under `@nypl/web-reader/dist/injectable-html-styles.css`. This can then be imported via webpack as a url to a static file that is copied to the dist folder. You can then use this url in your injectable config.
+2. The `fontInjectable` uses a plain url to a css file that we host normally on our site. In this case you would be responsible for copying the css file into your source code and making sure it is hosted at some location.
+
+```ts
+import cssInjectableUrl from '!file-loader!extract-loader!css-loader!@nypl/web-reader/dist/injectable-html-styles.css';
+
+const cssInjectable: Injectable = {
+  type: 'style',
+  url: htmlStyles,
+};
+const fontInjectable: Injectable = {
+  type: 'style',
+  url: `${origin}/fonts/opendyslexic/opendyslexic.css`,
+  fontFamily: 'opendyslexic',
+};
+
+const htmlInjectables = [cssInjectable, fontInjectable];
+
+const Reader = () => {
+  return (
+    <WebReader
+      injectables={htmlInjectables}
+      webpubManifestUrl="example/manifest.json"
+    />
+  );
+};
+```
+
+**Note:** Injectables do not apply to pdf reading.
 
 ## Errors
 
