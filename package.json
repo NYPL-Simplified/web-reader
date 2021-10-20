@@ -24,7 +24,7 @@
   "scripts": {
     "example:build": "parcel build",
     "example:nocache": "parcel --no-cache",
-    "example": "parcel",
+    "example": "parcel example/index.html",
     "example:https": "parcel --cert localhost.pem --key localhost-key.pem",
     "example:sw": "ENABLE_SW=true npm run example:https",
     "start": "ts-node -T build.ts -w",
