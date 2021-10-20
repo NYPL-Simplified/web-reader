@@ -9,7 +9,8 @@ import {
 import { HEADER_HEIGHT } from '../ui/constants';
 import { Injectable } from '../Readium/Injectable';
 import useSWR from 'swr';
-import { Box } from '@chakra-ui/react';
+import { Box, Flex, Skeleton, SkeletonText } from '@chakra-ui/react';
+import LoadingSkeleton from '../ui/LoadingSkeleton';
 
 type HtmlState = HtmlReaderState & {
   currentResourceIndex: number;
@@ -65,14 +66,17 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
 
 const FONT_SIZE_STEP = 4;
 
-async function fetcher(...args: any[]) {
-  const res = await fetch(...args);
+async function fetcher(url: string) {
+  const res = await fetch(url);
   const txt = await res.text();
   return txt;
 }
 
-function useResource(url: string | null) {
-  const { data: resource, isValidating, error } = useSWR(url, fetcher);
+function useResource(
+  url: string | null,
+  getContent: (url: string) => Promise<string>
+) {
+  const { data: resource, isValidating, error } = useSWR(url, getContent);
   if (error) throw error;
 
   const document = resource
@@ -95,7 +99,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const {
     webpubManifestUrl,
     manifest,
-    getContent,
+    getContent = fetcher,
     injectables = defaultInjectables,
     injectablesFixed = defaultInjectablesFixed,
   } = args ?? {};
@@ -117,26 +121,32 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       ).toString()
     : null;
 
-  const { resource, isValidating } = useResource(currentResourceUrl);
+  const { resource, isValidating } = useResource(
+    currentResourceUrl,
+    getContent
+  );
+
+  const isAtStart = currentResourceIndex === 0;
+  const isAtEnd = currentResourceIndex === manifest?.readingOrder.length;
 
   // for now just navigates resources
   const goForward = React.useCallback(async () => {
     if (!manifest) return;
-    if (manifest.readingOrder.length === currentResourceIndex) return;
+    if (isAtEnd) return;
     dispatch({
       type: 'SET_CURRENT_RESOURCE',
       index: currentResourceIndex + 1,
     });
-  }, [currentResourceIndex, manifest]);
+  }, [isAtEnd, currentResourceIndex, manifest]);
 
   const goBackward = React.useCallback(async () => {
     if (!manifest) return;
-    if (manifest.readingOrder.length === 0) return;
+    if (isAtStart) return;
     dispatch({
       type: 'SET_CURRENT_RESOURCE',
       index: currentResourceIndex - 1,
     });
-  }, [manifest, currentResourceIndex]);
+  }, [manifest, isAtStart, currentResourceIndex]);
 
   const setColorMode = React.useCallback(async (mode: ColorMode) => {
     dispatch({ type: 'SET_COLOR_MODE', mode });
@@ -186,7 +196,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     return {
       type: null,
       isLoading: true,
-      content: <div>Loading resource...</div>,
+      content: <LoadingSkeleton />,
       navigator: null,
       manifest: null,
       state: null,

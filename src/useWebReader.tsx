@@ -15,6 +15,7 @@ import {
   WebpubPdfConformsTo,
   ConformsTo,
 } from './WebpubManifestTypes/ConformsTo';
+import LoadingSkeleton from './ui/LoadingSkeleton';
 
 function getReaderType(conformsTo: ConformsTo | null | undefined) {
   switch (conformsTo) {
@@ -90,7 +91,7 @@ export default function useWebReader(
   if (manifest === null) {
     return {
       isLoading: true,
-      content: <HtmlReaderContent />,
+      content: <LoadingSkeleton />,
       manifest: null,
       navigator: null,
       state: null,
