@@ -237,7 +237,12 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     type: 'HTML',
     isLoading: false,
     content: (
-      <Box as="iframe" height="100vh" title="CHANGEME" srcDoc={resource} />
+      <Box
+        as="iframe"
+        height={`calc(100vh - ${HEADER_HEIGHT}px)`}
+        title="CHANGEME"
+        srcDoc={resource}
+      />
     ),
     state,
     manifest,
