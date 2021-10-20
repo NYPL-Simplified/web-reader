@@ -1,4 +1,3 @@
-import D2Reader, { Locator } from '@d-i-t-a/reader';
 import React from 'react';
 import {
   ColorMode,
@@ -7,12 +6,13 @@ import {
   ReaderArguments,
   FontFamily,
 } from '../types';
-import HtmlReaderContent from './HtmlReaderContent';
 import { HEADER_HEIGHT } from '../ui/constants';
 import { Injectable } from '../Readium/Injectable';
+import useSWR from 'swr';
+import { Box } from '@chakra-ui/react';
 
 type HtmlState = HtmlReaderState & {
-  reader: D2Reader | undefined;
+  currentResourceIndex: number;
 };
 
 /**
@@ -23,27 +23,19 @@ const defaultInjectables: Injectable[] = [];
 const defaultInjectablesFixed: Injectable[] = [];
 
 export type HtmlAction =
-  | { type: 'SET_READER'; reader: D2Reader }
+  | { type: 'SET_CURRENT_RESOURCE'; index: number }
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
   | { type: 'SET_SCROLL'; isScrolling: boolean }
   | { type: 'SET_FONT_SIZE'; size: number }
-  | { type: 'SET_FONT_FAMILY'; family: FontFamily }
-  | { type: 'SET_CURRENT_TOC_URL'; currentTocUrl: string };
+  | { type: 'SET_FONT_FAMILY'; family: FontFamily };
 
 function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
   switch (action.type) {
-    case 'SET_READER': {
-      // set all the initial settings taken from the reader
-      const settings = action.reader.currentSettings();
+    case 'SET_CURRENT_RESOURCE':
       return {
-        reader: action.reader,
-        isScrolling: settings.verticalScroll,
-        colorMode: getColorMode(settings.appearance),
-        fontSize: settings.fontSize,
-        fontFamily: r2FamilyToFamily[settings.fontFamily] ?? 'publisher',
-        currentTocUrl: action.reader.mostRecentNavigatedTocItem(), // This returns a relative href
+        ...state,
+        currentResourceIndex: action.index,
       };
-    }
 
     case 'SET_COLOR_MODE':
       return {
@@ -68,16 +60,36 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
         ...state,
         fontFamily: action.family,
       };
-
-    case 'SET_CURRENT_TOC_URL':
-      return {
-        ...state,
-        currentTocUrl: action.currentTocUrl,
-      };
   }
 }
 
 const FONT_SIZE_STEP = 4;
+
+async function fetcher(...args: any[]) {
+  const res = await fetch(...args);
+  const txt = await res.text();
+  return txt;
+}
+
+function useResource(url: string | null) {
+  const { data: resource, isValidating, error } = useSWR(url, fetcher);
+  if (error) throw error;
+
+  const document = resource
+    ? new DOMParser().parseFromString(resource, 'text/html')
+    : undefined;
+
+  // add base
+  const base = document?.createElement('base');
+
+  if (base && url) {
+    base.setAttribute('href', url);
+    document?.head.appendChild(base);
+  }
+
+  const str = document?.documentElement.outerHTML;
+  return { resource: str, isValidating };
+}
 
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const {
@@ -93,127 +105,78 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     isScrolling: false,
     fontSize: 16,
     fontFamily: 'sans-serif',
-    reader: undefined,
     currentTocUrl: null,
+    currentResourceIndex: 0,
   });
 
-  const { reader, fontSize } = state;
+  const { currentResourceIndex, fontSize } = state;
+  const currentResourceUrl = manifest
+    ? new URL(
+        manifest.readingOrder[currentResourceIndex].href,
+        webpubManifestUrl
+      ).toString()
+    : null;
 
-  // initialize the reader
-  React.useEffect(() => {
-    // bail out if there is no webpubManifestUrl. It indicates this format is not being used.
-    if (!webpubManifestUrl) return;
-    const url = new URL(webpubManifestUrl);
+  const { resource, isValidating } = useResource(currentResourceUrl);
 
-    D2Reader.build({
-      url,
-      injectables: injectables,
-      injectablesFixed: injectablesFixed,
-      attributes: {
-        navHeight: HEADER_HEIGHT,
-        margin: 0,
-      },
-      rights: {
-        /**
-         * Makes the reader fetch every resource before rendering, which
-         * takes forever.
-         */
-        autoGeneratePositions: false,
-      },
-      api: {
-        getContent: getContent as any, //TODO: fix this casting,
-      } as any, //TODO: fix this casting,,
-    }).then((reader) => {
-      dispatch({ type: 'SET_READER', reader });
-    });
-  }, [webpubManifestUrl, getContent, injectables, injectablesFixed]);
-
-  // prev and next page functions
+  // for now just navigates resources
   const goForward = React.useCallback(async () => {
-    if (!reader) return;
-    const isLastPage = await reader.atEnd();
-    reader.nextPage();
-    if (isLastPage) {
-      // FIXME: This will not work for links containing sub-links
-      // b/c reader.nextPage saves the raw toc link without the elementID
-      dispatch({
-        type: 'SET_CURRENT_TOC_URL',
-        currentTocUrl: reader.mostRecentNavigatedTocItem(),
-      });
-    }
-  }, [reader]);
+    if (!manifest) return;
+    if (manifest.readingOrder.length === currentResourceIndex) return;
+    dispatch({
+      type: 'SET_CURRENT_RESOURCE',
+      index: currentResourceIndex + 1,
+    });
+  }, [currentResourceIndex, manifest]);
 
   const goBackward = React.useCallback(async () => {
-    if (!reader) return;
-    const isFirstPage = await reader.atStart();
-    reader.previousPage();
-    if (isFirstPage) {
-      dispatch({
-        type: 'SET_CURRENT_TOC_URL',
-        currentTocUrl: reader.mostRecentNavigatedTocItem(),
-      });
-    }
-  }, [reader]);
+    if (!manifest) return;
+    if (manifest.readingOrder.length === 0) return;
+    dispatch({
+      type: 'SET_CURRENT_RESOURCE',
+      index: currentResourceIndex - 1,
+    });
+  }, [manifest, currentResourceIndex]);
 
-  const setColorMode = React.useCallback(
-    async (mode: ColorMode) => {
-      if (!reader) return;
-      dispatch({ type: 'SET_COLOR_MODE', mode });
-      await reader.applyUserSettings({ appearance: mode });
-    },
-    [reader]
-  );
+  const setColorMode = React.useCallback(async (mode: ColorMode) => {
+    dispatch({ type: 'SET_COLOR_MODE', mode });
+  }, []);
 
   const setScroll = React.useCallback(
     async (val: 'scrolling' | 'paginated') => {
       const isScrolling = val === 'scrolling';
-      await reader?.scroll(isScrolling);
       dispatch({ type: 'SET_SCROLL', isScrolling });
     },
-    [reader]
+    []
   );
 
   const increaseFontSize = React.useCallback(async () => {
-    if (!reader) return;
     const newSize = fontSize + FONT_SIZE_STEP;
-    await reader.applyUserSettings({ fontSize: newSize });
     dispatch({ type: 'SET_FONT_SIZE', size: newSize });
-  }, [reader, fontSize]);
+  }, [fontSize]);
 
   const decreaseFontSize = React.useCallback(async () => {
-    if (!reader) return;
     const newSize = fontSize - FONT_SIZE_STEP;
-    await reader.applyUserSettings({ fontSize: newSize });
     dispatch({ type: 'SET_FONT_SIZE', size: newSize });
-  }, [reader, fontSize]);
+  }, [fontSize]);
 
-  const setFontFamily = React.useCallback(
-    async (family: FontFamily) => {
-      if (!reader) return;
-      const r2Family = familyToR2Family[family];
-      // the applyUserSettings type is incorrect. We are supposed to pass in a string.
-      await reader.applyUserSettings({ fontFamily: r2Family as any });
-      dispatch({ type: 'SET_FONT_FAMILY', family });
-    },
-    [reader]
-  );
+  const setFontFamily = React.useCallback(async (family: FontFamily) => {
+    dispatch({ type: 'SET_FONT_FAMILY', family });
+  }, []);
 
-  const goToPage = React.useCallback(
-    (href) => {
-      if (!reader) return;
-      // Adding try/catch here because goTo throws a TypeError
-      // if the TOC link you clicked on was the current page..
-      try {
-        reader.goTo({ href } as Locator); // This needs to be fixed, locations should be optional.
-        dispatch({ type: 'SET_CURRENT_TOC_URL', currentTocUrl: href });
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    [reader]
-  );
+  const goToPage = React.useCallback((href) => {
+    // if (!reader) return;
+    // // Adding try/catch here because goTo throws a TypeError
+    // // if the TOC link you clicked on was the current page..
+    // try {
+    //   reader.goTo({ href } as Locator); // This needs to be fixed, locations should be optional.
+    //   dispatch({ type: 'SET_CURRENT_TOC_URL', currentTocUrl: href });
+    // } catch (error) {
+    //   console.error(error);
+    // }
+  }, []);
 
-  const isLoading = !reader;
+  const isLoading = isValidating;
 
   // this format is inactive, return null
   if (!webpubManifestUrl || !manifest) return null;
@@ -223,7 +186,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     return {
       type: null,
       isLoading: true,
-      content: <HtmlReaderContent />,
+      content: <div>Loading resource...</div>,
       navigator: null,
       manifest: null,
       state: null,
@@ -234,7 +197,9 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   return {
     type: 'HTML',
     isLoading: false,
-    content: <HtmlReaderContent />,
+    content: (
+      <Box as="iframe" height="100vh" title="CHANGEME" srcDoc={resource} />
+    ),
     state,
     manifest,
     navigator: {
