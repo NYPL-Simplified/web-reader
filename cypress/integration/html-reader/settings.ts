@@ -59,10 +59,10 @@ describe('useHtmlReader configuration settings', () => {
     });
   });
 
-  it.only('should render css injectables when provided', () => {
+  it('should render css injectables when provided', () => {
     cy.loadPage('/test/with-injectables');
     cy.getIframeHtml().within(() => {
-      cy.get('head > title').should('exist');
+      cy.get('head > title', { timeout: 15000 }).should('exist');
       cy.get(
         'head > link[href$="/fonts/opensyslexic/opendyslexic.css"]'
       ).should('exist');
