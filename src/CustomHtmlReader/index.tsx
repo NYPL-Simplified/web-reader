@@ -1,4 +1,4 @@
-import D2Reader from '@d-i-t-a/reader';
+import D2Reader, { Locator } from '@d-i-t-a/reader';
 import React from 'react';
 import {
   ColorMode,
@@ -8,10 +8,8 @@ import {
   FontFamily,
 } from '../types';
 import HtmlReaderContent from './HtmlReaderContent';
-import { Locator } from '@d-i-t-a/reader';
 import { HEADER_HEIGHT } from '../ui/constants';
-import '../../node_modules/@d-i-t-a/reader/dist/reader.css';
-import { Injectable } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
+import { Injectable } from '../Readium/Injectable';
 
 type HtmlState = HtmlReaderState & {
   reader: D2Reader | undefined;
