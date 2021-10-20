@@ -348,4 +348,4 @@ npm run build # builds to dist
 
 ## Publishing to NPM
 
-Not done yet, but we will probable use [np](https://github.com/sindresorhus/np) or otherwise integrate it into our Github Workflow.
+Run `npm run release` from the main branch. Follow the prompts to add a new version, publish a release to github, and push to npm.
