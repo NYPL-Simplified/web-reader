@@ -151,7 +151,8 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
 
   const { resource, isValidating } = useResource(
     currentResourceUrl,
-    getContent
+    getContent,
+    injectables
   );
 
   const isAtStart = currentResourceIndex === 0;
