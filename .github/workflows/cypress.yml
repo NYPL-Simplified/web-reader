@@ -33,13 +33,13 @@ jobs:
       # to make sure we use the precise Cypress version
       # (which is important when using ^ version in package.json)
       # see https://github.com/actions/cache
-      # - name: Cache NPM and Cypress 📦
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: |
-      #       ~/.cache/Cypress
-      #       node_modules
-      #     key: my-cache-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - name: Cache NPM and Cypress 📦
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/Cypress
+            node_modules
+          key: my-cache-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
       - name: Install Cypress 📥
         run: npm i cypress
@@ -59,6 +59,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      # this should always get a cache hit because we isntall above.
+      # but we need to make sure cypress is installed on all of the
+      # containers.
+      - name: Cache NPM and Cypress 📦
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/Cypress
+            node_modules
+          key: my-cache-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install Cypress 📥
+        run: npm i cypress
 
       - name: Run Chrome
         uses: cypress-io/github-action@v2
