@@ -26,7 +26,7 @@ Cypress.Commands.add('loadPage', (pageName) => {
 
 Cypress.Commands.add('getIframeHtml', (selector: string = IFRAME_SELECTOR) => {
   return cy
-    .get(selector, { timeout: 15000 })
+    .get(selector, { timeout: 30000 })
     .its('0.contentDocument.documentElement')
     .should('not.be.empty')
     .then(cy.wrap);
