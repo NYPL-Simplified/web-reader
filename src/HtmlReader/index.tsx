@@ -6,7 +6,6 @@ import {
   ReaderReturn,
   ReaderArguments,
   FontFamily,
-  ReadingLocation,
   GetContent,
 } from '../types';
 import HtmlReaderContent from './HtmlReaderContent';
@@ -38,7 +37,7 @@ export type HtmlAction =
   | { type: 'SET_FONT_FAMILY'; family: FontFamily }
   | { type: 'SET_CURRENT_TOC_URL'; currentTocUrl: string }
   | { type: 'LOCATION_CHANGED'; location: Locator }
-  | { type: 'SET_READING_LOCATION'; readingLocation: ReadingLocation };
+  | { type: 'BOOK_BOUNDARY_CHANGED'; atStart: boolean; atEnd: boolean };
 
 function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
   switch (action.type) {
@@ -53,10 +52,8 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
         fontFamily: r2FamilyToFamily[settings.fontFamily] ?? 'publisher',
         currentTocUrl: action.reader.mostRecentNavigatedTocItem(),
         location: undefined,
-        readingLocation: {
-          start: true,
-          end: false,
-        },
+        atStart: true,
+        atEnd: false,
       };
     }
 
@@ -96,10 +93,11 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
         location: action.location,
       };
 
-    case 'SET_READING_LOCATION':
+    case 'BOOK_BOUNDARY_CHANGED':
       return {
         ...state,
-        readingLocation: action.readingLocation,
+        atStart: action.atStart,
+        atEnd: action.atEnd,
       };
   }
 }
@@ -123,10 +121,8 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     reader: undefined,
     currentTocUrl: null,
     location: undefined,
-    readingLocation: {
-      start: true,
-      end: false,
-    },
+    atStart: true,
+    atEnd: false,
   });
 
   const { reader, fontSize, location } = state;
@@ -154,12 +150,10 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       },
       api: {
         getContent: getContent as GetContent,
-        updateCurrentLocation: (location: Locator) => {
+        updateCurrentLocation: async (location: Locator) => {
           // This is needed so that setReadingLocation has the updated "reader" value.
           dispatch({ type: 'LOCATION_CHANGED', location: location });
-          return new Promise(function (resolve, reject) {
-            resolve(location);
-          });
+          return await location;
         },
       } as NavigatorAPI,
     }).then((reader) => {
@@ -329,11 +323,9 @@ const r2FamilyToFamily: Record<string, FontFamily | undefined> = {
 };
 
 async function setReadingLocation(
-  reader: D2Reader | undefined,
+  reader: D2Reader,
   dispatch: React.Dispatch<HtmlAction>
 ): Promise<void> {
-  if (!reader) return;
-
   const isFirstResource = (await reader.currentResource()) === 0;
   const isResourceStart = (await reader.atStart()) && isFirstResource;
 
@@ -342,10 +334,8 @@ async function setReadingLocation(
   const isResourceEnd = (await reader.atEnd()) && isLastResource;
 
   dispatch({
-    type: 'SET_READING_LOCATION',
-    readingLocation: {
-      start: isResourceStart,
-      end: isResourceEnd,
-    },
+    type: 'BOOK_BOUNDARY_CHANGED',
+    atStart: isResourceStart,
+    atEnd: isResourceEnd,
   });
 }

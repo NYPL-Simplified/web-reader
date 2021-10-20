@@ -31,18 +31,14 @@ export type HtmlNavigator = Navigator & {
   setColorMode: (mode: ColorMode) => Promise<void>;
 };
 
-export type ReadingLocation = {
-  start: boolean;
-  end: boolean;
-};
-
 export type ReaderState = {
   colorMode: ColorMode;
   isScrolling: boolean;
   fontSize: number;
   fontFamily: FontFamily;
   currentTocUrl: string | null;
-  readingLocation: ReadingLocation;
+  atStart: boolean;
+  atEnd: boolean;
 };
 
 // PDF specific reader state

@@ -1,11 +1,6 @@
 import { Document, Page, PageProps, pdfjs } from 'react-pdf';
 import * as React from 'react';
-import {
-  ReaderArguments,
-  ReaderReturn,
-  PdfReaderState,
-  ReadingLocation,
-} from '../types';
+import { ReaderArguments, ReaderReturn, PdfReaderState } from '../types';
 import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
 import useMeasure from './useMeasure';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
@@ -42,7 +37,7 @@ type PdfReaderAction =
       height: number | undefined;
       width: number | undefined;
     }
-  | { type: 'SET_READING_LOCATION'; readingLocation: ReadingLocation };
+  | { type: 'BOOK_BOUNDARY_CHANGED'; atStart: boolean; atEnd: boolean };
 const IFRAME_WRAPPER_ID = 'iframe-wrapper';
 
 function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
@@ -113,10 +108,11 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
         pageHeight: action.height,
       };
 
-    case 'SET_READING_LOCATION':
+    case 'BOOK_BOUNDARY_CHANGED':
       return {
         ...state,
-        readingLocation: action.readingLocation,
+        atStart: action.atStart,
+        atEnd: action.atEnd,
       };
   }
 }
@@ -176,15 +172,14 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     pdfHeight: 0,
     pageHeight: undefined,
     pageWidth: undefined,
-    readingLocation: {
-      start: true,
-      end: false,
-    },
+    atStart: true,
+    atEnd: false,
   });
 
   // state we can derive from the state above
   const isFetching = !state.resource;
   const isParsed = typeof state.numPages === 'number';
+  const isSinglePDF = manifest && manifest?.readingOrder.length === 1;
   const [containerRef, containerSize] = useMeasure<HTMLDivElement>();
 
   // Wrap Page component so that we can pass it styles
@@ -270,16 +265,12 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   React.useEffect(() => {
     if (!manifest) return;
 
-    const isSinglePDF = manifest?.readingOrder.length <= 1;
-
     // Hide all buttons for single PDF on scroll mode
     if (isSinglePDF && state.isScrolling) {
       dispatch({
-        type: 'SET_READING_LOCATION',
-        readingLocation: {
-          start: true,
-          end: true,
-        },
+        type: 'BOOK_BOUNDARY_CHANGED',
+        atStart: true,
+        atEnd: true,
       });
     } else {
       const isFirstResource = state.resourceIndex === 0;
@@ -293,11 +284,9 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         (state.isScrolling && isLastResource);
 
       dispatch({
-        type: 'SET_READING_LOCATION',
-        readingLocation: {
-          start: isResourceStart,
-          end: isResourceEnd,
-        },
+        type: 'BOOK_BOUNDARY_CHANGED',
+        atStart: isResourceStart,
+        atEnd: isResourceEnd,
       });
     }
   }, [
@@ -306,6 +295,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     state.numPages,
     state.pageNumber,
     state.resourceIndex,
+    isSinglePDF,
   ]);
 
   // prev and next page functions

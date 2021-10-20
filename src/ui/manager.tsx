@@ -27,12 +27,12 @@ const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
 }) => {
   const bgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
   const loading = props.isLoading;
-  const startReading = props.state?.readingLocation.start;
-  const endReading = props.state?.readingLocation.end;
+  const isAtStart = props.state?.atStart;
+  const isAtEnd = props.state?.atEnd;
   return (
     <Flex flexDir="column" minHeight="100vh" w="100vw">
       {!loading && <Header headerLeft={headerLeft} {...props} />}
-      {!startReading && (
+      {!isAtStart && (
         <PageButton
           onClick={props.navigator?.goBackward}
           left={0}
@@ -51,7 +51,7 @@ const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
       >
         {children}
       </Flex>
-      {!endReading && (
+      {!isAtEnd && (
         <PageButton
           onClick={props.navigator?.goForward}
           right={0}
