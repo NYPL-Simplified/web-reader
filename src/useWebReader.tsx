@@ -2,7 +2,7 @@ import React from 'react';
 import { fetchJson } from './utils/fetch';
 import HtmlReaderContent from './HtmlReader/HtmlReaderContent';
 import usePdfReader from './PdfReader';
-import useHtmlReader from './HtmlReader';
+import useHtmlReader from './CustomHtmlReader';
 import {
   UseWebReaderArguments,
   HTMLActiveReader,
