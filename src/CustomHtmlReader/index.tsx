@@ -72,9 +72,30 @@ async function fetcher(url: string) {
   return txt;
 }
 
+function getInjectableElement(
+  document: Document,
+  injectable: Injectable
+): HTMLElement | undefined {
+  switch (injectable.type) {
+    case 'style': {
+      const el = document.createElement('style');
+      if (injectable.url) {
+        el.setAttribute('href', injectable.url);
+      } else {
+        console.warn('Injectable missing url', injectable);
+      }
+      return el;
+    }
+
+    default:
+      return;
+  }
+}
+
 function useResource(
   url: string | null,
-  getContent: (url: string) => Promise<string>
+  getContent: (url: string) => Promise<string>,
+  injectables: Injectable[]
 ) {
   const { data: resource, isValidating, error } = useSWR(url, getContent);
   if (error) throw error;
@@ -83,12 +104,19 @@ function useResource(
     ? new DOMParser().parseFromString(resource, 'text/html')
     : undefined;
 
-  // add base
+  // add base so relative URLs work.
   const base = document?.createElement('base');
-
   if (base && url) {
     base.setAttribute('href', url);
     document?.head.appendChild(base);
+  }
+
+  // add injectables
+  if (document) {
+    for (const injectable of injectables) {
+      const element = getInjectableElement(document, injectable);
+      if (element) document?.head.appendChild(element);
+    }
   }
 
   const str = document?.documentElement.outerHTML;
