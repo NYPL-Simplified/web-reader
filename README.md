@@ -363,4 +363,4 @@ npm run build # builds to dist
 
 ## Publishing to NPM
 
-Run `npm run release`.
+Run `npm run release` from the main branch. Follow the prompts to add a new version, publish a release to github, and push to npm.
