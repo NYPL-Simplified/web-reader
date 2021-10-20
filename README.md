@@ -120,7 +120,10 @@ Finally, to use in a vanilla Javascript app:
 
 ## Styling
 
-We ship a css file with each entrypoint that should be imported. This is necessary
+Most styling is included in the basic UI, but we also ship a few css files that must be included:
+
+1. Both the HTML and the PDF side have css that is necessary to be included for the dependencies we use to render correctly. This is built automatically into `@nypl/web-reader/dist/esm/index.css` and `@nypl/web-reader/dist/cjs/index.css`. Depending which package you are using, you should include one of those files in your bundle.
+1. The HTML Reader can inject `<style>` tags (and other tags) into the reader iframe itself, called an "injectable". This is used to add styles to the html content of the publication. More on this is below.
 
 ## Injectables
 
