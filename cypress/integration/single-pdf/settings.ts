@@ -22,19 +22,19 @@ describe('Single PDF display settings', () => {
   });
 
   it('should zoom in and out', () => {
-    cy.findByText('Julius H. Schoeps')
+    cy.findByText('Assessing climate change')
       .should('be.visible')
       .should('have.css', 'font-size', '8.9176px');
 
     cy.findByRole('button', { name: 'Zoom In' }).click();
-    cy.findByText('Julius H. Schoeps').should(
+    cy.findByText('Assessing climate change').should(
       'have.css',
       'font-size',
       '9.80936px'
     );
 
     cy.findByRole('button', { name: 'Zoom Out' }).click();
-    cy.findByText('Julius H. Schoeps').should(
+    cy.findByText('Assessing climate change').should(
       'have.css',
       'font-size',
       '8.9176px'
