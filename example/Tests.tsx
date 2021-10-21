@@ -49,6 +49,14 @@ export default function Tests(): JSX.Element {
         <h1>404</h1>
         <p>Page not found.</p>
       </Route>
+      <Route path={`${path}/get-content`}>
+        <WebReader
+          webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
+          getContent={async (url) => {
+            return `<p>url: ${url}</p>`;
+          }}
+        />
+      </Route>
     </Switch>
   );
 }
