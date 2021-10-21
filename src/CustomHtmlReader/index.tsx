@@ -17,6 +17,15 @@ type HtmlState = HtmlReaderState & {
 };
 
 /**
+ * @TODO :
+ *  - Don't use ReadiumCSS for fixed layout
+ *  - Make fixed layout work
+ *  - Set user settings using css vars on iframe HTML
+ *  - Maybe use Readium-CSS source files instead of dist files
+ *  - Look up how to make reducers have effects (like setting css vars)
+ */
+
+/**
  * If we provide injectables that are not found, the app won't load at all.
  * Therefore we will not provide any default injectables.
  */
@@ -78,7 +87,8 @@ function getInjectableElement(
 ): HTMLElement | undefined {
   switch (injectable.type) {
     case 'style': {
-      const el = document.createElement('style');
+      const el = document.createElement('link');
+      el.setAttribute('rel', 'stylesheet');
       if (injectable.url) {
         el.setAttribute('href', injectable.url);
       } else {
@@ -97,7 +107,9 @@ function useResource(
   getContent: (url: string) => Promise<string>,
   injectables: Injectable[]
 ) {
-  const { data: resource, isValidating, error } = useSWR(url, getContent);
+  const { data: resource, isValidating, error } = useSWR(url, getContent, {
+    revalidateOnFocus: false,
+  });
   if (error) throw error;
 
   const document = resource
@@ -141,6 +153,8 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     currentResourceIndex: 0,
   });
 
+  const [iframe, setIframe] = React.useState<HTMLIFrameElement | null>(null);
+
   const { currentResourceIndex, fontSize } = state;
   const currentResourceUrl = manifest
     ? new URL(
@@ -157,6 +171,12 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
 
   const isAtStart = currentResourceIndex === 0;
   const isAtEnd = currentResourceIndex === manifest?.readingOrder.length;
+
+  // update the user settings css
+  React.useEffect(() => {
+    if (!iframe || !manifest) return;
+    setCSSVar(iframe, '--USER_scroll', getPagination(state.isScrolling));
+  }, [state.isScrolling, iframe, manifest]);
 
   // for now just navigates resources
   const goForward = React.useCallback(async () => {
@@ -237,9 +257,10 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     type: 'HTML',
     isLoading: false,
     content: (
-      <Box
-        as="iframe"
-        height={`calc(100vh - ${HEADER_HEIGHT}px)`}
+      <iframe
+        ref={(el) => setIframe(el)}
+        // as="iframe"
+        style={{ height: `calc(100vh - ${HEADER_HEIGHT}px)` }}
         title="CHANGEME"
         srcDoc={resource}
       />
@@ -257,6 +278,25 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       goToPage,
     },
   };
+}
+
+/**
+ * Sets a CSS var on the html element in the iframe. Used to set
+ * ReadiumCSS settings like scrolling and color mode and font
+ * size.
+ */
+function setCSSVar(iframe: HTMLIFrameElement, name: string, val: string) {
+  const html = iframe?.contentDocument?.documentElement;
+  html?.style.setProperty(name, val);
+}
+
+function getPagination(isPaginated: boolean) {
+  switch (isPaginated) {
+    case true:
+      return 'readium-scroll-on';
+    case false:
+      return 'readium-scroll-off';
+  }
 }
 
 function getColorMode(d2Mode: string): ColorMode {
