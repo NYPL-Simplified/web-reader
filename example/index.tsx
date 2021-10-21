@@ -104,6 +104,18 @@ const App = () => {
               webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
             />
           </Route>
+          <Route path="/moby-epub3">
+            <WebReader
+              injectables={htmlInjectables}
+              webpubManifestUrl={`${origin}/samples/moby-epub3-exploded/manifest.json`}
+            />
+          </Route>
+          <Route path="/readium-css-docs">
+            <WebReader
+              injectables={htmlInjectables}
+              webpubManifestUrl={`${origin}/samples/ReadiumCSS-docs/manifest.json`}
+            />
+          </Route>
           <Route path="/streamed-alice-epub">
             <WebReader
               injectables={htmlInjectables}
@@ -145,6 +157,19 @@ const HomePage = () => {
           <UnorderedList>
             <ListItem>
               <Link to="/moby-epub2">Moby Dick </Link>
+            </ListItem>
+          </UnorderedList>
+        </ListItem>
+        <ListItem>
+          EPUB3 Based Webpubs
+          <UnorderedList>
+            <ListItem>
+              <Link to="/moby-epub3">Moby Dick (EPUB 3)</Link>
+            </ListItem>
+            <ListItem>
+              <Link to="/readium-css-docs">
+                Readium CSS Documentation (as Webpub)
+              </Link>
             </ListItem>
           </UnorderedList>
         </ListItem>
