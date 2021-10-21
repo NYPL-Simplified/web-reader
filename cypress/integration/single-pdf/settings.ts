@@ -30,7 +30,7 @@ describe('Single PDF display settings', () => {
     cy.findByText('Assessing climate change').should(
       'have.css',
       'font-size',
-      '9.80936px'
+      '27.987px'
     );
 
     cy.findByRole('button', { name: 'Zoom Out' }).click();
