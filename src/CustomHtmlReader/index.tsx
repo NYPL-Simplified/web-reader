@@ -246,36 +246,67 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     html.scrollTo(offset, 0);
   }, [width, state.pageIndex, iframe, manifest, state.isScrolling, resource]);
 
+  const goToNextResource = React.useCallback(() => {
+    if (isAtLastResource) return;
+    dispatch({
+      type: 'SET_CURRENT_RESOURCE',
+      index: currentResourceIndex + 1,
+    });
+    dispatch({
+      type: 'SET_PAGE_INDEX',
+      index: 0,
+    });
+  }, [isAtLastResource, currentResourceIndex]);
+
+  /**
+   * @TODO - you need to know the number of pages in the prev
+   * resource to scroll the user to the last one when navigating
+   * backwards.
+   */
+  const goToPrevResource = React.useCallback(() => {
+    if (isAtFirstResource) return;
+    dispatch({
+      type: 'SET_CURRENT_RESOURCE',
+      index: currentResourceIndex - 1,
+    });
+    dispatch({
+      type: 'SET_PAGE_INDEX',
+      index: 0,
+    });
+  }, [isAtFirstResource, currentResourceIndex]);
   /**
    * In scroll mode:
    *    navigates one resource
    * In page mode:
    *    Navigates one page unless at end of resource
+   *
+   * @TODO - check that you are not at the last page before going
+   * to next page.
    */
   const goForward = React.useCallback(async () => {
-    if (!manifest) return;
+    if (!manifest || !iframe) return;
     if (!state.isScrolling) {
-      dispatch({ type: 'SET_PAGE_INDEX', index: state.pageIndex + 1 });
+      const isScrollEnd = getIsScrollEnd(iframe);
+      if (isScrollEnd) {
+        goToNextResource();
+      } else {
+        dispatch({ type: 'SET_PAGE_INDEX', index: state.pageIndex + 1 });
+      }
     } else {
-      if (isAtLastResource) return;
-      dispatch({
-        type: 'SET_CURRENT_RESOURCE',
-        index: currentResourceIndex + 1,
-      });
+      goToNextResource();
     }
-  }, [
-    isAtLastResource,
-    currentResourceIndex,
-    manifest,
-    state.isScrolling,
-    state.pageIndex,
-  ]);
+  }, [iframe, goToNextResource, manifest, state.isScrolling, state.pageIndex]);
 
   const goBackward = React.useCallback(async () => {
-    if (!manifest) return;
+    if (!manifest || !iframe) return;
     if (!state.isScrolling) {
-      if (state.pageIndex > 0) {
-        dispatch({ type: 'SET_PAGE_INDEX', index: state.pageIndex - 1 });
+      const isScrollStart = getIsScrollStart(iframe);
+      if (isScrollStart) {
+        goToPrevResource();
+      } else {
+        if (state.pageIndex > 0) {
+          dispatch({ type: 'SET_PAGE_INDEX', index: state.pageIndex - 1 });
+        }
       }
     } else {
       if (isAtFirstResource) return;
@@ -285,6 +316,8 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       });
     }
   }, [
+    iframe,
+    goToPrevResource,
     manifest,
     isAtFirstResource,
     currentResourceIndex,
@@ -376,6 +409,21 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       goToPage,
     },
   };
+}
+
+// NOTE: If this proves flaky we could use IntersectionObserver instead
+function getIsScrollEnd(iframe: HTMLIFrameElement) {
+  const html = getIframeHTML(iframe);
+  if (!html) return false;
+  const scrollWidth = html.scrollWidth;
+  const currentScroll = html.scrollLeft + html.clientWidth;
+  return scrollWidth === currentScroll;
+}
+function getIsScrollStart(iframe: HTMLIFrameElement) {
+  const html = getIframeHTML(iframe);
+  if (!html) return false;
+  const currentScroll = html.scrollLeft;
+  return currentScroll === 0;
 }
 
 function getIframeHTML(iframe: HTMLIFrameElement) {
