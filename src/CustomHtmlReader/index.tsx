@@ -13,6 +13,8 @@ import LoadingSkeleton from '../ui/LoadingSkeleton';
 
 type HtmlState = HtmlReaderState & {
   currentResourceIndex: number;
+  page: number | null;
+  totalPages: number | null;
 };
 
 /**
@@ -105,11 +107,14 @@ function getInjectableElement(
 function useResource(
   url: string | null,
   getContent: (url: string) => Promise<string>,
-  injectables: Injectable[]
+  injectables: Injectable[],
+  state: HtmlState
 ) {
-  const { data: resource, isValidating, error } = useSWR(url, getContent, {
+  const { data, isValidating, error } = useSWR(url, getContent, {
     revalidateOnFocus: false,
   });
+  // cast the data to a possibly undefined because, it is?
+  const resource = data as string | undefined;
   if (error) throw error;
 
   const document = resource
@@ -129,10 +134,35 @@ function useResource(
       const element = getInjectableElement(document, injectable);
       if (element) document?.head.appendChild(element);
     }
+
+    // set the initial state
+    setCss(document.documentElement, state);
   }
 
   const str = document?.documentElement.outerHTML;
   return { resource: str, isValidating };
+}
+
+function setCss(html: HTMLElement, state: HtmlState) {
+  setCSSProperty(html, '--USER__scroll', getPagination(state.isScrolling));
+  setCSSProperty(
+    html,
+    '--USER__appearance',
+    getColorModeValue(state.colorMode)
+  );
+  setCSSProperty(html, '--USER__advancedSettings', 'readium-advanced-on');
+  setCSSProperty(
+    html,
+    '--USER__fontOverride',
+    getFontOverride(state.fontFamily)
+  );
+  setCSSProperty(
+    html,
+    '--USER__fontFamily',
+    familyToReadiumFamily[state.fontFamily]
+  );
+  setCSSProperty(html, '--USER__fontSize', `${state.fontSize}%`);
+  setCSSProperty(html, 'overflow', state.isScrolling ? 'scroll' : 'hidden');
 }
 
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
@@ -150,7 +180,9 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     fontSize: 100,
     fontFamily: 'sans-serif',
     currentTocUrl: null,
-    currentResourceIndex: 0,
+    currentResourceIndex: 2,
+    page: null,
+    totalPages: null,
   });
 
   const [iframe, setIframe] = React.useState<HTMLIFrameElement | null>(null);
@@ -166,58 +198,47 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const { resource, isValidating } = useResource(
     currentResourceUrl,
     getContent,
-    injectables
+    injectables,
+    state
   );
 
-  const isAtStart = currentResourceIndex === 0;
-  const isAtEnd = currentResourceIndex === manifest?.readingOrder.length;
+  const isAtFirstResource = currentResourceIndex === 0;
+  const isAtLastResource =
+    currentResourceIndex === manifest?.readingOrder.length;
 
-  // update the user settings css
+  // update the user settings css variables
   // also need to run this when the resource changes, or set them on the srcDoc directly (@TODO look into that)
+  // also need to wait for the iframe to be loaded before we do this. Otherwise there wont be html and we will do
+  // nothing.
   React.useEffect(() => {
     if (!iframe || !manifest) return;
-    setCSSVar(iframe, '--USER__scroll', getPagination(state.isScrolling));
-    setCSSVar(iframe, '--USER__appearance', getColorModeValue(state.colorMode));
-    setCSSVar(iframe, '--USER__advancedSettings', 'readium-advanced-on');
-    setCSSVar(
-      iframe,
-      '--USER__fontOverride',
-      getFontOverride(state.fontFamily)
-    );
-    setCSSVar(
-      iframe,
-      '--USER__fontFamily',
-      familyToReadiumFamily[state.fontFamily]
-    );
-    setCSSVar(iframe, '--USER__fontSize', `${state.fontSize}%`);
-  }, [
-    state.isScrolling,
-    state.colorMode,
-    state.fontFamily,
-    state.fontSize,
-    iframe,
-    manifest,
-    resource,
-  ]);
+    const html = getIframeHTML(iframe);
+    setCss(html, state);
+  }, [state, iframe, manifest, resource]);
 
-  // for now just navigates resources
+  /**
+   * In scroll mode:
+   *    navigates one resource
+   * In page mode:
+   *    Navigates one page unless at end of resource
+   */
   const goForward = React.useCallback(async () => {
     if (!manifest) return;
-    if (isAtEnd) return;
+    if (isAtLastResource) return;
     dispatch({
       type: 'SET_CURRENT_RESOURCE',
       index: currentResourceIndex + 1,
     });
-  }, [isAtEnd, currentResourceIndex, manifest]);
+  }, [isAtLastResource, currentResourceIndex, manifest]);
 
   const goBackward = React.useCallback(async () => {
     if (!manifest) return;
-    if (isAtStart) return;
+    if (isAtFirstResource) return;
     dispatch({
       type: 'SET_CURRENT_RESOURCE',
       index: currentResourceIndex - 1,
     });
-  }, [manifest, isAtStart, currentResourceIndex]);
+  }, [manifest, isAtFirstResource, currentResourceIndex]);
 
   const setColorMode = React.useCallback(async (mode: ColorMode) => {
     dispatch({ type: 'SET_COLOR_MODE', mode });
@@ -302,14 +323,23 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   };
 }
 
+function getIframeHTML(iframe: HTMLIFrameElement) {
+  const html = iframe?.contentDocument?.documentElement;
+  if (!html) {
+    console.warn(
+      'Attempting to perform action on iframe HTML but the element is not there yet.'
+    );
+  }
+  return html;
+}
+
 /**
  * Sets a CSS var on the html element in the iframe. Used to set
  * ReadiumCSS settings like scrolling and color mode and font
  * size.
  */
-function setCSSVar(iframe: HTMLIFrameElement, name: string, val: string) {
-  const html = iframe?.contentDocument?.documentElement;
-  html?.style.setProperty(name, val);
+function setCSSProperty(html: HTMLElement, name: string, val: string) {
+  html.style.setProperty(name, val);
 }
 
 function getPagination(isPaginated: boolean) {
