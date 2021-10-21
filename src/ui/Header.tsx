@@ -30,7 +30,9 @@ export const DefaultHeaderLeft = (): React.ReactElement => {
       }}
     >
       <Icon as={MdHome} w={6} h={6} />
-      <Text variant="headerNav">Back to Homepage</Text>
+      <Text paddingLeft={2} variant="headerNav">
+        Back to Homepage
+      </Text>
     </Link>
   );
 };
@@ -52,12 +54,17 @@ export default function Header(
           readerState={state}
         />
         <SettingsCard {...props} />
-        <Button border="none" onClick={toggleFullScreen}>
-          <Icon
-            as={isFullscreen ? MdOutlineFullscreenExit : MdOutlineFullscreen}
-            w={6}
-            h={6}
-          />
+        <Button
+          border="none"
+          onClick={toggleFullScreen}
+          leftIcon={
+            <Icon
+              as={isFullscreen ? MdOutlineFullscreenExit : MdOutlineFullscreen}
+              w={6}
+              h={6}
+            />
+          }
+        >
           <Text variant="headerNav">Toggle Fullscreen</Text>
         </Button>
       </HStack>

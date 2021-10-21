@@ -50,8 +50,13 @@ export default function TableOfContent({
       onOpen={() => setIsOpen(true)}
       onClose={() => setIsOpen(false)} // To account for "close by lose focus"
     >
-      <MenuButton as={Button} border="none">
-        <Icon as={isOpen ? MdOutlineCancel : MdOutlineToc} w={6} h={6} />
+      <MenuButton
+        as={Button}
+        border="none"
+        leftIcon={
+          <Icon as={isOpen ? MdOutlineCancel : MdOutlineToc} w={6} h={6} />
+        }
+      >
         <Text variant="headerNav">Table of Contents</Text>
       </MenuButton>
       {isOpen && manifest?.toc && (
