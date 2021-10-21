@@ -4,6 +4,9 @@ describe('render page content', () => {
   it('Renders content on the epub2 based webpub page', () => {
     cy.loadPage('/moby-epub2');
 
+    cy.get('#reader-loading').should('be.visible');
+    cy.get('#reader-loading').should('not.be.visible');
+
     cy.log('check that all the essential buttons are on the page');
     cy.findByRole('link', { name: 'Return to Homepage' }).should('exist');
     cy.findByRole('button', { name: 'Table of Contents' }).should('exist');
