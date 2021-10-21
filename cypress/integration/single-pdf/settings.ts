@@ -21,10 +21,10 @@ describe('Single PDF display settings', () => {
     cy.findByRole('button', { name: 'Increase font size' }).should('not.exist');
   });
 
-  it('should zoom in and out', () => {
+  it.only('should zoom in and out', () => {
     cy.findByText('Assessing climate change')
       .should('be.visible')
-      .should('have.css', 'font-size', '8.9176px');
+      .should('have.css', 'font-size', '25.4428px');
 
     cy.findByRole('button', { name: 'Zoom In' }).click();
     cy.findByText('Assessing climate change').should(
