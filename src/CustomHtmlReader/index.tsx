@@ -352,15 +352,11 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   }, []);
 
   const goToPage = React.useCallback((href) => {
-    // if (!reader) return;
-    // // Adding try/catch here because goTo throws a TypeError
-    // // if the TOC link you clicked on was the current page..
-    // try {
-    //   reader.goTo({ href } as Locator); // This needs to be fixed, locations should be optional.
-    //   dispatch({ type: 'SET_CURRENT_TOC_URL', currentTocUrl: href });
-    // } catch (error) {
-    //   console.error(error);
-    // }
+    if (!manifest) return;
+    // get the resource with that href and set it.
+    // may need to handle a page number or other # content.
+
+    // what happens if there is no resource with that href?
   }, []);
 
   const isLoading = isValidating;
