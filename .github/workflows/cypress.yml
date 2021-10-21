@@ -1,11 +1,11 @@
-name: Cypress
+name: Cypress Tests (Chrome, Firefox, Safari) x5
 on: [deployment_status]
 
 jobs:
-  cypress:
-    name: Run Integration Tests
-    if: github.event.deployment_status.state == 'success' && github.event.deployment_status.environment == 'Preview – web-reader'
+  install:
+    name: Install cypress
     runs-on: ubuntu-latest
+    if: github.event.deployment_status.state == 'success' && github.event.deployment_status.environment == 'Preview – web-reader'
     container:
       image: cypress/browsers:node14.17.0-chrome88-ff89
       options: --user 1001 # https://github.com/cypress-io/github-action#firefox
@@ -13,7 +13,50 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install Cypress
+      # cache NPM modules and Cypress binary folder
+      # we can use "package-lock.json" as the key file
+      # to make sure we use the precise Cypress version
+      # (which is important when using ^ version in package.json)
+      # see https://github.com/actions/cache
+      - name: Cache NPM and Cypress 📦
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/Cypress
+            node_modules
+          key: my-cache-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install Cypress 📥
+        run: npm i cypress
+
+  chrome:
+    name: Run Chrome Tests
+    runs-on: ubuntu-latest
+    needs: install
+    container:
+      image: cypress/browsers:node14.17.0-chrome88-ff89
+      options: --user 1001 # https://github.com/cypress-io/github-action#firefox
+    strategy:
+      fail-fast: false
+      matrix:
+        # run copies of the current job in parallel
+        containers: [1, 2, 3, 4, 5, 6]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # this should always get a cache hit because we isntall above.
+      # but we need to make sure cypress is installed on all of the
+      # containers.
+      - name: Cache NPM and Cypress 📦
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/Cypress
+            node_modules
+          key: my-cache-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install Cypress 📥
         run: npm i cypress
 
       - name: Run Chrome
@@ -28,7 +71,9 @@ jobs:
           install: false
           browser: chrome
           record: true
-        
+          parallel: true
+          group: 'UI - Chrome'
+
       - name: Upload failure screenshots
         uses: actions/upload-artifact@v2
         if: ${{ failure() }}
@@ -42,9 +87,9 @@ jobs:
         with:
           name: cypress-videos
           path: cypress/videos
-      
+
       # https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#job-status-check-functions
-      - name: Cypress tests ✅
+      - name: Set successful workflow status ✅
         if: ${{ success() }}
         # set the merge commit status check
         # using GitHub REST API
@@ -61,7 +106,7 @@ jobs:
             "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           }'
 
-      - name: Cypress tests 🚨
+      - name: Set failure workflow status 🚨
         if: ${{ failure() }}
         run: |
           curl --request POST \
