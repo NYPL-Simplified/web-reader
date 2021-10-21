@@ -29,7 +29,9 @@ declare global {
 
 Cypress.Commands.add('loadPage', (pageName) => {
   const resourceInterceptUrl =
-    pageName === '/streamed-alice-epub'
+    pageName === '/streamed-alice-epub' ||
+    pageName === '/test/with-injectables' ||
+    pageName === '/test/no-injectables'
       ? 'https://alice.dita.digital/**'
       : '/samples/**';
   cy.intercept(resourceInterceptUrl, { middleware: true }, (req) => {

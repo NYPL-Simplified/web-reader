@@ -24,12 +24,12 @@ export default function Tests(): JSX.Element {
       </Route>
       <Route path={`${path}/no-injectables`}>
         <WebReader
-          webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
+          webpubManifestUrl={'https://alice.dita.digital/manifest.json'}
         />
       </Route>
       <Route path={`${path}/with-injectables`}>
         <WebReader
-          webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
+          webpubManifestUrl={'https://alice.dita.digital/manifest.json'}
           injectables={[
             {
               type: 'style',
