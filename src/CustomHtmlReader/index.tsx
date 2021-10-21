@@ -178,7 +178,8 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   React.useEffect(() => {
     if (!iframe || !manifest) return;
     setCSSVar(iframe, '--USER_scroll', getPagination(state.isScrolling));
-  }, [state.isScrolling, iframe, manifest]);
+    setCSSVar(iframe, '--USER__appearance', getColorModeValue(state.colorMode));
+  }, [state.isScrolling, state.colorMode, iframe, manifest]);
 
   // for now just navigates resources
   const goForward = React.useCallback(async () => {
@@ -298,6 +299,17 @@ function getPagination(isPaginated: boolean) {
       return 'readium-scroll-on';
     case false:
       return 'readium-scroll-off';
+  }
+}
+
+function getColorModeValue(mode: ColorMode) {
+  switch (mode) {
+    case 'day':
+      return 'readium-default-on';
+    case 'night':
+      return 'readium-night-on';
+    case 'sepia':
+      return 'readium-sepia-on';
   }
 }
 
