@@ -23,6 +23,7 @@ type HtmlState = HtmlReaderState & {
  *  - Set user settings using css vars on iframe HTML
  *  - Maybe use Readium-CSS source files instead of dist files
  *  - Look up how to make reducers have effects (like setting css vars)
+ *  - Maybe don't use srcDoc, or if using it, set all settings in srcDoc.
  */
 
 /**
@@ -173,6 +174,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const isAtEnd = currentResourceIndex === manifest?.readingOrder.length;
 
   // update the user settings css
+  // @TODO - also need to run this when the resource changes, or set them on the srcDoc directly.
   React.useEffect(() => {
     if (!iframe || !manifest) return;
     setCSSVar(iframe, '--USER_scroll', getPagination(state.isScrolling));
