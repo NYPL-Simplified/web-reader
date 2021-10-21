@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ComponentProps } from 'react';
 import { Flex, Link, HStack, Text, Icon } from '@chakra-ui/react';
 import { MdHome } from 'react-icons/md';
 import { ActiveReader, ReaderManagerArguments } from '../types';
@@ -11,7 +11,7 @@ import { HEADER_HEIGHT } from './constants';
 import { MdOutlineFullscreenExit, MdOutlineFullscreen } from 'react-icons/md';
 import useFullscreen from './hooks/useFullScreen';
 
-const DefaultHeaderLeft = (): React.ReactElement => {
+export const DefaultHeaderLeft = (): React.ReactElement => {
   const linkColor = useColorModeValue('gray.700', 'gray.100', 'gray.700');
   return (
     <Link
@@ -45,21 +45,7 @@ export default function Header(
   const mainBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
 
   return (
-    <Flex
-      as="header"
-      position="sticky"
-      top={0}
-      left={0}
-      right={0}
-      height={`${HEADER_HEIGHT}px`}
-      zIndex="sticky"
-      alignContent="space-between"
-      alignItems="center"
-      px={8}
-      borderBottom="1px solid"
-      borderColor="gray.100"
-      bgColor={mainBgColor}
-    >
+    <HeaderWrapper bgColor={mainBgColor}>
       {headerLeft ?? <DefaultHeaderLeft />}
       <HStack ml="auto" spacing={1}>
         <TableOfContent
@@ -82,6 +68,29 @@ export default function Header(
           <Text variant="headerNav">Toggle Fullscreen</Text>
         </Button>
       </HStack>
-    </Flex>
+    </HeaderWrapper>
   );
 }
+
+export const HeaderWrapper: React.FC<ComponentProps<typeof Flex>> = ({
+  children,
+}) => {
+  return (
+    <Flex
+      as="header"
+      position="sticky"
+      top={0}
+      left={0}
+      right={0}
+      height={`${HEADER_HEIGHT}px`}
+      zIndex="sticky"
+      alignContent="space-between"
+      alignItems="center"
+      px={8}
+      borderBottom="1px solid"
+      borderColor="gray.100"
+    >
+      {children}
+    </Flex>
+  );
+};

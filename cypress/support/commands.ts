@@ -16,6 +16,8 @@ declare global {
           | '/test/with-injectables'
           | '/test/get-content'
           | '/streamed-alice-epub'
+          | '/test/unparsable-manifest'
+          | '/test/missing-resource'
       ): void;
       getIframeHtml(selector?: string): Chainable<Subject>;
       getIframeHead(selector?: string): Chainable<Subject>;
@@ -44,8 +46,10 @@ Cypress.Commands.add('loadPage', (pageName) => {
   cy.wait('@sample', { timeout: 20000 }).then((interception) => {
     assert.isNotNull(interception?.response?.body, 'API call has data');
   });
-  cy.get(IFRAME_SELECTOR).its(`0.contentDocument.body`).should('not.be.empty');
   cy.findByRole('link', { name: 'Return to Homepage' }).should('exist');
+  cy.get(IFRAME_SELECTOR)
+    .its(`0.contentDocument.documentElement`)
+    .should('not.be.empty');
 });
 
 Cypress.Commands.add('getIframeHtml', (selector: string = IFRAME_SELECTOR) => {
@@ -56,7 +60,7 @@ Cypress.Commands.add('getIframeHtml', (selector: string = IFRAME_SELECTOR) => {
     .then(cy.wrap);
 });
 
-Cypress.Commands.add('getIframeHead', (selector: string) => {
+Cypress.Commands.add('getIframeHead', (selector: string = IFRAME_SELECTOR) => {
   return cy
     .get(selector, { timeout: 15000 })
     .its(`0.contentDocument.head`)
@@ -64,7 +68,7 @@ Cypress.Commands.add('getIframeHead', (selector: string) => {
     .then(cy.wrap);
 });
 
-Cypress.Commands.add('getIframeBody', (selector: string) => {
+Cypress.Commands.add('getIframeBody', (selector: string = IFRAME_SELECTOR) => {
   return cy
     .get(selector, { timeout: 15000 })
     .its(`0.contentDocument.body`)
