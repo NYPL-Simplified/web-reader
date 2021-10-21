@@ -14,6 +14,14 @@ export default function Tests(): JSX.Element {
           sub-routes.
         </p>
       </Route>
+      <Route path={`${path}/get-content`}>
+        <WebReader
+          webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
+          getContent={async (url) => {
+            return `<p>url: ${url}</p>`;
+          }}
+        />
+      </Route>
       <Route path={`${path}/no-injectables`}>
         <WebReader
           webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
@@ -48,14 +56,6 @@ export default function Tests(): JSX.Element {
       <Route path={`${path}/*`}>
         <h1>404</h1>
         <p>Page not found.</p>
-      </Route>
-      <Route path={`${path}/get-content`}>
-        <WebReader
-          webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
-          getContent={async (url) => {
-            return `<p>url: ${url}</p>`;
-          }}
-        />
       </Route>
     </Switch>
   );
