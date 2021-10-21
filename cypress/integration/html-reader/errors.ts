@@ -17,7 +17,7 @@ describe('error states', () => {
 
     cy.findByRole('heading', { name: 'An error occurred' });
     cy.findByRole('alert', {
-      name: `Network Error: Unparseable JSON file found at ${
+      name: `Network Error: Unparsable JSON file found at ${
         Cypress.config().baseUrl
       }/samples/test/unparseable-manifest.json.`,
     });
