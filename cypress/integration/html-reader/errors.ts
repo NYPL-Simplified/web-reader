@@ -13,7 +13,11 @@ describe('error states', () => {
   });
 
   it('throws error for unparsable manifest', () => {
-    cy.loadPage('/test/unparsable-manifest');
+    /* 
+      we use visit here instead of 'loadPage' because 'loadPage'
+      checks for an iframe that should fail to render in this test 
+    */
+    cy.visit('/test/unparsable-manifest');
 
     cy.findByRole('heading', { name: 'An error occurred' });
     cy.findByRole('alert', {
