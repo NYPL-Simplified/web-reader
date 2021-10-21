@@ -61,12 +61,12 @@ describe('useHtmlReader configuration settings', () => {
 
   it('should render css injectables when provided', () => {
     cy.loadPage('/test/with-injectables');
+    cy.getIframeHead().find('title').should('exist');
+    cy.getIframeHead()
+      .find('link[href$="/fonts/opensyslexic/opendyslexic.css"]')
+      .should('exist');
+    cy.getIframeHead().find('link[href$="/css/sample.css"]');
     cy.getIframeHtml().within(() => {
-      cy.get('head > title', { timeout: 15000 }).should('exist');
-      cy.get(
-        'head > link[href$="/fonts/opensyslexic/opendyslexic.css"]'
-      ).should('exist');
-      cy.get('head > link[href$="/css/sample.css"]').should('exist');
       // make sure the css was applied
       cy.get('body').should('have.css', 'color', 'rgb(0, 0, 255)');
     });
