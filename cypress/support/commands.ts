@@ -7,7 +7,16 @@ declare global {
   namespace Cypress {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     interface Chainable<Subject = any> {
-      loadPage(pageName: string): void;
+      loadPage(
+        pageName:
+          | '/moby-epub2'
+          | 'axisnow-encrypted'
+          | '/axisnow-decrypted'
+          | '/test/no-injectables'
+          | '/test/with-injectables'
+          | '/test/get-content'
+          | '/streamed-alice-epub'
+      ): void;
       getIframeHtml(selector?: string): Chainable<Subject>;
       getIframeHead(selector?: string): Chainable<Subject>;
       getIframeBody(selector?: string): Chainable<Subject>;
@@ -17,11 +26,26 @@ declare global {
 }
 
 Cypress.Commands.add('loadPage', (pageName) => {
+  const resourceInterceptUrl =
+    pageName === '/streamed-alice-epub'
+      ? 'https://alice.dita.digital/**'
+      : '/samples/**';
+  cy.intercept(resourceInterceptUrl, { middleware: true }, (req) => {
+    req.on('before:response', (res) => {
+      // force all API responses to not be cached
+      res.headers['cache-control'] = 'no-store';
+    });
+  }).as('sample');
   cy.visit(pageName, {
     onBeforeLoad: (win) => {
       win.sessionStorage.clear(); // clear storage so that we are always on page one
     },
   });
+  cy.wait('@sample', { timeout: 20000 }).then((interception) => {
+    assert.isNotNull(interception?.response?.body, 'API call has data');
+  });
+  cy.get(IFRAME_SELECTOR).its(`0.contentDocument.body`).should('not.be.empty');
+  cy.findByRole('link', { name: 'Return to Homepage' }).should('exist');
 });
 
 Cypress.Commands.add('getIframeHtml', (selector: string = IFRAME_SELECTOR) => {
@@ -53,13 +77,18 @@ Cypress.Commands.add('loadPdf', (path: '/pdf' | '/pdf-collection') => {
     Cypress.config().baseUrl === 'http://localhost:1234'
       ? 'http://localhost:3001'
       : 'https://drb-api-qa.nypl.org/utils';
-  cy.intercept('GET', `${pdfProxyInterceptUrl}/**`).as('pdf');
+  cy.intercept(`${pdfProxyInterceptUrl}/**`, { middleware: true }, (req) => {
+    req.on('before:response', (res) => {
+      // force all API responses to not be cached
+      res.headers['cache-control'] = 'no-store';
+    });
+  }).as('pdf');
   cy.visit(path, {
     onBeforeLoad: (win) => {
       win.sessionStorage.clear(); // clear storage so that we are always on page one
     },
   });
-  cy.wait('@pdf', { timeout: 20000 });
+  cy.wait('@pdf', { timeout: 30000 });
   cy.get('#iframe-wrapper')
     .find('div[class="react-pdf__Page__textContent"]', { timeout: 10000 })
     .should('have.attr', 'style');
