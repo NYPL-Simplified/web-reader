@@ -6,11 +6,12 @@ describe('display settings', () => {
   });
 
   it('should have the default settings', () => {
-    // cy.getIframeHtml(IFRAME_SELECTOR)
-    //   .should('have.attr', 'data-viewer-font', 'publisher')
-    //   .should('have.css', '--USER__appearance', 'readium-default-on')
-    //   .should('have.css', '--USER__fontFamily', 'Original')
-    //   .should('have.css', '--USER__scroll', 'readium-scroll-on');
+    cy.get('#reader-loading').should('not.be.visible');
+    cy.getIframeHtml(IFRAME_SELECTOR)
+      .should('have.attr', 'data-viewer-font', 'publisher')
+      .should('have.css', '--USER__appearance', 'readium-default-on')
+      .should('have.css', '--USER__fontFamily', 'Original')
+      .should('have.css', '--USER__scroll', 'readium-scroll-on');
   });
 
   it('should update the font family to serif, paginated mode, and on sepia theme', () => {
