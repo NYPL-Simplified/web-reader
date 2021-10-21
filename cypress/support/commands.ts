@@ -46,8 +46,10 @@ Cypress.Commands.add('loadPage', (pageName) => {
   cy.wait('@sample', { timeout: 20000 }).then((interception) => {
     assert.isNotNull(interception?.response?.body, 'API call has data');
   });
-  cy.get(IFRAME_SELECTOR).its(`0.contentDocument.head`).should('not.be.empty');
   cy.findByRole('link', { name: 'Return to Homepage' }).should('exist');
+  cy.get(IFRAME_SELECTOR)
+    .its(`0.contentDocument.documentElement`)
+    .should('not.be.empty');
 });
 
 Cypress.Commands.add('getIframeHtml', (selector: string = IFRAME_SELECTOR) => {
