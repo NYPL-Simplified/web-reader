@@ -12,7 +12,7 @@ describe('error states', () => {
     });
   });
 
-  it('throws error for unparseable manifest', () => {
+  it('throws error for unparsable manifest', () => {
     cy.loadPage('/test/unparsable-manifest');
 
     cy.findByRole('heading', { name: 'An error occurred' });
