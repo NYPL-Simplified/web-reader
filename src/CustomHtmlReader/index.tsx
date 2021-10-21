@@ -10,10 +10,11 @@ import { HEADER_HEIGHT } from '../ui/constants';
 import { Injectable } from '../Readium/Injectable';
 import useSWR from 'swr';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
+import useResizeObserver from 'use-resize-observer';
 
 type HtmlState = HtmlReaderState & {
   currentResourceIndex: number;
-  page: number | null;
+  pageIndex: number;
   totalPages: number | null;
 };
 
@@ -21,10 +22,12 @@ type HtmlState = HtmlReaderState & {
  * @TODO :
  *  - Don't use ReadiumCSS for fixed layout
  *  - Make fixed layout work
- *  - Set user settings using css vars on iframe HTML
  *  - Maybe use Readium-CSS source files instead of dist files
- *  - Look up how to make reducers have effects (like setting css vars)
- *  - Maybe don't use srcDoc, or if using it, set all settings in srcDoc.
+ *  - Keep track of where to use is in scroll mode so location stays when
+ *    switch to paginate and vice-versa
+ *  - change resource when at last page (page mode)
+ *  - don't show page buttons when in scroll mode
+ *  - Separate out paginated and scrolling state types
  */
 
 /**
@@ -39,7 +42,8 @@ export type HtmlAction =
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
   | { type: 'SET_SCROLL'; isScrolling: boolean }
   | { type: 'SET_FONT_SIZE'; size: number }
-  | { type: 'SET_FONT_FAMILY'; family: FontFamily };
+  | { type: 'SET_FONT_FAMILY'; family: FontFamily }
+  | { type: 'SET_PAGE_INDEX'; index: number };
 
 function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
   switch (action.type) {
@@ -71,6 +75,12 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
       return {
         ...state,
         fontFamily: action.family,
+      };
+
+    case 'SET_PAGE_INDEX':
+      return {
+        ...state,
+        pageIndex: action.index,
       };
   }
 }
@@ -181,11 +191,12 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     fontFamily: 'sans-serif',
     currentTocUrl: null,
     currentResourceIndex: 2,
-    page: null,
+    pageIndex: 0,
     totalPages: null,
   });
 
   const [iframe, setIframe] = React.useState<HTMLIFrameElement | null>(null);
+  const { ref, width = 1, height = 1 } = useResizeObserver<HTMLIFrameElement>();
 
   const { currentResourceIndex, fontSize } = state;
   const currentResourceUrl = manifest
@@ -213,8 +224,27 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   React.useEffect(() => {
     if (!iframe || !manifest) return;
     const html = getIframeHTML(iframe);
+    if (!html) return;
     setCss(html, state);
   }, [state, iframe, manifest, resource]);
+
+  /**
+   * In scroll mode we:
+   *  - set the horizontal offset based on page number and witdh
+   *  - set the total pages so we know how far we can scroll
+   */
+  React.useEffect(() => {
+    if (!iframe || !manifest) return;
+    if (state.isScrolling) return;
+    // set the scroll offset based on page number
+    const offset = width * state.pageIndex;
+    const html = getIframeHTML(iframe);
+    if (!html) {
+      console.warn('Trying to scroll before html is present');
+      return;
+    }
+    html.scrollTo(offset, 0);
+  }, [width, state.pageIndex, iframe, manifest, state.isScrolling, resource]);
 
   /**
    * In scroll mode:
@@ -224,21 +254,43 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
    */
   const goForward = React.useCallback(async () => {
     if (!manifest) return;
-    if (isAtLastResource) return;
-    dispatch({
-      type: 'SET_CURRENT_RESOURCE',
-      index: currentResourceIndex + 1,
-    });
-  }, [isAtLastResource, currentResourceIndex, manifest]);
+    if (!state.isScrolling) {
+      dispatch({ type: 'SET_PAGE_INDEX', index: state.pageIndex + 1 });
+    } else {
+      if (isAtLastResource) return;
+      dispatch({
+        type: 'SET_CURRENT_RESOURCE',
+        index: currentResourceIndex + 1,
+      });
+    }
+  }, [
+    isAtLastResource,
+    currentResourceIndex,
+    manifest,
+    state.isScrolling,
+    state.pageIndex,
+  ]);
 
   const goBackward = React.useCallback(async () => {
     if (!manifest) return;
-    if (isAtFirstResource) return;
-    dispatch({
-      type: 'SET_CURRENT_RESOURCE',
-      index: currentResourceIndex - 1,
-    });
-  }, [manifest, isAtFirstResource, currentResourceIndex]);
+    if (!state.isScrolling) {
+      if (state.pageIndex > 0) {
+        dispatch({ type: 'SET_PAGE_INDEX', index: state.pageIndex - 1 });
+      }
+    } else {
+      if (isAtFirstResource) return;
+      dispatch({
+        type: 'SET_CURRENT_RESOURCE',
+        index: currentResourceIndex - 1,
+      });
+    }
+  }, [
+    manifest,
+    isAtFirstResource,
+    currentResourceIndex,
+    state.isScrolling,
+    state.pageIndex,
+  ]);
 
   const setColorMode = React.useCallback(async (mode: ColorMode) => {
     dispatch({ type: 'SET_COLOR_MODE', mode });
@@ -301,7 +353,10 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     isLoading: false,
     content: (
       <iframe
-        ref={(el) => setIframe(el)}
+        ref={(el) => {
+          setIframe(el);
+          ref(el);
+        }}
         // as="iframe"
         style={{ height: `calc(100vh - ${HEADER_HEIGHT}px)` }}
         title="CHANGEME"
