@@ -34,6 +34,14 @@ export default function Tests(): JSX.Element {
           ]}
         />
       </Route>
+      <Route path={`${path}/get-content`}>
+        <WebReader
+          webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
+          getContent={async (url) => {
+            return `<p>url: ${url}</p>`;
+          }}
+        />
+      </Route>
     </>
   );
 }

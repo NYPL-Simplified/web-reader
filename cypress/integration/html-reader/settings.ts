@@ -7,8 +7,6 @@ describe('display settings', () => {
 
   it('should have the default settings', () => {
     cy.log('briefly see the loading indicator');
-    cy.get('#reader-loading').should('be.visible');
-    cy.get('#reader-loading').should('not.be.visible');
 
     cy.getIframeHtml(IFRAME_SELECTOR)
       .should('have.attr', 'data-viewer-font', 'publisher')
