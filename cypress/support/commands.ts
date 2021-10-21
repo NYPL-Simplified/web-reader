@@ -27,13 +27,18 @@ declare global {
   }
 }
 
+const pagesUsingAliceInWonderlandExample: string[] = [
+  '/streamed-alice-epub',
+  '/test/with-injectables',
+  '/test/no-injectables',
+];
+
 Cypress.Commands.add('loadPage', (pageName) => {
-  const resourceInterceptUrl =
-    pageName === '/streamed-alice-epub' ||
-    pageName === '/test/with-injectables' ||
-    pageName === '/test/no-injectables'
-      ? 'https://alice.dita.digital/**'
-      : '/samples/**';
+  const resourceInterceptUrl = pagesUsingAliceInWonderlandExample.includes(
+    pageName
+  )
+    ? 'https://alice.dita.digital/**'
+    : '/samples/**';
   cy.intercept(resourceInterceptUrl, { middleware: true }, (req) => {
     req.on('before:response', (res) => {
       // force all API responses to not be cached
