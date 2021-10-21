@@ -151,7 +151,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       api: {
         getContent: getContent as GetContent,
         updateCurrentLocation: async (location: Locator) => {
-          // This is needed so that setReadingLocation has the updated "reader" value.
+          // This is needed so that setBookBoundary has the updated "reader" value.
           dispatch({ type: 'LOCATION_CHANGED', location: location });
           return await location;
         },
@@ -164,8 +164,8 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   // Re-calculate page location on scroll/TOC navigation/page button press
   React.useEffect(() => {
     if (!location || !reader) return;
-    setReadingLocation(reader, dispatch);
-  }, [location, reader]);
+    setBookBoundary(reader, dispatch);
+  }, [location, reader, state.isScrolling]);
 
   // prev and next page functions
   const goForward = React.useCallback(async () => {
@@ -322,7 +322,7 @@ const r2FamilyToFamily: Record<string, FontFamily | undefined> = {
   opendyslexic: 'open-dyslexic',
 };
 
-async function setReadingLocation(
+async function setBookBoundary(
   reader: D2Reader,
   dispatch: React.Dispatch<HtmlAction>
 ): Promise<void> {

@@ -156,6 +156,8 @@ const MockHtmlReaderState = {
   fontFamily: 'sans-serif',
   reader: undefined,
   currentTocUrl: null,
+  atStart: true,
+  atEnd: false,
 };
 
 const MockPdfReaderState = {
@@ -168,6 +170,8 @@ const MockPdfReaderState = {
   pageNumber: 1,
   numPages: null,
   currentTocUrl: null,
+  atStart: true,
+  atEnd: false,
 };
 
 export const MockHtmlSettingsProps = {
