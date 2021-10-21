@@ -36,7 +36,7 @@ export default function Tests(): JSX.Element {
       </Route>
       <Route path={`${path}/unparseable-manifest`}>
         <WebReader
-          webpubManifestUrl={`${origin}/samples/test/unparseable-manifest.json`}
+          webpubManifestUrl={`${origin}/samples/test/unparsable-manifest.json`}
         />
       </Route>
       <Route path={`${path}/missing-resource`}>
