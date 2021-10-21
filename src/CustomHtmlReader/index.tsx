@@ -9,7 +9,6 @@ import {
 import { HEADER_HEIGHT } from '../ui/constants';
 import { Injectable } from '../Readium/Injectable';
 import useSWR from 'swr';
-import { Box, Flex, Skeleton, SkeletonText } from '@chakra-ui/react';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
 
 type HtmlState = HtmlReaderState & {
@@ -148,7 +147,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const [state, dispatch] = React.useReducer(htmlReducer, {
     colorMode: 'day',
     isScrolling: false,
-    fontSize: 16,
+    fontSize: 100,
     fontFamily: 'sans-serif',
     currentTocUrl: null,
     currentResourceIndex: 0,
@@ -174,12 +173,32 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const isAtEnd = currentResourceIndex === manifest?.readingOrder.length;
 
   // update the user settings css
-  // @TODO - also need to run this when the resource changes, or set them on the srcDoc directly.
+  // also need to run this when the resource changes, or set them on the srcDoc directly (@TODO look into that)
   React.useEffect(() => {
     if (!iframe || !manifest) return;
-    setCSSVar(iframe, '--USER_scroll', getPagination(state.isScrolling));
+    setCSSVar(iframe, '--USER__scroll', getPagination(state.isScrolling));
     setCSSVar(iframe, '--USER__appearance', getColorModeValue(state.colorMode));
-  }, [state.isScrolling, state.colorMode, iframe, manifest]);
+    setCSSVar(iframe, '--USER__advancedSettings', 'readium-advanced-on');
+    setCSSVar(
+      iframe,
+      '--USER__fontOverride',
+      getFontOverride(state.fontFamily)
+    );
+    setCSSVar(
+      iframe,
+      '--USER__fontFamily',
+      familyToReadiumFamily[state.fontFamily]
+    );
+    setCSSVar(iframe, '--USER__fontSize', `${state.fontSize}%`);
+  }, [
+    state.isScrolling,
+    state.colorMode,
+    state.fontFamily,
+    state.fontSize,
+    iframe,
+    manifest,
+    resource,
+  ]);
 
   // for now just navigates resources
   const goForward = React.useCallback(async () => {
@@ -327,10 +346,19 @@ function getColorMode(d2Mode: string): ColorMode {
   }
 }
 
+function getFontOverride(fontFamily: FontFamily) {
+  switch (fontFamily) {
+    case 'publisher':
+      return 'readium-font-off';
+    default:
+      return 'readium-font-on';
+  }
+}
+
 /**
  * We need to map from our family values to R2D2BC's family values.
  */
-const familyToR2Family: Record<FontFamily, string> = {
+const familyToReadiumFamily: Record<FontFamily, string> = {
   publisher: 'Original',
   serif: 'serif',
   'sans-serif': 'sans-serif',
