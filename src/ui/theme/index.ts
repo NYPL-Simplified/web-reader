@@ -6,6 +6,7 @@ import { ColorMode } from '../../types';
 import { getColor } from '../../utils/getColor';
 import getButtonStyle from './components/button';
 import Alert from './components/alert';
+import { Dict } from './types';
 
 /**
  * See Chakra default theme for shape of theme object:
@@ -16,7 +17,7 @@ import Alert from './components/alert';
  *
  * Returns the chakra theme object with an additional property `currentColorMode`
  */
-export function getTheme(colorMode: ColorMode = 'day') {
+export function getTheme(colorMode: ColorMode = 'day'): Dict<unknown> {
   return extendTheme(
     {
       colors,
