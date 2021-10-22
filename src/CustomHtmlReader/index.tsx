@@ -23,11 +23,11 @@ type HtmlState = HtmlReaderState & {
  *  - Don't use ReadiumCSS for fixed layout
  *  - Make fixed layout work
  *  - Maybe use Readium-CSS source files instead of dist files
- *  - Keep track of where to use is in scroll mode so location stays when
+ *  - Keep track of where the user is in scroll mode so location stays when
  *    switch to paginate and vice-versa
- *  - change resource when at last page (page mode)
  *  - don't show page buttons when in scroll mode
  *  - Separate out paginated and scrolling state types
+ *  - Go to last page of last resource when navigating backwards
  */
 
 /**
@@ -196,7 +196,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   });
 
   const [iframe, setIframe] = React.useState<HTMLIFrameElement | null>(null);
-  const { ref, width = 1, height = 1 } = useResizeObserver<HTMLIFrameElement>();
+  const { ref, width = 1 } = useResizeObserver<HTMLIFrameElement>();
 
   const { currentResourceIndex, fontSize } = state;
   const currentResourceUrl = manifest
@@ -245,6 +245,11 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     }
     html.scrollTo(offset, 0);
   }, [width, state.pageIndex, iframe, manifest, state.isScrolling, resource]);
+
+  // go to last page when navigating backwards from one
+  // resource to another. You need to know if it has been measured
+  // yet though in order to do this.
+  // React.useEffect(() => {}, []);
 
   const goToNextResource = React.useCallback(() => {
     if (isAtLastResource) return;
