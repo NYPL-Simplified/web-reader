@@ -24,12 +24,12 @@ export default function Tests(): JSX.Element {
       </Route>
       <Route path={`${path}/no-injectables`}>
         <WebReader
-          webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
+          webpubManifestUrl={'https://alice.dita.digital/manifest.json'}
         />
       </Route>
       <Route path={`${path}/with-injectables`}>
         <WebReader
-          webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
+          webpubManifestUrl={'https://alice.dita.digital/manifest.json'}
           injectables={[
             {
               type: 'style',
@@ -51,6 +51,14 @@ export default function Tests(): JSX.Element {
       <Route path={`${path}/missing-resource`}>
         <WebReader
           webpubManifestUrl={`${origin}/samples/test/missing-resource.json`}
+        />
+      </Route>
+      <Route path={`${path}/missing-injectable`}>
+        <WebReader
+          webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
+          injectables={[
+            { type: 'style', url: `http://example.com/doesnt-exist.css` },
+          ]}
         />
       </Route>
       <Route path={`${path}/*`}>

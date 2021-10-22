@@ -34,6 +34,12 @@ describe('error states', () => {
     cy.getIframeBody().contains('Page not found.', { timeout: 10000 });
   });
 
-  // @TODO - this requires change in R2D2BC.
-  // it('throws error for missing injectable', () => {});
+  it('throws error for missing injectable', () => {
+    cy.loadPage('/test/missing-injectable');
+
+    cy.findByRole('heading', { name: 'An error occurred' });
+    cy.findByRole('alert', {
+      name: `Injectable failed to load at: http://example.com/doesnt-exist.css`,
+    });
+  });
 });
