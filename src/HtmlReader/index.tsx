@@ -99,6 +99,12 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     currentTocUrl: null,
   });
 
+  // used to handle async errors thrown in useEffect
+  const [error, setError] = React.useState<Error | undefined>(undefined);
+  if (error) {
+    throw error;
+  }
+
   const { reader, fontSize } = state;
 
   // initialize the reader
@@ -124,6 +130,9 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       },
       api: {
         getContent: getContent as any, //TODO: fix this casting,
+        onError: function (e: Error) {
+          setError(e);
+        },
       } as any, //TODO: fix this casting,,
     }).then((reader) => {
       dispatch({ type: 'SET_READER', reader });

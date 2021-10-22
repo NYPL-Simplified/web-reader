@@ -18,6 +18,7 @@ declare global {
           | '/streamed-alice-epub'
           | '/test/unparsable-manifest'
           | '/test/missing-resource'
+          | '/test/missing-injectable'
       ): void;
       getIframeHtml(selector?: string): Chainable<Subject>;
       getIframeHead(selector?: string): Chainable<Subject>;

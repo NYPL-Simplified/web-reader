@@ -53,6 +53,14 @@ export default function Tests(): JSX.Element {
           webpubManifestUrl={`${origin}/samples/test/missing-resource.json`}
         />
       </Route>
+      <Route path={`${path}/missing-injectable`}>
+        <WebReader
+          webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
+          injectables={[
+            { type: 'style', url: `http://example.com/doesnt-exist.css` },
+          ]}
+        />
+      </Route>
       <Route path={`${path}/*`}>
         <h1>404</h1>
         <p>Page not found.</p>
