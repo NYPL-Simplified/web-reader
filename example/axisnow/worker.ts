@@ -8,9 +8,15 @@ declare const self: WorkerGlobalScope;
  * We need to proxy the decryptChapter function, so we need to re-wrap this up.
  */
 const proxiedCreateChapterDecryptor: typeof createChapterDecryptor = async (
-  params
+  params,
+  webpubManifest,
+  webpubManifestUrl
 ) => {
-  const decryptChapter = await createChapterDecryptor(params);
+  const decryptChapter = await createChapterDecryptor(
+    params,
+    webpubManifest,
+    webpubManifestUrl
+  );
   return Comlink.proxy(decryptChapter);
 };
 

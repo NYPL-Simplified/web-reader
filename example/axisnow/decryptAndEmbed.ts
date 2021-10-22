@@ -1,3 +1,5 @@
+import { WebpubManifest } from '../../src/types';
+
 type DecryptChapter = (resourceUrl: string) => Promise<string>;
 
 type DecryptorParams = {
@@ -16,7 +18,9 @@ type IDecryptor = {
 };
 
 export default async function createChapterDecryptor(
-  params: DecryptorParams
+  params: DecryptorParams,
+  webpubManifest: WebpubManifest,
+  webpubManifestUrl: string
 ): Promise<DecryptChapter> {
   try {
     // we have to type cast this because it is a dynamic, optional import.
@@ -24,7 +28,7 @@ export default async function createChapterDecryptor(
     const Decryptor = require('@nypl-simplified-packages/axisnow-access-control-web')
       .default as IDecryptor;
     const decryptor = await Decryptor.createDecryptor(params);
-    return decryptChapter(decryptor);
+    return decryptChapter(decryptor, webpubManifest, webpubManifestUrl);
   } catch (e) {
     console.error(e);
     throw new Error(
@@ -33,25 +37,53 @@ export default async function createChapterDecryptor(
   }
 }
 
-/**
- * Decrypts a chapter and all embedded resources
- *
- * TO DO:
- *  - How to release url objects we have created but no
- *    longer need? These should be released when going
- *    to next chapter. We can keep around a list of
- *    object urls for a given chapter and then call something
- *    to release them.
- *
- * ASSETS TO RE-EMBED:
- *  - images (done)
- *  - css (done)
- *  - css urls ?
- *  - js
- */
-const decryptChapter = (decryptor: IDecryptorInstance) => async (
-  url: string
-): Promise<string> => {
+function absoluteHref(href: string, base: string): string {
+  const url = new URL(href, base);
+  return url.toString();
+}
+
+function getLinkFromManifest(
+  manifest: WebpubManifest,
+  href: string,
+  webpubManifestUrl: string
+) {
+  const fullHref = absoluteHref(href, webpubManifestUrl);
+  return (
+    manifest.resources?.find(
+      (link) => absoluteHref(link.href, webpubManifestUrl) === fullHref
+    ) ??
+    manifest.readingOrder.find(
+      (link) => absoluteHref(link.href, webpubManifestUrl) === fullHref
+    )
+  );
+}
+
+async function fetchResource(url: string) {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(
+      `Received code ${response.status} ${response.statusText} for ${url}`
+    );
+  }
+  return await response.text();
+}
+
+const decryptChapter = (
+  decryptor: IDecryptorInstance,
+  webpubManifest: WebpubManifest,
+  webpubManifestUrl: string
+) => async (url: string): Promise<string> => {
+  // check that this link is actually encrypted in the manifest
+  const link = getLinkFromManifest(webpubManifest, url, webpubManifestUrl);
+
+  console.log('DECRYPT', link, webpubManifest, url);
+  const encryptionScheme = link?.properties?.encrypted?.scheme;
+
+  // if there is no encryption, just fetch it and return it
+  if (!encryptionScheme) {
+    return fetchResource(url);
+  }
+
   // get the chapter and decrypt it
   const chapterStr = await decryptor.decryptToString(url);
 
