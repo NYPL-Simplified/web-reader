@@ -32,7 +32,7 @@ export default async function createChapterDecryptor(
   } catch (e) {
     console.error(e);
     throw new Error(
-      'Could not import or create an AxisNow Decryptor. You may not have access to the private package.'
+      'Could not import or create an AxisNow Decryptor. You may not have access to the private package, or the loan may have expired.'
     );
   }
 }
