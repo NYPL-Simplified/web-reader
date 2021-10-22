@@ -125,6 +125,12 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     atEnd: false,
   });
 
+  // used to handle async errors thrown in useEffect
+  const [error, setError] = React.useState<Error | undefined>(undefined);
+  if (error) {
+    throw error;
+  }
+
   const { reader, fontSize, location } = state;
 
   // initialize the reader
@@ -154,6 +160,9 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
           // This is needed so that setBookBoundary has the updated "reader" value.
           dispatch({ type: 'LOCATION_CHANGED', location: location });
           return await location;
+        },
+        onError: function (e: Error) {
+          setError(e);
         },
       } as NavigatorAPI,
     }).then((reader) => {

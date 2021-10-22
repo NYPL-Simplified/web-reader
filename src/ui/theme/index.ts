@@ -5,6 +5,7 @@ import nyplTheme from '../nypl-base-theme';
 import { ColorMode } from '../../types';
 import { getColor } from '../../utils/getColor';
 import getButtonStyle from './components/button';
+import Alert from './components/alert';
 import { Dict } from './types';
 
 /**
@@ -16,7 +17,7 @@ import { Dict } from './types';
  *
  * Returns the chakra theme object with an additional property `currentColorMode`
  */
-export function getTheme(colorMode: ColorMode): Dict<unknown> {
+export function getTheme(colorMode: ColorMode = 'day'): Dict<unknown> {
   return extendTheme(
     {
       colors,
@@ -27,6 +28,7 @@ export function getTheme(colorMode: ColorMode): Dict<unknown> {
       components: {
         Button: getButtonStyle(getColor(colorMode)),
         Text,
+        Alert,
       },
       currentColorMode: colorMode,
     },

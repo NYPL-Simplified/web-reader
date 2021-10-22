@@ -30,7 +30,7 @@ const typography: Typography = {
     medium: 500,
     bold: 700,
   },
-  lineHeights: [1, 1.1, 1.25, 1.5],
+  lineHeights: [1, 1.1, 1.25, 1.5, 2, 2.5],
   letterSpacings: {
     tighter: '-0.05em',
     tight: '-0.025em',

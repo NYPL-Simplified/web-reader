@@ -4,6 +4,7 @@ import { ReaderArguments, ReaderReturn, PdfReaderState } from '../types';
 import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
 import useMeasure from './useMeasure';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 
 type PdfState = PdfReaderState & {
   resourceIndex: number;
