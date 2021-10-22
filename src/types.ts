@@ -92,6 +92,7 @@ export type UseWebReaderArguments = {
   pdfWorkerSrc?: string;
   injectables?: Injectable[];
   injectablesFixed?: Injectable[];
+  _useCustomHtmlRenderer?: boolean;
 };
 
 export type ActiveReaderArguments = UseWebReaderArguments & {

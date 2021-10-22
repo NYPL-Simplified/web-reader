@@ -8,8 +8,9 @@ import {
   Route,
   Link,
   useParams,
+  useRouteMatch,
 } from 'react-router-dom';
-import WebReader from '../src';
+import WebReader from './WebReader';
 import {
   ChakraProvider,
   Heading,
@@ -20,6 +21,7 @@ import {
   Input,
   Flex,
   Button,
+  Stack,
 } from '@chakra-ui/react';
 import { getTheme } from '../src/ui/theme';
 import usePublicationSW from '../src/ServiceWorker/client';
@@ -75,55 +77,8 @@ const App = () => {
     <ChakraProvider theme={getTheme('day')}>
       <BrowserRouter>
         <Switch>
-          <Route path="/pdf">
-            <WebReader
-              webpubManifestUrl="/samples/pdf/degruyter.json"
-              proxyUrl={pdfProxyUrl}
-              pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
-            />
-          </Route>
-          <Route path="/pdf-collection">
-            <WebReader
-              webpubManifestUrl="/samples/pdf/muse1007.json"
-              proxyUrl={pdfProxyUrl}
-              pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
-            />
-          </Route>
-          <Route path="/axisnow-encrypted">
-            <AxisNowEncrypted injectables={htmlInjectables} />
-          </Route>
-          <Route path="/axisnow-decrypted">
-            <WebReader
-              injectables={htmlInjectables}
-              webpubManifestUrl={`${origin}/samples/dickens-axisnow/decrypted/manifest.json`}
-            />
-          </Route>
-          <Route path="/moby-epub2">
-            <WebReader
-              injectables={htmlInjectables}
-              webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
-            />
-          </Route>
-          <Route path="/moby-epub3">
-            <WebReader
-              injectables={htmlInjectables}
-              webpubManifestUrl={`${origin}/samples/moby-epub3-exploded/manifest.json`}
-            />
-          </Route>
-          <Route path="/readium-css-docs">
-            <WebReader
-              injectables={htmlInjectables}
-              webpubManifestUrl={`${origin}/samples/ReadiumCSS-docs/manifest.json`}
-            />
-          </Route>
-          <Route path="/streamed-alice-epub">
-            <WebReader
-              injectables={htmlInjectables}
-              webpubManifestUrl="https://alice.dita.digital/manifest.json"
-            />
-          </Route>
-          <Route path="/url/:manifestUrl">
-            <DynamicReader />
+          <Route path="/:version">
+            <Readers />
           </Route>
           <Route exact path="/">
             <HomePage />
@@ -138,6 +93,78 @@ const App = () => {
         </Switch>
       </BrowserRouter>
     </ChakraProvider>
+  );
+};
+
+const Readers = () => {
+  const { path } = useRouteMatch();
+  return (
+    <Switch>
+      <Route path={`${path}/pdf`}>
+        <WebReader
+          webpubManifestUrl="/samples/pdf/degruyter.json"
+          proxyUrl={pdfProxyUrl}
+          pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
+        />
+      </Route>
+      <Route path={`${path}/pdf-collection`}>
+        <WebReader
+          webpubManifestUrl="/samples/pdf/muse1007.json"
+          proxyUrl={pdfProxyUrl}
+          pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
+        />
+      </Route>
+      <Route path={`${path}/axisnow-encrypted`}>
+        <AxisNowEncrypted injectables={htmlInjectables} />
+      </Route>
+      <Route path={`${path}/axisnow-decrypted`}>
+        <WebReader
+          injectables={htmlInjectables}
+          webpubManifestUrl={`${origin}/samples/dickens-axisnow/decrypted/manifest.json`}
+        />
+      </Route>
+      <Route path={`${path}/moby-epub2`}>
+        <WebReader
+          injectables={htmlInjectables}
+          webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
+        />
+      </Route>
+      <Route path={`${path}/moby-epub3`}>
+        <WebReader
+          injectables={htmlInjectables}
+          webpubManifestUrl={`${origin}/samples/moby-epub3-exploded/manifest.json`}
+        />
+      </Route>
+      <Route path={`${path}/readium-css-docs`}>
+        <WebReader
+          injectables={htmlInjectables}
+          webpubManifestUrl={`${origin}/samples/ReadiumCSS-docs/manifest.json`}
+        />
+      </Route>
+      <Route path={`${path}/streamed-alice-epub`}>
+        <WebReader
+          injectables={htmlInjectables}
+          webpubManifestUrl="https://alice.dita.digital/manifest.json"
+        />
+      </Route>
+      <Route path={`${path}/url/:manifestUrl`}>
+        <DynamicReader />
+      </Route>
+      <Route path="*">
+        <h1>404</h1>
+        <p>Page not found.</p>
+      </Route>
+    </Switch>
+  );
+};
+
+const ReaderLink: React.FC<{ to: string }> = ({ to, children }) => {
+  return (
+    <Stack direction="row">
+      <Text>{children}</Text>
+      <Link to={`/v1${to}`}>v1</Link>
+      <Link to={`/v2${to}`}>v2</Link>
+    </Stack>
   );
 };
 
@@ -156,7 +183,7 @@ const HomePage = () => {
           EPUB2 Based Webpubs
           <UnorderedList>
             <ListItem>
-              <Link to="/moby-epub2">Moby Dick </Link>
+              <ReaderLink to="/moby-epub2">Moby Dick </ReaderLink>
             </ListItem>
           </UnorderedList>
         </ListItem>
@@ -164,12 +191,12 @@ const HomePage = () => {
           EPUB3 Based Webpubs
           <UnorderedList>
             <ListItem>
-              <Link to="/moby-epub3">Moby Dick (EPUB 3)</Link>
+              <ReaderLink to="/moby-epub3">Moby Dick (EPUB 3)</ReaderLink>
             </ListItem>
             <ListItem>
-              <Link to="/readium-css-docs">
+              <ReaderLink to="/readium-css-docs">
                 Readium CSS Documentation (as Webpub)
-              </Link>
+              </ReaderLink>
             </ListItem>
           </UnorderedList>
         </ListItem>
@@ -177,9 +204,9 @@ const HomePage = () => {
           Remote hosted WebPubs
           <UnorderedList>
             <ListItem>
-              <Link to="streamed-alice-epub">
+              <ReaderLink to="streamed-alice-epub">
                 Alice's Adventures in Wonderland
-              </Link>
+              </ReaderLink>
               <Text as="i">
                 &nbsp;(streamed from https://alice.dita.digital)
               </Text>
@@ -190,10 +217,10 @@ const HomePage = () => {
           PDFs
           <UnorderedList>
             <ListItem>
-              <Link to="/pdf">Single-PDF Webpub</Link>
+              <ReaderLink to="/pdf">Single-PDF Webpub</ReaderLink>
             </ListItem>
             <ListItem>
-              <Link to="/pdf-collection">Multi-PDF Webpub</Link>
+              <ReaderLink to="/pdf-collection">Multi-PDF Webpub</ReaderLink>
             </ListItem>
           </UnorderedList>
         </ListItem>
@@ -205,14 +232,11 @@ const HomePage = () => {
               value={dynamicHref}
               onChange={handleChange}
               placeholder="Webpub Manifest URL"
+              mr={2}
             />
-            <Button
-              ml={2}
-              as={Link}
-              to={`/url/${encodeURIComponent(dynamicHref)}`}
-            >
-              Go
-            </Button>
+            <ReaderLink to={`/url/${encodeURIComponent(dynamicHref)}`}>
+              Go:
+            </ReaderLink>
           </Flex>
         </ListItem>
       </UnorderedList>
@@ -225,7 +249,9 @@ const HomePage = () => {
       </Text>
       <UnorderedList p={4}>
         <ListItem>
-          <Link to="/axisnow-encrypted">AxisNow Encrypted EPUB</Link>
+          <ReaderLink to="/axisnow-encrypted">
+            AxisNow Encrypted EPUB
+          </ReaderLink>
           <UnorderedList>
             <ListItem>
               <Text fontSize="sm" as="i">
@@ -241,7 +267,9 @@ const HomePage = () => {
           </UnorderedList>
         </ListItem>
         <ListItem>
-          <Link to="/axisnow-decrypted">Decrypted AxisNow EPUB</Link>
+          <ReaderLink to="/axisnow-decrypted">
+            Decrypted AxisNow EPUB
+          </ReaderLink>
           <UnorderedList>
             <ListItem>
               <Text fontSize="sm" as="i">

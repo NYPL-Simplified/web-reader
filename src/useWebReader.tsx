@@ -2,7 +2,8 @@ import React from 'react';
 import { fetchJson } from './utils/fetch';
 import HtmlReaderContent from './HtmlReader/HtmlReaderContent';
 import usePdfReader from './PdfReader';
-import useHtmlReader from './CustomHtmlReader';
+import useHtmlReader from './HtmlReader';
+import useCustomHtmlReader from './CustomHtmlReader';
 import {
   UseWebReaderArguments,
   HTMLActiveReader,
@@ -15,7 +16,6 @@ import {
   WebpubPdfConformsTo,
   ConformsTo,
 } from './WebpubManifestTypes/ConformsTo';
-import LoadingSkeleton from './ui/LoadingSkeleton';
 
 function getReaderType(conformsTo: ConformsTo | null | undefined) {
   switch (conformsTo) {
@@ -48,6 +48,7 @@ export default function useWebReader(
     pdfWorkerSrc,
     injectables,
     injectablesFixed,
+    _useCustomHtmlRenderer,
   } = args;
   const [manifest, setManifest] = React.useState<WebpubManifest | null>(null);
   const readerType = getReaderType(
@@ -61,6 +62,18 @@ export default function useWebReader(
    */
   const htmlReader = useHtmlReader(
     readerType === 'HTML' && manifest
+      ? {
+          webpubManifestUrl,
+          manifest,
+          getContent,
+          injectables,
+          injectablesFixed,
+        }
+      : undefined
+  );
+
+  const customHtmlReader = useCustomHtmlReader(
+    _useCustomHtmlRenderer && readerType === 'HTML' && manifest
       ? {
           webpubManifestUrl,
           manifest,
@@ -91,7 +104,7 @@ export default function useWebReader(
   if (manifest === null) {
     return {
       isLoading: true,
-      content: <LoadingSkeleton />,
+      content: <HtmlReaderContent />,
       manifest: null,
       navigator: null,
       state: null,
@@ -102,6 +115,9 @@ export default function useWebReader(
   /**
    * Return whichever reader is not Inactive (not `null`)
    */
+  if (customHtmlReader) {
+    return customHtmlReader;
+  }
   if (htmlReader) {
     return htmlReader;
   }
