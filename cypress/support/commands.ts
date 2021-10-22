@@ -28,11 +28,18 @@ declare global {
   }
 }
 
+const pagesUsingAliceInWonderlandExample: string[] = [
+  '/streamed-alice-epub',
+  '/test/with-injectables',
+  '/test/no-injectables',
+];
+
 Cypress.Commands.add('loadPage', (pageName) => {
-  const resourceInterceptUrl =
-    pageName === '/streamed-alice-epub'
-      ? 'https://alice.dita.digital/**'
-      : '/samples/**';
+  const resourceInterceptUrl = pagesUsingAliceInWonderlandExample.includes(
+    pageName
+  )
+    ? 'https://alice.dita.digital/**'
+    : '/samples/**';
   cy.intercept(resourceInterceptUrl, { middleware: true }, (req) => {
     req.on('before:response', (res) => {
       // force all API responses to not be cached
@@ -44,13 +51,11 @@ Cypress.Commands.add('loadPage', (pageName) => {
       win.sessionStorage.clear(); // clear storage so that we are always on page one
     },
   });
+  cy.get('#reader-loading').should('be.visible');
   cy.wait('@sample', { timeout: 20000 }).then((interception) => {
     assert.isNotNull(interception?.response?.body, 'API call has data');
   });
-  cy.findByRole('link', { name: 'Return to Homepage' }).should('exist');
-  cy.get(IFRAME_SELECTOR)
-    .its(`0.contentDocument.documentElement`)
-    .should('not.be.empty');
+  cy.get('#reader-loading').should('not.be.visible');
 });
 
 Cypress.Commands.add('getIframeHtml', (selector: string = IFRAME_SELECTOR) => {
