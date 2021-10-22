@@ -13,7 +13,6 @@ const TextStyle = {
 
 function variantHeaderNav() {
   return {
-    pl: 2,
     my: 0,
     letterSpacing: 1,
     fontSize: 0,

@@ -1,0 +1,38 @@
+{
+  "@context": "https://readium.org/webpub-manifest/context.jsonld",
+  "metadata": {
+    "title": "Moby Dick; Or, The Whale",
+    "language": "en",
+    "author": "Herman Melville"
+  },
+  "resources": [
+    {
+      "href": "OEBPS/@export@sunsite@users@gutenbackend@cache@epub@2701@2701-cover.png",
+      "type": "image/png",
+      "id": "item1"
+    },
+    { "href": "OEBPS/pgepub.css", "type": "text/css", "id": "item2" },
+    { "href": "OEBPS/0.css", "type": "text/css", "id": "item3" },
+    { "href": "OEBPS/1.css", "type": "text/css", "id": "item4" },
+    { "href": "OEBPS/toc.ncx", "type": "application/x-dtbncx+xml", "id": "ncx" }
+  ],
+  "readingOrder": [
+    {
+      "href": "OEBPS/non-existent.html",
+      "type": "application/xhtml+xml",
+      "id": "coverpage-wrapper"
+    },
+    {
+      "href": "OEBPS/@public@vhost@g@gutenberg@html@files@2701@2701-h@2701-h-0.htm.html",
+      "type": "application/xhtml+xml",
+      "id": "item5"
+    }
+  ],
+  "toc": [
+    {
+      "title": "MOBY-DICK; or, THE WHALE.",
+      "href": "OEBPS/@public@vhost@g@gutenberg@html@files@2701@2701-h@2701-h-0.htm.html#pgepubid00000"
+    }
+  ],
+  "links": []
+}

@@ -39,12 +39,17 @@ export default function SettingsCard(
         autoFocus={true}
       >
         <PopoverTrigger>
-          <Button onClick={open} border="none">
-            <Icon
-              as={isOpen ? MdOutlineCancel : MdOutlineSettings}
-              w={6}
-              h={6}
-            />
+          <Button
+            onClick={open}
+            border="none"
+            leftIcon={
+              <Icon
+                as={isOpen ? MdOutlineCancel : MdOutlineSettings}
+                w={6}
+                h={6}
+              />
+            }
+          >
             <Text variant="headerNav">Settings</Text>
           </Button>
         </PopoverTrigger>
