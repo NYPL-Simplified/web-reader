@@ -12,6 +12,6 @@ export async function fetchJson<ExpectedResponse extends any = any>(
   try {
     return (await response.json()) as ExpectedResponse;
   } catch (e) {
-    throw new Error(`Network Error: Unparseable JSON file found at ${url}.`);
+    throw new Error(`Network Error: Unparsable JSON file found at ${url}.`);
   }
 }

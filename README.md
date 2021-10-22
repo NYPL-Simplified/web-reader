@@ -2,7 +2,7 @@
 
 This project is a web reader built by NYPL for reading eBooks. It is built using the [Readium Architecture](https://github.com/readium/architecture), and specifically built for Webpubs. Webpub is a spec [defined by the Readium Foundation](https://github.com/readium/webpub-manifest) to provide a common abstraction between many types of web publications. Initially, this project will focus on HTML-based Webpubs and Webpubs that define PDF collections. An HTML-based Webpub can be generated from many types of eBooks, but most commonly ePubs.
 
-The project is build with [esbuild](https://esbuild.github.io/). It uses Typescript, React, Jest and Cypress, and features both a Storybook development environment and an example application under `/example`. The example is deployed here: https://nypl-web-reader.vercel.app.
+The project is built with [esbuild](https://esbuild.github.io/). It uses Typescript, React, Jest and Cypress, and features both a Storybook development environment and an example application under `/example`. The example is deployed here: https://nypl-web-reader.vercel.app.
 
 A big thanks to [R2D2BC](https://github.com/d-i-t-a/R2D2BC) for providing the underlying HTML navigator capabilities.
 
@@ -25,7 +25,7 @@ A big thanks to [R2D2BC](https://github.com/d-i-t-a/R2D2BC) for providing the un
   - [x] Zoom (PDF only)
 - [x] Offline support (prefetch and cache desired content via Service Worker, along with host app shell.
 - [ ] Saving bookmarks / highlights
-- [ ] WAI-ARIA compliant accessibility (_pending accessibility review_)
+- [x] WAI-ARIA compliant accessibility
 - [ ] Integration tested
 
 ## Example
@@ -120,11 +120,46 @@ Finally, to use in a vanilla Javascript app:
 
 ## Styling
 
-We ship a css file with each entrypoint that should be imported. This is necessary
+Most styling is included in the basic UI, but we also ship a few css files that must be included:
+
+1. Both the HTML and the PDF side have css that is necessary to be included for the dependencies we use to render correctly. This is built automatically into `@nypl/web-reader/dist/esm/index.css` and `@nypl/web-reader/dist/cjs/index.css`. Depending which package you are using, you should include one of those files in your bundle.
+1. The HTML Reader can inject `<style>` tags (and other tags) into the reader iframe itself, called an "injectable". This is used to add styles to the html content of the publication. More on this is below.
 
 ## Injectables
 
-The HTML Reader has the ability to inject custom elements into the reader iframe. This is most useful for passing
+The HTML Reader has the ability to inject custom elements into the reader iframe. This is most useful for passing stylesheets and fonts, but other elements can be injected too. It is recommended to pass the `opendyslexic` font and the default Readium stylesheets as injectables to the iframe.
+
+In the below example, we show two different ways to do this.
+
+1. The `cssInjectableUrl` is loaded via webpack loaders. We export the Readium CSS stylesheets compiled under `@nypl/web-reader/dist/injectable-html-styles.css`. This can then be imported via webpack as a url to a static file that is copied to the dist folder. You can then use this url in your injectable config.
+2. The `fontInjectable` uses a plain url to a css file that we host normally on our site. In this case you would be responsible for copying the css file into your source code and making sure it is hosted at some location.
+
+```ts
+import cssInjectableUrl from '!file-loader!extract-loader!css-loader!@nypl/web-reader/dist/injectable-html-styles.css';
+
+const cssInjectable: Injectable = {
+  type: 'style',
+  url: htmlStyles,
+};
+const fontInjectable: Injectable = {
+  type: 'style',
+  url: `${origin}/fonts/opendyslexic/opendyslexic.css`,
+  fontFamily: 'opendyslexic',
+};
+
+const htmlInjectables = [cssInjectable, fontInjectable];
+
+const Reader = () => {
+  return (
+    <WebReader
+      injectables={htmlInjectables}
+      webpubManifestUrl="example/manifest.json"
+    />
+  );
+};
+```
+
+**Note:** Injectables do not apply to pdf reading.
 
 ## Errors
 

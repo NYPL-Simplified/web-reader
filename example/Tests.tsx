@@ -1,17 +1,26 @@
 import * as React from 'react';
 import { Route, useRouteMatch } from 'react-router';
+import { Switch } from 'react-router-dom';
 import WebReader from '../src';
 
 export default function Tests(): JSX.Element {
   const { path } = useRouteMatch();
 
   return (
-    <>
+    <Switch>
       <Route exact path={path}>
         <p>
           This route is for testing purposes. Please render one of the
           sub-routes.
         </p>
+      </Route>
+      <Route path={`${path}/get-content`}>
+        <WebReader
+          webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
+          getContent={async (url) => {
+            return `<p>url: ${url}</p>`;
+          }}
+        />
       </Route>
       <Route path={`${path}/no-injectables`}>
         <WebReader
@@ -34,9 +43,9 @@ export default function Tests(): JSX.Element {
           ]}
         />
       </Route>
-      <Route path={`${path}/unparseable-manifest`}>
+      <Route path={`${path}/unparsable-manifest`}>
         <WebReader
-          webpubManifestUrl={`${origin}/samples/test/unparseable-manifest.json`}
+          webpubManifestUrl={`${origin}/samples/test/unparsable-manifest.json`}
         />
       </Route>
       <Route path={`${path}/missing-resource`}>
@@ -52,6 +61,10 @@ export default function Tests(): JSX.Element {
           ]}
         />
       </Route>
-    </>
+      <Route path={`${path}/*`}>
+        <h1>404</h1>
+        <p>Page not found.</p>
+      </Route>
+    </Switch>
   );
 }

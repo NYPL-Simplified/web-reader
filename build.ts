@@ -117,17 +117,18 @@ async function buildAll() {
     'dist/esm/index.js'
   );
 
-  // compile the CSS to the root
+  // compile the injectable CSS files.
+  // the non-injectable css gets automatically compiled to
+  // dist/ems/index.css and dist/cjs/index.css
   const p3 = buildTs(
     {
       entryPoints: {
-        'pdf-styles': 'src/PdfReader/styles.css',
         'injectable-html-styles': 'src/HtmlReader/injectable-styles.css',
       },
       outdir: 'dist',
       minify: isProduction,
     },
-    'Compiled CSS',
+    'Compiled Injectable CSS',
     'dist/*-styles.css'
   );
 

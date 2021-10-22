@@ -12,14 +12,18 @@ describe('error states', () => {
     });
   });
 
-  it('throws error for unparseable manifest', () => {
-    cy.loadPage('/test/unparseable-manifest');
+  it('throws error for unparsable manifest', () => {
+    /* 
+      we use visit here instead of 'loadPage' because 'loadPage'
+      checks for an iframe that should fail to render in this test 
+    */
+    cy.visit('/test/unparsable-manifest');
 
     cy.findByRole('heading', { name: 'An error occurred' });
     cy.findByRole('alert', {
-      name: `Network Error: Unparseable JSON file found at ${
+      name: `Network Error: Unparsable JSON file found at ${
         Cypress.config().baseUrl
-      }/samples/test/unparseable-manifest.json.`,
+      }/samples/test/unparsable-manifest.json.`,
     });
   });
 
