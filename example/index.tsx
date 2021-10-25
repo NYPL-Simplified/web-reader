@@ -117,9 +117,9 @@ const App = () => {
                 injectables={htmlInjectables}
                 webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
               />
+              <Heading>The page continues...</Heading>
+              <Text as="p">Here is some more content below the reader</Text>
             </Box>
-            <Heading>The page continues...</Heading>
-            <Text as="p">Here is some more content below the reader</Text>
           </Route>
           <Route path="/streamed-alice-epub">
             <WebReader
