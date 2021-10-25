@@ -6,6 +6,8 @@ import {
   PdfNavigator,
   ReaderState,
   WebpubManifest,
+  FontFamily,
+  ColorMode,
 } from '../../src/types';
 import { HtmlSettingsProps } from '../../src/ui/HtmlSettings';
 import { PdfSettingsProps } from '../../src/ui/PdfSettings';
@@ -149,11 +151,11 @@ export const MockReaderState = {} as ReaderState;
 
 const MockComponent = (): React.ReactElement => <>Hello, world.</>;
 
-const MockHtmlReaderState = {
-  colorMode: 'day',
+export const MockHtmlReaderState = {
+  colorMode: 'day' as ColorMode,
   isScrolling: false,
   fontSize: 16,
-  fontFamily: 'sans-serif',
+  fontFamily: 'sans-serif' as FontFamily,
   reader: undefined,
   currentTocUrl: null,
   atStart: true,
@@ -161,10 +163,10 @@ const MockHtmlReaderState = {
 };
 
 const MockPdfReaderState = {
-  colorMode: 'day',
+  colorMode: 'day' as ColorMode,
   isScrolling: false,
   fontSize: 16,
-  fontFamily: 'sans-serif',
+  fontFamily: 'sans-serif' as FontFamily,
   resourceIndex: 0,
   file: null,
   pageNumber: 1,
