@@ -1,8 +1,30 @@
 import * as React from 'react';
 import { render } from '@testing-library/react';
-import { MockHtmlSettingsProps, MockPdfSettingsProps } from './utils/MockData';
+import {
+  MockHtmlNavigator,
+  MockHtmlReaderState,
+  MockHtmlSettingsProps,
+  MockPdfSettingsProps,
+} from './utils/MockData';
 import HtmlSettings from '../src/ui/HtmlSettings';
 import PdfSettings from '../src/ui/PdfSettings';
+
+import { axe } from 'jest-axe';
+import SettingsCard from '../src/ui/SettingsButton';
+
+describe('SettingsCard Accessibility checker', () => {
+  test.only('SettingsCard should have no violation', async () => {
+    const { container } = render(
+      <SettingsCard
+        navigator={MockHtmlNavigator}
+        state={MockHtmlReaderState}
+        type={'HTML'}
+      />
+    );
+
+    expect(await axe(container)).toHaveNoViolations();
+  });
+});
 
 describe('Render settings for different media type', () => {
   test('HTML settings', () => {
