@@ -35,7 +35,7 @@ describe('error states', () => {
   });
 
   it('throws error for missing injectable', () => {
-    cy.loadPage('/test/missing-injectable');
+    cy.visit('/test/missing-injectable');
 
     cy.findByRole('heading', { name: 'An error occurred' });
     cy.findByRole('alert', {
