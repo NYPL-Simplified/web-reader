@@ -1,4 +1,4 @@
-import { ThemeProvider, Flex, Icon } from '@chakra-ui/react';
+import { ThemeProvider, Flex, Icon, Button } from '@chakra-ui/react';
 import * as React from 'react';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import { ReaderManagerArguments, ReaderReturn } from '../types';
@@ -29,30 +29,39 @@ const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
   return (
     <Flex flexDir="column" minHeight="100vh" w="100vw">
       {!props.isLoading && <Header headerLeft={headerLeft} {...props} />}
-      <PageButton
-        onClick={props.navigator?.goBackward}
-        left={0}
-        aria-label="Previous Page"
-      >
-        <Icon as={MdKeyboardArrowLeft} w={6} h={6} />
-      </PageButton>
+
       <Flex
         bg={bgColor}
         // accounting for the prev/next buttons
-        px={{ sm: 10, md: '5vw' }}
+        // px={{ sm: 10, md: '5vw' }}
         flexDir="column"
         alignItems="stretch"
         flex="1 1 100%"
       >
         {children}
       </Flex>
-      <PageButton
-        onClick={props.navigator?.goForward}
-        right={0}
-        aria-label="Next Page"
+
+      <Flex
+        zIndex="docked"
+        position="fixed"
+        bottom="0"
+        justifyContent="space-between"
+        w="100%"
+        bg={bgColor}
+        borderTop="1px solid"
+        borderColor="gray.100"
       >
-        <Icon as={MdKeyboardArrowRight} w={6} h={6} />
-      </PageButton>
+        <PageButton
+          onClick={props.navigator?.goBackward}
+          aria-label="Previous Page"
+        >
+          <Icon as={MdKeyboardArrowLeft} w={6} h={6} />
+          Previous
+        </PageButton>
+        <PageButton onClick={props.navigator?.goForward} aria-label="Next Page">
+          Next <Icon as={MdKeyboardArrowRight} w={6} h={6} />
+        </PageButton>
+      </Flex>
     </Flex>
   );
 };
