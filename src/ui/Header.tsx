@@ -45,7 +45,7 @@ export default function Header(
   const mainBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
 
   return (
-    <HeaderWrapper bgColor={mainBgColor}>
+    <HeaderWrapper bg={mainBgColor}>
       {headerLeft ?? <DefaultHeaderLeft />}
       <HStack ml="auto" spacing={1}>
         <TableOfContent
@@ -74,6 +74,7 @@ export default function Header(
 
 export const HeaderWrapper: React.FC<ComponentProps<typeof Flex>> = ({
   children,
+  ...rest
 }) => {
   return (
     <Flex
@@ -89,6 +90,7 @@ export const HeaderWrapper: React.FC<ComponentProps<typeof Flex>> = ({
       px={8}
       borderBottom="1px solid"
       borderColor="gray.100"
+      {...rest}
     >
       {children}
     </Flex>
