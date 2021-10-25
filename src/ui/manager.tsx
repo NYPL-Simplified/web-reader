@@ -7,6 +7,8 @@ import useColorModeValue from './hooks/useColorModeValue';
 import PageButton from './PageButton';
 import { getTheme } from './theme';
 
+export const FOOTER_HEIGHT = 42;
+
 /**
  * The default Manager UI. This will be broken into individual components
  * that can be imported and used separately or in a customized setup.
@@ -27,13 +29,18 @@ const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
 }) => {
   const bgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
   return (
-    <Flex flexDir="column" minHeight="100vh" w="100vw">
+    <Flex
+      flexDir="column"
+      minHeight="100vh"
+      w="100%"
+      overflowX="hidden"
+      position="relative"
+    >
       {!props.isLoading && <Header headerLeft={headerLeft} {...props} />}
 
       <Flex
         bg={bgColor}
-        // accounting for the prev/next buttons
-        // px={{ sm: 10, md: '5vw' }}
+        pb={`${FOOTER_HEIGHT}px`}
         flexDir="column"
         alignItems="stretch"
         flex="1 1 100%"
@@ -42,8 +49,9 @@ const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
       </Flex>
 
       <Flex
+        height={`${FOOTER_HEIGHT}px`}
         zIndex="docked"
-        position="fixed"
+        position="absolute"
         bottom="0"
         justifyContent="space-between"
         w="100%"

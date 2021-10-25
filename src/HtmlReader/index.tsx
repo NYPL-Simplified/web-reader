@@ -119,7 +119,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       injectablesFixed: injectablesFixed,
       attributes: {
         navHeight: HEADER_HEIGHT,
-        margin: 100,
+        margin: 16,
       },
       rights: {
         /**

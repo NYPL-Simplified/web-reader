@@ -105,13 +105,11 @@ const App = () => {
             />
           </Route>
           <Route path="/embedded-moby-epub2">
-            <Box bg="lavenderblush" py={6} w="100vw">
+            <Box bg="lavenderblush" p={6} w="100vw">
               <Heading>Embedded Example</Heading>
               <Text as="p">
                 This example shows how a web reader looks embedded within a page
-                instead of taking over the full page. It is possible to have
-                content above and below the reader, but the reader currently
-                must be full-width.
+                instead of taking over the full page.
               </Text>
               <WebReader
                 injectables={htmlInjectables}
