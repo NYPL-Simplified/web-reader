@@ -180,7 +180,7 @@ const HomePage = () => {
           Embedded Reader
           <UnorderedList>
             <ListItem>
-              <Link to="/moby-epub2">Embedded Moby Dick </Link>
+              <Link to="/embedded-moby-epub2">Embedded Moby Dick </Link>
             </ListItem>
           </UnorderedList>
         </ListItem>
