@@ -114,6 +114,17 @@ function getInjectableElement(
   }
 }
 
+function injectJS(document: Document) {
+  const script = document.createElement('script');
+  script.setAttribute('type', 'text/javascript');
+  script.textContent = `
+    window.onload = () => {
+      window.top.postMessage({source: 'reader-iframe', type: 'IFRAME_LOADED'})
+    }
+  `;
+  document.head.appendChild(script);
+}
+
 function useResource(
   url: string | null,
   getContent: (url: string) => Promise<string>,
@@ -147,6 +158,9 @@ function useResource(
 
     // set the initial state
     setCss(document.documentElement, state);
+
+    // inject js to communicate with iframe
+    injectJS(document);
   }
 
   const str = document?.documentElement.outerHTML;
@@ -186,7 +200,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
 
   const [state, dispatch] = React.useReducer(htmlReducer, {
     colorMode: 'day',
-    isScrolling: false,
+    isScrolling: true,
     fontSize: 100,
     fontFamily: 'sans-serif',
     currentTocUrl: null,
@@ -196,7 +210,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   });
 
   const [iframe, setIframe] = React.useState<HTMLIFrameElement | null>(null);
-  const { ref, width = 1 } = useResizeObserver<HTMLIFrameElement>();
+  const { ref, width = 0 } = useResizeObserver<HTMLIFrameElement>();
 
   const { currentResourceIndex, fontSize } = state;
   const currentResourceUrl = manifest
@@ -227,6 +241,16 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     if (!html) return;
     setCss(html, state);
   }, [state, iframe, manifest, resource]);
+
+  // add iframe event listeners
+  React.useEffect(() => {
+    window.onmessage = (message) => {
+      if (message.data?.source === 'reader-iframe') {
+        // dispatch it as an action sent from the iframe.
+        // dispatch(message.data)
+      }
+    };
+  }, []);
 
   /**
    * In scroll mode we:
@@ -279,6 +303,20 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       index: 0,
     });
   }, [isAtFirstResource, currentResourceIndex]);
+
+  // on scroll, update the current page
+  React.useEffect(() => {
+    const document = iframe?.contentDocument;
+    if (!document) return;
+
+    console.log('Adding scroll');
+    function handleScroll() {
+      console.log('scroll');
+    }
+
+    document.addEventListener('scroll', handleScroll);
+    // return () => document.removeEventListener('scroll', handleScroll);
+  }, [iframe]);
   /**
    * In scroll mode:
    *    navigates one resource
