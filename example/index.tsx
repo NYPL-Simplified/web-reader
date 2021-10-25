@@ -159,15 +159,7 @@ const HomePage = () => {
           EPUB2 Based Webpubs
           <UnorderedList>
             <ListItem>
-              <Link to="/embedded-moby-epub2">Embedded Moby Dick</Link>
-            </ListItem>
-          </UnorderedList>
-        </ListItem>
-        <ListItem>
-          Embedded example
-          <UnorderedList>
-            <ListItem>
-              <Link to="/moby-epub2">EmbeddedMoby Dick </Link>
+              <Link to="/moby-epub2">Moby Dick</Link>
             </ListItem>
           </UnorderedList>
         </ListItem>
@@ -181,6 +173,14 @@ const HomePage = () => {
               <Text as="i">
                 &nbsp;(streamed from https://alice.dita.digital)
               </Text>
+            </ListItem>
+          </UnorderedList>
+        </ListItem>
+        <ListItem>
+          Embedded Reader
+          <UnorderedList>
+            <ListItem>
+              <Link to="/moby-epub2">Embedded Moby Dick </Link>
             </ListItem>
           </UnorderedList>
         </ListItem>
