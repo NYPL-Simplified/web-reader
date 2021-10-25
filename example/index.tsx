@@ -104,6 +104,23 @@ const App = () => {
               webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
             />
           </Route>
+          <Route path="/embedded-moby-epub2">
+            <Box bg="lavenderblush" py={6} w="100vw">
+              <Heading>Embedded Example</Heading>
+              <Text as="p">
+                This example shows how a web reader looks embedded within a page
+                instead of taking over the full page. It is possible to have
+                content above and below the reader, but the reader currently
+                must be full-width.
+              </Text>
+              <WebReader
+                injectables={htmlInjectables}
+                webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
+              />
+            </Box>
+            <Heading>The page continues...</Heading>
+            <Text as="p">Here is some more content below the reader</Text>
+          </Route>
           <Route path="/streamed-alice-epub">
             <WebReader
               injectables={htmlInjectables}
@@ -144,7 +161,15 @@ const HomePage = () => {
           EPUB2 Based Webpubs
           <UnorderedList>
             <ListItem>
-              <Link to="/moby-epub2">Moby Dick </Link>
+              <Link to="/embedded-moby-epub2">Embedded Moby Dick</Link>
+            </ListItem>
+          </UnorderedList>
+        </ListItem>
+        <ListItem>
+          Embedded example
+          <UnorderedList>
+            <ListItem>
+              <Link to="/moby-epub2">EmbeddedMoby Dick </Link>
             </ListItem>
           </UnorderedList>
         </ListItem>
