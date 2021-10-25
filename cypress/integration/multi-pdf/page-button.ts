@@ -40,6 +40,8 @@ describe('Page button on Multiple PDF page', () => {
       cy.findByRole('button', { name: 'Next Page' }).click();
     }
 
+    cy.wait(1000);
+
     cy.findByRole('button', { name: 'Next Page' }).should('not.exist');
     cy.findByRole('button', { name: 'Previous Page' }).should('exist');
 
