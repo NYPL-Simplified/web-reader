@@ -43,7 +43,7 @@ const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
         pb={`${FOOTER_HEIGHT}px`}
         flexDir="column"
         alignItems="stretch"
-        flex="1 1 100%"
+        flex="1 1 auto"
       >
         {children}
       </Flex>

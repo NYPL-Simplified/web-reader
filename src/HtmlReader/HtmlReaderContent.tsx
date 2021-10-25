@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { HEADER_HEIGHT } from '../ui/constants';
+import { FOOTER_HEIGHT } from '../ui/manager';
 
 const HtmlReaderContent: React.FC = () => {
   return (
@@ -8,7 +9,7 @@ const HtmlReaderContent: React.FC = () => {
         tabIndex={-1}
         id="iframe-wrapper"
         style={{
-          height: `calc(100vh - ${HEADER_HEIGHT}px)`,
+          height: `calc(100vh - ${HEADER_HEIGHT + FOOTER_HEIGHT}px)`,
           overflow: 'hidden',
         }}
       >
