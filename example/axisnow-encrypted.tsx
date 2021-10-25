@@ -42,11 +42,11 @@ const AxisNowEncrypted: React.FC<AxisNowEncryptedProps> = (props) => {
       try {
         const res = await fetch(webpubManifestUrl);
         const manifest = await res.json();
-        const decryptor = await createDecryptor(
-          params,
-          manifest,
-          webpubManifestUrl
-        );
+        const decryptor = await createDecryptor({
+          ...params,
+          webpubManifest: manifest,
+          webpubManifestUrl,
+        });
         setGetContent(() => decryptor);
       } catch (e) {
         setError(e);

@@ -1,5 +1,5 @@
 import * as Comlink from 'comlink';
-import createChapterDecryptor from './decryptAndEmbed';
+import createChapterDecryptor from './createChapterDecryptor';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 declare const self: WorkerGlobalScope;
@@ -8,15 +8,9 @@ declare const self: WorkerGlobalScope;
  * We need to proxy the decryptChapter function, so we need to re-wrap this up.
  */
 const proxiedCreateChapterDecryptor: typeof createChapterDecryptor = async (
-  params,
-  webpubManifest,
-  webpubManifestUrl
+  params
 ) => {
-  const decryptChapter = await createChapterDecryptor(
-    params,
-    webpubManifest,
-    webpubManifestUrl
-  );
+  const decryptChapter = await createChapterDecryptor(params);
   return Comlink.proxy(decryptChapter);
 };
 
