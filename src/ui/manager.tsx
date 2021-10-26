@@ -2,6 +2,7 @@ import { ThemeProvider, Flex, Icon } from '@chakra-ui/react';
 import * as React from 'react';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import { ReaderManagerArguments, ReaderReturn } from '../types';
+import { FOOTER_HEIGHT } from './constants';
 import Header from './Header';
 import useColorModeValue from './hooks/useColorModeValue';
 import PageButton from './PageButton';
