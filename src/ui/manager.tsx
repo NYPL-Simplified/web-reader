@@ -1,4 +1,4 @@
-import { ThemeProvider, Flex, Icon, Button } from '@chakra-ui/react';
+import { ThemeProvider, Flex, Icon } from '@chakra-ui/react';
 import * as React from 'react';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import { ReaderManagerArguments, ReaderReturn } from '../types';
@@ -6,8 +6,6 @@ import Header from './Header';
 import useColorModeValue from './hooks/useColorModeValue';
 import PageButton from './PageButton';
 import { getTheme } from './theme';
-
-export const FOOTER_HEIGHT = 42;
 
 /**
  * The default Manager UI. This will be broken into individual components
