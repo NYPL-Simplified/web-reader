@@ -1,3 +1,6 @@
+import { SCALE_STEP } from '../../support/constants';
+import { pdfZoomTestHelper } from '../../support/pdfZoomTestHelper';
+
 describe('Single PDF display settings', () => {
   beforeEach(() => {
     cy.loadPdf('/pdf');
@@ -22,22 +25,18 @@ describe('Single PDF display settings', () => {
   });
 
   it('should zoom in and out', () => {
-    cy.findByText('Julius H. Schoeps')
-      .should('be.visible')
-      .should('have.css', 'font-size', '8.30561px');
+    cy.get('.react-pdf__Page').then(($elm) => {
+      pdfZoomTestHelper($elm, '1', '1');
+    });
 
     cy.findByRole('button', { name: 'Zoom In' }).click();
-    cy.findByText('Julius H. Schoeps').should(
-      'have.css',
-      'font-size',
-      '9.13617px'
-    );
+    cy.get('.react-pdf__Page').then(($elm) => {
+      pdfZoomTestHelper($elm, `${1 + SCALE_STEP}`, `${1 + SCALE_STEP}`);
+    });
 
     cy.findByRole('button', { name: 'Zoom Out' }).click();
-    cy.findByText('Julius H. Schoeps').should(
-      'have.css',
-      'font-size',
-      '8.30561px'
-    );
+    cy.get('.react-pdf__Page').then(($elm) => {
+      pdfZoomTestHelper($elm, '1', '1');
+    });
   });
 });
