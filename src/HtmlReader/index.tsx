@@ -9,9 +9,13 @@ import {
 } from '../types';
 import HtmlReaderContent from './HtmlReaderContent';
 import { Locator } from '@d-i-t-a/reader';
-import { HEADER_HEIGHT } from '../ui/constants';
 import '../../node_modules/@d-i-t-a/reader/dist/reader.css';
 import { Injectable } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
+import {
+  DEFAULT_HEIGHT,
+  DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
+  HEADER_HEIGHT,
+} from '../constants';
 
 type HtmlState = HtmlReaderState & {
   reader: D2Reader | undefined;
@@ -88,6 +92,8 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     getContent,
     injectables = defaultInjectables,
     injectablesFixed = defaultInjectablesFixed,
+    height = DEFAULT_HEIGHT,
+    growWhenScrolling = DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
   } = args ?? {};
 
   const [state, dispatch] = React.useReducer(htmlReducer, {
@@ -234,7 +240,13 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     return {
       type: null,
       isLoading: true,
-      content: <HtmlReaderContent />,
+      content: (
+        <HtmlReaderContent
+          height={height}
+          isScrolling={state.isScrolling}
+          growsWhenScrolling={growWhenScrolling}
+        />
+      ),
       navigator: null,
       manifest: null,
       state: null,
@@ -245,7 +257,13 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   return {
     type: 'HTML',
     isLoading: false,
-    content: <HtmlReaderContent />,
+    content: (
+      <HtmlReaderContent
+        height={height}
+        isScrolling={state.isScrolling}
+        growsWhenScrolling={growWhenScrolling}
+      />
+    ),
     state,
     manifest,
     navigator: {

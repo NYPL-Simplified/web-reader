@@ -1,15 +1,25 @@
 import * as React from 'react';
-import { HEADER_HEIGHT } from '../ui/constants';
-import { FOOTER_HEIGHT } from '../ui/manager';
 
-const HtmlReaderContent: React.FC = () => {
+const HtmlReaderContent: React.FC<{
+  height: string;
+  isScrolling: boolean;
+  growsWhenScrolling: boolean;
+}> = ({ height, isScrolling, growsWhenScrolling }) => {
+  const shouldGrow = isScrolling && growsWhenScrolling;
   return (
     <div id="D2Reader-Container">
       <main
         tabIndex={-1}
         id="iframe-wrapper"
         style={{
-          height: `calc(100vh - ${HEADER_HEIGHT + FOOTER_HEIGHT}px)`,
+          /**
+           * This determines the height of the iframe.
+           *
+           * If we remove this, then in scrolling mode it simply grows to fit
+           * content. In paginated mode, however, we must have this set because
+           * we have to decide how big the content should be.
+           */
+          height: shouldGrow ? 'initial' : height,
           overflow: 'hidden',
         }}
       >

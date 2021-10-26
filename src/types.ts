@@ -92,6 +92,8 @@ export type UseWebReaderArguments = {
   pdfWorkerSrc?: string;
   injectables?: Injectable[];
   injectablesFixed?: Injectable[];
+  height?: string; // CSS string (ie: "800px" or `calc(100vh-${CHROME_HEIGHT}`)
+  growWhenScrolling?: boolean; // should the reader grow to fit content in scroll mode (ie. disregard the height)?
 };
 
 export type ActiveReaderArguments = UseWebReaderArguments & {

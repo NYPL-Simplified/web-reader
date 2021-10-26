@@ -1,8 +1,8 @@
 import { ThemeProvider, Flex, Icon } from '@chakra-ui/react';
 import * as React from 'react';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
+import { FOOTER_HEIGHT } from '../constants';
 import { ReaderManagerArguments, ReaderReturn } from '../types';
-import { FOOTER_HEIGHT } from './constants';
 import Header from './Header';
 import useColorModeValue from './hooks/useColorModeValue';
 import PageButton from './PageButton';
@@ -28,13 +28,7 @@ const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
 }) => {
   const bgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
   return (
-    <Flex
-      flexDir="column"
-      minHeight="100vh"
-      w="100%"
-      overflowX="hidden"
-      position="relative"
-    >
+    <Flex flexDir="column" w="100%" overflowX="hidden" position="relative">
       {!props.isLoading && <Header headerLeft={headerLeft} {...props} />}
 
       <Flex

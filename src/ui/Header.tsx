@@ -7,9 +7,9 @@ import useColorModeValue from '../ui/hooks/useColorModeValue';
 import SettingsCard from './SettingsButton';
 import Button from './Button';
 import TableOfContent from './TableOfContent';
-import { HEADER_HEIGHT } from './constants';
 import { MdOutlineFullscreenExit, MdOutlineFullscreen } from 'react-icons/md';
 import useFullscreen from './hooks/useFullScreen';
+import { HEADER_HEIGHT } from '../constants';
 
 export const DefaultHeaderLeft = (): React.ReactElement => {
   const linkColor = useColorModeValue('gray.700', 'gray.100', 'gray.700');

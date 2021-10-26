@@ -14,16 +14,21 @@ import { Navigator, ReaderState, WebpubManifest } from '../types';
 import Button from './Button';
 import useColorModeValue from './hooks/useColorModeValue';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
-import { HEADER_HEIGHT } from './constants';
 
 export default function TableOfContent({
   navigator,
   manifest,
   readerState,
+  height,
+  growWhenScrolling,
+  isScrolling,
 }: {
   navigator: Navigator;
   manifest: WebpubManifest;
   readerState: ReaderState;
+  height: string;
+  isScrolling: boolean;
+  growWhenScrolling: boolean;
 }): React.ReactElement {
   const [isOpen, setIsOpen] = useState(false);
   const tocLinkHandler: React.MouseEventHandler<HTMLButtonElement> = (evt) => {
@@ -45,6 +50,9 @@ export default function TableOfContent({
     return getLinkHref(link.children[0]);
   };
 
+  const shouldGrow = isScrolling && growWhenScrolling;
+  const finalHeight = shouldGrow ? 'initial' : height;
+
   return (
     <Menu
       onOpen={() => setIsOpen(true)}
@@ -63,7 +71,7 @@ export default function TableOfContent({
         <Portal>
           <MenuList
             width="100vw"
-            height={`calc(100vh - ${HEADER_HEIGHT}px)`}
+            height={finalHeight}
             background={tocBgColor}
             borderRadius="none"
             borderColor={tocBgColor}
