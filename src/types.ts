@@ -31,6 +31,14 @@ export type HtmlNavigator = Navigator & {
   setColorMode: (mode: ColorMode) => Promise<void>;
 };
 
+// Optional settings to initialize the reader with
+export type ReaderSettings = {
+  colorMode?: ColorMode;
+  isScrolling?: boolean;
+  fontSize?: number;
+  fontFamily?: FontFamily;
+};
+
 export type ReaderState = {
   colorMode: ColorMode;
   isScrolling: boolean;
@@ -92,6 +100,7 @@ export type UseWebReaderArguments = {
   pdfWorkerSrc?: string;
   injectables?: Injectable[];
   injectablesFixed?: Injectable[];
+  readerSettings?: ReaderSettings;
 };
 
 export type ActiveReaderArguments = UseWebReaderArguments & {

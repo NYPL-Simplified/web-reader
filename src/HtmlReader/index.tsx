@@ -6,12 +6,15 @@ import {
   ReaderReturn,
   ReaderArguments,
   FontFamily,
+  ReaderSettings,
+  ReaderState,
 } from '../types';
 import HtmlReaderContent from './HtmlReaderContent';
 import { Locator } from '@d-i-t-a/reader';
 import { HEADER_HEIGHT } from '../ui/constants';
 import '../../node_modules/@d-i-t-a/reader/dist/reader.css';
 import { Injectable } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
+import { UserSettings } from '@d-i-t-a/reader/dist/types/model/user-settings/UserSettings';
 
 type HtmlState = HtmlReaderState & {
   reader: D2Reader | undefined;
@@ -37,6 +40,7 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
     case 'SET_READER': {
       // set all the initial settings taken from the reader
       const settings = action.reader.currentSettings();
+      console.log('state', settings);
       return {
         reader: action.reader,
         isScrolling: settings.verticalScroll,
@@ -80,6 +84,15 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
 }
 
 const FONT_SIZE_STEP = 4;
+// Using ReaderState here as type because ReaderSettings seems to run into
+// Type Errors with the Reducer
+const defaultReaderSettings: ReaderState = {
+  colorMode: 'day',
+  isScrolling: false,
+  fontSize: 16,
+  fontFamily: 'sans-serif',
+  currentTocUrl: null,
+};
 
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const {
@@ -88,15 +101,12 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     getContent,
     injectables = defaultInjectables,
     injectablesFixed = defaultInjectablesFixed,
+    readerSettings,
   } = args ?? {};
 
   const [state, dispatch] = React.useReducer(htmlReducer, {
-    colorMode: 'day',
-    isScrolling: false,
-    fontSize: 16,
-    fontFamily: 'sans-serif',
+    ...defaultReaderSettings,
     reader: undefined,
-    currentTocUrl: null,
   });
 
   // used to handle async errors thrown in useEffect
@@ -113,6 +123,16 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     if (!webpubManifestUrl) return;
     const url = new URL(webpubManifestUrl);
 
+    const initialReaderSettings: ReaderState = {
+      colorMode: readerSettings?.colorMode ?? defaultReaderSettings.colorMode,
+      isScrolling:
+        readerSettings?.isScrolling ?? defaultReaderSettings.isScrolling,
+      fontSize: readerSettings?.fontSize ?? defaultReaderSettings.fontSize,
+      fontFamily:
+        readerSettings?.fontFamily ?? defaultReaderSettings.fontFamily,
+      currentTocUrl: null,
+    };
+
     D2Reader.build({
       url,
       injectables: injectables,
@@ -128,6 +148,12 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
          */
         autoGeneratePositions: false,
       },
+      userSettings: {
+        appearance: getD2Appearance(initialReaderSettings.colorMode),
+        fontSize: initialReaderSettings.fontSize,
+        fontFamily: initialReaderSettings.fontFamily,
+        verticalScroll: initialReaderSettings.isScrolling,
+      },
       api: {
         getContent: getContent as any, //TODO: fix this casting,
         onError: function (e: Error) {
@@ -137,7 +163,13 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     }).then((reader) => {
       dispatch({ type: 'SET_READER', reader });
     });
-  }, [webpubManifestUrl, getContent, injectables, injectablesFixed]);
+  }, [
+    webpubManifestUrl,
+    getContent,
+    injectables,
+    injectablesFixed,
+    readerSettings,
+  ]);
 
   // prev and next page functions
   const goForward = React.useCallback(async () => {
@@ -178,6 +210,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const setScroll = React.useCallback(
     async (val: 'scrolling' | 'paginated') => {
       const isScrolling = val === 'scrolling';
+      console.log('isScrolling', isScrolling);
       await reader?.scroll(isScrolling);
       dispatch({ type: 'SET_SCROLL', isScrolling });
     },
@@ -272,6 +305,20 @@ function getColorMode(d2Mode: string): ColorMode {
     default:
       console.error('COLOR MODE SLIPPED THROUG', d2Mode);
       return 'day';
+  }
+}
+
+function getD2Appearance(colorMode: string): string {
+  switch (colorMode) {
+    case 'day':
+      return 'readium-default-on';
+    case 'nightn':
+      return 'readium-night-on';
+    case 'sepia':
+      return 'readium-sepia-on';
+    default:
+      console.error('COLOR MODE SLIPPED THROUG', colorMode);
+      return 'readium-default-on';
   }
 }
 
