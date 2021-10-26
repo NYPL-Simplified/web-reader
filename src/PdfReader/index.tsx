@@ -5,6 +5,8 @@ import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
 import useMeasure from './useMeasure';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+import { HEADER_HEIGHT } from '../ui/constants';
+import { FOOTER_HEIGHT } from '../ui/manager';
 
 type PdfState = PdfReaderState & {
   resourceIndex: number;
@@ -38,7 +40,9 @@ type PdfReaderAction =
       height: number | undefined;
       width: number | undefined;
     };
+
 const IFRAME_WRAPPER_ID = 'iframe-wrapper';
+export const SCALE_STEP = 0.1;
 
 function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
   switch (action.type) {
@@ -319,14 +323,14 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   const zoomIn = React.useCallback(async () => {
     dispatch({
       type: 'SET_SCALE',
-      scale: state.scale + 0.1,
+      scale: state.scale + SCALE_STEP,
     });
   }, [state.scale]);
 
   const zoomOut = React.useCallback(async () => {
     dispatch({
       type: 'SET_SCALE',
-      scale: state.scale - 0.1,
+      scale: state.scale - SCALE_STEP,
     });
   }, [state.scale]);
 
@@ -424,6 +428,16 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         id={IFRAME_WRAPPER_ID}
         ref={containerRef}
       >
+        {/* FIXME: POC, update this with more react proach*/}
+        <style>
+          {`
+            .react-pdf__Document {
+              height: calc(100vh - ${HEADER_HEIGHT + FOOTER_HEIGHT}px);
+              overflow-x: hidden;
+              overflow-y: auto;
+            }
+          `}
+        </style>
         <Document file={state.resource} onLoadSuccess={onDocumentLoadSuccess}>
           {isParsed && state.numPages && (
             <>
