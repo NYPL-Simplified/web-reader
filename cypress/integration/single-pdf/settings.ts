@@ -24,20 +24,20 @@ describe('Single PDF display settings', () => {
   it('should zoom in and out', () => {
     cy.findByText('Julius H. Schoeps')
       .should('be.visible')
-      .should('have.css', 'font-size', '8.9176px');
+      .should('have.css', 'font-size', '8.30561px');
 
     cy.findByRole('button', { name: 'Zoom In' }).click();
     cy.findByText('Julius H. Schoeps').should(
       'have.css',
       'font-size',
-      '9.80936px'
+      '9.13617px'
     );
 
     cy.findByRole('button', { name: 'Zoom Out' }).click();
     cy.findByText('Julius H. Schoeps').should(
       'have.css',
       'font-size',
-      '8.9176px'
+      '8.30561px'
     );
   });
 });

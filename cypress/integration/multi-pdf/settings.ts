@@ -24,20 +24,24 @@ describe('Multi PDF display settings', () => {
   it('should zoom in and out', () => {
     cy.findByText('Anthropology without Informants')
       .should('be.visible')
-      .should('have.css', 'font-size', '11.5909px');
+      .should('have.css', 'font-size', '10.7955px');
+
+    cy.findByText('Anthropology without Informants')
+      .should('be.visible')
+      .should('have.css', 'font-size', '10.7955px');
 
     cy.findByRole('button', { name: 'Zoom In' }).click();
     cy.findByText('Anthropology without Informants').should(
       'have.css',
       'font-size',
-      '12.75px'
+      '11.875px'
     );
 
     cy.findByRole('button', { name: 'Zoom Out' }).click();
     cy.findByText('Anthropology without Informants').should(
       'have.css',
       'font-size',
-      '11.5909px'
+      '10.7955px'
     );
   });
 });

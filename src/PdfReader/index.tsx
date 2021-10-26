@@ -428,7 +428,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         id={IFRAME_WRAPPER_ID}
         ref={containerRef}
       >
-        {/* FIXME: POC, update this with more react proach*/}
+        {/* FIXME: POC, update this with more a react proach. chakra.factory throws memory leak error.*/}
         <style>
           {`
             .react-pdf__Document {

@@ -23,7 +23,7 @@ describe('Multi PDF navigation', () => {
     cy.findByRole('radio', { name: 'Scrolling' }).should('be.checked');
     cy.findByRole('button', { name: 'Table of Contents' }).click();
     cy.findByRole('menuitem', { name: 'Foreword' }).click();
-    cy.wait(5000);
+    cy.wait('@pdf');
     cy.findByText('Anthropology without Informants', { timeout: 10000 }).should(
       'be.visible'
     );
