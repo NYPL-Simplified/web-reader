@@ -70,7 +70,7 @@ export default function TableOfContent({
       {isOpen && manifest?.toc && (
         <Portal>
           <MenuList
-            width="100vw"
+            width="100%"
             height={finalHeight}
             background={tocBgColor}
             borderRadius="none"
