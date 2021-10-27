@@ -21,23 +21,33 @@ describe('Single PDF display settings', () => {
     cy.findByRole('button', { name: 'Increase font size' }).should('not.exist');
   });
 
-  it.only('should zoom in and out', () => {
-    cy.findByText('Assessing climate change')
-      .should('be.visible')
-      .should('have.css', 'font-size', '25.4428px');
+  it('should zoom in and out', () => {
+    cy.get('div[class="react-pdf__Page__textContent"]')
+      .find('span')
+      .should(
+        'have.text',
+        'ECONOMICS – WORKING PAPERS 2021/03Assessing climate change  risks at the country level: the EIB scoring model'
+      )
+      .should('have.css', 'font-size', '8.72323px');
 
     cy.findByRole('button', { name: 'Zoom In' }).click();
-    cy.findByText('Assessing climate change').should(
-      'have.css',
-      'font-size',
-      '27.987px'
-    );
+
+    cy.get('div[class="react-pdf__Page__textContent"]')
+      .find('span')
+      .should(
+        'have.text',
+        'ECONOMICS – WORKING PAPERS 2021/03Assessing climate change  risks at the country level: the EIB scoring model'
+      )
+      .should('have.css', 'font-size', '9.59555px');
 
     cy.findByRole('button', { name: 'Zoom Out' }).click();
-    cy.findByText('Assessing climate change').should(
-      'have.css',
-      'font-size',
-      '8.9176px'
-    );
+
+    cy.get('div[class="react-pdf__Page__textContent"]')
+      .find('span')
+      .should(
+        'have.text',
+        'ECONOMICS – WORKING PAPERS 2021/03Assessing climate change  risks at the country level: the EIB scoring model'
+      )
+      .should('have.css', 'font-size', '8.72323px');
   });
 });
