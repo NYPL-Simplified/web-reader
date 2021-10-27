@@ -10,6 +10,6 @@ describe('Renders single PDF', () => {
     cy.findByRole('button', { name: 'Next Page' }).should('exist');
     cy.findByRole('button', { name: 'Previous Page' }).should('not.exist');
 
-    cy.findByText('Julius H. Schoeps').should('be.visible');
+    cy.findByText('Assessing climate change').should('be.visible');
   });
 });
