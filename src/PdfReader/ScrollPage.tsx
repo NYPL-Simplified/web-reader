@@ -5,28 +5,28 @@ import { useInView } from 'react-intersection-observer';
 type ScrollPageProps = {
   pageNumber: number;
   width: number | undefined;
-  height: number | undefined;
   scale: number;
+  onLoadSuccess: (page: any) => void;
+  placeholderHeight: number;
+  placeholderWidth: number;
 };
 
 type PlaceholderProps = {
+  height: number;
   width: number | undefined;
-  scale: number | undefined;
 };
 
-const Placeholder: FC<PlaceholderProps> = ({ height, width, scale }) => {
-  if (height && width && scale) {
-    // const currentWidth = scale * width;
-    // const currentHeight = scale * height;
-    return <div style={{ width: width, height: height }} />;
-  }
+const Placeholder: FC<PlaceholderProps> = ({ width, height }) => {
+  return <div style={{ width: width, height: height }} />;
 };
 
 const ScrollPage: FC<ScrollPageProps> = ({
   scale,
   pageNumber,
   width,
-  height,
+  onLoadSuccess,
+  placeholderHeight,
+  placeholderWidth,
 }) => {
   const { ref, inView } = useInView({
     threshold: 0,
@@ -35,9 +35,14 @@ const ScrollPage: FC<ScrollPageProps> = ({
   return (
     <div ref={ref}>
       {inView ? (
-        <ChakraPage pageNumber={pageNumber} scale={scale} width={width} />
+        <ChakraPage
+          pageNumber={pageNumber}
+          scale={scale}
+          width={width}
+          onLoadSuccess={onLoadSuccess}
+        />
       ) : (
-        <Placeholder width={width} scale={scale} height={height} />
+        <Placeholder width={placeholderWidth} height={placeholderHeight} />
       )}
     </div>
   );

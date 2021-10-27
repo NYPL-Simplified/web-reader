@@ -1,12 +1,10 @@
 import { Document, PageProps, pdfjs } from 'react-pdf';
-// import { PDFDocumentProxy } from 'pdfjs-dist';
 import * as React from 'react';
 import { ReaderArguments, ReaderReturn, PdfReaderState } from '../types';
 import { Flex } from '@chakra-ui/react';
 import useMeasure from './useMeasure';
 import ChakraPage from './ChakraPage';
 import ScrollPage from './ScrollPage';
-// import PageWithObserver from './PageWithObserver';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 
@@ -42,10 +40,6 @@ type PdfReaderAction =
       height: number | undefined;
       width: number | undefined;
     };
-
-interface VisiblePages {
-  [index: string]: boolean;
-}
 
 const IFRAME_WRAPPER_ID = 'iframe-wrapper';
 
@@ -180,14 +174,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   const isFetching = !state.resource;
   const isParsed = typeof state.numPages === 'number';
   const [containerRef, containerSize] = useMeasure<HTMLDivElement>();
-  // const [visiblePages, setVisiblePages] = React.useState<VisiblePages>({});
-
-  // const setPageVisibility = React.useCallback((pageNumber, isIntersecting) => {
-  //   setVisiblePages((prevVisiblePages) => ({
-  //     ...prevVisiblePages,
-  //     [pageNumber]: isIntersecting
-  //   }));
-  // }, []);
 
   /**
    * Load the current resource and set it in state,
@@ -385,43 +371,10 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     };
   }
 
-  const getPageDimensions = (page: {
-    getViewport: (arg0: { scale: number }) => { height: number; width: number };
-  }) => {
-    const viewport = page.getViewport({ scale: 1 });
-    const viewportRatio = viewport.width / viewport.height;
-    let pageDimensions;
-    // the Page component takes either a width or height prop. If the page is
-    // wider than it is high, we want to scale the page using it's width,
-    // otherwise use it's height
-    if (viewport.width > viewport.height) {
-      pageDimensions = {
-        width: viewport.width ? viewport.width * 0.6 : null,
-        height: null,
-      };
-    } else {
-      pageDimensions = {
-        width: null,
-        height: viewport.height ? viewport.height * 0.7 : null,
-      };
-    }
-    return { viewportRatio, pageDimensions };
-  };
-
-  const onDocumentLoadSuccess = (pdf) => {
-    // Get the dimensions for the first page
-    const page = pdf.getPage(0);
-    // const pdf2 = page.getViewport();
-    console.log('PAGE', page);
-    // const { viewportRatio, pageDimensions } = getPageDimensions(page);
-    // console.log('???', viewportRatio, pageDimensions);
-
-    // setViewportRatio(viewportRatio);
-    // setPageDimensions(pageDimensions);
-
+  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     dispatch({
       type: 'PDF_PARSED',
-      numPages: pdf.numPages,
+      numPages: numPages,
     });
   };
 
@@ -465,20 +418,14 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
             <>
               {state.isScrolling &&
                 Array.from(new Array(state.numPages), (_, index) => (
-                  // <PageWithObserver
-                  //   key={`page_${index + 1}`}
-                  //   width={containerSize?.width}
-                  //   scale={state.scale}
-                  //   pageNumber={index + 1}
-                  //   setPageVisibility={setPageVisibility}
-                  //   visible={visiblePages[index]}
-                  // />
                   <ScrollPage
                     key={`page_${index + 1}`}
                     width={containerSize?.width}
-                    height={state.pageHeight}
+                    placeholderHeight={state.pdfHeight}
+                    placeholderWidth={state.pdfWidth}
                     scale={state.scale}
                     pageNumber={index + 1}
+                    onLoadSuccess={onRenderSuccess}
                   />
                 ))}
               {!state.isScrolling && (
