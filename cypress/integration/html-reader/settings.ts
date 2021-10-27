@@ -21,7 +21,7 @@ describe('display settings', () => {
     cy.findByRole('button', { name: 'Settings' }).click();
 
     cy.findByText('Serif').click();
-    cy.findByText('Paginated').click();
+    cy.findByText('Scrolling').click();
     cy.findByText('Sepia').click();
 
     cy.getIframeHtml(IFRAME_SELECTOR)
