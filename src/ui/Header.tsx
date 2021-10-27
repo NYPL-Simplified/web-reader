@@ -73,6 +73,7 @@ export default function Header(
 }
 
 export const HeaderWrapper: React.FC<ComponentProps<typeof Flex>> = ({
+  bgColor,
   children,
 }) => {
   return (
@@ -89,7 +90,7 @@ export const HeaderWrapper: React.FC<ComponentProps<typeof Flex>> = ({
       px={8}
       borderBottom="1px solid"
       borderColor="gray.100"
-      backgroundColor="ui.white"
+      backgroundColor={bgColor}
     >
       {children}
     </Flex>
