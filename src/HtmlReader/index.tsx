@@ -16,6 +16,7 @@ import {
   Injectable,
   NavigatorAPI,
 } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
+import debounce from 'debounce';
 
 type HtmlState = HtmlReaderState & {
   reader: D2Reader | undefined;
@@ -167,6 +168,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       } as NavigatorAPI,
     }).then((reader) => {
       dispatch({ type: 'SET_READER', reader });
+      enableResizeEvent(reader, dispatch);
     });
   }, [webpubManifestUrl, getContent, injectables, injectablesFixed]);
 
@@ -347,4 +349,16 @@ async function setBookBoundary(
     atStart: isResourceStart,
     atEnd: isResourceEnd,
   });
+}
+
+function enableResizeEvent(
+  reader: D2Reader,
+  dispatch: React.Dispatch<HtmlAction>
+) {
+  const resizeHandler = () => {
+    setBookBoundary(reader, dispatch);
+  };
+
+  const debouncedResizeHandler = debounce(resizeHandler, 500);
+  window.addEventListener('resize', debouncedResizeHandler);
 }

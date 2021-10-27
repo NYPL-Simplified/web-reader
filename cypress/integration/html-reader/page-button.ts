@@ -71,4 +71,44 @@ describe('PageButton visibility on useHtmlReader', () => {
     cy.findByRole('button', { name: 'Next Page' }).should('exist');
     cy.findByRole('button', { name: 'Previous Page' }).should('exist');
   });
+
+  it('Should toggle the page buttons when the screen is resized', () => {
+    cy.intercept('GET', 'https://alice.dita.digital/text/uncopyright.xhtml').as(
+      'uncopyright'
+    );
+
+    // The load time for Scrolling mode is extreamly unpredictable, better to use paginated
+    cy.findByRole('button', { name: 'Settings' }).click();
+    cy.findByText('Paginated').click();
+
+    cy.findByRole('button', { name: 'Table of Contents' }).click();
+    cy.log('move to last chapter');
+    cy.findByRole('menuitem', { name: /(.*copy.*right$)/ }).click();
+
+    cy.wait('@uncopyright', { timeout: 10000 });
+
+    cy.wait(1000);
+
+    cy.getIframeBody(IFRAME_SELECTOR).find('.copyright-page').should('exist');
+
+    cy.findByRole('button', { name: 'Next Page' }).click();
+    cy.findByRole('button', { name: 'Next Page' }).should('exist');
+
+    cy.wait(1000);
+
+    cy.findByRole('button', { name: 'Next Page' }).should('not.exist');
+    cy.findByRole('button', { name: 'Previous Page' }).should('exist');
+
+    cy.log('Small screen should reveal next button');
+    cy.viewport(100, 100);
+
+    cy.findByRole('button', { name: 'Next Page' }).should('exist');
+    cy.findByRole('button', { name: 'Previous Page' }).should('exist');
+
+    cy.log('switch back to default viewport');
+    cy.viewport(1000, 600);
+
+    cy.findByRole('button', { name: 'Next Page' }).should('not.exist');
+    cy.findByRole('button', { name: 'Previous Page' }).should('exist');
+  });
 });
