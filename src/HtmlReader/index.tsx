@@ -149,13 +149,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     }).then((reader) => {
       dispatch({ type: 'SET_READER', reader });
     });
-  }, [
-    webpubManifestUrl,
-    getContent,
-    injectables,
-    injectablesFixed,
-    readerSettings,
-  ]);
+  }, [webpubManifestUrl, getContent, injectables, injectablesFixed]);
 
   // prev and next page functions
   const goForward = React.useCallback(async () => {

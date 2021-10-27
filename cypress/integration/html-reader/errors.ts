@@ -45,7 +45,7 @@ describe('error states', () => {
 
     cy.visit('/test/missing-injectable');
 
-    cy.wait('@sample');
+    cy.wait('@sample', { timeout: 10000 });
     cy.wait('@missingCss');
 
     cy.findByRole('heading', { name: 'An error occurred' });
