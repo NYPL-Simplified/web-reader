@@ -7,6 +7,7 @@ describe('display settings', () => {
 
   it('should have the default settings', () => {
     cy.get('#reader-loading').should('not.be.visible');
+    cy.wait(3000);
     cy.getIframeHtml(IFRAME_SELECTOR)
       .should('have.attr', 'data-viewer-font', 'publisher')
       .should('have.css', '--USER__appearance', 'readium-default-on')
