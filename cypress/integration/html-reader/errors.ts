@@ -35,10 +35,17 @@ describe('error states', () => {
   });
 
   it('throws error for missing injectable', () => {
+    cy.intercept('/samples/**', { middleware: true }, (req) => {
+      req.on('before:response', (res) => {
+        // force all API responses to not be cached
+        res.headers['cache-control'] = 'no-store';
+      });
+    }).as('sample');
     cy.intercept('http://example.com/doesnt-exist.css').as('missingCss');
 
     cy.visit('/test/missing-injectable');
 
+    cy.wait('@sample');
     cy.wait('@missingCss');
 
     cy.findByRole('heading', { name: 'An error occurred' });
