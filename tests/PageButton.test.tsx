@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import PageButton from '../src/ui/PageButton';
+import { axe } from 'jest-axe';
 
 const MockIconComponent = ({
   testid,
@@ -14,32 +15,53 @@ const MockIconComponent = ({
   </span>
 );
 
-test('render PageButton', () => {
-  const previousHandler = jest.fn();
-  const nextHandler = jest.fn();
-  render(
-    <>
-      <PageButton onClick={previousHandler} aria-label="Previous Page">
-        <MockIconComponent testid="previous" />
-      </PageButton>
-      <PageButton onClick={nextHandler} aria-label="Next Page">
-        <MockIconComponent testid="next" />
-      </PageButton>
-    </>
-  );
+describe('PageButton Accessibility checker', () => {
+  test('PageButton should have no violation', async () => {
+    const previousHandler = jest.fn();
+    const nextHandler = jest.fn();
+    const { container } = render(
+      <>
+        <PageButton onClick={previousHandler} aria-label="Previous Page">
+          <MockIconComponent testid="previous" />
+        </PageButton>
+        <PageButton onClick={nextHandler} aria-label="Next Page">
+          <MockIconComponent testid="next" />
+        </PageButton>
+      </>
+    );
 
-  const previousBtn = screen.getByRole('button', { name: 'Previous Page' });
-  const nextBtn = screen.getByRole('button', { name: 'Next Page' });
+    expect(await axe(container)).toHaveNoViolations();
+  });
+});
 
-  expect(previousBtn).toBeInTheDocument();
-  expect(nextBtn).toBeInTheDocument();
+describe('PageButton rendering', () => {
+  test('render PageButton', () => {
+    const previousHandler = jest.fn();
+    const nextHandler = jest.fn();
+    render(
+      <>
+        <PageButton onClick={previousHandler} aria-label="Previous Page">
+          <MockIconComponent testid="previous" />
+        </PageButton>
+        <PageButton onClick={nextHandler} aria-label="Next Page">
+          <MockIconComponent testid="next" />
+        </PageButton>
+      </>
+    );
 
-  expect(screen.getByTestId('previous')).toBeInTheDocument();
-  expect(screen.getByTestId('next')).toBeInTheDocument();
+    const previousBtn = screen.getByRole('button', { name: 'Previous Page' });
+    const nextBtn = screen.getByRole('button', { name: 'Next Page' });
 
-  fireEvent.click(previousBtn);
-  expect(previousHandler).toHaveBeenCalled();
+    expect(previousBtn).toBeInTheDocument();
+    expect(nextBtn).toBeInTheDocument();
 
-  fireEvent.click(nextBtn);
-  expect(nextHandler).toHaveBeenCalled();
+    expect(screen.getByTestId('previous')).toBeInTheDocument();
+    expect(screen.getByTestId('next')).toBeInTheDocument();
+
+    fireEvent.click(previousBtn);
+    expect(previousHandler).toHaveBeenCalled();
+
+    fireEvent.click(nextBtn);
+    expect(nextHandler).toHaveBeenCalled();
+  });
 });
