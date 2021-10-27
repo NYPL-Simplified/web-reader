@@ -6,7 +6,6 @@ import {
   ReaderReturn,
   ReaderArguments,
   FontFamily,
-  ReaderSettings,
   ReaderState,
 } from '../types';
 import HtmlReaderContent from './HtmlReaderContent';
@@ -14,7 +13,6 @@ import { Locator } from '@d-i-t-a/reader';
 import { HEADER_HEIGHT } from '../ui/constants';
 import '../../node_modules/@d-i-t-a/reader/dist/reader.css';
 import { Injectable } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
-import { UserSettings } from '@d-i-t-a/reader/dist/types/model/user-settings/UserSettings';
 
 type HtmlState = HtmlReaderState & {
   reader: D2Reader | undefined;
