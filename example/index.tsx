@@ -77,14 +77,21 @@ const App = () => {
         <Switch>
           <Route path="/pdf">
             <WebReader
-              webpubManifestUrl="/samples/pdf/degruyter.json"
+              webpubManifestUrl="/samples/pdf/single-resource-short.json"
+              proxyUrl={pdfProxyUrl}
+              pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
+            />
+          </Route>
+          <Route path="/pdf-large">
+            <WebReader
+              webpubManifestUrl="/samples/pdf/single-resource-long.json"
               proxyUrl={pdfProxyUrl}
               pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
             />
           </Route>
           <Route path="/pdf-collection">
             <WebReader
-              webpubManifestUrl="/samples/pdf/muse1007.json"
+              webpubManifestUrl="/samples/pdf/multi-resource.json"
               proxyUrl={pdfProxyUrl}
               pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
             />
@@ -166,6 +173,9 @@ const HomePage = () => {
           <UnorderedList>
             <ListItem>
               <Link to="/pdf">Single-PDF Webpub</Link>
+            </ListItem>
+            <ListItem>
+              <Link to="/pdf-large">Single-PDF Webpub (large file)</Link>
             </ListItem>
             <ListItem>
               <Link to="/pdf-collection">Multi-PDF Webpub</Link>
