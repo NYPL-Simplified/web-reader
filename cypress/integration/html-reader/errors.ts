@@ -29,13 +29,13 @@ describe('error states', () => {
 
   // @TODO - Improve this error UX. Requires change in R2D2BC.
   it('throws error for missing resource', () => {
-    cy.loadPage('/test/missing-resource');
+    cy.visit('/test/missing-resource');
 
     cy.getIframeBody().contains('Page not found.', { timeout: 10000 });
   });
 
   it('throws error for missing injectable', () => {
-    cy.loadPage('/test/missing-injectable');
+    cy.visit('/test/missing-injectable');
 
     cy.findByRole('heading', { name: 'An error occurred' });
     cy.findByRole('alert', {
