@@ -89,6 +89,7 @@ export const HeaderWrapper: React.FC<ComponentProps<typeof Flex>> = ({
       px={8}
       borderBottom="1px solid"
       borderColor="gray.100"
+      backgroundColor="ui.white"
     >
       {children}
     </Flex>
