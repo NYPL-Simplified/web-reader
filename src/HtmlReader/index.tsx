@@ -6,13 +6,13 @@ import {
   ReaderReturn,
   ReaderArguments,
   FontFamily,
-  GetContent,
 } from '../types';
 import HtmlReaderContent from './HtmlReaderContent';
 import { Locator } from '@d-i-t-a/reader';
 import { HEADER_HEIGHT } from '../ui/constants';
 import '../../node_modules/@d-i-t-a/reader/dist/reader.css';
 import {
+  GetContent,
   Injectable,
   NavigatorAPI,
 } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
@@ -112,15 +112,16 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     getContent,
     injectables = defaultInjectables,
     injectablesFixed = defaultInjectablesFixed,
+    readerSettings,
   } = args ?? {};
 
   const [state, dispatch] = React.useReducer(htmlReducer, {
     colorMode: 'day',
-    isScrolling: false,
+    isScrolling: readerSettings?.isScrolling ?? false,
     fontSize: 16,
     fontFamily: 'sans-serif',
-    reader: undefined,
     currentTocUrl: null,
+    reader: undefined,
     location: undefined,
     atStart: true,
     atEnd: false,
@@ -140,6 +141,10 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     if (!webpubManifestUrl) return;
     const url = new URL(webpubManifestUrl);
 
+    const userSettings = {
+      verticalScroll: state.isScrolling,
+    };
+
     D2Reader.build({
       url,
       injectables: injectables,
@@ -155,6 +160,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
          */
         autoGeneratePositions: false,
       },
+      userSettings: userSettings,
       api: {
         getContent: getContent as GetContent,
         updateCurrentLocation: async (location: Locator) => {
@@ -170,7 +176,13 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       dispatch({ type: 'SET_READER', reader });
       enableResizeEvent(reader, dispatch);
     });
-  }, [webpubManifestUrl, getContent, injectables, injectablesFixed]);
+  }, [
+    webpubManifestUrl,
+    getContent,
+    injectables,
+    injectablesFixed,
+    state.isScrolling,
+  ]);
 
   // Re-calculate page location on scroll/TOC navigation/page button press
   React.useEffect(() => {

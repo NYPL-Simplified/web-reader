@@ -157,10 +157,10 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     pdfjs.GlobalWorkerOptions.workerSrc = args.pdfWorkerSrc;
   }
 
-  const { webpubManifestUrl, manifest, proxyUrl } = args ?? {};
+  const { webpubManifestUrl, manifest, proxyUrl, readerSettings } = args ?? {};
   const [state, dispatch] = React.useReducer(pdfReducer, {
     colorMode: 'day',
-    isScrolling: false,
+    isScrolling: readerSettings?.isScrolling ?? false,
     fontSize: 16,
     fontFamily: 'sans-serif',
     resourceIndex: 0,
