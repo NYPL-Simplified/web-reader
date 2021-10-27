@@ -5,8 +5,11 @@ import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
 import useMeasure from './useMeasure';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
-import { HEADER_HEIGHT } from '../ui/constants';
-import { FOOTER_HEIGHT } from '../ui/manager';
+import { HEADER_HEIGHT, FOOTER_HEIGHT } from '../constants';
+import {
+  DEFAULT_HEIGHT,
+  DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
+} from '../constants';
 
 type PdfState = PdfReaderState & {
   resourceIndex: number;
@@ -153,7 +156,13 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     pdfjs.GlobalWorkerOptions.workerSrc = args.pdfWorkerSrc;
   }
 
-  const { webpubManifestUrl, manifest, proxyUrl } = args ?? {};
+  const {
+    webpubManifestUrl,
+    manifest,
+    proxyUrl,
+    height = DEFAULT_HEIGHT,
+    growWhenScrolling = DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
+  } = args ?? {};
   const [state, dispatch] = React.useReducer(pdfReducer, {
     colorMode: 'day',
     isScrolling: false,
@@ -372,6 +381,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
           alignItems="center"
           justifyContent="center"
           flex="1 0 auto"
+          height={height}
         >
           PDF is loading
         </Flex>
@@ -413,6 +423,9 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     }
   }
 
+  const shouldGrow = state.isScrolling && growWhenScrolling;
+  const finalHeight = shouldGrow ? 'initial' : height;
+
   // the reader is active but loading a page
   return {
     type: 'PDF',
@@ -427,6 +440,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         tabIndex={-1}
         id={IFRAME_WRAPPER_ID}
         ref={containerRef}
+        height={finalHeight}
       >
         {/* FIXME: POC, update this with more a react proach. chakra.factory throws memory leak error.*/}
         <style>
