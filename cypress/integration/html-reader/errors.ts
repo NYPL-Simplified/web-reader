@@ -35,7 +35,11 @@ describe('error states', () => {
   });
 
   it('throws error for missing injectable', () => {
+    cy.intercept('http://example.com/doesnt-exist.css').as('missingCss');
+
     cy.visit('/test/missing-injectable');
+
+    cy.wait('@missingCss');
 
     cy.findByRole('heading', { name: 'An error occurred' });
     cy.findByRole('alert', {
