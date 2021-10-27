@@ -11,10 +11,10 @@ describe('display settings', () => {
       .should('have.attr', 'data-viewer-font', 'publisher')
       .should('have.css', '--USER__appearance', 'readium-default-on')
       .should('have.css', '--USER__fontFamily', 'Original')
-      .should('have.css', '--USER__scroll', 'readium-scroll-on');
+      .should('have.css', '--USER__scroll', 'readium-scroll-off');
   });
 
-  it('should update the font family to serif, paginated mode, and on sepia theme', () => {
+  it('should update the font family to serif, scroll mode, and on sepia theme', () => {
     cy.log('open the settings menu');
     cy.findByRole('button', { name: 'Settings' }).click();
 
@@ -25,7 +25,7 @@ describe('display settings', () => {
     cy.getIframeHtml(IFRAME_SELECTOR)
       .should('have.attr', 'data-viewer-font', 'serif')
       .should('have.css', '--USER__appearance', 'readium-sepia-on')
-      .should('have.css', '--USER__scroll', 'readium-scroll-off');
+      .should('have.css', '--USER__scroll', 'readium-scroll-on');
   });
 
   it('should trigger font size setting', () => {

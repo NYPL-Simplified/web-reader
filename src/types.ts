@@ -33,10 +33,7 @@ export type HtmlNavigator = Navigator & {
 
 // Optional settings to initialize the reader with
 export type ReaderSettings = {
-  colorMode?: ColorMode;
   isScrolling?: boolean;
-  fontSize?: number;
-  fontFamily?: FontFamily;
 };
 
 export type ReaderState = {

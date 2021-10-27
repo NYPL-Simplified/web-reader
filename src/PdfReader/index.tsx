@@ -1,10 +1,16 @@
 import { Document, Page, PageProps, pdfjs } from 'react-pdf';
 import * as React from 'react';
-import { ReaderArguments, ReaderReturn, PdfReaderState } from '../types';
+import {
+  ColorMode,
+  ReaderArguments,
+  ReaderReturn,
+  WebpubManifest,
+  PdfReaderState,
+} from '../types';
 import { chakra, Flex, shouldForwardProp } from '@chakra-ui/react';
 import useMeasure from './useMeasure';
-import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 
 type PdfState = PdfReaderState & {
   resourceIndex: number;
@@ -21,6 +27,8 @@ type PdfState = PdfReaderState & {
   pageWidth: number | undefined;
 };
 
+pdfjs.GlobalWorkerOptions.workerSrc = `pdf.worker.min.js`;
+
 type PdfReaderAction =
   | {
       type: 'SET_CURRENT_RESOURCE';
@@ -30,6 +38,7 @@ type PdfReaderAction =
   | { type: 'RESOURCE_FETCH_SUCCESS'; resource: { data: Uint8Array } }
   | { type: 'PDF_PARSED'; numPages: number }
   | { type: 'NAVIGATE_PAGE'; pageNum: number }
+  | { type: 'SET_COLOR_MODE'; mode: ColorMode }
   | { type: 'SET_SCALE'; scale: number }
   | { type: 'SET_SCROLL'; isScrolling: boolean }
   | { type: 'PAGE_LOAD_SUCCESS'; height: number; width: number }
@@ -78,6 +87,12 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
       return {
         ...state,
         pageNumber: action.pageNum,
+      };
+
+    case 'SET_COLOR_MODE':
+      return {
+        ...state,
+        colorMode: action.mode,
       };
 
     case 'SET_SCROLL':
@@ -144,16 +159,12 @@ const loadResource = async (resourceUrl: string, proxyUrl?: string) => {
  * @returns
  */
 export default function usePdfReader(args: ReaderArguments): ReaderReturn {
-  // use a passed in src for the pdf worker
-  if (args?.pdfWorkerSrc) {
-    pdfjs.GlobalWorkerOptions.workerSrc = args.pdfWorkerSrc;
-  }
-
-  const { webpubManifestUrl, manifest, proxyUrl, initialReaderSettings } =
-    args ?? {};
+  const { webpubManifestUrl, manifest, proxyUrl, readerSettings } = args ?? {};
   const [state, dispatch] = React.useReducer(pdfReducer, {
-    colorMode: initialReaderSettings?.colorMode || 'day',
-    isScrolling: initialReaderSettings?.isScrolling || true,
+    colorMode: 'day',
+    isScrolling: readerSettings?.isScrolling ?? false,
+    fontSize: 16,
+    fontFamily: 'sans-serif',
     resourceIndex: 0,
     resource: null,
     pageNumber: 1,
@@ -304,6 +315,15 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     state.resourceIndex,
   ]);
 
+  /**
+   * These ones don't make sense in the PDF case I dont think. I'm still
+   * deciding how we will separate the types of Navigators and States, so
+   * for now just pass dummies through.
+   */
+  const setColorMode = React.useCallback(async () => {
+    console.log('unimplemented');
+  }, []);
+
   const setScroll = React.useCallback(
     async (val: 'scrolling' | 'paginated') => {
       const isScrolling = val === 'scrolling';
@@ -315,19 +335,23 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   /**
    * TODO: Change this button into a different "scale" button
    */
-  const zoomIn = React.useCallback(async () => {
+  const increaseFontSize = React.useCallback(async () => {
     dispatch({
       type: 'SET_SCALE',
       scale: state.scale + 0.1,
     });
   }, [state.scale]);
 
-  const zoomOut = React.useCallback(async () => {
+  const decreaseFontSize = React.useCallback(async () => {
     dispatch({
       type: 'SET_SCALE',
       scale: state.scale - 0.1,
     });
   }, [state.scale]);
+
+  const setFontFamily = React.useCallback(async () => {
+    console.log('unimplemented');
+  }, []);
 
   const goToPage = React.useCallback(
     async (href) => {
@@ -376,8 +400,10 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       navigator: {
         goForward,
         goBackward,
-        zoomIn,
-        zoomOut,
+        increaseFontSize,
+        decreaseFontSize,
+        setFontFamily,
+        setColorMode,
         setScroll,
         goToPage,
       },
@@ -455,9 +481,11 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     navigator: {
       goForward,
       goBackward,
+      setColorMode,
       setScroll,
-      zoomIn,
-      zoomOut,
+      increaseFontSize,
+      decreaseFontSize,
+      setFontFamily,
       goToPage,
     },
   };

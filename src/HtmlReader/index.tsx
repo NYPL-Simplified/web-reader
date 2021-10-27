@@ -40,7 +40,6 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
     case 'SET_READER': {
       // set all the initial settings taken from the reader
       const settings = action.reader.currentSettings();
-      console.log('state', settings);
       return {
         reader: action.reader,
         isScrolling: settings.verticalScroll,
@@ -123,14 +122,8 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     if (!webpubManifestUrl) return;
     const url = new URL(webpubManifestUrl);
 
-    const initialReaderSettings: ReaderState = {
-      colorMode: readerSettings?.colorMode ?? defaultReaderSettings.colorMode,
-      isScrolling:
-        readerSettings?.isScrolling ?? defaultReaderSettings.isScrolling,
-      fontSize: readerSettings?.fontSize ?? defaultReaderSettings.fontSize,
-      fontFamily:
-        readerSettings?.fontFamily ?? defaultReaderSettings.fontFamily,
-      currentTocUrl: null,
+    const userSettings = {
+      verticalScroll: defaultReaderSettings.isScrolling,
     };
 
     D2Reader.build({
@@ -148,12 +141,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
          */
         autoGeneratePositions: false,
       },
-      userSettings: {
-        appearance: getD2Appearance(initialReaderSettings.colorMode),
-        fontSize: initialReaderSettings.fontSize,
-        fontFamily: initialReaderSettings.fontFamily,
-        verticalScroll: initialReaderSettings.isScrolling,
-      },
+      userSettings: userSettings,
       api: {
         getContent: getContent as any, //TODO: fix this casting,
         onError: function (e: Error) {
@@ -210,7 +198,6 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const setScroll = React.useCallback(
     async (val: 'scrolling' | 'paginated') => {
       const isScrolling = val === 'scrolling';
-      console.log('isScrolling', isScrolling);
       await reader?.scroll(isScrolling);
       dispatch({ type: 'SET_SCROLL', isScrolling });
     },
@@ -305,20 +292,6 @@ function getColorMode(d2Mode: string): ColorMode {
     default:
       console.error('COLOR MODE SLIPPED THROUG', d2Mode);
       return 'day';
-  }
-}
-
-function getD2Appearance(colorMode: string): string {
-  switch (colorMode) {
-    case 'day':
-      return 'readium-default-on';
-    case 'nightn':
-      return 'readium-night-on';
-    case 'sepia':
-      return 'readium-sepia-on';
-    default:
-      console.error('COLOR MODE SLIPPED THROUG', colorMode);
-      return 'readium-default-on';
   }
 }
 
