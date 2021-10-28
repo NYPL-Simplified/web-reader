@@ -42,12 +42,14 @@ describe('Multi PDF navigation', () => {
     cy.findByText('Anthropology without Informants').should('be.visible');
   });
 
-  it('should switch to scrolling mode', () => {
+  it.only('should switch to scrolling mode', () => {
     cy.findByText('Anthropology without Informants').should('be.visible');
     cy.findByRole('button', { name: 'Settings' }).click();
     cy.findByText('Scrolling').click();
     cy.findByRole('button', { name: 'Next Page' }).click();
+    cy.wait('@pdf');
+    cy.get('div[data-page-number="5"]', { timeout: 6000 }).scrollIntoView();
     cy.wait(5000);
-    cy.get('div[data-page-number="5"]').should('exist');
+    cy.get('div[data-page-number="5"]').find('canvas').should('exist');
   });
 });

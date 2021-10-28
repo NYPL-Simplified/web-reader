@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import ChakraPage from './ChakraPage';
 import { useInView } from 'react-intersection-observer';
 
 type ScrollPageProps = {
-  pageNumber: number;
+  index: number;
   width: number | undefined;
   scale: number;
   onLoadSuccess: (page: any) => void;
@@ -14,15 +14,23 @@ type ScrollPageProps = {
 type PlaceholderProps = {
   height: number;
   width: number | undefined;
+  pageNumber: number;
 };
 
-const Placeholder: FC<PlaceholderProps> = ({ width, height }) => {
-  return <div style={{ width: width, height: height }} />;
+type PagesToRender = boolean;
+
+const Placeholder: FC<PlaceholderProps> = ({ width, height, pageNumber }) => {
+  return (
+    <div
+      data-page-number={pageNumber}
+      style={{ width: width, height: height }}
+    />
+  );
 };
 
 const ScrollPage: FC<ScrollPageProps> = ({
   scale,
-  pageNumber,
+  index,
   width,
   onLoadSuccess,
   placeholderHeight,
@@ -36,13 +44,17 @@ const ScrollPage: FC<ScrollPageProps> = ({
     <div ref={ref}>
       {inView ? (
         <ChakraPage
-          pageNumber={pageNumber}
+          pageNumber={index + 1}
           scale={scale}
           width={width}
           onLoadSuccess={onLoadSuccess}
         />
       ) : (
-        <Placeholder width={placeholderWidth} height={placeholderHeight} />
+        <Placeholder
+          width={placeholderWidth}
+          height={placeholderHeight}
+          pageNumber={index + 1}
+        />
       )}
     </div>
   );

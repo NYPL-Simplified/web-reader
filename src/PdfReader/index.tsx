@@ -155,7 +155,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   const { webpubManifestUrl, manifest, proxyUrl, readerSettings } = args ?? {};
   const [state, dispatch] = React.useReducer(pdfReducer, {
     colorMode: 'day',
-    isScrolling: true,
+    isScrolling: readerSettings?.isScrolling ?? false,
     fontSize: 16,
     fontFamily: 'sans-serif',
     resourceIndex: 0,
@@ -395,9 +395,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     }
   }
 
-  console.log('STATE', state);
-  console.log('CONTAINER SIZE', containerSize);
-
   // the reader is active but loading a page
   return {
     type: 'PDF',
@@ -424,7 +421,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
                     placeholderHeight={state.pdfHeight}
                     placeholderWidth={state.pdfWidth}
                     scale={state.scale}
-                    pageNumber={index + 1}
+                    index={index}
                     onLoadSuccess={onRenderSuccess}
                   />
                 ))}
