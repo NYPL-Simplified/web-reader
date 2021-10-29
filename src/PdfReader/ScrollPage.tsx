@@ -1,12 +1,13 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import ChakraPage from './ChakraPage';
 import { useInView } from 'react-intersection-observer';
+import { PageProps } from 'react-pdf';
 
 type ScrollPageProps = {
   index: number;
   width: number | undefined;
   scale: number;
-  onLoadSuccess: (page: any) => void;
+  onLoadSuccess: (page: PageProps) => void;
   placeholderHeight: number;
   placeholderWidth: number;
 };
@@ -17,11 +18,10 @@ type PlaceholderProps = {
   pageNumber: number;
 };
 
-type PagesToRender = boolean;
-
 const Placeholder: FC<PlaceholderProps> = ({ width, height, pageNumber }) => {
   return (
     <div
+      // data-page-number is used in Cypress tests
       data-page-number={pageNumber}
       style={{ width: width, height: height }}
     />
@@ -38,12 +38,15 @@ const ScrollPage: FC<ScrollPageProps> = ({
 }) => {
   const { ref, inView } = useInView({
     threshold: 0,
+    triggerOnce: true,
   });
 
   return (
     <div ref={ref}>
       {inView ? (
         <ChakraPage
+          // data-page-number is used in Cypress tests
+          data-page-number={index + 1}
           pageNumber={index + 1}
           scale={scale}
           width={width}

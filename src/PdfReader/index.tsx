@@ -417,6 +417,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
                 Array.from(new Array(state.numPages), (_, index) => (
                   <ScrollPage
                     key={`page_${index + 1}`}
+                    // width is necessary to pass to react-pdf Page component on initial render
                     width={containerSize?.width}
                     placeholderHeight={state.pdfHeight}
                     placeholderWidth={state.pdfWidth}
