@@ -38,10 +38,13 @@ export const DefaultHeaderLeft = (): React.ReactElement => {
 };
 
 export default function Header(
-  props: ActiveReader & ReaderManagerArguments
+  props: ActiveReader &
+    ReaderManagerArguments & {
+      containerRef: React.MutableRefObject<null | HTMLDivElement>;
+    }
 ): React.ReactElement {
   const [isFullscreen, toggleFullScreen] = useFullscreen();
-  const { headerLeft, state, navigator, manifest } = props;
+  const { headerLeft, navigator, manifest } = props;
   const mainBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
 
   return (
@@ -49,9 +52,9 @@ export default function Header(
       {headerLeft ?? <DefaultHeaderLeft />}
       <HStack ml="auto" spacing={1}>
         <TableOfContent
+          containerRef={props.containerRef}
           navigator={navigator}
           manifest={manifest}
-          readerState={state}
         />
         <SettingsCard {...props} />
         <Button
@@ -72,12 +75,13 @@ export default function Header(
   );
 }
 
-export const HeaderWrapper: React.FC<ComponentProps<typeof Flex>> = ({
-  children,
-  ...rest
-}) => {
+export const HeaderWrapper = React.forwardRef<
+  HTMLDivElement,
+  ComponentProps<typeof Flex>
+>(({ children, ...rest }, ref) => {
   return (
     <Flex
+      ref={ref}
       as="header"
       position="sticky"
       top={0}
@@ -95,4 +99,4 @@ export const HeaderWrapper: React.FC<ComponentProps<typeof Flex>> = ({
       {children}
     </Flex>
   );
-};
+});

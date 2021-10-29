@@ -27,11 +27,20 @@ const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
   ...props
 }) => {
   const bgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
+  const containerRef = React.useRef<HTMLDivElement>(null);
   return (
     <Flex flexDir="column" w="100%" overflowX="hidden" position="relative">
-      {!props.isLoading && <Header headerLeft={headerLeft} {...props} />}
+      {!props.isLoading && (
+        <Header
+          headerLeft={headerLeft}
+          containerRef={containerRef}
+          {...props}
+        />
+      )}
 
       <Flex
+        ref={containerRef}
+        position="relative"
         bg={bgColor}
         pb={`${FOOTER_HEIGHT}px`}
         flexDir="column"
