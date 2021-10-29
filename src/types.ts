@@ -31,6 +31,11 @@ export type HtmlNavigator = Navigator & {
   setColorMode: (mode: ColorMode) => Promise<void>;
 };
 
+// Optional settings to initialize the reader with
+export type ReaderSettings = {
+  isScrolling?: boolean;
+};
+
 export type ReaderState = {
   colorMode: ColorMode;
   isScrolling: boolean;
@@ -94,6 +99,7 @@ export type UseWebReaderArguments = {
   injectablesFixed?: Injectable[];
   height?: string; // CSS string (ie: "800px" or `calc(100vh-${CHROME_HEIGHT}`)
   growWhenScrolling?: boolean; // should the reader grow to fit content in scroll mode (ie. disregard the height)?
+  readerSettings?: ReaderSettings;
 };
 
 export type ActiveReaderArguments = UseWebReaderArguments & {

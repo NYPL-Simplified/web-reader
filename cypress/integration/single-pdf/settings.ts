@@ -25,18 +25,32 @@ describe('Single PDF display settings', () => {
   });
 
   it('should zoom in and out', () => {
-    cy.get('.react-pdf__Page').then(($elm) => {
-      pdfZoomTestHelper($elm, '1', '1');
-    });
+    cy.get('div[class="react-pdf__Page__textContent"]')
+      .find('span')
+      .should(
+        'have.text',
+        'ECONOMICS – WORKING PAPERS 2021/03Assessing climate change  risks at the country level: the EIB scoring model'
+      )
+      .should('have.css', 'font-size', '8.72323px');
 
     cy.findByRole('button', { name: 'Zoom In' }).click();
-    cy.get('.react-pdf__Page').then(($elm) => {
-      pdfZoomTestHelper($elm, `${1 + SCALE_STEP}`, `${1 + SCALE_STEP}`);
-    });
+
+    cy.get('div[class="react-pdf__Page__textContent"]')
+      .find('span')
+      .should(
+        'have.text',
+        'ECONOMICS – WORKING PAPERS 2021/03Assessing climate change  risks at the country level: the EIB scoring model'
+      )
+      .should('have.css', 'font-size', '9.59555px');
 
     cy.findByRole('button', { name: 'Zoom Out' }).click();
-    cy.get('.react-pdf__Page').then(($elm) => {
-      pdfZoomTestHelper($elm, '1', '1');
-    });
+
+    cy.get('div[class="react-pdf__Page__textContent"]')
+      .find('span')
+      .should(
+        'have.text',
+        'ECONOMICS – WORKING PAPERS 2021/03Assessing climate change  risks at the country level: the EIB scoring model'
+      )
+      .should('have.css', 'font-size', '8.72323px');
   });
 });

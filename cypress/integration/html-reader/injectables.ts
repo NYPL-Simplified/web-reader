@@ -9,12 +9,10 @@ describe('useHtmlReader configuration settings', () => {
     cy.getIframeHead(IFRAME_SELECTOR)
       .find('link[href$="/css/sample.css"]')
       .should('not.exist');
-    cy.getIframeHead(IFRAME_SELECTOR).contains('title', 'Title Page');
   });
 
   it('should render css injectables when provided', () => {
     cy.loadPage('/test/with-injectables');
-    cy.getIframeHead(IFRAME_SELECTOR).contains('title', 'Title Page');
     cy.getIframeHead(IFRAME_SELECTOR)
       .find(`link[href$="/fonts/opensyslexic/opendyslexic.css"]`)
       .should('exist');

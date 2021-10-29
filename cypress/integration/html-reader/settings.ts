@@ -7,25 +7,27 @@ describe('display settings', () => {
 
   it('should have the default settings', () => {
     cy.get('#reader-loading').should('not.be.visible');
+    // without this wait we are getting "element is detached from dom" errors
+    cy.wait(3000);
     cy.getIframeHtml(IFRAME_SELECTOR)
       .should('have.attr', 'data-viewer-font', 'publisher')
       .should('have.css', '--USER__appearance', 'readium-default-on')
       .should('have.css', '--USER__fontFamily', 'Original')
-      .should('have.css', '--USER__scroll', 'readium-scroll-on');
+      .should('have.css', '--USER__scroll', 'readium-scroll-off');
   });
 
-  it('should update the font family to serif, paginated mode, and on sepia theme', () => {
+  it('should update the font family to serif, scroll mode, and on sepia theme', () => {
     cy.log('open the settings menu');
     cy.findByRole('button', { name: 'Settings' }).click();
 
     cy.findByText('Serif').click();
-    cy.findByText('Paginated').click();
+    cy.findByText('Scrolling').click();
     cy.findByText('Sepia').click();
 
     cy.getIframeHtml(IFRAME_SELECTOR)
       .should('have.attr', 'data-viewer-font', 'serif')
       .should('have.css', '--USER__appearance', 'readium-sepia-on')
-      .should('have.css', '--USER__scroll', 'readium-scroll-off');
+      .should('have.css', '--USER__scroll', 'readium-scroll-on');
   });
 
   it('should trigger font size setting', () => {
@@ -42,30 +44,5 @@ describe('display settings', () => {
       '--USER__fontSize',
       '96%'
     ); // 4% per step?
-  });
-});
-
-describe('useHtmlReader configuration settings', () => {
-  it('should have no injectables by default', () => {
-    cy.loadPage('/test/no-injectables');
-
-    cy.getIframeHtml().within(() => {
-      cy.get('head > link').should('not.exist');
-      // make sure there is a title, the query does in fact work
-      cy.get('head > title').should('exist');
-    });
-  });
-
-  it.only('should render css injectables when provided', () => {
-    cy.loadPage('/test/with-injectables');
-    cy.getIframeHtml().within(() => {
-      cy.get('head > title', { timeout: 15000 }).should('exist');
-      cy.get(
-        'head > link[href$="/fonts/opensyslexic/opendyslexic.css"]'
-      ).should('exist');
-      cy.get('head > link[href$="/css/sample.css"]').should('exist');
-      // make sure the css was applied
-      cy.get('body').should('have.css', 'color', 'rgb(0, 0, 255)');
-    });
   });
 });
