@@ -42,7 +42,7 @@ describe('Multi PDF navigation', () => {
     cy.findByText('Anthropology without Informants').should('be.visible');
   });
 
-  it.only('should switch to scrolling mode', () => {
+  it('should switch to scrolling mode', () => {
     cy.findByText('Anthropology without Informants').should('be.visible');
     cy.findByRole('button', { name: 'Settings' }).click();
     cy.findByText('Scrolling').click();
