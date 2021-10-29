@@ -7,7 +7,7 @@ describe('Multi PDF navigation', () => {
     cy.findByRole('button', { name: 'Settings' }).click();
     cy.findByRole('radio', { name: 'Paginated' }).should('be.checked');
     cy.findByRole('button', { name: 'Table of Contents' }).click();
-    cy.findByRole('menuitem', { name: 'Foreword' }).click();
+    cy.findByRole('listitem', { name: 'Foreword' }).click();
     cy.wait(5000);
     cy.findByText('Anthropology without Informants', { timeout: 10000 }).should(
       'be.visible'
@@ -22,7 +22,7 @@ describe('Multi PDF navigation', () => {
     cy.findByRole('radio', { name: 'Paginated' }).should('not.be.checked');
     cy.findByRole('radio', { name: 'Scrolling' }).should('be.checked');
     cy.findByRole('button', { name: 'Table of Contents' }).click();
-    cy.findByRole('menuitem', { name: 'Foreword' }).click();
+    cy.findByRole('listitem', { name: 'Foreword' }).click();
     cy.wait('@pdf');
     cy.findByText('Anthropology without Informants', { timeout: 10000 }).should(
       'be.visible'

@@ -20,6 +20,10 @@ const HtmlReaderContent: React.FC<{
            * we have to decide how big the content should be.
            */
           height: shouldGrow ? 'initial' : height,
+          /**
+           * We always want the height to be at least the defined height
+           */
+          minHeight: height,
           overflow: 'hidden',
         }}
       >
