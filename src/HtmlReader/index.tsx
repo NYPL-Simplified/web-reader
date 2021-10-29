@@ -135,11 +135,11 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
         autoGeneratePositions: false,
       },
       api: {
-        getContent: getContent as any, //TODO: fix this casting,
+        getContent: getContent,
         onError: function (e: Error) {
           setError(e);
         },
-      } as any, //TODO: fix this casting,,
+      } as any, //TODO: fix this casting,
     }).then((reader) => {
       dispatch({ type: 'SET_READER', reader });
     });

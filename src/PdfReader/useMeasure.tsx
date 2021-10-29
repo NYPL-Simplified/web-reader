@@ -1,9 +1,5 @@
 import * as React from 'react';
 
-declare const window: Window &
-  typeof globalThis & {
-    ResizeObserver: any;
-  };
 export type Dimensions = Pick<
   DOMRectReadOnly,
   'x' | 'y' | 'top' | 'left' | 'right' | 'bottom' | 'height' | 'width'
@@ -27,14 +23,14 @@ export default function useMeasure<
         (
           entries: {
             contentRect: {
-              x: any;
-              y: any;
-              width: any;
-              height: any;
-              top: any;
-              left: any;
-              bottom: any;
-              right: any;
+              x: number;
+              y: number;
+              width: number;
+              height: number;
+              top: number;
+              left: number;
+              bottom: number;
+              right: number;
             };
           }[]
         ) => {

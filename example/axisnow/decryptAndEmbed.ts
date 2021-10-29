@@ -12,7 +12,7 @@ type IDecryptorInstance = {
 };
 
 type IDecryptor = {
-  createDecryptor(params: any): Promise<IDecryptorInstance>;
+  createDecryptor(params: DecryptorParams): Promise<IDecryptorInstance>;
 };
 
 export default async function createChapterDecryptor(
