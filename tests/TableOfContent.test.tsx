@@ -1,22 +1,25 @@
 import * as React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import TableOfContent from '../src/ui/TableOfContent';
-import {
-  MockNavigator,
-  MockWebpubManifest,
-  MockReaderState,
-} from './utils/MockData';
+import { MockNavigator, MockWebpubManifest } from './utils/MockData';
 
 import { axe } from 'jest-axe';
+
+const TestTOC: React.FC<
+  Omit<React.ComponentProps<typeof TableOfContent>, 'containerRef'>
+> = (props) => {
+  const ref = React.useRef();
+  return (
+    <div ref={ref}>
+      <TableOfContent containerRef={ref} {...props} />
+    </div>
+  );
+};
 
 describe('Table of Content Accessibility checker', () => {
   test('TOC should have no violation', async () => {
     const { container } = render(
-      <TableOfContent
-        readerState={MockReaderState}
-        navigator={MockNavigator}
-        manifest={MockWebpubManifest}
-      />
+      <TestTOC navigator={MockNavigator} manifest={MockWebpubManifest} />
     );
 
     expect(await axe(container)).toHaveNoViolations();
@@ -25,24 +28,18 @@ describe('Table of Content Accessibility checker', () => {
 
 describe('Table Of Content rendering', () => {
   beforeEach(() => {
-    render(
-      <TableOfContent
-        readerState={MockReaderState}
-        navigator={MockNavigator}
-        manifest={MockWebpubManifest}
-      />
-    );
+    render(<TestTOC navigator={MockNavigator} manifest={MockWebpubManifest} />);
   });
 
   test('render Table Of Content', () => {
     // The initial TOC component render should not show TOC popover on the screen.
-    expect(screen.queryByText('Chapter 1')).toBeNull();
+    expect(screen.queryByText('Chapter 1')).not.toBeVisible();
 
     // We need to open the TOC element for TOC links to show up
     const toggleBtn = screen.getByRole('button', { name: 'Table of Contents' });
     fireEvent.click(toggleBtn);
 
-    const tocLinkElm = screen.getByRole('menuitem', { name: 'Chapter 1' });
+    const tocLinkElm = screen.getByRole('listitem', { name: 'Chapter 1' });
     expect(tocLinkElm).toBeInTheDocument();
   });
 
@@ -50,7 +47,7 @@ describe('Table Of Content rendering', () => {
     const toggleBtn = screen.getByRole('button', { name: 'Table of Contents' });
     fireEvent.click(toggleBtn);
 
-    const chapterOneElm = screen.getByRole('menuitem', { name: 'Chapter 1' });
+    const chapterOneElm = screen.getByRole('listitem', { name: 'Chapter 1' });
     fireEvent.click(chapterOneElm);
     expect(MockNavigator.goToPage).toHaveBeenCalledWith('chapter/one/url');
   });
@@ -59,13 +56,13 @@ describe('Table Of Content rendering', () => {
     const toggleBtn = screen.getByRole('button', { name: 'Table of Contents' });
     fireEvent.click(toggleBtn);
 
-    const chapterThreeElm = screen.getByRole('menuitem', { name: 'Chapter 3' });
+    const chapterThreeElm = screen.getByRole('listitem', { name: 'Chapter 3' });
     fireEvent.click(chapterThreeElm);
     expect(MockNavigator.goToPage).toHaveBeenCalledWith('chapter/three/url');
 
     fireEvent.click(toggleBtn);
 
-    const chapterThreeOneElm = screen.getByRole('menuitem', {
+    const chapterThreeOneElm = screen.getByRole('listitem', {
       name: 'Chapter 3 part 1',
     });
     fireEvent.click(chapterThreeOneElm);
@@ -78,7 +75,7 @@ describe('Table Of Content rendering', () => {
     const toggleBtn = screen.getByRole('button', { name: 'Table of Contents' });
     fireEvent.click(toggleBtn);
 
-    const chapterFourElm = screen.getByRole('menuitem', {
+    const chapterFourElm = screen.getByRole('listitem', {
       name: 'Chapter 4',
     });
     fireEvent.click(chapterFourElm);
@@ -86,7 +83,7 @@ describe('Table Of Content rendering', () => {
 
     fireEvent.click(toggleBtn);
 
-    const chapterFourOneElm = screen.getByRole('menuitem', {
+    const chapterFourOneElm = screen.getByRole('listitem', {
       name: 'Chapter 4 part 1',
     });
     fireEvent.click(chapterFourOneElm);
@@ -98,7 +95,7 @@ describe('Table Of Content rendering', () => {
     const toggleBtn = screen.getByRole('button', { name: 'Table of Contents' });
     fireEvent.click(toggleBtn);
 
-    const chapterFourElm = screen.getByRole('menuitem', {
+    const chapterFourElm = screen.getByRole('listitem', {
       name: 'Chapter 4 part 2',
     });
     fireEvent.click(chapterFourElm);
@@ -106,7 +103,7 @@ describe('Table Of Content rendering', () => {
 
     fireEvent.click(toggleBtn);
 
-    const chapterFourThreeElm = screen.getByRole('menuitem', {
+    const chapterFourThreeElm = screen.getByRole('listitem', {
       name: 'Chapter 4 part 3',
     });
     fireEvent.click(chapterFourThreeElm);

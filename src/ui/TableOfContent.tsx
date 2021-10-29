@@ -70,18 +70,23 @@ export default function TableOfContent({
               {manifest.toc?.map((content: ReadiumLink) => (
                 <Item
                   key={content.title}
+                  aria-label={content.title}
                   onClick={() => tocLinkHandler(getLinkHref(content))}
                   html={content.title ?? ''}
                 >
-                  {content.children &&
-                    content.children.map((subLink) => (
-                      <Item
-                        key={subLink.title}
-                        onClick={() => tocLinkHandler(getLinkHref(subLink))}
-                        pl={10}
-                        html={subLink.title ?? ''}
-                      ></Item>
-                    ))}
+                  {content.children && (
+                    <UnorderedList>
+                      {content.children.map((subLink) => (
+                        <Item
+                          aria-label={subLink.title}
+                          key={subLink.title}
+                          onClick={() => tocLinkHandler(getLinkHref(subLink))}
+                          pl={10}
+                          html={subLink.title ?? ''}
+                        ></Item>
+                      ))}
+                    </UnorderedList>
+                  )}
                 </Item>
               ))}
             </UnorderedList>
