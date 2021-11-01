@@ -105,7 +105,7 @@ const App = () => {
                 means it will not grow to fit content in scrolling mode.
               </Text>
               <WebReader
-                webpubManifestUrl="/samples/pdf/muse1007.json"
+                webpubManifestUrl="/samples/pdf/multi-resource.json"
                 proxyUrl={pdfProxyUrl}
                 pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
                 growWhenScrolling={false}
@@ -125,7 +125,7 @@ const App = () => {
                 prop.
               </Text>
               <WebReader
-                webpubManifestUrl="/samples/pdf/muse1007.json"
+                webpubManifestUrl="/samples/pdf/multi-resource.json"
                 proxyUrl={pdfProxyUrl}
                 pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
               />
