@@ -29,7 +29,7 @@ const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
   const bgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
   const containerRef = React.useRef<HTMLDivElement>(null);
   return (
-    <Flex flexDir="column" w="100%" overflowX="hidden" position="relative">
+    <Flex flexDir="column" w="100%" position="relative">
       {!props.isLoading && (
         <Header
           headerLeft={headerLeft}
@@ -42,7 +42,6 @@ const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
         ref={containerRef}
         position="relative"
         bg={bgColor}
-        pb={`${FOOTER_HEIGHT}px`}
         flexDir="column"
         alignItems="stretch"
         flex="1 1 auto"
@@ -51,9 +50,10 @@ const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
       </Flex>
 
       <Flex
+        as="footer"
+        position="sticky"
         height={`${FOOTER_HEIGHT}px`}
         zIndex="docked"
-        position="absolute"
         bottom="0"
         justifyContent="space-between"
         w="100%"
