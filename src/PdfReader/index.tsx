@@ -422,7 +422,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
                     placeholderHeight={state.pdfHeight}
                     placeholderWidth={state.pdfWidth}
                     scale={state.scale}
-                    index={index}
+                    pageNumber={index + 1}
                     onLoadSuccess={onRenderSuccess}
                   />
                 ))}

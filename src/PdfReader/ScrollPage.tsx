@@ -4,7 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import { PageProps } from 'react-pdf';
 
 type ScrollPageProps = {
-  index: number;
+  pageNumber: number;
   width: number | undefined;
   scale: number;
   onLoadSuccess: (page: PageProps) => void;
@@ -30,7 +30,7 @@ const Placeholder: FC<PlaceholderProps> = ({ width, height, pageNumber }) => {
 
 const ScrollPage: FC<ScrollPageProps> = ({
   scale,
-  index,
+  pageNumber,
   width,
   onLoadSuccess,
   placeholderHeight,
@@ -46,8 +46,8 @@ const ScrollPage: FC<ScrollPageProps> = ({
       {inView ? (
         <ChakraPage
           // data-page-number is used in Cypress tests
-          data-page-number={index + 1}
-          pageNumber={index + 1}
+          data-page-number={pageNumber}
+          pageNumber={pageNumber}
           scale={scale}
           width={width}
           onLoadSuccess={onLoadSuccess}
@@ -56,7 +56,7 @@ const ScrollPage: FC<ScrollPageProps> = ({
         <Placeholder
           width={placeholderWidth}
           height={placeholderHeight}
-          pageNumber={index + 1}
+          pageNumber={pageNumber}
         />
       )}
     </div>
