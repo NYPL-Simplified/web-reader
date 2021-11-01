@@ -13,7 +13,9 @@ describe('Multi PDF navigation', () => {
       'be.visible'
     );
     cy.findByRole('button', { name: 'Next Page' }).click();
-    cy.findByText('Foreword', { timeout: 10000 }).should('exist');
+    cy.get('div[class="react-pdf__Page__textContent"]').within(() => {
+      cy.findByText('Foreword', { timeout: 10000 }).should('exist');
+    });
   });
 
   it('Scrolling mode & TOC: should update page content after clicking on TOC link', () => {
