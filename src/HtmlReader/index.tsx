@@ -115,9 +115,11 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     readerSettings,
   } = args ?? {};
 
+  const defaultIsScrolling = readerSettings?.isScrolling ?? false;
+
   const [state, dispatch] = React.useReducer(htmlReducer, {
     colorMode: 'day',
-    isScrolling: readerSettings?.isScrolling ?? false,
+    isScrolling: defaultIsScrolling,
     fontSize: 16,
     fontFamily: 'sans-serif',
     currentTocUrl: null,
@@ -142,7 +144,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     const url = new URL(webpubManifestUrl);
 
     const userSettings = {
-      verticalScroll: state.isScrolling,
+      verticalScroll: defaultIsScrolling,
     };
 
     D2Reader.build({
@@ -181,7 +183,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     getContent,
     injectables,
     injectablesFixed,
-    state.isScrolling,
+    defaultIsScrolling,
   ]);
 
   // Re-calculate page location on scroll/TOC navigation/page button press
@@ -372,5 +374,5 @@ function enableResizeEvent(
   };
 
   const debouncedResizeHandler = debounce(resizeHandler, 500);
-  window.addEventListener('resize', debouncedResizeHandler);
+  window.addEventListener('resize', debouncedResizeHandler, { passive: true });
 }
