@@ -230,9 +230,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
 
   //TODO: Somehow, this window size updates when height
   React.useEffect(() => {
-    if (containerSize) {
-      resizePage(state.pdfWidth, state.pdfHeight, containerSize);
-    }
+    resizePage(state.pdfWidth, state.pdfHeight, containerSize);
   }, [containerSize, state.pdfWidth, state.pdfHeight, resizePage]);
 
   // prev and next page functions
@@ -379,8 +377,10 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   };
 
   function onRenderSuccess(page: PageProps) {
-    if (!page.height || !page.width || !containerSize)
-      throw new Error('Error rendering page from Reader');
+    if (!page.height || !page.width)
+      throw new Error(
+        'Error rendering page from Reader, please refresh your page.'
+      );
     if (
       Math.round(page.height) !== state.pdfHeight ||
       Math.round(page.width) !== state.pdfWidth
@@ -418,7 +418,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
                   <ScrollPage
                     key={`page_${index + 1}`}
                     // width is necessary to pass to react-pdf Page component on initial render
-                    width={containerSize?.width}
+                    width={containerSize.width}
                     placeholderHeight={state.pdfHeight}
                     placeholderWidth={state.pdfWidth}
                     scale={state.scale}
