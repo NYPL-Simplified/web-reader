@@ -3,10 +3,6 @@ describe('Single PDF navigation', () => {
     cy.loadPdf('/pdf');
   });
 
-  // TODO: Add this test after pulling in changes from Crystal's TOC pr
-  //   it('should update page content after clicking on TOC link', () => {
-  //   });
-
   it('should navigate forward and backwards with page buttons', () => {
     cy.findByText('Assessing climate change').should('be.visible');
 
@@ -22,11 +18,9 @@ describe('Single PDF navigation', () => {
     cy.findByText('Assessing climate change').should('be.visible');
     cy.findByRole('button', { name: 'Settings' }).click();
     cy.findByText('Scrolling').click();
-    cy.wait(5000);
-    cy.get('div[data-page-number="4"]')
-      .findByText(
-        'Matteo Ferrazzi, Fotios Kalantzis and Sanne Zwart (European Investment Bank)'
-      )
-      .should('exist');
+    cy.get('div[data-page-number="4"]').scrollIntoView();
+    cy.findByText(
+      'Matteo Ferrazzi, Fotios Kalantzis and Sanne Zwart (European Investment Bank)'
+    ).should('exist');
   });
 });
