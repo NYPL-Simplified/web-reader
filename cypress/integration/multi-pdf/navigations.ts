@@ -47,7 +47,9 @@ describe('Multi PDF navigation', () => {
     cy.findByRole('button', { name: 'Settings' }).click();
     cy.findByText('Scrolling').click();
     cy.findByRole('button', { name: 'Next Page' }).click();
+    cy.wait('@pdf');
+    cy.get('div[data-page-number="5"]', { timeout: 6000 }).scrollIntoView();
     cy.wait(5000);
-    cy.get('div[data-page-number="5"]').should('exist');
+    cy.get('div[data-page-number="5"]').find('canvas').should('exist');
   });
 });
