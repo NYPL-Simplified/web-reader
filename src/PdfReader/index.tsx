@@ -268,7 +268,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     // do nothing if we haven't parsed the PDF yet
     if (!isParsed) return;
 
-    if (state.pageNumber > 1) {
+    if (state.pageNumber > 1 && !state.isScrolling) {
       dispatch({
         type: 'NAVIGATE_PAGE',
         pageNum: state.pageNumber - 1,
