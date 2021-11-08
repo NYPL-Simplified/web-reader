@@ -1,5 +1,5 @@
 import * as Comlink from 'comlink';
-import createChapterDecryptor from './decryptAndEmbed';
+import createChapterDecryptor from './createChapterDecryptor';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 declare const self: WorkerGlobalScope;
