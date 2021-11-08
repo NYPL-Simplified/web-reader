@@ -13,9 +13,10 @@ describe('Multi PDF navigation', () => {
       'be.visible'
     );
     cy.findByRole('button', { name: 'Next Page' }).click();
-    cy.get('div[class="react-pdf__Page__textContent"]').within(() => {
-      cy.findByText('Foreword', { timeout: 10000 }).should('exist');
-    });
+    cy.findByText(
+      /This volume encapsulates some of the most significant published work of Leslie/,
+      { timeout: 10000 }
+    ).should('be.visible');
   });
 
   it('Scrolling mode & TOC: should update page content after clicking on TOC link', () => {
