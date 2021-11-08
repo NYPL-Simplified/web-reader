@@ -33,6 +33,7 @@ type HtmlState = HtmlReaderState & {
 /**
  * If we provide injectables that are not found, the app won't load at all.
  * Therefore we will not provide any default injectables.
+ * @todo - this is not true in our custom rendered. We should provide default injectables.
  */
 const defaultInjectables: Injectable[] = [];
 const defaultInjectablesFixed: Injectable[] = [];
@@ -450,7 +451,10 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   };
 }
 
-// NOTE: If this proves flaky we could use IntersectionObserver instead
+/**
+ * Determine if you are at the end of a resource
+ * NOTE: If this proves flaky we could use IntersectionObserver instead
+ */
 function getIsScrollEnd(iframe: HTMLIFrameElement) {
   const html = getIframeHTML(iframe);
   if (!html) return false;
@@ -458,6 +462,9 @@ function getIsScrollEnd(iframe: HTMLIFrameElement) {
   const currentScroll = html.scrollLeft + html.clientWidth;
   return scrollWidth === currentScroll;
 }
+/**
+ * Determine if you are at the start of a resource
+ */
 function getIsScrollStart(iframe: HTMLIFrameElement) {
   const html = getIframeHTML(iframe);
   if (!html) return false;
@@ -465,6 +472,9 @@ function getIsScrollStart(iframe: HTMLIFrameElement) {
   return currentScroll === 0;
 }
 
+/**
+ * Get the HTML element of the iframe
+ */
 function getIframeHTML(iframe: HTMLIFrameElement) {
   const html = iframe?.contentDocument?.documentElement;
   if (!html) {
@@ -484,6 +494,9 @@ function setCSSProperty(html: HTMLElement, name: string, val: string) {
   html.style.setProperty(name, val);
 }
 
+/**
+ * Translates the readium scroll css var into a boolean
+ */
 function getPagination(isPaginated: boolean) {
   switch (isPaginated) {
     case true:
@@ -493,6 +506,10 @@ function getPagination(isPaginated: boolean) {
   }
 }
 
+/**
+ * Translates the internal color mode value into a Readium
+ * color mode value.
+ */
 function getColorModeValue(mode: ColorMode) {
   switch (mode) {
     case 'day':
@@ -504,6 +521,10 @@ function getColorModeValue(mode: ColorMode) {
   }
 }
 
+/**
+ * Translates the readium color mode value into an internal
+ * color mode value
+ */
 function getColorMode(d2Mode: string): ColorMode {
   switch (d2Mode) {
     case 'readium-default-on':
@@ -518,6 +539,9 @@ function getColorMode(d2Mode: string): ColorMode {
   }
 }
 
+/**
+ * Gets the Readium font-override setting based on the given font family.
+ */
 function getFontOverride(fontFamily: FontFamily) {
   switch (fontFamily) {
     case 'publisher':
@@ -528,7 +552,7 @@ function getFontOverride(fontFamily: FontFamily) {
 }
 
 /**
- * We need to map from our family values to R2D2BC's family values.
+ * Translates the internal font family to a readium css font family value.
  */
 const familyToReadiumFamily: Record<FontFamily, string> = {
   publisher: 'Original',
@@ -537,7 +561,7 @@ const familyToReadiumFamily: Record<FontFamily, string> = {
   'open-dyslexic': 'opendyslexic',
 };
 /**
- * And vice-versa
+ * Translates a readium css font family to an internal font family.
  */
 const r2FamilyToFamily: Record<string, FontFamily | undefined> = {
   Original: 'publisher',
