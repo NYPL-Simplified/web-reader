@@ -1,6 +1,7 @@
 import { IFRAME_SELECTOR } from '../../support/constants';
+import describev1v2 from '../../support/describev1v2';
 
-describe('render page content', () => {
+describev1v2('render page content', () => {
   it('Renders content on the epub2 based webpub page', () => {
     cy.loadPage('/streamed-alice-epub');
     cy.log('check that all the essential buttons are on the page');

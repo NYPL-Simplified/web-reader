@@ -1,6 +1,7 @@
 import { IFRAME_SELECTOR } from '../../support/constants';
+import describev1v2 from '../../support/describev1v2';
 
-describe('useHtmlReader configuration settings', () => {
+describev1v2('useHtmlReader configuration settings', () => {
   it('should have no injectables by default', () => {
     cy.loadPage('/test/no-injectables');
     cy.getIframeHead(IFRAME_SELECTOR)

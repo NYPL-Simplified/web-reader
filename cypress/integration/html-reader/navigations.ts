@@ -1,6 +1,7 @@
 import { IFRAME_SELECTOR } from '../../support/constants';
+import describev1v2 from '../../support/describev1v2';
 
-describe('navigating an EPUB page', () => {
+describev1v2('navigating an EPUB page', () => {
   beforeEach(() => {
     cy.loadPage('/streamed-alice-epub');
   });
@@ -9,7 +10,7 @@ describe('navigating an EPUB page', () => {
     cy.findByRole('link', { name: 'Return to Homepage' }).should(
       'have.prop',
       'href',
-      `${Cypress.config().baseUrl}/`
+      `${Cypress.config().baseUrl?.replace('/v1', '').replace('/v2', '')}/`
     );
   });
 

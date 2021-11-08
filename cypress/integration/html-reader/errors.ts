@@ -1,4 +1,6 @@
-describe('error states', () => {
+import describev1v2 from '../../support/describev1v2';
+
+describev1v2('error states', () => {
   beforeEach(() => {
     /**
      * React re-throws caught exceptions in dev so that they appear in the
@@ -21,9 +23,7 @@ describe('error states', () => {
 
     cy.findByRole('heading', { name: 'An error occurred' });
     cy.findByRole('alert', {
-      name: `Network Error: Unparsable JSON file found at ${
-        Cypress.config().baseUrl
-      }/samples/test/unparsable-manifest.json.`,
+      name: /Network Error: Unparsable JSON file found at http.+\/unparsable-manifest.json/i,
     });
   });
 

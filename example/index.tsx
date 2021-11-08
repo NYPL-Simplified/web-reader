@@ -10,7 +10,7 @@ import {
   useParams,
   useRouteMatch,
 } from 'react-router-dom';
-import WebReader from './WebReader';
+import WebReader from '../src';
 import {
   ChakraProvider,
   Heading,
@@ -79,12 +79,31 @@ const App = () => {
           <Route exact path="/">
             <HomePage />
           </Route>
+          <Route path={`/pdf`}>
+            <WebReader
+              webpubManifestUrl="/samples/pdf/single-resource-short.json"
+              proxyUrl={pdfProxyUrl}
+              pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
+            />
+          </Route>
+          <Route path={`/pdf-large`}>
+            <WebReader
+              webpubManifestUrl="/samples/pdf/single-resource-long.json"
+              proxyUrl={pdfProxyUrl}
+              pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
+            />
+          </Route>
+          <Route path={`/pdf-collection`}>
+            <WebReader
+              webpubManifestUrl="/samples/pdf/multi-resource.json"
+              proxyUrl={pdfProxyUrl}
+              pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
+            />
+          </Route>
           <Route path="/:version">
-            <Readers />
+            <HtmlReaders />
           </Route>
-          <Route path="/test">
-            <Tests />
-          </Route>
+
           <Route path="*">
             <h1>404</h1>
             <p>Page not found. what</p>
@@ -95,31 +114,17 @@ const App = () => {
   );
 };
 
-const Readers = () => {
+/**
+ * Allows switching between v1 and v2 of the HTML reader.
+ */
+const HtmlReaders = () => {
   const { path } = useRouteMatch();
+  const { version = 'v1' } = useParams<{ version: string | undefined }>();
+  const useCustomHtmlRenderer = version === 'v2';
+  console.log('Using Version: ', version);
+
   return (
     <Switch>
-      <Route path={`${path}/pdf`}>
-        <WebReader
-          webpubManifestUrl="/samples/pdf/single-resource-short.json"
-          proxyUrl={pdfProxyUrl}
-          pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
-        />
-      </Route>
-      <Route path={`${path}/pdf-large`}>
-        <WebReader
-          webpubManifestUrl="/samples/pdf/single-resource-long.json"
-          proxyUrl={pdfProxyUrl}
-          pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
-        />
-      </Route>
-      <Route path={`${path}/pdf-collection`}>
-        <WebReader
-          webpubManifestUrl="/samples/pdf/multi-resource.json"
-          proxyUrl={pdfProxyUrl}
-          pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
-        />
-      </Route>
       <Route path={`${path}/axisnow-encrypted`}>
         <AxisNowEncrypted injectables={htmlInjectables} />
       </Route>
@@ -127,34 +132,42 @@ const Readers = () => {
         <WebReader
           injectables={htmlInjectables}
           webpubManifestUrl={`${origin}/samples/dickens-axisnow/decrypted/manifest.json`}
+          _useCustomHtmlRenderer={useCustomHtmlRenderer}
         />
       </Route>
       <Route path={`${path}/moby-epub2`}>
         <WebReader
           injectables={htmlInjectables}
           webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
+          _useCustomHtmlRenderer={useCustomHtmlRenderer}
         />
       </Route>
       <Route path={`${path}/moby-epub3`}>
         <WebReader
           injectables={htmlInjectables}
           webpubManifestUrl={`${origin}/samples/moby-epub3-exploded/manifest.json`}
+          _useCustomHtmlRenderer={useCustomHtmlRenderer}
         />
       </Route>
       <Route path={`${path}/readium-css-docs`}>
         <WebReader
           injectables={htmlInjectables}
           webpubManifestUrl={`${origin}/samples/ReadiumCSS-docs/manifest.json`}
+          _useCustomHtmlRenderer={useCustomHtmlRenderer}
         />
       </Route>
       <Route path={`${path}/streamed-alice-epub`}>
         <WebReader
           injectables={htmlInjectables}
           webpubManifestUrl="https://alice.dita.digital/manifest.json"
+          _useCustomHtmlRenderer={useCustomHtmlRenderer}
         />
       </Route>
       <Route path={`${path}/url/:manifestUrl`}>
-        <DynamicReader />
+        <DynamicReader _useCustomHtmlRenderer={useCustomHtmlRenderer} />
+      </Route>
+      <Route path={`${path}/test`}>
+        <Tests _useCustomHtmlRenderer={useCustomHtmlRenderer} />
       </Route>
       <Route path="*">
         <h1>404</h1>
@@ -304,11 +317,17 @@ const HomePage = () => {
   );
 };
 
-const DynamicReader: React.FC = () => {
+const DynamicReader: React.FC<{ _useCustomHtmlRenderer: boolean }> = ({
+  _useCustomHtmlRenderer = false,
+}) => {
   const { manifestUrl } = useParams<{ manifestUrl: string }>();
   const decoded = decodeURIComponent(manifestUrl);
   return (
-    <WebReader injectables={htmlInjectables} webpubManifestUrl={decoded} />
+    <WebReader
+      injectables={htmlInjectables}
+      webpubManifestUrl={decoded}
+      _useCustomHtmlRenderer={_useCustomHtmlRenderer}
+    />
   );
 };
 
