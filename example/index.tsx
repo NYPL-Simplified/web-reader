@@ -102,14 +102,21 @@ const Readers = () => {
     <Switch>
       <Route path={`${path}/pdf`}>
         <WebReader
-          webpubManifestUrl="/samples/pdf/degruyter.json"
+          webpubManifestUrl="/samples/pdf/single-resource-short.json"
+          proxyUrl={pdfProxyUrl}
+          pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
+        />
+      </Route>
+      <Route path={`${path}/pdf-large`}>
+        <WebReader
+          webpubManifestUrl="/samples/pdf/single-resource-long.json"
           proxyUrl={pdfProxyUrl}
           pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
         />
       </Route>
       <Route path={`${path}/pdf-collection`}>
         <WebReader
-          webpubManifestUrl="/samples/pdf/muse1007.json"
+          webpubManifestUrl="/samples/pdf/multi-resource.json"
           proxyUrl={pdfProxyUrl}
           pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
         />
@@ -161,9 +168,7 @@ const Readers = () => {
 const ReaderLink: React.FC<{ to: string }> = ({ to, children }) => {
   return (
     <Stack direction="row">
-      <Text>{children}</Text>
-      <Link to={`/v1${to}`}>v1</Link>
-      <Link to={`/v2${to}`}>v2</Link>
+      <Link to={`/v1${to}`}>{children}</Link> (<Link to={`/v2${to}`}>v2</Link>)
     </Stack>
   );
 };
@@ -218,6 +223,11 @@ const HomePage = () => {
           <UnorderedList>
             <ListItem>
               <ReaderLink to="/pdf">Single-PDF Webpub</ReaderLink>
+            </ListItem>
+            <ListItem>
+              <ReaderLink to="/pdf-large">
+                Single-PDF Webpub (large file)
+              </ReaderLink>
             </ListItem>
             <ListItem>
               <ReaderLink to="/pdf-collection">Multi-PDF Webpub</ReaderLink>

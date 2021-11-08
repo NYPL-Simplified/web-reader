@@ -6,29 +6,28 @@ describe('display settings', () => {
   });
 
   it('should have the default settings', () => {
-    cy.log('briefly see the loading indicator');
-    cy.get('#reader-loading').should('be.visible');
     cy.get('#reader-loading').should('not.be.visible');
-
+    // without this wait we are getting "element is detached from dom" errors
+    cy.wait(3000);
     cy.getIframeHtml(IFRAME_SELECTOR)
       .should('have.attr', 'data-viewer-font', 'publisher')
       .should('have.css', '--USER__appearance', 'readium-default-on')
       .should('have.css', '--USER__fontFamily', 'Original')
-      .should('have.css', '--USER__scroll', 'readium-scroll-on');
+      .should('have.css', '--USER__scroll', 'readium-scroll-off');
   });
 
-  it('should update the font family to serif, paginated mode, and on sepia theme', () => {
+  it('should update the font family to serif, scroll mode, and on sepia theme', () => {
     cy.log('open the settings menu');
     cy.findByRole('button', { name: 'Settings' }).click();
 
     cy.findByText('Serif').click();
-    cy.findByText('Paginated').click();
+    cy.findByText('Scrolling').click();
     cy.findByText('Sepia').click();
 
     cy.getIframeHtml(IFRAME_SELECTOR)
       .should('have.attr', 'data-viewer-font', 'serif')
       .should('have.css', '--USER__appearance', 'readium-sepia-on')
-      .should('have.css', '--USER__scroll', 'readium-scroll-off');
+      .should('have.css', '--USER__scroll', 'readium-scroll-on');
   });
 
   it('should trigger font size setting', () => {

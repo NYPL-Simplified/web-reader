@@ -6,6 +6,7 @@ import {
   ReaderReturn,
   ReaderArguments,
   FontFamily,
+  ReaderState,
 } from '../types';
 import HtmlReaderContent from './HtmlReaderContent';
 import { Locator } from '@d-i-t-a/reader';
@@ -80,6 +81,15 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
 }
 
 const FONT_SIZE_STEP = 4;
+// Using ReaderState here as type because ReaderSettings seems to run into
+// Type Errors with the Reducer
+const defaultReaderSettings: ReaderState = {
+  colorMode: 'day',
+  isScrolling: false,
+  fontSize: 16,
+  fontFamily: 'sans-serif',
+  currentTocUrl: null,
+};
 
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const {
@@ -88,16 +98,19 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     getContent,
     injectables = defaultInjectables,
     injectablesFixed = defaultInjectablesFixed,
+    readerSettings,
   } = args ?? {};
 
   const [state, dispatch] = React.useReducer(htmlReducer, {
-    colorMode: 'day',
-    isScrolling: false,
-    fontSize: 16,
-    fontFamily: 'sans-serif',
+    ...defaultReaderSettings,
     reader: undefined,
-    currentTocUrl: null,
   });
+
+  // used to handle async errors thrown in useEffect
+  const [error, setError] = React.useState<Error | undefined>(undefined);
+  if (error) {
+    throw error;
+  }
 
   const { reader, fontSize } = state;
 
@@ -106,6 +119,10 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     // bail out if there is no webpubManifestUrl. It indicates this format is not being used.
     if (!webpubManifestUrl) return;
     const url = new URL(webpubManifestUrl);
+
+    const userSettings = {
+      verticalScroll: defaultReaderSettings.isScrolling,
+    };
 
     D2Reader.build({
       url,
@@ -122,8 +139,12 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
          */
         autoGeneratePositions: false,
       },
+      userSettings: userSettings,
       api: {
         getContent: getContent as any, //TODO: fix this casting,
+        onError: function (e: Error) {
+          setError(e);
+        },
       } as any, //TODO: fix this casting,,
     }).then((reader) => {
       dispatch({ type: 'SET_READER', reader });

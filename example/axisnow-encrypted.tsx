@@ -9,6 +9,8 @@ import { Injectable } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator
 type AxisNowEncryptedProps = {
   injectables: Injectable[];
 };
+
+const webpubManifestUrl = `${origin}/samples/dickens-axisnow/encrypted/manifest.json`;
 /**
  * This sample shows setting up a decryptor for this specific book and then passing a
  * getContent function to the Web Reader. This getContent function runs in a separate
@@ -36,11 +38,22 @@ const AxisNowEncrypted: React.FC<AxisNowEncryptedProps> = (props) => {
       isbn,
     };
 
-    createDecryptor(params)
-      .then((decr) => {
-        setGetContent(() => decr);
-      })
-      .catch(setError);
+    async function setup() {
+      try {
+        const res = await fetch(webpubManifestUrl);
+        const manifest = await res.json();
+        const decryptor = await createDecryptor({
+          ...params,
+          webpubManifest: manifest,
+          webpubManifestUrl,
+        });
+        setGetContent(() => decryptor);
+      } catch (e) {
+        setError(e);
+      }
+    }
+
+    setup();
   }, [book_vault_uuid, isbn]);
 
   if (error) {
@@ -61,7 +74,7 @@ const AxisNowEncrypted: React.FC<AxisNowEncryptedProps> = (props) => {
   return (
     <WebReader
       injectables={props.injectables}
-      webpubManifestUrl={`${origin}/samples/dickens-axisnow/encrypted/manifest.json`}
+      webpubManifestUrl={webpubManifestUrl}
       getContent={getContent}
     />
   );

@@ -1,6 +1,6 @@
 {
   "name": "@nypl/web-reader",
-  "version": "0.2.2",
+  "version": "0.2.5",
   "license": "MIT",
   "repository": "https://github.com/NYPL-Simplified/web-reader",
   "homepage": "https://github.com/NYPL-Simplified/web-reader",
@@ -87,12 +87,13 @@
     "@storybook/addon-storyshots": "^6.3.1",
     "@storybook/addons": "^6.3.1",
     "@storybook/react": "^6.3.1",
-    "@testing-library/cypress": "^8.0.0",
+    "@testing-library/cypress": "^8.0.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/react-hooks": "^7.0.1",
     "@types/debounce": "^1.2.0",
     "@types/http-proxy": "^1.17.7",
+    "@types/jest-axe": "^3.5.3",
     "@types/node": "^14.17.10",
     "@types/react": "^17.0.19",
     "@types/react-dom": "^17.0.0",
@@ -103,7 +104,7 @@
     "@typescript-eslint/parser": "^4.29.2",
     "babel-jest": "^27.0.5",
     "babel-loader": "^8.2.2",
-    "cypress": "^8.3.0",
+    "cypress": "^8.6.0",
     "debounce": "^1.2.1",
     "esbuild": "^0.12.28",
     "esbuild-jest": "^0.5.0",
@@ -118,6 +119,7 @@
     "express": "^4.17.1",
     "husky": "^7.0.2",
     "jest": "^27.0.5",
+    "jest-axe": "^5.0.1",
     "jest-watch-typeahead": "^0.5.0",
     "lint-staged": "^11.1.2",
     "parcel": "^2.0.0-rc.0",
@@ -142,14 +144,15 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
-    "@chakra-ui/react": "^1.6.6",
-    "@d-i-t-a/reader": "2.0.0-beta.3",
+    "@chakra-ui/react": "^1.6.9",
+    "@d-i-t-a/reader": "^2.0.0-beta.4",
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
     "comlink": "^4.3.1",
     "framer-motion": "^4.1.6",
     "node-fetch": "^2.6.1",
     "react-icons": "^4.3.1",
+    "react-intersection-observer": "^8.32.2",
     "react-pdf": "^5.3.2",
     "react-resize-observer": "^1.1.1",
     "swr": "^1.0.1",
@@ -160,7 +163,7 @@
     "workbox-strategies": "^6.3.0"
   },
   "optionalDependencies": {
-    "@nypl-simplified-packages/axisnow-access-control-web": "^1.3.0"
+    "@nypl-simplified-packages/axisnow-access-control-web": "^1.4.0"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": "eslint --cache --fix",

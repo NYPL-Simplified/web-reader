@@ -51,6 +51,13 @@ export default function useWebReader(
     _useCustomHtmlRenderer,
   } = args;
   const [manifest, setManifest] = React.useState<WebpubManifest | null>(null);
+  const [error, setError] = React.useState<Error | null>(null);
+  // if there is an error that occurred, we want to throw it so that
+  // consumers can catch it in an ErrorBoundary
+  if (error) {
+    throw error;
+  }
+
   const readerType = getReaderType(
     manifest ? manifest.metadata.conformsTo : null
   );
@@ -97,7 +104,9 @@ export default function useWebReader(
 
   // fetch the manifest and set it in state
   React.useEffect(() => {
-    fetchJson<WebpubManifest>(webpubManifestUrl).then(setManifest);
+    fetchJson<WebpubManifest>(webpubManifestUrl)
+      .then(setManifest)
+      .catch(setError);
   }, [webpubManifestUrl]);
 
   // first if we are still fetching the manifest, return loading
