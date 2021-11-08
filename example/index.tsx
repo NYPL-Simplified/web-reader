@@ -77,18 +77,18 @@ const App = () => {
     <ChakraProvider theme={getTheme('day')}>
       <BrowserRouter>
         <Switch>
+          <Route path="/">
+            <HomePage />
+          </Route>
           <Route path="/:version">
             <Readers />
-          </Route>
-          <Route exact path="/">
-            <HomePage />
           </Route>
           <Route path="/test">
             <Tests />
           </Route>
           <Route path="*">
             <h1>404</h1>
-            <p>Page not found.</p>
+            <p>Page not found. what</p>
           </Route>
         </Switch>
       </BrowserRouter>
@@ -166,9 +166,16 @@ const Readers = () => {
 };
 
 const ReaderLink: React.FC<{ to: string }> = ({ to, children }) => {
+  // don't show for pdfs
+  const isPdf = to.includes('pdf');
   return (
     <Stack direction="row">
-      <Link to={`/v1${to}`}>{children}</Link> (<Link to={`/v2${to}`}>v2</Link>)
+      <Link to={`/v1${to}`}>{children}</Link>
+      {!isPdf && (
+        <span>
+          - (<Link to={`/v2${to}`}>v2</Link>)
+        </span>
+      )}
     </Stack>
   );
 };
@@ -236,7 +243,7 @@ const HomePage = () => {
         </ListItem>
         <ListItem>
           Bring your own manifest:
-          <Flex alignItems="center">
+          <Stack direction="row" alignItems="center">
             <Input
               maxW={500}
               value={dynamicHref}
@@ -244,10 +251,13 @@ const HomePage = () => {
               placeholder="Webpub Manifest URL"
               mr={2}
             />
-            <ReaderLink to={`/url/${encodeURIComponent(dynamicHref)}`}>
-              Go:
-            </ReaderLink>
-          </Flex>
+            <Button as={Link} to={`v1/url/${encodeURIComponent(dynamicHref)}`}>
+              V1
+            </Button>
+            <Button as={Link} to={`v2/url/${encodeURIComponent(dynamicHref)}`}>
+              V2
+            </Button>
+          </Stack>
         </ListItem>
       </UnorderedList>
       <Heading as="h2" fontSize={2} mt={3}>
