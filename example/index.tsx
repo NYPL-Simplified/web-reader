@@ -19,7 +19,6 @@ import {
   Box,
   Text,
   Input,
-  Flex,
   Button,
   Stack,
 } from '@chakra-ui/react';
@@ -77,7 +76,7 @@ const App = () => {
     <ChakraProvider theme={getTheme('day')}>
       <BrowserRouter>
         <Switch>
-          <Route path="/">
+          <Route exact path="/">
             <HomePage />
           </Route>
           <Route path="/:version">
