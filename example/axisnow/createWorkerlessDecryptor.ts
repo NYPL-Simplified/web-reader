@@ -1,3 +1,3 @@
-import createChapterDecryptor from './decryptAndEmbed';
+import createChapterDecryptor from './createChapterDecryptor';
 
 export default createChapterDecryptor;
