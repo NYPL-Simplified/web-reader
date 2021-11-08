@@ -44,7 +44,7 @@ export default function Header(
     }
 ): React.ReactElement {
   const [isFullscreen, toggleFullScreen] = useFullscreen();
-  const { headerLeft, navigator, manifest } = props;
+  const { headerLeft, navigator, manifest, containerRef } = props;
   const mainBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
 
   return (
@@ -52,7 +52,7 @@ export default function Header(
       {headerLeft ?? <DefaultHeaderLeft />}
       <HStack ml="auto" spacing={1}>
         <TableOfContent
-          containerRef={props.containerRef}
+          containerRef={containerRef}
           navigator={navigator}
           manifest={manifest}
         />
