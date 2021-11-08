@@ -25,9 +25,10 @@ export default function TableOfContent({
   manifest: WebpubManifest;
   containerRef: React.MutableRefObject<HTMLDivElement | null>;
 }): React.ReactElement {
-  const { isOpen, onClose, onToggle } = useDisclosure({
+  const { isOpen, onClose, onOpen } = useDisclosure({
     defaultIsOpen: false,
   });
+  const focusRef = React.useRef<HTMLLIElement | null>(null);
 
   const tocLinkHandler = (href: string) => {
     navigator.goToPage(href);
@@ -42,11 +43,30 @@ export default function TableOfContent({
     return getLinkHref(link.children[0]);
   };
 
+  /**
+   * Open TOC and focus the right value
+   */
+  const openToc = () => {
+    onOpen();
+    console.log(focusRef.current);
+    focusRef.current?.focus();
+  };
+  const closeToc = () => {
+    onClose();
+  };
+  const toggleToc = () => {
+    if (isOpen) {
+      closeToc();
+    } else {
+      openToc();
+    }
+  };
+
   return (
     <>
       <Button
         border="none"
-        onClick={onToggle}
+        onClick={toggleToc}
         leftIcon={
           <Icon as={isOpen ? MdOutlineCancel : MdOutlineToc} w={6} h={6} />
         }
@@ -73,6 +93,7 @@ export default function TableOfContent({
                   aria-label={content.title}
                   onClick={() => tocLinkHandler(getLinkHref(content))}
                   html={content.title ?? ''}
+                  ref={focusRef}
                 >
                   {content.children && (
                     <UnorderedList>
@@ -97,9 +118,10 @@ export default function TableOfContent({
   );
 }
 
-const Item: React.FC<
+const Item = React.forwardRef<
+  HTMLLIElement,
   React.ComponentProps<typeof ListItem> & { html: string }
-> = ({ html, children, ...props }) => {
+>(({ html, children, ...props }, ref) => {
   const bgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
   const color = useColorModeValue('ui.black', 'ui.white', 'ui.black');
   const borderColor = useColorModeValue(
@@ -121,6 +143,7 @@ const Item: React.FC<
 
   return (
     <ListItem
+      ref={ref}
       d="flex"
       flexDir="column"
       alignItems="stretch"
@@ -143,4 +166,4 @@ const Item: React.FC<
       {children}
     </ListItem>
   );
-};
+});
