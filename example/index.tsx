@@ -114,7 +114,7 @@ const App = () => {
               <Text as="p">Here is some more content below the reader</Text>
             </Box>
           </Route>
-          <Route path="/growing-embedded-pdf-collection">
+          <Route path="/growing-height-embedded-pdf-collection">
             <Box bg="lavenderblush" p={6} w="100vw">
               <Heading>Growing-height Embedded PDF</Heading>
               <Text as="p">
