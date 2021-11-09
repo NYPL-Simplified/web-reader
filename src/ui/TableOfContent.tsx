@@ -8,16 +8,13 @@ import {
   ListItem,
   UnorderedList,
   Box,
-  SlideFade,
-  Modal,
-  ModalContent,
-  ModalCloseButton,
 } from '@chakra-ui/react';
 import { MdOutlineToc, MdOutlineCancel } from 'react-icons/md';
 import { Navigator, WebpubManifest } from '../types';
 import Button from './Button';
 import useColorModeValue from './hooks/useColorModeValue';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
+import { Menu, MenuButton, MenuItem, MenuList } from './menu';
 
 export default function TableOfContent({
   navigator,
@@ -31,7 +28,7 @@ export default function TableOfContent({
   const { isOpen, onClose, onOpen } = useDisclosure({
     defaultIsOpen: false,
   });
-  const focusRef = React.useRef<HTMLLIElement | null>(null);
+  const focusRef = React.useRef<HTMLAnchorElement | null>(null);
 
   const tocLinkHandler = (href: string) => {
     navigator.goToPage(href);
@@ -51,7 +48,12 @@ export default function TableOfContent({
    */
   const openToc = () => {
     onOpen();
-    focusRef.current?.focus();
+    requestAnimationFrame(() => {
+      if (focusRef.current) {
+        console.log('focusing');
+        focusRef.current.focus();
+      }
+    });
   };
   const closeToc = () => {
     onClose();
@@ -65,8 +67,9 @@ export default function TableOfContent({
   };
 
   return (
-    <>
-      <Button
+    <Menu>
+      <MenuButton
+        as={Button}
         border="none"
         onClick={toggleToc}
         leftIcon={
@@ -74,54 +77,52 @@ export default function TableOfContent({
         }
       >
         <Text variant="headerNav">Table of Contents</Text>
-      </Button>
-      <Modal isOpen={isOpen} containerRef={containerRef}>
-        {/* <Box
+      </MenuButton>
+      <Portal containerRef={containerRef}>
+        <MenuList
+          overflow="scroll"
+          m="0"
           position="absolute"
           top="0"
           left="0"
           bg={tocBgColor}
           right="0"
           bottom="0"
-          width="100%"
-          height="100%"
           zIndex="overlay"
-        > */}
-        <ModalContent>
-          <UnorderedList overflow="scroll" height="100%" m="0">
-            {manifest.toc?.map((content: ReadiumLink, i) => (
-              <Item
-                key={content.title}
-                aria-label={content.title}
-                onClick={() => tocLinkHandler(getLinkHref(content))}
-                html={content.title ?? ''}
-              >
-                {content.children && (
-                  <UnorderedList>
-                    {content.children.map((subLink) => (
-                      <Item
-                        aria-label={subLink.title}
-                        key={subLink.title}
-                        onClick={() => tocLinkHandler(getLinkHref(subLink))}
-                        pl={10}
-                        html={subLink.title ?? ''}
-                      ></Item>
-                    ))}
-                  </UnorderedList>
-                )}
-              </Item>
-            ))}
-          </UnorderedList>
-        </ModalContent>
-        {/* </Box> */}
-      </Modal>
-    </>
+          border="none"
+          borderRadius="0"
+        >
+          {manifest.toc?.map((content: ReadiumLink, i) => (
+            <Item
+              key={content.title}
+              aria-label={content.title}
+              onClick={() => tocLinkHandler(getLinkHref(content))}
+              html={content.title ?? ''}
+            >
+              {content.children && (
+                <>
+                  {content.children.map((subLink) => (
+                    <Item
+                      aria-label={subLink.title}
+                      key={subLink.title}
+                      onClick={() => tocLinkHandler(getLinkHref(subLink))}
+                      pl={10}
+                      html={subLink.title ?? ''}
+                    ></Item>
+                  ))}
+                </>
+              )}
+            </Item>
+          ))}
+        </MenuList>
+      </Portal>
+    </Menu>
   );
 }
 
 const Item = React.forwardRef<
-  HTMLLIElement,
-  React.ComponentProps<typeof ListItem> & { html: string }
+  HTMLAnchorElement,
+  React.ComponentProps<typeof MenuItem> & { html: string }
 >(({ html, children, ...props }, ref) => {
   const bgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
   const color = useColorModeValue('ui.black', 'ui.white', 'ui.black');
@@ -143,28 +144,28 @@ const Item = React.forwardRef<
   } as const;
 
   return (
-    <ListItem
-      ref={ref}
-      d="flex"
-      flexDir="column"
-      alignItems="stretch"
-      listStyleType="none"
-      bg={bgColor}
-      color={color}
-      {...props}
-    >
-      <Box
-        borderBottom="1px solid"
-        borderColor={borderColor}
-        flex="1 0 auto"
-        p={3}
-        as={Link}
-        d="block"
+    <>
+      <MenuItem
+        d="flex"
+        flexDir="column"
+        alignItems="stretch"
+        listStyleType="none"
+        bg={bgColor}
+        color={color}
         _hover={_hover}
         _focus={_focus}
-        dangerouslySetInnerHTML={{ __html: html }}
-      ></Box>
+        tabIndex={-1}
+        borderBottom="1px solid"
+        borderColor={borderColor}
+        {...props}
+      >
+        <RenderHtml html={html} />
+      </MenuItem>
       {children}
-    </ListItem>
+    </>
   );
 });
+
+const RenderHtml: React.FC<{ html: string }> = ({ html }) => {
+  return <Box as="span" dangerouslySetInnerHTML={{ __html: html }} />;
+};
