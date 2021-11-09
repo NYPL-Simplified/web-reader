@@ -9,6 +9,9 @@ import {
   UnorderedList,
   Box,
   SlideFade,
+  Modal,
+  ModalContent,
+  ModalCloseButton,
 } from '@chakra-ui/react';
 import { MdOutlineToc, MdOutlineCancel } from 'react-icons/md';
 import { Navigator, WebpubManifest } from '../types';
@@ -48,7 +51,6 @@ export default function TableOfContent({
    */
   const openToc = () => {
     onOpen();
-    console.log(focusRef.current);
     focusRef.current?.focus();
   };
   const closeToc = () => {
@@ -73,47 +75,46 @@ export default function TableOfContent({
       >
         <Text variant="headerNav">Table of Contents</Text>
       </Button>
-      <Portal containerRef={containerRef}>
-        <SlideFade in={isOpen} offsetY="20px">
-          <Box
-            position="absolute"
-            top="0"
-            left="0"
-            bg={tocBgColor}
-            right="0"
-            bottom="0"
-            width="100%"
-            height="100%"
-            zIndex="overlay"
-          >
-            <UnorderedList overflow="scroll" height="100%" m="0">
-              {manifest.toc?.map((content: ReadiumLink) => (
-                <Item
-                  key={content.title}
-                  aria-label={content.title}
-                  onClick={() => tocLinkHandler(getLinkHref(content))}
-                  html={content.title ?? ''}
-                  ref={focusRef}
-                >
-                  {content.children && (
-                    <UnorderedList>
-                      {content.children.map((subLink) => (
-                        <Item
-                          aria-label={subLink.title}
-                          key={subLink.title}
-                          onClick={() => tocLinkHandler(getLinkHref(subLink))}
-                          pl={10}
-                          html={subLink.title ?? ''}
-                        ></Item>
-                      ))}
-                    </UnorderedList>
-                  )}
-                </Item>
-              ))}
-            </UnorderedList>
-          </Box>
-        </SlideFade>
-      </Portal>
+      <Modal isOpen={isOpen} containerRef={containerRef}>
+        {/* <Box
+          position="absolute"
+          top="0"
+          left="0"
+          bg={tocBgColor}
+          right="0"
+          bottom="0"
+          width="100%"
+          height="100%"
+          zIndex="overlay"
+        > */}
+        <ModalContent>
+          <UnorderedList overflow="scroll" height="100%" m="0">
+            {manifest.toc?.map((content: ReadiumLink, i) => (
+              <Item
+                key={content.title}
+                aria-label={content.title}
+                onClick={() => tocLinkHandler(getLinkHref(content))}
+                html={content.title ?? ''}
+              >
+                {content.children && (
+                  <UnorderedList>
+                    {content.children.map((subLink) => (
+                      <Item
+                        aria-label={subLink.title}
+                        key={subLink.title}
+                        onClick={() => tocLinkHandler(getLinkHref(subLink))}
+                        pl={10}
+                        html={subLink.title ?? ''}
+                      ></Item>
+                    ))}
+                  </UnorderedList>
+                )}
+              </Item>
+            ))}
+          </UnorderedList>
+        </ModalContent>
+        {/* </Box> */}
+      </Modal>
     </>
   );
 }
