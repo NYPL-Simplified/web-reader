@@ -31,7 +31,7 @@ describe('Table Of Content rendering', () => {
     render(<TestTOC navigator={MockNavigator} manifest={MockWebpubManifest} />);
   });
 
-  test('render Table Of Content', () => {
+  test('render Table Of Content', async () => {
     // The initial TOC component render should not show TOC popover on the screen.
     expect(screen.queryByText('Chapter 1')).not.toBeVisible();
 
@@ -39,30 +39,36 @@ describe('Table Of Content rendering', () => {
     const toggleBtn = screen.getByRole('button', { name: 'Table of Contents' });
     fireEvent.click(toggleBtn);
 
-    const tocLinkElm = screen.getByRole('listitem', { name: 'Chapter 1' });
+    const tocLinkElm = await screen.findByRole('menuitem', {
+      name: 'Chapter 1',
+    });
     expect(tocLinkElm).toBeInTheDocument();
   });
 
-  test('navigation should be called with the correct url', () => {
+  test('navigation should be called with the correct url', async () => {
     const toggleBtn = screen.getByRole('button', { name: 'Table of Contents' });
     fireEvent.click(toggleBtn);
 
-    const chapterOneElm = screen.getByRole('listitem', { name: 'Chapter 1' });
+    const chapterOneElm = await screen.findByRole('menuitem', {
+      name: 'Chapter 1',
+    });
     fireEvent.click(chapterOneElm);
     expect(MockNavigator.goToPage).toHaveBeenCalledWith('chapter/one/url');
   });
 
-  test('navigation should call chapter and subchapters separately if both are provided', () => {
+  test('navigation should call chapter and subchapters separately if both are provided', async () => {
     const toggleBtn = screen.getByRole('button', { name: 'Table of Contents' });
     fireEvent.click(toggleBtn);
 
-    const chapterThreeElm = screen.getByRole('listitem', { name: 'Chapter 3' });
+    const chapterThreeElm = await screen.findByRole('menuitem', {
+      name: 'Chapter 3',
+    });
     fireEvent.click(chapterThreeElm);
     expect(MockNavigator.goToPage).toHaveBeenCalledWith('chapter/three/url');
 
     fireEvent.click(toggleBtn);
 
-    const chapterThreeOneElm = screen.getByRole('listitem', {
+    const chapterThreeOneElm = await screen.findByRole('menuitem', {
       name: 'Chapter 3 part 1',
     });
     fireEvent.click(chapterThreeOneElm);
@@ -71,11 +77,11 @@ describe('Table Of Content rendering', () => {
     );
   });
 
-  test('navigation should use first subchapter as chapter link if nothing is provided', () => {
+  test('navigation should use first subchapter as chapter link if nothing is provided', async () => {
     const toggleBtn = screen.getByRole('button', { name: 'Table of Contents' });
     fireEvent.click(toggleBtn);
 
-    const chapterFourElm = screen.getByRole('listitem', {
+    const chapterFourElm = await screen.findByRole('menuitem', {
       name: 'Chapter 4',
     });
     fireEvent.click(chapterFourElm);
@@ -83,7 +89,7 @@ describe('Table Of Content rendering', () => {
 
     fireEvent.click(toggleBtn);
 
-    const chapterFourOneElm = screen.getByRole('listitem', {
+    const chapterFourOneElm = await screen.findByRole('menuitem', {
       name: 'Chapter 4 part 1',
     });
     fireEvent.click(chapterFourOneElm);
@@ -91,11 +97,11 @@ describe('Table Of Content rendering', () => {
   });
 
   //Documentation of not-yet-implemented functionality
-  test('navigation does not show recursive child links', () => {
+  test('navigation does not show recursive child links', async () => {
     const toggleBtn = screen.getByRole('button', { name: 'Table of Contents' });
     fireEvent.click(toggleBtn);
 
-    const chapterFourElm = screen.getByRole('listitem', {
+    const chapterFourElm = await screen.findByRole('menuitem', {
       name: 'Chapter 4 part 2',
     });
     fireEvent.click(chapterFourElm);
@@ -103,7 +109,7 @@ describe('Table Of Content rendering', () => {
 
     fireEvent.click(toggleBtn);
 
-    const chapterFourThreeElm = screen.getByRole('listitem', {
+    const chapterFourThreeElm = await screen.findByRole('menuitem', {
       name: 'Chapter 4 part 3',
     });
     fireEvent.click(chapterFourThreeElm);
