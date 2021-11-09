@@ -6,16 +6,21 @@ import {
   ReaderReturn,
   ReaderArguments,
   FontFamily,
-  ReaderState,
 } from '../types';
 import HtmlReaderContent from './HtmlReaderContent';
 import { Locator } from '@d-i-t-a/reader';
 import { HEADER_HEIGHT } from '../ui/constants';
 import '../../node_modules/@d-i-t-a/reader/dist/reader.css';
-import { Injectable } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
+import {
+  GetContent,
+  Injectable,
+  NavigatorAPI,
+} from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
+import debounce from 'debounce';
 
 type HtmlState = HtmlReaderState & {
   reader: D2Reader | undefined;
+  location: undefined | Locator;
 };
 
 /**
@@ -31,7 +36,9 @@ export type HtmlAction =
   | { type: 'SET_SCROLL'; isScrolling: boolean }
   | { type: 'SET_FONT_SIZE'; size: number }
   | { type: 'SET_FONT_FAMILY'; family: FontFamily }
-  | { type: 'SET_CURRENT_TOC_URL'; currentTocUrl: string };
+  | { type: 'SET_CURRENT_TOC_URL'; currentTocUrl: string }
+  | { type: 'LOCATION_CHANGED'; location: Locator }
+  | { type: 'BOOK_BOUNDARY_CHANGED'; atStart: boolean; atEnd: boolean };
 
 function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
   switch (action.type) {
@@ -44,7 +51,10 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
         colorMode: getColorMode(settings.appearance),
         fontSize: settings.fontSize,
         fontFamily: r2FamilyToFamily[settings.fontFamily] ?? 'publisher',
-        currentTocUrl: action.reader.mostRecentNavigatedTocItem(), // This returns a relative href
+        currentTocUrl: action.reader.mostRecentNavigatedTocItem(),
+        location: undefined,
+        atStart: true,
+        atEnd: false,
       };
     }
 
@@ -77,19 +87,23 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
         ...state,
         currentTocUrl: action.currentTocUrl,
       };
+
+    case 'LOCATION_CHANGED':
+      return {
+        ...state,
+        location: action.location,
+      };
+
+    case 'BOOK_BOUNDARY_CHANGED':
+      return {
+        ...state,
+        atStart: action.atStart,
+        atEnd: action.atEnd,
+      };
   }
 }
 
 const FONT_SIZE_STEP = 4;
-// Using ReaderState here as type because ReaderSettings seems to run into
-// Type Errors with the Reducer
-const defaultReaderSettings: ReaderState = {
-  colorMode: 'day',
-  isScrolling: false,
-  fontSize: 16,
-  fontFamily: 'sans-serif',
-  currentTocUrl: null,
-};
 
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const {
@@ -101,9 +115,18 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     readerSettings,
   } = args ?? {};
 
+  const defaultIsScrolling = readerSettings?.isScrolling ?? false;
+
   const [state, dispatch] = React.useReducer(htmlReducer, {
-    ...defaultReaderSettings,
+    colorMode: 'day',
+    isScrolling: defaultIsScrolling,
+    fontSize: 16,
+    fontFamily: 'sans-serif',
+    currentTocUrl: null,
     reader: undefined,
+    location: undefined,
+    atStart: true,
+    atEnd: false,
   });
 
   // used to handle async errors thrown in useEffect
@@ -112,7 +135,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     throw error;
   }
 
-  const { reader, fontSize } = state;
+  const { reader, fontSize, location } = state;
 
   // initialize the reader
   React.useEffect(() => {
@@ -121,7 +144,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     const url = new URL(webpubManifestUrl);
 
     const userSettings = {
-      verticalScroll: defaultReaderSettings.isScrolling,
+      verticalScroll: defaultIsScrolling,
     };
 
     D2Reader.build({
@@ -141,15 +164,33 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       },
       userSettings: userSettings,
       api: {
-        getContent: getContent as any, //TODO: fix this casting,
+        getContent: getContent as GetContent,
+        updateCurrentLocation: async (location: Locator) => {
+          // This is needed so that setBookBoundary has the updated "reader" value.
+          dispatch({ type: 'LOCATION_CHANGED', location: location });
+          return await location;
+        },
         onError: function (e: Error) {
           setError(e);
         },
-      } as any, //TODO: fix this casting,,
+      } as NavigatorAPI,
     }).then((reader) => {
       dispatch({ type: 'SET_READER', reader });
+      enableResizeEvent(reader, dispatch);
     });
-  }, [webpubManifestUrl, getContent, injectables, injectablesFixed]);
+  }, [
+    webpubManifestUrl,
+    getContent,
+    injectables,
+    injectablesFixed,
+    defaultIsScrolling,
+  ]);
+
+  // Re-calculate page location on scroll/TOC navigation/page button press
+  React.useEffect(() => {
+    if (!location || !reader) return;
+    setBookBoundary(reader, dispatch);
+  }, [location, reader, state.isScrolling]);
 
   // prev and next page functions
   const goForward = React.useCallback(async () => {
@@ -305,3 +346,33 @@ const r2FamilyToFamily: Record<string, FontFamily | undefined> = {
   'sans-serif': 'sans-serif',
   opendyslexic: 'open-dyslexic',
 };
+
+async function setBookBoundary(
+  reader: D2Reader,
+  dispatch: React.Dispatch<HtmlAction>
+): Promise<void> {
+  const isFirstResource = (await reader.currentResource()) === 0;
+  const isResourceStart = (await reader.atStart()) && isFirstResource;
+
+  const isLastResource =
+    (await reader.currentResource()) === (await reader.totalResources()) - 1; // resource index starts with 0
+  const isResourceEnd = (await reader.atEnd()) && isLastResource;
+
+  dispatch({
+    type: 'BOOK_BOUNDARY_CHANGED',
+    atStart: isResourceStart,
+    atEnd: isResourceEnd,
+  });
+}
+
+function enableResizeEvent(
+  reader: D2Reader,
+  dispatch: React.Dispatch<HtmlAction>
+) {
+  const resizeHandler = () => {
+    setBookBoundary(reader, dispatch);
+  };
+
+  const debouncedResizeHandler = debounce(resizeHandler, 500);
+  window.addEventListener('resize', debouncedResizeHandler, { passive: true });
+}
