@@ -27,7 +27,7 @@ describe('navigating an EPUB page', () => {
     cy.findByRole('button', { name: 'Table of Contents' }).click();
 
     cy.log('open chapter 1');
-    cy.findByRole('listitem', { name: 'I: Down the Rab­bit-Hole' }).click();
+    cy.findByRole('menuitem', { name: 'I: Down the Rab­bit-Hole' }).click();
 
     cy.wait('@chapterOne', { timeout: 10000 }).then((interception) => {
       assert.isNotNull(
@@ -66,7 +66,7 @@ describe('navigating an EPUB page', () => {
     cy.findByRole('button', { name: 'Table of Contents' }).click();
 
     cy.log('open chapter 1');
-    cy.findByRole('listitem', { name: 'I: Down the Rab­bit-Hole' }).click();
+    cy.findByRole('menuitem', { name: 'I: Down the Rab­bit-Hole' }).click();
 
     cy.wait('@chapterOne', { timeout: 10000 }).then((interception) => {
       assert.isNotNull(
