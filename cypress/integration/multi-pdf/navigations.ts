@@ -52,4 +52,27 @@ describe('Multi PDF navigation', () => {
     cy.wait(5000);
     cy.get('div[data-page-number="5"]').find('canvas').should('exist');
   });
+
+  it('should navigate between resources with page buttons on scrolling mode', () => {
+    cy.findByText('Anthropology without Informants').should('be.visible');
+    cy.findByRole('button', { name: 'Settings' }).click();
+    cy.findByText('Scrolling').click();
+    cy.findByRole('button', { name: 'Next Page' }).click();
+    cy.findByText('Anthropology without Informants').should('not.exist');
+
+    cy.log('switch from paginated to scrolling');
+    cy.findByRole('button', { name: 'Settings' }).click();
+    cy.findByText('Paginated').click();
+    cy.findByRole('button', { name: 'Next Page' }).click();
+
+    cy.findByText('Anthropology without Informants').should('not.exist');
+
+    cy.findByRole('button', { name: 'Settings' }).click();
+    cy.findByText('Scrolling').click();
+    cy.findByRole('button', { name: 'Previous Page' }).click();
+
+    cy.wait('@pdf');
+
+    cy.findByText('Anthropology without Informants').should('be.visible');
+  });
 });
