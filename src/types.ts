@@ -42,6 +42,8 @@ export type ReaderState = {
   fontSize: number;
   fontFamily: FontFamily;
   currentTocUrl: string | null;
+  atStart: boolean;
+  atEnd: boolean;
 };
 
 // PDF specific reader state
