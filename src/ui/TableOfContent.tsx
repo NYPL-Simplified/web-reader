@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  Link,
-  Portal,
-  Text,
-  Icon,
-  useDisclosure,
-  ListItem,
-  UnorderedList,
-  Box,
-} from '@chakra-ui/react';
+import { Portal, Text, Icon, Box } from '@chakra-ui/react';
 import { MdOutlineToc, MdOutlineCancel } from 'react-icons/md';
 import { Navigator, WebpubManifest } from '../types';
 import Button from './Button';
@@ -25,14 +16,8 @@ export default function TableOfContent({
   manifest: WebpubManifest;
   containerRef: React.MutableRefObject<HTMLDivElement | null>;
 }): React.ReactElement {
-  const { isOpen, onClose, onOpen } = useDisclosure({
-    defaultIsOpen: false,
-  });
-  const focusRef = React.useRef<HTMLAnchorElement | null>(null);
-
   const tocLinkHandler = (href: string) => {
     navigator.goToPage(href);
-    onClose();
   };
 
   const tocBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
@@ -43,79 +28,59 @@ export default function TableOfContent({
     return getLinkHref(link.children[0]);
   };
 
-  /**
-   * Open TOC and focus the right value
-   */
-  const openToc = () => {
-    onOpen();
-    requestAnimationFrame(() => {
-      if (focusRef.current) {
-        console.log('focusing');
-        focusRef.current.focus();
-      }
-    });
-  };
-  const closeToc = () => {
-    onClose();
-  };
-  const toggleToc = () => {
-    if (isOpen) {
-      closeToc();
-    } else {
-      openToc();
-    }
-  };
-
   return (
     <Menu>
-      <MenuButton
-        as={Button}
-        border="none"
-        onClick={toggleToc}
-        leftIcon={
-          <Icon as={isOpen ? MdOutlineCancel : MdOutlineToc} w={6} h={6} />
-        }
-      >
-        <Text variant="headerNav">Table of Contents</Text>
-      </MenuButton>
-      <Portal containerRef={containerRef}>
-        <MenuList
-          overflow="scroll"
-          m="0"
-          position="absolute"
-          top="0"
-          left="0"
-          bg={tocBgColor}
-          right="0"
-          bottom="0"
-          zIndex="overlay"
-          border="none"
-          borderRadius="0"
-        >
-          {manifest.toc?.map((content: ReadiumLink, i) => (
-            <Item
-              key={content.title}
-              aria-label={content.title}
-              onClick={() => tocLinkHandler(getLinkHref(content))}
-              html={content.title ?? ''}
+      {({ isOpen }) => (
+        <>
+          <MenuButton
+            as={Button}
+            border="none"
+            leftIcon={
+              <Icon as={isOpen ? MdOutlineCancel : MdOutlineToc} w={6} h={6} />
+            }
+          >
+            <Text variant="headerNav">Table of Contents</Text>
+          </MenuButton>
+          <Portal containerRef={containerRef}>
+            <MenuList
+              overflow="scroll"
+              m="0"
+              position="absolute"
+              top="0"
+              left="0"
+              bg={tocBgColor}
+              right="0"
+              bottom="0"
+              zIndex="overlay"
+              border="none"
+              borderRadius="0"
             >
-              {content.children && (
-                <>
-                  {content.children.map((subLink) => (
-                    <Item
-                      aria-label={subLink.title}
-                      key={subLink.title}
-                      onClick={() => tocLinkHandler(getLinkHref(subLink))}
-                      pl={10}
-                      html={subLink.title ?? ''}
-                    ></Item>
-                  ))}
-                </>
-              )}
-            </Item>
-          ))}
-        </MenuList>
-      </Portal>
+              {manifest.toc?.map((content: ReadiumLink, i) => (
+                <Item
+                  key={content.title}
+                  aria-label={content.title}
+                  onClick={() => tocLinkHandler(getLinkHref(content))}
+                  html={content.title ?? ''}
+                >
+                  {content.children && (
+                    <>
+                      {content.children.map((subLink) => (
+                        <Item
+                          aria-label={subLink.title}
+                          key={subLink.title}
+                          onClick={() => tocLinkHandler(getLinkHref(subLink))}
+                          pl={10}
+                          html={subLink.title ?? ''}
+                        ></Item>
+                      ))}
+                    </>
+                  )}
+                </Item>
+              ))}
+            </MenuList>
+          </Portal>
+        </>
+      )}
     </Menu>
   );
 }
@@ -159,13 +124,9 @@ const Item = React.forwardRef<
         borderColor={borderColor}
         {...props}
       >
-        <RenderHtml html={html} />
+        <span dangerouslySetInnerHTML={{ __html: html }} />
       </MenuItem>
       {children}
     </>
   );
 });
-
-const RenderHtml: React.FC<{ html: string }> = ({ html }) => {
-  return <Box as="span" dangerouslySetInnerHTML={{ __html: html }} />;
-};
