@@ -28,6 +28,9 @@ const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
 }) => {
   const bgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const isAtStart = props.state?.atStart;
+  const isAtEnd = props.state?.atEnd;
+
   return (
     <Flex flexDir="column" w="100%" position="relative">
       {!props.isLoading && (
@@ -64,11 +67,16 @@ const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
         <PageButton
           onClick={props.navigator?.goBackward}
           aria-label="Previous Page"
+          disabled={isAtStart}
         >
           <Icon as={MdKeyboardArrowLeft} w={6} h={6} />
           Previous
         </PageButton>
-        <PageButton onClick={props.navigator?.goForward} aria-label="Next Page">
+        <PageButton
+          onClick={props.navigator?.goForward}
+          aria-label="Next Page"
+          disabled={isAtEnd}
+        >
           Next <Icon as={MdKeyboardArrowRight} w={6} h={6} />
         </PageButton>
       </Flex>

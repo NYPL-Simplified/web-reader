@@ -44,8 +44,8 @@ type PdfReaderAction =
       type: 'RESIZE_PAGE';
       height: number | undefined;
       width: number | undefined;
-    };
-
+    }
+  | { type: 'BOOK_BOUNDARY_CHANGED'; atStart: boolean; atEnd: boolean };
 const IFRAME_WRAPPER_ID = 'iframe-wrapper';
 export const SCALE_STEP = 0.1;
 
@@ -116,6 +116,13 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
         pageWidth: action.width,
         pageHeight: action.height,
       };
+
+    case 'BOOK_BOUNDARY_CHANGED':
+      return {
+        ...state,
+        atStart: action.atStart,
+        atEnd: action.atEnd,
+      };
   }
 }
 
@@ -181,11 +188,14 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     pdfHeight: 0,
     pageHeight: undefined,
     pageWidth: undefined,
+    atStart: true,
+    atEnd: false,
   });
 
   // state we can derive from the state above
   const isFetching = !state.resource;
   const isParsed = typeof state.numPages === 'number';
+  const isSinglePDF = manifest && manifest?.readingOrder.length === 1;
   const [containerRef, containerSize] = useMeasure<HTMLDivElement>();
 
   /**
@@ -246,6 +256,45 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     resizePage(state.pdfWidth, state.pdfHeight, containerSize);
   }, [containerSize, state.pdfWidth, state.pdfHeight, resizePage]);
 
+  /**
+   * Hide Or Show Page Button
+   */
+  React.useEffect(() => {
+    if (!manifest) return;
+
+    // Hide all buttons for single PDF on scroll mode
+    if (isSinglePDF && state.isScrolling) {
+      dispatch({
+        type: 'BOOK_BOUNDARY_CHANGED',
+        atStart: true,
+        atEnd: true,
+      });
+    } else {
+      const isFirstResource = state.resourceIndex === 0;
+      const isResourceStart = isFirstResource && state.pageNumber === 1;
+
+      const isLastResource =
+        state.resourceIndex === manifest?.readingOrder?.length - 1;
+      const isResourceEnd =
+        (isLastResource && state.pageNumber === state.numPages) ||
+        // On scroll mode, next page button takes you to the next resource. So we can just hide the next button on last resource.
+        (state.isScrolling && isLastResource);
+
+      dispatch({
+        type: 'BOOK_BOUNDARY_CHANGED',
+        atStart: isResourceStart,
+        atEnd: isResourceEnd,
+      });
+    }
+  }, [
+    manifest,
+    state.isScrolling,
+    state.numPages,
+    state.pageNumber,
+    state.resourceIndex,
+    isSinglePDF,
+  ]);
+
   // prev and next page functions
   const goForward = React.useCallback(async () => {
     // do nothing if we haven't parsed the number of pages yet
@@ -281,7 +330,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     // do nothing if we haven't parsed the PDF yet
     if (!isParsed) return;
 
-    if (state.pageNumber > 1) {
+    if (state.pageNumber > 1 && !state.isScrolling) {
       dispatch({
         type: 'NAVIGATE_PAGE',
         pageNum: state.pageNumber - 1,

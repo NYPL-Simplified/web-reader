@@ -8,7 +8,7 @@ describe('Renders single PDF', () => {
     cy.findByRole('button', { name: 'Settings' }).should('exist');
     cy.findByRole('button', { name: 'Toggle Fullscreen' }).should('exist');
     cy.findByRole('button', { name: 'Next Page' }).should('exist');
-    cy.findByRole('button', { name: 'Previous Page' }).should('exist');
+    cy.findByRole('button', { name: 'Previous Page' }).should('not.exist');
 
     cy.findByText('Assessing climate change').should('be.visible');
   });
