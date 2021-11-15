@@ -8,9 +8,9 @@ describe('render page content', () => {
     cy.findByRole('button', { name: 'Table of Contents' }).should('exist');
     cy.findByRole('button', { name: 'Settings' }).should('exist');
     cy.findByRole('button', { name: 'Toggle Fullscreen' }).should('exist');
-    cy.findByRole('button', { name: 'Next Page' }).should('exist');
+    cy.findByRole('button', { name: 'Next Page' }).should('not.be.disabled');
     // On initial load, previous button is hidden
-    cy.findByRole('button', { name: 'Previous Page' }).should('not.exist');
+    cy.findByRole('button', { name: 'Previous Page' }).should('be.disabled');
 
     cy.log('page one contains an image');
     cy.getIframeBody(IFRAME_SELECTOR)

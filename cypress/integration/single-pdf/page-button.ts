@@ -3,26 +3,28 @@ describe('Pagebutton on single PDF page', () => {
     cy.loadPdf('/pdf');
   });
 
-  it('Should hide page buttons on scrolling mode', () => {
-    cy.findByRole('button', { name: 'Next Page' }).should('exist');
-    cy.findByRole('button', { name: 'Previous Page' }).should('not.exist');
+  it('Should disable page buttons on scrolling mode', () => {
+    cy.findByRole('button', { name: 'Next Page' }).should('not.be.disabled');
+    cy.findByRole('button', { name: 'Previous Page' }).should('be.disabled');
 
     cy.findByRole('button', { name: 'Settings' }).click();
     cy.findByText('Scrolling').click();
 
-    cy.findByRole('button', { name: 'Next Page' }).should('not.exist');
-    cy.findByRole('button', { name: 'Previous Page' }).should('not.exist');
+    cy.findByRole('button', { name: 'Next Page' }).should('be.disabled');
+    cy.findByRole('button', { name: 'Previous Page' }).should('be.disabled');
   });
 
-  it('Should trigger hide or show when moving back and forward between pages on paginated mode', () => {
+  it('Should trigger page button state when moving back and forward between pages on paginated mode', () => {
     cy.findByRole('button', { name: 'Next Page' }).click();
 
-    cy.findByRole('button', { name: 'Next Page' }).should('exist');
-    cy.findByRole('button', { name: 'Previous Page' }).should('exist');
+    cy.findByRole('button', { name: 'Next Page' }).should('not.be.disabled');
+    cy.findByRole('button', { name: 'Previous Page' }).should(
+      'not.be.disabled'
+    );
 
     cy.findByRole('button', { name: 'Previous Page' }).click();
 
-    cy.findByRole('button', { name: 'Next Page' }).should('exist');
-    cy.findByRole('button', { name: 'Previous Page' }).should('not.exist');
+    cy.findByRole('button', { name: 'Next Page' }).should('not.be.disabled');
+    cy.findByRole('button', { name: 'Previous Page' }).should('be.disabled');
   });
 });
