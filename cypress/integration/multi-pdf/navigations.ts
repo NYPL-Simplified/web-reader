@@ -13,7 +13,10 @@ describe('Multi PDF navigation', () => {
       'be.visible'
     );
     cy.findByRole('button', { name: 'Next Page' }).click();
-    cy.findByText('Foreword', { timeout: 10000 }).should('exist');
+    cy.findByText(
+      /This volume encapsulates some of the most significant published work of Leslie/,
+      { timeout: 10000 }
+    ).should('be.visible');
   });
 
   it('Scrolling mode & TOC: should update page content after clicking on TOC link', () => {
@@ -23,7 +26,7 @@ describe('Multi PDF navigation', () => {
     cy.findByRole('radio', { name: 'Scrolling' }).should('be.checked');
     cy.findByRole('button', { name: 'Table of Contents' }).click();
     cy.findByRole('menuitem', { name: 'Foreword' }).click();
-    cy.wait(5000);
+    cy.wait('@pdf');
     cy.findByText('Anthropology without Informants', { timeout: 10000 }).should(
       'be.visible'
     );

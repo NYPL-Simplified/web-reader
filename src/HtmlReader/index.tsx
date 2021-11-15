@@ -9,8 +9,12 @@ import {
 } from '../types';
 import HtmlReaderContent from './HtmlReaderContent';
 import { Locator } from '@d-i-t-a/reader';
-import { HEADER_HEIGHT } from '../ui/constants';
 import '../../node_modules/@d-i-t-a/reader/dist/reader.css';
+import {
+  DEFAULT_HEIGHT,
+  DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
+  HEADER_HEIGHT,
+} from '../constants';
 import {
   GetContent,
   Injectable,
@@ -112,6 +116,8 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     getContent,
     injectables = defaultInjectables,
     injectablesFixed = defaultInjectablesFixed,
+    height = DEFAULT_HEIGHT,
+    growWhenScrolling = DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
     readerSettings,
   } = args ?? {};
 
@@ -153,7 +159,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       injectablesFixed: injectablesFixed,
       attributes: {
         navHeight: HEADER_HEIGHT,
-        margin: 0,
+        margin: 16,
       },
       rights: {
         /**
@@ -168,7 +174,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
         updateCurrentLocation: async (location: Locator) => {
           // This is needed so that setBookBoundary has the updated "reader" value.
           dispatch({ type: 'LOCATION_CHANGED', location: location });
-          return await location;
+          return location;
         },
         onError: function (e: Error) {
           setError(e);
@@ -287,7 +293,13 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     return {
       type: null,
       isLoading: true,
-      content: <HtmlReaderContent />,
+      content: (
+        <HtmlReaderContent
+          height={height}
+          isScrolling={state.isScrolling}
+          growsWhenScrolling={growWhenScrolling}
+        />
+      ),
       navigator: null,
       manifest: null,
       state: null,
@@ -298,7 +310,13 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   return {
     type: 'HTML',
     isLoading: false,
-    content: <HtmlReaderContent />,
+    content: (
+      <HtmlReaderContent
+        height={height}
+        isScrolling={state.isScrolling}
+        growsWhenScrolling={growWhenScrolling}
+      />
+    ),
     state,
     manifest,
     navigator: {

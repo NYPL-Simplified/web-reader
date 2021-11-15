@@ -7,6 +7,11 @@ import ChakraPage from './ChakraPage';
 import ScrollPage from './ScrollPage';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+import { HEADER_HEIGHT, FOOTER_HEIGHT } from '../constants';
+import {
+  DEFAULT_HEIGHT,
+  DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
+} from '../constants';
 
 type PdfState = PdfReaderState & {
   resourceIndex: number;
@@ -42,6 +47,7 @@ type PdfReaderAction =
     }
   | { type: 'BOOK_BOUNDARY_CHANGED'; atStart: boolean; atEnd: boolean };
 const IFRAME_WRAPPER_ID = 'iframe-wrapper';
+export const SCALE_STEP = 0.1;
 
 function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
   switch (action.type) {
@@ -159,7 +165,14 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     pdfjs.GlobalWorkerOptions.workerSrc = args.pdfWorkerSrc;
   }
 
-  const { webpubManifestUrl, manifest, proxyUrl, readerSettings } = args ?? {};
+  const {
+    webpubManifestUrl,
+    manifest,
+    proxyUrl,
+    readerSettings,
+    height = DEFAULT_HEIGHT,
+    growWhenScrolling = DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
+  } = args ?? {};
   const [state, dispatch] = React.useReducer(pdfReducer, {
     colorMode: 'day',
     isScrolling: readerSettings?.isScrolling ?? false,
@@ -352,14 +365,14 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   const zoomIn = React.useCallback(async () => {
     dispatch({
       type: 'SET_SCALE',
-      scale: state.scale + 0.1,
+      scale: state.scale + SCALE_STEP,
     });
   }, [state.scale]);
 
   const zoomOut = React.useCallback(async () => {
     dispatch({
       type: 'SET_SCALE',
-      scale: state.scale - 0.1,
+      scale: state.scale - SCALE_STEP,
     });
   }, [state.scale]);
 
@@ -401,6 +414,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
           alignItems="center"
           justifyContent="center"
           flex="1 0 auto"
+          height={height}
         >
           PDF is loading
         </Flex>
@@ -444,6 +458,9 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     }
   }
 
+  const shouldGrow = state.isScrolling && growWhenScrolling;
+  const finalHeight = shouldGrow ? 'initial' : height;
+
   // the reader is active but loading a page
   return {
     type: 'PDF',
@@ -458,7 +475,18 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         tabIndex={-1}
         id={IFRAME_WRAPPER_ID}
         ref={containerRef}
+        height={finalHeight}
       >
+        {/* FIXME: POC, update this with more a react proach. chakra.factory throws memory leak error.*/}
+        <style>
+          {`
+            .react-pdf__Document {
+              height: calc(100vh - ${HEADER_HEIGHT + FOOTER_HEIGHT}px);
+              overflow-x: hidden;
+              overflow-y: auto;
+            }
+          `}
+        </style>
         <Document file={state.resource} onLoadSuccess={onDocumentLoadSuccess}>
           {isParsed && state.numPages && (
             <>

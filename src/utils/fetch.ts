@@ -2,7 +2,7 @@
  * Utilities for fetching specific types
  */
 
-export async function fetchJson<ExpectedResponse extends any = any>(
+export async function fetchJson<ExpectedResponse extends unknown = unknown>(
   url: string
 ): Promise<ExpectedResponse> {
   const response = await fetch(url);

@@ -7,9 +7,9 @@ import useColorModeValue from '../ui/hooks/useColorModeValue';
 import SettingsCard from './SettingsButton';
 import Button from './Button';
 import TableOfContent from './TableOfContent';
-import { HEADER_HEIGHT } from './constants';
 import { MdOutlineFullscreenExit, MdOutlineFullscreen } from 'react-icons/md';
 import useFullscreen from './hooks/useFullScreen';
+import { HEADER_HEIGHT } from '../constants';
 
 export const DefaultHeaderLeft = (): React.ReactElement => {
   const linkColor = useColorModeValue('gray.700', 'gray.100', 'gray.700');
@@ -38,20 +38,23 @@ export const DefaultHeaderLeft = (): React.ReactElement => {
 };
 
 export default function Header(
-  props: ActiveReader & ReaderManagerArguments
+  props: ActiveReader &
+    ReaderManagerArguments & {
+      containerRef: React.MutableRefObject<null | HTMLDivElement>;
+    }
 ): React.ReactElement {
   const [isFullscreen, toggleFullScreen] = useFullscreen();
-  const { headerLeft, state, navigator, manifest } = props;
+  const { headerLeft, navigator, manifest, containerRef } = props;
   const mainBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
 
   return (
-    <HeaderWrapper bgColor={mainBgColor}>
+    <HeaderWrapper bg={mainBgColor}>
       {headerLeft ?? <DefaultHeaderLeft />}
       <HStack ml="auto" spacing={1}>
         <TableOfContent
+          containerRef={containerRef}
           navigator={navigator}
           manifest={manifest}
-          readerState={state}
         />
         <SettingsCard {...props} />
         <Button
@@ -72,12 +75,13 @@ export default function Header(
   );
 }
 
-export const HeaderWrapper: React.FC<ComponentProps<typeof Flex>> = ({
-  bgColor,
-  children,
-}) => {
+export const HeaderWrapper = React.forwardRef<
+  HTMLDivElement,
+  ComponentProps<typeof Flex>
+>(({ children, ...rest }, ref) => {
   return (
     <Flex
+      ref={ref}
       as="header"
       position="sticky"
       top={0}
@@ -90,9 +94,9 @@ export const HeaderWrapper: React.FC<ComponentProps<typeof Flex>> = ({
       px={8}
       borderBottom="1px solid"
       borderColor="gray.100"
-      backgroundColor={bgColor}
+      {...rest}
     >
       {children}
     </Flex>
   );
-};
+});

@@ -1,23 +1,26 @@
+import { Button } from '@chakra-ui/react';
+import React from 'react';
 import { GetColor } from '../../../types';
 
-const getButtonStyle = (getColor: GetColor) => ({
-  // style object for base or default style
-  baseStyle: {
-    borderRadius: 'none',
-  },
-  // styles for different sizes ("sm", "md", "lg")
-  sizes: {},
-  // styles for different visual variants ("outline", "solid")
-  variants: {
-    solid: variantSolid(getColor),
-    toggle: variantToggle(getColor),
-  },
-  // default values for `size`, `variant`, `colorScheme`
-  defaultProps: {
-    size: 'sm',
-    variant: 'solid',
-  },
-});
+const getButtonStyle = (getColor: GetColor) =>
+  ({
+    // style object for base or default style
+    baseStyle: {
+      borderRadius: 'none',
+    },
+    // styles for different sizes ("sm", "md", "lg")
+    sizes: {},
+    // styles for different visual variants ("outline", "solid")
+    variants: {
+      solid: variantSolid(getColor),
+      toggle: variantToggle(getColor),
+    },
+    // default values for `size`, `variant`, `colorScheme`
+    defaultProps: {
+      size: 'sm',
+      variant: 'solid',
+    },
+  } as const);
 
 /* Color Schemes:
  ** Light, Sepia, Dark
@@ -27,7 +30,9 @@ const getButtonStyle = (getColor: GetColor) => ({
  ** Disabled
  ** Hovered
  */
-const variantSolid = (getColor: GetColor) => (props: any) => {
+const variantSolid = (getColor: GetColor) => (
+  props: React.ComponentProps<typeof Button>
+) => {
   const bgColor = getColor('ui.white', 'ui.black', 'ui.sepia');
   const color = getColor('gray.800', 'ui.white', 'gray.800');
 
@@ -56,7 +61,9 @@ const variantSolid = (getColor: GetColor) => (props: any) => {
   };
 };
 
-const variantToggle = (getColor: GetColor) => (props: any) => {
+const variantToggle = (getColor: GetColor) => (
+  props: React.ComponentProps<typeof Button>
+) => {
   const bgColor = getColor('ui.white', 'gray.800', 'ui.white');
   const color = getColor('gray.800', 'ui.white', 'gray.800');
   return {

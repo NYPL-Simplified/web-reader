@@ -1,5 +1,5 @@
 import React from 'react';
-import { Circle as ChakraCircle, Button } from '@chakra-ui/react';
+import { Button } from '@chakra-ui/react';
 import useColorModeValue from './hooks/useColorModeValue';
 
 export type PageButtonProps = React.ComponentPropsWithoutRef<typeof Button> & {
@@ -14,25 +14,18 @@ function PageButton(
   const circleBgColor = useColorModeValue('ui.white', 'gray.700', 'ui.white');
 
   return (
-    <ChakraCircle
-      as="button"
-      d="flex"
-      position="fixed"
-      zIndex="docked"
-      alignItems="center"
-      border="1px solid"
-      borderColor="ui.gray.light-cool"
+    <Button
       color={circleColor}
       bg={circleBgColor}
-      size={{ sm: '40px', md: '50px' }}
-      mx={{ sm: 2, md: 6 }}
-      top="50%"
+      height="auto"
+      border="none"
       cursor="pointer"
       onClick={onClick}
+      p={{ sm: 2 }}
       {...rest}
     >
       {children}
-    </ChakraCircle>
+    </Button>
   );
 }
 

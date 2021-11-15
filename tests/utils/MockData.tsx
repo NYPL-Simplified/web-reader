@@ -147,8 +147,6 @@ export const MockWebpubManifest = {
   ],
 } as WebpubManifest;
 
-export const MockReaderState = {} as ReaderState;
-
 const MockComponent = (): React.ReactElement => <>Hello, world.</>;
 
 export const MockHtmlReaderState = {

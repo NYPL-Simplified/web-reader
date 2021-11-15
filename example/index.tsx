@@ -96,6 +96,43 @@ const App = () => {
               pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
             />
           </Route>
+          <Route path="/fixed-height-embedded-pdf-collection">
+            <Box bg="lavenderblush" p={6} w="100vw">
+              <Heading>Fixed-height Embedded PDF</Heading>
+              <Text as="p">
+                This example shows how a web reader looks embedded within a page
+                instead of taking over the full page. It is fixed height, which
+                means it will not grow to fit content in scrolling mode.
+              </Text>
+              <WebReader
+                webpubManifestUrl="/samples/pdf/multi-resource.json"
+                proxyUrl={pdfProxyUrl}
+                pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
+                growWhenScrolling={false}
+              />
+              <Heading>The page continues...</Heading>
+              <Text as="p">Here is some more content below the reader</Text>
+            </Box>
+          </Route>
+          <Route path="/growing-height-embedded-pdf-collection">
+            <Box bg="lavenderblush" p={6} w="100vw">
+              <Heading>Growing-height Embedded PDF</Heading>
+              <Text as="p">
+                This example shows how a web reader looks embedded within a page
+                instead of taking over the full page. This example lets the PDF
+                grow to fit content of the resource in scrolling mode. In
+                paginated mode, however, it will use the value of the `height`
+                prop.
+              </Text>
+              <WebReader
+                webpubManifestUrl="/samples/pdf/multi-resource.json"
+                proxyUrl={pdfProxyUrl}
+                pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
+              />
+              <Heading>The page continues...</Heading>
+              <Text as="p">Here is some more content below the reader</Text>
+            </Box>
+          </Route>
           <Route path="/axisnow-encrypted">
             <AxisNowEncrypted injectables={htmlInjectables} />
           </Route>
@@ -110,6 +147,41 @@ const App = () => {
               injectables={htmlInjectables}
               webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
             />
+          </Route>
+          <Route path="/fixed-height-embedded-moby-epub2">
+            <Box bg="lavenderblush" p={6} w="100vw">
+              <Heading>Fixed-height Embedded Example</Heading>
+              <Text as="p">
+                This example shows how a web reader looks embedded within a page
+                instead of taking over the full page. It is fixed height, which
+                means it will not grow to fit content in scrolling mode..
+              </Text>
+              <WebReader
+                injectables={htmlInjectables}
+                webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
+                growWhenScrolling={false}
+                height="70vh"
+              />
+              <Heading>The page continues...</Heading>
+              <Text as="p">Here is some more content below the reader</Text>
+            </Box>
+          </Route>
+          <Route path="/growing-embedded-moby-epub2">
+            <Box bg="lavenderblush" p={6} w="100vw">
+              <Heading>Growing-height Embedded Example</Heading>
+              <Text as="p">
+                This example shows how a web reader looks embedded within a page
+                and with a growing-height policy. This example lets the PDF grow
+                to fit content of the resource in scrolling mode. In paginated
+                mode, however, it will use the value of the `height` prop.
+              </Text>
+              <WebReader
+                injectables={htmlInjectables}
+                webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
+              />
+              <Heading>The page continues...</Heading>
+              <Text as="p">Here is some more content below the reader</Text>
+            </Box>
           </Route>
           <Route path="/streamed-alice-epub">
             <WebReader
@@ -151,7 +223,7 @@ const HomePage = () => {
           EPUB2 Based Webpubs
           <UnorderedList>
             <ListItem>
-              <Link to="/moby-epub2">Moby Dick </Link>
+              <Link to="/moby-epub2">Moby Dick</Link>
             </ListItem>
           </UnorderedList>
         </ListItem>
@@ -169,6 +241,21 @@ const HomePage = () => {
           </UnorderedList>
         </ListItem>
         <ListItem>
+          Embedded Reader
+          <UnorderedList>
+            <ListItem>
+              <Link to="/fixed-height-embedded-moby-epub2">
+                Fixed-height Embedded Moby Dick
+              </Link>
+            </ListItem>
+            <ListItem>
+              <Link to="/growing-embedded-moby-epub2">
+                Growing-height Embedded Moby Dick
+              </Link>
+            </ListItem>
+          </UnorderedList>
+        </ListItem>
+        <ListItem>
           PDFs
           <UnorderedList>
             <ListItem>
@@ -179,6 +266,16 @@ const HomePage = () => {
             </ListItem>
             <ListItem>
               <Link to="/pdf-collection">Multi-PDF Webpub</Link>
+            </ListItem>
+            <ListItem>
+              <Link to="/fixed-height-embedded-pdf-collection">
+                Fixed-height embedded PDF
+              </Link>
+            </ListItem>
+            <ListItem>
+              <Link to="/growing-height-embedded-pdf-collection">
+                Growing-height embedded PDF
+              </Link>
             </ListItem>
           </UnorderedList>
         </ListItem>

@@ -23,11 +23,12 @@ const ToggleGroup: React.FC<ToggleGroupProps> = ({
 
   return (
     <Flex {...group} aria-label={label} flex="1 0 auto" flexWrap="wrap" my={2}>
-      {React.Children.map(children, (element) => {
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+      {React.Children.map(children, (element: any) => {
         try {
-          const value = (element as any).props.value;
+          const value = element.props.value;
           const radio = getRadioProps({ value });
-          return React.cloneElement(element as any, radio);
+          return React.cloneElement(element, radio);
         } catch (e) {
           throw new Error(
             'ToggleGroup expects ToggleButton children with `value` props.'

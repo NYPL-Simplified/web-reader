@@ -1,3 +1,6 @@
+import { SCALE_STEP } from '../../support/constants';
+import { pdfZoomTestHelper } from '../../support/pdfZoomTestHelper';
+
 describe('Multi PDF display settings', () => {
   beforeEach(() => {
     cy.loadPdf('/pdf-collection');
@@ -22,22 +25,18 @@ describe('Multi PDF display settings', () => {
   });
 
   it('should zoom in and out', () => {
-    cy.findByText('Anthropology without Informants')
-      .should('be.visible')
-      .should('have.css', 'font-size', '11.5909px');
+    cy.get('.react-pdf__Page').then(($elm) => {
+      pdfZoomTestHelper($elm, '1', '1');
+    });
 
     cy.findByRole('button', { name: 'Zoom In' }).click();
-    cy.findByText('Anthropology without Informants').should(
-      'have.css',
-      'font-size',
-      '12.75px'
-    );
+    cy.get('.react-pdf__Page').then(($elm) => {
+      pdfZoomTestHelper($elm, `${1 + SCALE_STEP}`, `${1 + SCALE_STEP}`);
+    });
 
     cy.findByRole('button', { name: 'Zoom Out' }).click();
-    cy.findByText('Anthropology without Informants').should(
-      'have.css',
-      'font-size',
-      '11.5909px'
-    );
+    cy.get('.react-pdf__Page').then(($elm) => {
+      pdfZoomTestHelper($elm, '1', '1');
+    });
   });
 });
