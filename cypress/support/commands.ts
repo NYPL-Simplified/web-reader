@@ -86,7 +86,7 @@ Cypress.Commands.add('loadPdf', (path: '/pdf' | '/pdf-collection') => {
   const pdfProxyInterceptUrl =
     Cypress.config().baseUrl === 'http://localhost:1234'
       ? 'http://localhost:3001'
-      : 'https://drb-api-qa.nypl.org/utils';
+      : 'https://drb-api-qa.nypl.org/utils/proxy';
   cy.intercept(`${pdfProxyInterceptUrl}/**`, { middleware: true }, (req) => {
     req.on('before:response', (res) => {
       // force all API responses to not be cached
