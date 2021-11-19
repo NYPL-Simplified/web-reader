@@ -5,7 +5,7 @@ const HtmlReaderContent: React.FC<{
   isScrolling: boolean;
   growsWhenScrolling: boolean;
 }> = ({ height, isScrolling, growsWhenScrolling }) => {
-  const shouldGrow = isScrolling && growsWhenScrolling;
+  // const shouldGrow = isScrolling && growsWhenScrolling;
   return (
     <div id="D2Reader-Container">
       <main
@@ -19,7 +19,7 @@ const HtmlReaderContent: React.FC<{
            * content. In paginated mode, however, we must have this set because
            * we have to decide how big the content should be.
            */
-          height: shouldGrow ? 'initial' : height,
+          height: height,
           /**
            * We always want the height to be at least the defined height
            */

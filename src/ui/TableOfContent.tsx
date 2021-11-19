@@ -43,7 +43,7 @@ export default function TableOfContent({
           </MenuButton>
           <Portal containerRef={containerRef}>
             <MenuList
-              overflow="scroll"
+              overflowY="auto"
               m="0"
               position="absolute"
               top="0"
@@ -55,28 +55,34 @@ export default function TableOfContent({
               border="none"
               borderRadius="0"
             >
-              {manifest.toc?.map((content: ReadiumLink, i) => (
-                <Item
-                  key={content.title}
-                  aria-label={content.title}
-                  onClick={() => tocLinkHandler(getLinkHref(content))}
-                  html={content.title ?? ''}
-                >
-                  {content.children && (
-                    <>
-                      {content.children.map((subLink) => (
-                        <Item
-                          aria-label={subLink.title}
-                          key={subLink.title}
-                          onClick={() => tocLinkHandler(getLinkHref(subLink))}
-                          pl={10}
-                          html={subLink.title ?? ''}
-                        ></Item>
-                      ))}
-                    </>
-                  )}
-                </Item>
-              ))}
+              {manifest.toc && manifest.toc.length > 0 ? (
+                manifest.toc.map((content: ReadiumLink, i) => (
+                  <Item
+                    key={content.title}
+                    aria-label={content.title}
+                    onClick={() => tocLinkHandler(getLinkHref(content))}
+                    html={content.title ?? ''}
+                  >
+                    {content.children && (
+                      <>
+                        {content.children.map((subLink) => (
+                          <Item
+                            aria-label={subLink.title}
+                            key={subLink.title}
+                            onClick={() => tocLinkHandler(getLinkHref(subLink))}
+                            pl={10}
+                            html={subLink.title ?? ''}
+                          ></Item>
+                        ))}
+                      </>
+                    )}
+                  </Item>
+                ))
+              ) : (
+                <MissingToc>
+                  This publication does not have a Table of Contents.
+                </MissingToc>
+              )}
             </MenuList>
           </Portal>
         </>
@@ -84,6 +90,24 @@ export default function TableOfContent({
     </Menu>
   );
 }
+
+const MissingToc = ({
+  children,
+}: {
+  children: string | React.ReactElement;
+}) => {
+  return (
+    <Box
+      d="flex"
+      justifyContent="center"
+      alignItems="center"
+      height="100%"
+      maxHeight="100vmin"
+    >
+      {children}
+    </Box>
+  );
+};
 
 const Item = React.forwardRef<
   HTMLAnchorElement,

@@ -26,6 +26,20 @@ describe('Table of Content Accessibility checker', () => {
   });
 });
 
+describe('Empty Table of Content', () => {
+  test('Empty TOC should show the missing toc message to users', () => {
+    const MissingTocManifest = {
+      ...MockWebpubManifest,
+      toc: [],
+    };
+    render(<TestTOC navigator={MockNavigator} manifest={MissingTocManifest} />);
+
+    expect(
+      screen.queryByText(/This publication does not have a Table of Contents/)
+    ).toBeInTheDocument();
+  });
+});
+
 describe('Table Of Content rendering', () => {
   beforeEach(() => {
     render(<TestTOC navigator={MockNavigator} manifest={MockWebpubManifest} />);
