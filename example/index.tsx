@@ -80,14 +80,16 @@ const App = () => {
             <HomePage />
           </Route>
 
-          <PdfReaders />
+          <Route path="/pdf">
+            <PdfReaders />
+          </Route>
           <Route path="/:version">
             <HtmlReaders />
           </Route>
 
           <Route path="*">
             <h1>404</h1>
-            <p>Page not found. what</p>
+            <p>Page not found.</p>
           </Route>
         </Switch>
       </BrowserRouter>
@@ -97,29 +99,29 @@ const App = () => {
 
 const PdfReaders = () => {
   return (
-    <Switch>
-      <Route path={`/pdf`}>
+    <>
+      <Route path={`/pdf/single-resource-short`}>
         <WebReader
           webpubManifestUrl="/samples/pdf/single-resource-short.json"
           proxyUrl={pdfProxyUrl}
           pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
         />
       </Route>
-      <Route path={`/pdf-large`}>
+      <Route path={`/pdf/large`}>
         <WebReader
           webpubManifestUrl="/samples/pdf/single-resource-long.json"
           proxyUrl={pdfProxyUrl}
           pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
         />
       </Route>
-      <Route path={`/pdf-collection`}>
+      <Route path={`/pdf/collection`}>
         <WebReader
           webpubManifestUrl="/samples/pdf/multi-resource.json"
           proxyUrl={pdfProxyUrl}
           pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
         />
       </Route>
-      <Route path={`/fixed-height-embedded-pdf-collection`}>
+      <Route path={`/pdf/fixed-height-embedded-collection`}>
         <Box bg="lavenderblush" p={6} w="100vw">
           <Heading>Fixed-height Embedded PDF</Heading>
           <Text as="p">
@@ -137,7 +139,7 @@ const PdfReaders = () => {
           <Text as="p">Here is some more content below the reader</Text>
         </Box>
       </Route>
-      <Route path={`/growing-height-embedded-pdf-collection`}>
+      <Route path={`/pdf/growing-height-embedded-collection`}>
         <Box bg="lavenderblush" p={6} w="100vw">
           <Heading>Growing-height Embedded PDF</Heading>
           <Text as="p">
@@ -155,7 +157,7 @@ const PdfReaders = () => {
           <Text as="p">Here is some more content below the reader</Text>
         </Box>
       </Route>
-    </Switch>
+    </>
   );
 };
 
@@ -251,7 +253,7 @@ const HtmlReaders = () => {
   );
 };
 
-const ReaderLink: React.FC<{ to: string }> = ({ to, children }) => {
+const HtmlReaderLink: React.FC<{ to: string }> = ({ to, children }) => {
   // don't show for pdfs
   const isPdf = to.includes('pdf');
   return (
@@ -281,7 +283,7 @@ const HomePage = () => {
           EPUB2 Based Webpubs
           <UnorderedList>
             <ListItem>
-              <ReaderLink to="/moby-epub2">Moby Dick </ReaderLink>
+              <HtmlReaderLink to="/moby-epub2">Moby Dick </HtmlReaderLink>
             </ListItem>
           </UnorderedList>
         </ListItem>
@@ -289,12 +291,14 @@ const HomePage = () => {
           EPUB3 Based Webpubs
           <UnorderedList>
             <ListItem>
-              <ReaderLink to="/moby-epub3">Moby Dick (EPUB 3)</ReaderLink>
+              <HtmlReaderLink to="/moby-epub3">
+                Moby Dick (EPUB 3)
+              </HtmlReaderLink>
             </ListItem>
             <ListItem>
-              <ReaderLink to="/readium-css-docs">
+              <HtmlReaderLink to="/readium-css-docs">
                 Readium CSS Documentation (as Webpub)
-              </ReaderLink>
+              </HtmlReaderLink>
             </ListItem>
           </UnorderedList>
         </ListItem>
@@ -302,9 +306,9 @@ const HomePage = () => {
           Remote hosted WebPubs
           <UnorderedList>
             <ListItem>
-              <ReaderLink to="streamed-alice-epub">
+              <HtmlReaderLink to="streamed-alice-epub">
                 Alice's Adventures in Wonderland
-              </ReaderLink>
+              </HtmlReaderLink>
               <Text as="i">
                 &nbsp;(streamed from https://alice.dita.digital)
               </Text>
@@ -330,23 +334,21 @@ const HomePage = () => {
           PDFs
           <UnorderedList>
             <ListItem>
-              <ReaderLink to="/pdf">Single-PDF Webpub</ReaderLink>
+              <Link to="/pdf/single-resource-short">Single-PDF Webpub</Link>
             </ListItem>
             <ListItem>
-              <ReaderLink to="/pdf-large">
-                Single-PDF Webpub (large file)
-              </ReaderLink>
+              <Link to="/pdf/large">Single-PDF Webpub (large file)</Link>
             </ListItem>
             <ListItem>
-              <ReaderLink to="/pdf-collection">Multi-PDF Webpub</ReaderLink>
+              <Link to="/pdf/collection">Multi-PDF Webpub</Link>
             </ListItem>
             <ListItem>
-              <Link to="/fixed-height-embedded-pdf-collection">
+              <Link to="/pdf/fixed-height-embedded-collection">
                 Fixed-height embedded PDF
               </Link>
             </ListItem>
             <ListItem>
-              <Link to="/growing-height-embedded-pdf-collection">
+              <Link to="/pdf/growing-height-embedded-collection">
                 Growing-height embedded PDF
               </Link>
             </ListItem>
@@ -380,9 +382,9 @@ const HomePage = () => {
       </Text>
       <UnorderedList p={4}>
         <ListItem>
-          <ReaderLink to="/axisnow-encrypted">
+          <HtmlReaderLink to="/axisnow-encrypted">
             AxisNow Encrypted EPUB
-          </ReaderLink>
+          </HtmlReaderLink>
           <UnorderedList>
             <ListItem>
               <Text fontSize="sm" as="i">
@@ -398,9 +400,9 @@ const HomePage = () => {
           </UnorderedList>
         </ListItem>
         <ListItem>
-          <ReaderLink to="/axisnow-decrypted">
+          <HtmlReaderLink to="/axisnow-decrypted">
             Decrypted AxisNow EPUB
-          </ReaderLink>
+          </HtmlReaderLink>
           <UnorderedList>
             <ListItem>
               <Text fontSize="sm" as="i">
