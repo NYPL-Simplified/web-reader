@@ -7,8 +7,8 @@ describe('Renders multi PDF', () => {
     cy.findByRole('button', { name: 'Table of Contents' }).should('exist');
     cy.findByRole('button', { name: 'Settings' }).should('exist');
     cy.findByRole('button', { name: 'Toggle Fullscreen' }).should('exist');
-    cy.findByRole('button', { name: 'Next Page' }).should('exist');
-    cy.findByRole('button', { name: 'Previous Page' }).should('exist');
+    cy.findByRole('button', { name: 'Next Page' }).should('not.be.disabled');
+    cy.findByRole('button', { name: 'Previous Page' }).should('be.disabled');
 
     cy.findByText('Anthropology without Informants').should('be.visible');
   });

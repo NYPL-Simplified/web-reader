@@ -1,3 +1,4 @@
+import { StyleProps } from '@chakra-ui/react';
 import { Dict } from '../types';
 
 const sizes = {

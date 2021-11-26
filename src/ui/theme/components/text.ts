@@ -11,6 +11,7 @@ const TextStyle = {
   defaultProps: {},
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function variantHeaderNav() {
   return {
     my: 0,
@@ -18,7 +19,7 @@ function variantHeaderNav() {
     fontSize: 0,
     display: { sm: 'none', md: 'none', lg: 'inline-block' },
     verticalAlign: 'middle',
-  };
+  } as const;
 }
 
 export default TextStyle;

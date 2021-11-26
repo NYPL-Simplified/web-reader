@@ -11,7 +11,7 @@ export default function useEventListener(
   element: HTMLElement | Window,
   type: string,
   listener: () => void
-) {
+): void {
   useEffect(() => {
     if (!element) {
       return undefined;

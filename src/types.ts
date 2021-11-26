@@ -42,6 +42,8 @@ export type ReaderState = {
   fontSize: number;
   fontFamily: FontFamily;
   currentTocUrl: string | null;
+  atStart: boolean;
+  atEnd: boolean;
 };
 
 // PDF specific reader state
@@ -97,7 +99,33 @@ export type UseWebReaderArguments = {
   pdfWorkerSrc?: string;
   injectables?: Injectable[];
   injectablesFixed?: Injectable[];
+  /**
+   * Forces the reader to use the new custom html renderer when
+   * viewing HTML documents.
+   *
+   * Default: `false`
+   */
   _useCustomHtmlRenderer?: boolean;
+  /**
+   * CSS string to set the height of the reader in paginated mode, and also
+   * in scrolling mode if `growWhenScrolling` is `false`.
+   *
+   * eg: "800px" or `calc(100vh-${CHROME_HEIGHT})`
+   *
+   * Default: `calc(100vh-${CHROME_HEIGHT})`
+   */
+  height?: string;
+  /**
+   * Tells the renderer if it should grow to fit content in scrolling mode, or if should
+   * remain the same height and instead show an internal scroll bar. Set to `true` by
+   * default, as this should be used in a full-page reader, the most common use case.
+   *
+   * Default: `true`
+   */
+  growWhenScrolling?: boolean;
+  /**
+   * Initial user settings for the reader
+   */
   readerSettings?: ReaderSettings;
 };
 

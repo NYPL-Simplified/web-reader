@@ -16,6 +16,10 @@ import {
   WebpubPdfConformsTo,
   ConformsTo,
 } from './WebpubManifestTypes/ConformsTo';
+import {
+  DEFAULT_HEIGHT,
+  DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
+} from './constants';
 
 function getReaderType(conformsTo: ConformsTo | null | undefined) {
   switch (conformsTo) {
@@ -49,6 +53,8 @@ export default function useWebReader(
     injectables,
     injectablesFixed,
     _useCustomHtmlRenderer,
+    height = DEFAULT_HEIGHT,
+    growWhenScrolling = DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
   } = args;
   const [manifest, setManifest] = React.useState<WebpubManifest | null>(null);
   const [error, setError] = React.useState<Error | null>(null);
@@ -75,6 +81,8 @@ export default function useWebReader(
           getContent,
           injectables,
           injectablesFixed,
+          height,
+          growWhenScrolling,
         }
       : undefined
   );
@@ -98,6 +106,8 @@ export default function useWebReader(
           manifest,
           proxyUrl,
           pdfWorkerSrc,
+          height,
+          growWhenScrolling,
         }
       : undefined
   );
@@ -113,7 +123,13 @@ export default function useWebReader(
   if (manifest === null) {
     return {
       isLoading: true,
-      content: <HtmlReaderContent />,
+      content: (
+        <HtmlReaderContent
+          height={height}
+          isScrolling={false}
+          growsWhenScrolling={false}
+        />
+      ),
       manifest: null,
       navigator: null,
       state: null,

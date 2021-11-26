@@ -7,6 +7,11 @@ import ChakraPage from './ChakraPage';
 import ScrollPage from './ScrollPage';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+import { HEADER_HEIGHT, FOOTER_HEIGHT } from '../constants';
+import {
+  DEFAULT_HEIGHT,
+  DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
+} from '../constants';
 
 type PdfState = PdfReaderState & {
   resourceIndex: number;
@@ -39,9 +44,10 @@ type PdfReaderAction =
       type: 'RESIZE_PAGE';
       height: number | undefined;
       width: number | undefined;
-    };
-
+    }
+  | { type: 'BOOK_BOUNDARY_CHANGED'; atStart: boolean; atEnd: boolean };
 const IFRAME_WRAPPER_ID = 'iframe-wrapper';
+export const SCALE_STEP = 0.1;
 
 function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
   switch (action.type) {
@@ -110,6 +116,13 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
         pageWidth: action.width,
         pageHeight: action.height,
       };
+
+    case 'BOOK_BOUNDARY_CHANGED':
+      return {
+        ...state,
+        atStart: action.atStart,
+        atEnd: action.atEnd,
+      };
   }
 }
 
@@ -152,7 +165,14 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     pdfjs.GlobalWorkerOptions.workerSrc = args.pdfWorkerSrc;
   }
 
-  const { webpubManifestUrl, manifest, proxyUrl, readerSettings } = args ?? {};
+  const {
+    webpubManifestUrl,
+    manifest,
+    proxyUrl,
+    readerSettings,
+    height = DEFAULT_HEIGHT,
+    growWhenScrolling = DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
+  } = args ?? {};
   const [state, dispatch] = React.useReducer(pdfReducer, {
     colorMode: 'day',
     isScrolling: readerSettings?.isScrolling ?? false,
@@ -168,11 +188,14 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     pdfHeight: 0,
     pageHeight: undefined,
     pageWidth: undefined,
+    atStart: true,
+    atEnd: false,
   });
 
   // state we can derive from the state above
   const isFetching = !state.resource;
   const isParsed = typeof state.numPages === 'number';
+  const isSinglePDF = manifest && manifest?.readingOrder.length === 1;
   const [containerRef, containerSize] = useMeasure<HTMLDivElement>();
 
   /**
@@ -233,6 +256,45 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     resizePage(state.pdfWidth, state.pdfHeight, containerSize);
   }, [containerSize, state.pdfWidth, state.pdfHeight, resizePage]);
 
+  /**
+   * Hide Or Show Page Button
+   */
+  React.useEffect(() => {
+    if (!manifest) return;
+
+    // Hide all buttons for single PDF on scroll mode
+    if (isSinglePDF && state.isScrolling) {
+      dispatch({
+        type: 'BOOK_BOUNDARY_CHANGED',
+        atStart: true,
+        atEnd: true,
+      });
+    } else {
+      const isFirstResource = state.resourceIndex === 0;
+      const isResourceStart = isFirstResource && state.pageNumber === 1;
+
+      const isLastResource =
+        state.resourceIndex === manifest?.readingOrder?.length - 1;
+      const isResourceEnd =
+        (isLastResource && state.pageNumber === state.numPages) ||
+        // On scroll mode, next page button takes you to the next resource. So we can just hide the next button on last resource.
+        (state.isScrolling && isLastResource);
+
+      dispatch({
+        type: 'BOOK_BOUNDARY_CHANGED',
+        atStart: isResourceStart,
+        atEnd: isResourceEnd,
+      });
+    }
+  }, [
+    manifest,
+    state.isScrolling,
+    state.numPages,
+    state.pageNumber,
+    state.resourceIndex,
+    isSinglePDF,
+  ]);
+
   // prev and next page functions
   const goForward = React.useCallback(async () => {
     // do nothing if we haven't parsed the number of pages yet
@@ -268,7 +330,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     // do nothing if we haven't parsed the PDF yet
     if (!isParsed) return;
 
-    if (state.pageNumber > 1) {
+    if (state.pageNumber > 1 && !state.isScrolling) {
       dispatch({
         type: 'NAVIGATE_PAGE',
         pageNum: state.pageNumber - 1,
@@ -303,14 +365,14 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   const zoomIn = React.useCallback(async () => {
     dispatch({
       type: 'SET_SCALE',
-      scale: state.scale + 0.1,
+      scale: state.scale + SCALE_STEP,
     });
   }, [state.scale]);
 
   const zoomOut = React.useCallback(async () => {
     dispatch({
       type: 'SET_SCALE',
-      scale: state.scale - 0.1,
+      scale: state.scale - SCALE_STEP,
     });
   }, [state.scale]);
 
@@ -352,6 +414,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
           alignItems="center"
           justifyContent="center"
           flex="1 0 auto"
+          height={height}
         >
           PDF is loading
         </Flex>
@@ -395,6 +458,9 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     }
   }
 
+  const shouldGrow = state.isScrolling && growWhenScrolling;
+  const finalHeight = shouldGrow ? 'initial' : height;
+
   // the reader is active but loading a page
   return {
     type: 'PDF',
@@ -409,7 +475,18 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         tabIndex={-1}
         id={IFRAME_WRAPPER_ID}
         ref={containerRef}
+        height={finalHeight}
       >
+        {/* FIXME: POC, update this with more a react proach. chakra.factory throws memory leak error.*/}
+        <style>
+          {`
+            .react-pdf__Document {
+              height: calc(100vh - ${HEADER_HEIGHT + FOOTER_HEIGHT}px);
+              overflow-x: hidden;
+              overflow-y: auto;
+            }
+          `}
+        </style>
         <Document file={state.resource} onLoadSuccess={onDocumentLoadSuccess}>
           {isParsed && state.numPages && (
             <>

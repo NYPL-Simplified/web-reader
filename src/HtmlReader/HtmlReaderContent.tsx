@@ -1,14 +1,21 @@
 import * as React from 'react';
-import { HEADER_HEIGHT } from '../ui/constants';
 
-const HtmlReaderContent: React.FC = () => {
+const HtmlReaderContent: React.FC<{
+  height: string;
+  isScrolling: boolean;
+  growsWhenScrolling: boolean;
+}> = ({ height }) => {
   return (
     <div id="D2Reader-Container">
       <main
         tabIndex={-1}
         id="iframe-wrapper"
         style={{
-          height: `calc(100vh - ${HEADER_HEIGHT}px)`,
+          height: height,
+          /**
+           * We always want the height to be at least the defined height
+           */
+          minHeight: height,
           overflow: 'hidden',
         }}
       >

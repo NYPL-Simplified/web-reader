@@ -1,40 +1,23 @@
-import React, { useState } from 'react';
-import {
-  Link,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Portal,
-  Text,
-  Icon,
-} from '@chakra-ui/react';
+import React from 'react';
+import { Portal, Text, Icon, Box } from '@chakra-ui/react';
 import { MdOutlineToc, MdOutlineCancel } from 'react-icons/md';
-import { Navigator, ReaderState, WebpubManifest } from '../types';
+import { Navigator, WebpubManifest } from '../types';
 import Button from './Button';
 import useColorModeValue from './hooks/useColorModeValue';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
-import { HEADER_HEIGHT } from './constants';
+import { Menu, MenuButton, MenuItem, MenuList } from './menu';
 
 export default function TableOfContent({
   navigator,
   manifest,
-  readerState,
+  containerRef,
 }: {
   navigator: Navigator;
   manifest: WebpubManifest;
-  readerState: ReaderState;
+  containerRef: React.MutableRefObject<HTMLDivElement | null>;
 }): React.ReactElement {
-  const [isOpen, setIsOpen] = useState(false);
-  const tocLinkHandler: React.MouseEventHandler<HTMLButtonElement> = (evt) => {
-    evt.preventDefault();
-    const href = evt.currentTarget.getAttribute('href');
-    if (!href) {
-      console.warn('TOC Link clicked without an href');
-      return;
-    }
+  const tocLinkHandler = (href: string) => {
     navigator.goToPage(href);
-    setIsOpen(false);
   };
 
   const tocBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
@@ -46,70 +29,90 @@ export default function TableOfContent({
   };
 
   return (
-    <Menu
-      onOpen={() => setIsOpen(true)}
-      onClose={() => setIsOpen(false)} // To account for "close by lose focus"
-    >
-      <MenuButton
-        as={Button}
-        border="none"
-        leftIcon={
-          <Icon as={isOpen ? MdOutlineCancel : MdOutlineToc} w={6} h={6} />
-        }
-      >
-        <Text variant="headerNav">Table of Contents</Text>
-      </MenuButton>
-      {isOpen && manifest?.toc && (
-        <Portal>
-          <MenuList
-            width="100vw"
-            height={`calc(100vh - ${HEADER_HEIGHT}px)`}
-            background={tocBgColor}
-            borderRadius="none"
-            borderColor={tocBgColor}
-            zIndex="popover"
-            px={7}
-            mt="-2px" // Move the popover slightly higher to hide Header border
-            overflow="auto"
+    <Menu>
+      {({ isOpen }) => (
+        <>
+          <MenuButton
+            as={Button}
+            border="none"
+            leftIcon={
+              <Icon as={isOpen ? MdOutlineCancel : MdOutlineToc} w={6} h={6} />
+            }
           >
-            {manifest.toc.map((content: ReadiumLink) => (
-              <React.Fragment key={content.title}>
-                <TocItem
-                  href={getLinkHref(content)}
-                  title={content.title}
-                  isActive={readerState?.currentTocUrl === content.href}
-                  onClick={tocLinkHandler}
-                />
-                {content.children &&
-                  content.children.map((subLink) => (
-                    <TocItem
-                      key={subLink.title}
-                      href={getLinkHref(subLink)}
-                      title={subLink.title}
-                      isActive={readerState?.currentTocUrl === subLink.href}
-                      onClick={tocLinkHandler}
-                      pl={10}
-                    />
-                  ))}
-              </React.Fragment>
-            ))}
-          </MenuList>
-        </Portal>
+            <Text variant="headerNav">Table of Contents</Text>
+          </MenuButton>
+          <Portal containerRef={containerRef}>
+            <MenuList
+              overflowY="auto"
+              m="0"
+              position="absolute"
+              top="0"
+              left="0"
+              bg={tocBgColor}
+              right="0"
+              bottom="0"
+              zIndex="overlay"
+              border="none"
+              borderRadius="0"
+            >
+              {manifest.toc && manifest.toc.length > 0 ? (
+                manifest.toc.map((content: ReadiumLink, i) => (
+                  <Item
+                    key={content.title}
+                    aria-label={content.title}
+                    onClick={() => tocLinkHandler(getLinkHref(content))}
+                    html={content.title ?? ''}
+                  >
+                    {content.children && (
+                      <>
+                        {content.children.map((subLink) => (
+                          <Item
+                            aria-label={subLink.title}
+                            key={subLink.title}
+                            onClick={() => tocLinkHandler(getLinkHref(subLink))}
+                            pl={10}
+                            html={subLink.title ?? ''}
+                          ></Item>
+                        ))}
+                      </>
+                    )}
+                  </Item>
+                ))
+              ) : (
+                <MissingToc>
+                  This publication does not have a Table of Contents.
+                </MissingToc>
+              )}
+            </MenuList>
+          </Portal>
+        </>
       )}
     </Menu>
   );
 }
 
-type TocItemProps = React.ComponentPropsWithoutRef<typeof MenuItem> & {
-  href: string;
-  title: string | undefined;
-  isActive: boolean;
-  onClick: React.MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>;
+const MissingToc = ({
+  children,
+}: {
+  children: string | React.ReactElement;
+}) => {
+  return (
+    <Box
+      d="flex"
+      justifyContent="center"
+      alignItems="center"
+      height="100%"
+      maxHeight="100vmin"
+    >
+      {children}
+    </Box>
+  );
 };
 
-const TocItem = (props: TocItemProps) => {
-  const { href, title, isActive, ...rest } = props;
-
+const Item = React.forwardRef<
+  HTMLAnchorElement,
+  React.ComponentProps<typeof MenuItem> & { html: string }
+>(({ html, children, ...props }, ref) => {
   const bgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
   const color = useColorModeValue('ui.black', 'ui.white', 'ui.black');
   const borderColor = useColorModeValue(
@@ -118,37 +121,36 @@ const TocItem = (props: TocItemProps) => {
     'yellow.600'
   );
 
-  const activeColor = 'ui.black';
-  const activeBgColor = 'ui.gray.light-cool';
-
   const _hover = {
     textDecoration: 'none',
-    background: isActive ? 'ui.black' : 'ui.gray.x-dark',
+    background: 'ui.gray.x-dark',
     color: 'ui.white',
-  };
+  } as const;
 
   const _focus = {
     ..._hover,
     boxShadow: 'none',
-  };
-
-  const styles = {
-    background: isActive ? activeBgColor : bgColor,
-    color: isActive ? activeColor : color,
-    borderBottom: `1px solid`,
-    borderColor: borderColor,
-    py: 3,
-    _hover,
-    _focus,
-  };
+  } as const;
 
   return (
-    <MenuItem as={Link} href={href} {...styles} {...rest}>
-      <RenderHtml title={title ?? ''} />
-    </MenuItem>
+    <>
+      <MenuItem
+        d="flex"
+        flexDir="column"
+        alignItems="stretch"
+        listStyleType="none"
+        bg={bgColor}
+        color={color}
+        _hover={_hover}
+        _focus={_focus}
+        tabIndex={-1}
+        borderBottom="1px solid"
+        borderColor={borderColor}
+        {...props}
+      >
+        <span dangerouslySetInnerHTML={{ __html: html }} />
+      </MenuItem>
+      {children}
+    </>
   );
-};
-
-const RenderHtml = ({ title }: { title: string }) => (
-  <span dangerouslySetInnerHTML={{ __html: title }}></span>
-);
+});
