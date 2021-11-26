@@ -6,9 +6,8 @@ import {
   ReaderArguments,
   FontFamily,
 } from '../types';
-import { HEADER_HEIGHT } from '../constants';
 import { Injectable } from '../Readium/Injectable';
-import useSWR from 'swr';
+import useSWRImmutable from 'swr/immutable';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
 import useResizeObserver from 'use-resize-observer';
 import { DEFAULT_HEIGHT, DEFAULT_SHOULD_GROW_WHEN_SCROLLING } from '..';
@@ -129,12 +128,7 @@ function useResource(
   injectables: Injectable[],
   state: HtmlState
 ) {
-  const { data, isValidating, error } = useSWR(url, getContent, {
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-    revalidateIfStale: false,
-    revalidateOnMount: false,
-  });
+  const { data, isValidating, error } = useSWRImmutable(url, getContent);
   // cast the data to a possibly undefined because, it is?
   const resource = data as string | undefined;
   if (error) throw error;
@@ -164,8 +158,10 @@ function useResource(
     // injectJS(document);
   }
 
+  const isLoading = isValidating && !data;
+
   const str = document?.documentElement.outerHTML;
-  return { resource: str, isValidating };
+  return { resource: str, isLoading };
 }
 
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
@@ -185,7 +181,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     fontSize: 100,
     fontFamily: 'sans-serif',
     currentTocUrl: null,
-    currentResourceIndex: 2,
+    currentResourceIndex: 0,
     pageIndex: 0,
     totalPages: null,
     atStart: true,
@@ -203,7 +199,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       ).toString()
     : null;
 
-  const { resource, isValidating } = useResource(
+  const { resource, isLoading } = useResource(
     currentResourceUrl,
     getContent,
     injectables,
@@ -374,8 +370,6 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
 
     // what happens if there is no resource with that href?
   }, []);
-
-  const isLoading = isValidating;
 
   // this format is inactive, return null
   if (!webpubManifestUrl || !manifest) return null;
