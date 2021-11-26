@@ -74,7 +74,7 @@ export default function useWebReader(
    * that format is inactive, and it will in turn return the InactiveState.
    */
   const htmlReader = useHtmlReader(
-    readerType === 'HTML' && manifest
+    readerType === 'HTML' && manifest && !_useCustomHtmlRenderer
       ? {
           webpubManifestUrl,
           manifest,

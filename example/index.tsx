@@ -168,7 +168,7 @@ const HtmlReaders = () => {
   const { path } = useRouteMatch();
   const { version = 'v1' } = useParams<{ version: string | undefined }>();
   const useCustomHtmlRenderer = version === 'v2';
-  console.log('Using Version: ', version);
+  console.log('Using Version:', version);
 
   return (
     <Switch>
@@ -254,16 +254,12 @@ const HtmlReaders = () => {
 };
 
 const HtmlReaderLink: React.FC<{ to: string }> = ({ to, children }) => {
-  // don't show for pdfs
-  const isPdf = to.includes('pdf');
   return (
     <Stack direction="row">
       <Link to={`/v1${to}`}>{children}</Link>
-      {!isPdf && (
-        <span>
-          - (<Link to={`/v2${to}`}>v2</Link>)
-        </span>
-      )}
+      <span>
+        - (<Link to={`/v2${to}`}>v2</Link>)
+      </span>
     </Stack>
   );
 };
