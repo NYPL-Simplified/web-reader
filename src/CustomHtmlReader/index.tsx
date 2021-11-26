@@ -11,6 +11,7 @@ import { Injectable } from '../Readium/Injectable';
 import useSWR from 'swr';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
 import useResizeObserver from 'use-resize-observer';
+import { DEFAULT_HEIGHT, DEFAULT_SHOULD_GROW_WHEN_SCROLLING } from '..';
 
 type HtmlState = HtmlReaderState & {
   currentResourceIndex: number;
@@ -20,14 +21,21 @@ type HtmlState = HtmlReaderState & {
 
 /**
  * @TODO :
- *  - Don't use ReadiumCSS for fixed layout
- *  - Make fixed layout work
- *  - Maybe use Readium-CSS source files instead of dist files
- *  - Keep track of where the user is in scroll mode so location stays when
- *    switch to paginate and vice-versa
+ *
+ *  - Make loading screen show header and take full height
+ *  - Keep track of resource size and container size
+ *  - Use that to calculate number of pages and current page
+ *  - Keep track of current location based on scroll value in current resource
+ *      - Switching to paginated from scroll should keep your location
  *  - don't show page buttons when in scroll mode
  *  - Separate out paginated and scrolling state types
  *  - Go to last page of last resource when navigating backwards
+ *  - Anchor links within a resource
+ *
+ * Future:
+ *  - Don't use ReadiumCSS for fixed layout
+ *  - Make fixed layout work
+ *  - Update to latest Readium CSS
  */
 
 /**
@@ -88,12 +96,6 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
 
 const FONT_SIZE_STEP = 4;
 
-async function fetcher(url: string) {
-  const res = await fetch(url);
-  const txt = await res.text();
-  return txt;
-}
-
 function getInjectableElement(
   document: Document,
   injectable: Injectable
@@ -115,17 +117,12 @@ function getInjectableElement(
   }
 }
 
-function injectJS(document: Document) {
-  const script = document.createElement('script');
-  script.setAttribute('type', 'text/javascript');
-  script.textContent = `
-    window.onload = () => {
-      window.top.postMessage({source: 'reader-iframe', type: 'IFRAME_LOADED'})
-    }
-  `;
-  document.head.appendChild(script);
-}
-
+/**
+ * Fetches an HTML resource and prepares it by injecting:
+ *  - Readium CSS
+ *  - A `<base>` element with the resource url
+ *  - Any other injectables passed in
+ */
 function useResource(
   url: string | null,
   getContent: (url: string) => Promise<string>,
@@ -134,6 +131,9 @@ function useResource(
 ) {
   const { data, isValidating, error } = useSWR(url, getContent, {
     revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    revalidateIfStale: false,
+    revalidateOnMount: false,
   });
   // cast the data to a possibly undefined because, it is?
   const resource = data as string | undefined;
@@ -157,46 +157,26 @@ function useResource(
       if (element) document?.head.appendChild(element);
     }
 
-    // set the initial state
+    // set the initial CSS state
     setCss(document.documentElement, state);
 
     // inject js to communicate with iframe
-    injectJS(document);
+    // injectJS(document);
   }
 
   const str = document?.documentElement.outerHTML;
   return { resource: str, isValidating };
 }
 
-function setCss(html: HTMLElement, state: HtmlState) {
-  setCSSProperty(html, '--USER__scroll', getPagination(state.isScrolling));
-  setCSSProperty(
-    html,
-    '--USER__appearance',
-    getColorModeValue(state.colorMode)
-  );
-  setCSSProperty(html, '--USER__advancedSettings', 'readium-advanced-on');
-  setCSSProperty(
-    html,
-    '--USER__fontOverride',
-    getFontOverride(state.fontFamily)
-  );
-  setCSSProperty(
-    html,
-    '--USER__fontFamily',
-    familyToReadiumFamily[state.fontFamily]
-  );
-  setCSSProperty(html, '--USER__fontSize', `${state.fontSize}%`);
-  setCSSProperty(html, 'overflow', state.isScrolling ? 'scroll' : 'hidden');
-}
-
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const {
     webpubManifestUrl,
     manifest,
-    getContent = fetcher,
+    getContent = fetchAsTxt,
     injectables = defaultInjectables,
     injectablesFixed = defaultInjectablesFixed,
+    height = DEFAULT_HEIGHT,
+    growWhenScrolling = DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
   } = args ?? {};
 
   const [state, dispatch] = React.useReducer(htmlReducer, {
@@ -244,16 +224,6 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     if (!html) return;
     setCss(html, state);
   }, [state, iframe, manifest, resource]);
-
-  // add iframe event listeners
-  React.useEffect(() => {
-    window.onmessage = (message) => {
-      if (message.data?.source === 'reader-iframe') {
-        // dispatch it as an action sent from the iframe.
-        // dispatch(message.data)
-      }
-    };
-  }, []);
 
   /**
    * In scroll mode we:
@@ -410,12 +380,16 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   // this format is inactive, return null
   if (!webpubManifestUrl || !manifest) return null;
 
+  // determines if the reader should grow to fit content or stay the
+  // pre-determined height passed in
+  const shouldGrow = state.isScrolling && growWhenScrolling;
+
   // we are initializing the reader
   if (isLoading) {
     return {
       type: null,
       isLoading: true,
-      content: <LoadingSkeleton />,
+      content: <LoadingSkeleton height={height} />,
       navigator: null,
       manifest: null,
       state: null,
@@ -433,7 +407,21 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
           ref(el);
         }}
         // as="iframe"
-        style={{ height: `calc(100vh - ${HEADER_HEIGHT}px)` }}
+        style={{
+          /**
+           * This determines the height of the iframe.
+           *
+           * If we remove this, then in scrolling mode it simply grows to fit
+           * content. In paginated mode, however, we must have this set because
+           * we have to decide how big the content should be.
+           */
+          height: shouldGrow ? 'initial' : height,
+          /**
+           * We always want the height to be at least the defined height
+           */
+          minHeight: height,
+          overflow: 'hidden',
+        }}
         title="CHANGEME"
         srcDoc={resource}
       />
@@ -451,6 +439,55 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       goToPage,
     },
   };
+}
+
+/**
+ * Fetches a resource as text
+ */
+async function fetchAsTxt(url: string) {
+  const res = await fetch(url);
+  const txt = await res.text();
+  return txt;
+}
+
+/**
+ * Inject some raw JS into the iframe document
+ */
+function injectJS(document: Document) {
+  const script = document.createElement('script');
+  script.setAttribute('type', 'text/javascript');
+  script.textContent = `
+    window.onload = () => {
+      window.top.postMessage({source: 'reader-iframe', type: 'IFRAME_LOADED'})
+    }
+  `;
+  document.head.appendChild(script);
+}
+
+/**
+ * Takes the HTML element and sets CSS variables on it based on the
+ * reader's state
+ */
+function setCss(html: HTMLElement, state: HtmlState) {
+  setCSSProperty(html, '--USER__scroll', getPagination(state.isScrolling));
+  setCSSProperty(
+    html,
+    '--USER__appearance',
+    getColorModeValue(state.colorMode)
+  );
+  setCSSProperty(html, '--USER__advancedSettings', 'readium-advanced-on');
+  setCSSProperty(
+    html,
+    '--USER__fontOverride',
+    getFontOverride(state.fontFamily)
+  );
+  setCSSProperty(
+    html,
+    '--USER__fontFamily',
+    familyToReadiumFamily[state.fontFamily]
+  );
+  setCSSProperty(html, '--USER__fontSize', `${state.fontSize}%`);
+  setCSSProperty(html, 'overflow', state.isScrolling ? 'scroll' : 'hidden');
 }
 
 /**
