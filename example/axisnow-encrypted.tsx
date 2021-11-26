@@ -8,6 +8,7 @@ import { Injectable } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator
 
 type AxisNowEncryptedProps = {
   injectables: Injectable[];
+  _useCustomHtmlRenderer: boolean;
 };
 
 const webpubManifestUrl = `${origin}/samples/dickens-axisnow/encrypted/manifest.json`;
@@ -49,7 +50,7 @@ const AxisNowEncrypted: React.FC<AxisNowEncryptedProps> = (props) => {
         });
         setGetContent(() => decryptor);
       } catch (e) {
-        setError(e);
+        setError(e as any);
       }
     }
 
@@ -76,6 +77,7 @@ const AxisNowEncrypted: React.FC<AxisNowEncryptedProps> = (props) => {
       injectables={props.injectables}
       webpubManifestUrl={webpubManifestUrl}
       getContent={getContent}
+      _useCustomHtmlRenderer={props._useCustomHtmlRenderer}
     />
   );
 };

@@ -6,7 +6,7 @@ import {
   ReaderArguments,
   FontFamily,
 } from '../types';
-import { HEADER_HEIGHT } from '../ui/constants';
+import { HEADER_HEIGHT } from '../constants';
 import { Injectable } from '../Readium/Injectable';
 import useSWR from 'swr';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
@@ -208,6 +208,8 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     currentResourceIndex: 2,
     pageIndex: 0,
     totalPages: null,
+    atStart: true,
+    atEnd: false,
   });
 
   const [iframe, setIframe] = React.useState<HTMLIFrameElement | null>(null);
