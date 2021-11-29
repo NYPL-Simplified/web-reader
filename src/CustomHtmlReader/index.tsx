@@ -73,7 +73,7 @@ export type HtmlAction =
   | { type: 'IFRAME_LOADED' }
   | { type: 'NAV_PREVIOUS_RESOURCE' }
   | { type: 'NAV_NEXT_RESOURCE' }
-  | { type: 'TOC_LINK_CLICK'; link: ReadiumLink }
+  | { type: 'GO_TO_LINK'; link: ReadiumLink }
   | { type: 'GO_FORWARD' }
   | { type: 'GO_BACKWARD' }
   // indicates completion of an inter-resource nav after iframe loads
@@ -147,6 +147,27 @@ function htmlReducer(args: ReaderArguments) {
           // we need to re-perform inter-resource nav
           isNavigated: false,
           isIframeLoaded: false,
+        };
+      }
+
+      case 'GO_TO_LINK': {
+        const isInReadingOrder = !!getFromReadingOrder(
+          action.link.href,
+          manifest
+        );
+        if (!isInReadingOrder) {
+          console.error(
+            `Cannot navigate to a link not in the reading order`,
+            action.link
+          );
+          return state;
+        }
+        // check if we are already on the resource, in which case
+        // we don't need to reset isIframeLoaded
+        const locator = linkToLocator(action.link);
+        return {
+          ...state,
+          location: locator,
         };
       }
 
@@ -229,9 +250,12 @@ function useResource(
   url: string | null,
   getContent: (url: string) => Promise<string>,
   injectables: Injectable[],
-  state: HtmlState
+  state: HtmlState,
+  dispatch: React.Dispatch<HtmlAction>
 ) {
-  const { data, isValidating, error } = useSWRImmutable(url, getContent);
+  const { data, isValidating, error } = useSWRImmutable(url, getContent, {
+    use: [dispatchMiddleware(dispatch)],
+  });
   // cast the data to a possibly undefined because, it is?
   const resource = data as string | undefined;
   if (error) throw error;
@@ -321,7 +345,8 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     currentResourceUrl,
     getContent,
     injectables,
-    state
+    state,
+    dispatch
   );
 
   /**
@@ -432,6 +457,23 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   }, [isAtFirstResource]);
 
   /**
+   * Dispatch the go to link and let reducer handle it
+   * @todo - rename this goToHref and make a separate goToLink
+   */
+  const goToPage = React.useCallback(
+    (href) => {
+      if (!manifest) return;
+      const { link } = getFromReadingOrder(href, manifest) ?? {};
+      if (!link) {
+        console.error(`No readingOrder entry found for href: ${href}`);
+        return;
+      }
+      dispatch({ type: 'GO_TO_LINK', link });
+    },
+    [manifest]
+  );
+
+  /**
    * In scroll mode:
    *    navigates one resource
    * In page mode:
@@ -495,14 +537,6 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
 
   const setFontFamily = React.useCallback(async (family: FontFamily) => {
     dispatch({ type: 'SET_FONT_FAMILY', family });
-  }, []);
-
-  const goToPage = React.useCallback((href) => {
-    if (!manifest) return;
-    // get the resource with that href and set it.
-    // may need to handle a page number or other # content.
-
-    // what happens if there is no resource with that href?
   }, []);
 
   /**
@@ -587,9 +621,33 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
  * gets the index of the current location href
  */
 function getCurrentIndex(manifest: WebpubManifest, state: HtmlState): number {
-  return manifest.readingOrder.findIndex(
+  const i = manifest.readingOrder.findIndex(
     (link) => link.href === state.location.href
   );
+  return i === -1 ? 0 : i;
+}
+
+/**
+ * Find a link in the reading order from a passed in href. Only uses pathname
+ */
+function getFromReadingOrder(
+  href: string,
+  manifest: WebpubManifest
+): { link: ReadiumLink; index: number } | undefined {
+  // use window.origin in case this is a relative path
+  const desiredUrl = new URL(href, window.origin);
+
+  const i = manifest.readingOrder.findIndex((link) => {
+    const url = new URL(link.href, window.origin);
+    if (url.pathname === desiredUrl.pathname) return true;
+  });
+
+  return i !== -1
+    ? {
+        link: manifest.readingOrder[i],
+        index: i,
+      }
+    : undefined;
 }
 
 /**
