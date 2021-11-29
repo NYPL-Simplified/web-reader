@@ -5,15 +5,17 @@ import {
   ReaderReturn,
   ReaderArguments,
   FontFamily,
+  WebpubManifest,
 } from '../types';
 import { Injectable } from '../Readium/Injectable';
 import useSWRImmutable from 'swr/immutable';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
 import useResizeObserver from 'use-resize-observer';
 import { DEFAULT_HEIGHT, DEFAULT_SHOULD_GROW_WHEN_SCROLLING } from '..';
+import { Locator } from '../Readium/Locator';
+import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 
 type HtmlState = HtmlReaderState & {
-  currentResourceIndex: number;
   pageIndex: number;
   totalPages: number;
   resourceSize: {
@@ -21,26 +23,41 @@ type HtmlState = HtmlReaderState & {
     width: number;
   };
   isIframeLoaded: boolean;
+  // tracks whether the inter-resource navigation effect has run.
+  isNavigated: boolean;
+  location: Locator;
 };
 
 /**
  * @TODO :
  *
- *  - Keep track of resource size and container size
- *  - Use that to calculate number of pages and current page
- *  - Keep track of current location based on scroll value in current resource
- *      - Switching to paginated from scroll should keep your location
- *      - store it in a Locator object
- *      - calculate atStart / atEnd properly
- *  - don't show page buttons when in scroll mode
- *  - Separate out paginated and scrolling state types?
+ *  - store location in locator object
+ *    - on TOC click, set it to the href and fragment
+ *    - on internal link click, use the href and fragment
+ *    - on first load, set it to start of the initial resource
+ *    - on next page click, set it to a CFI or progression or position
+ *
+ *  - location change effect that responds to
+ *    - hash link
+ *    - page number ?
+ *    - cfi
+ *  - calculate current page, total pages
+ *  - switching from scrolling to paginated should maintain position
+ *  - keep location in url bar
+ *  - calculate atstart atend properly
  *  - Go to last page of last resource when navigating backwards
  *  - Anchor links within a resource
+ *  - show loading indicator while iframe is loading
+ *  - render iframe when in loading state
  *
  * Future:
  *  - Don't use ReadiumCSS for fixed layout
  *  - Make fixed layout work
  *  - Update to latest Readium CSS
+ *
+ * FOR PAGINATION:
+ *  - maybe store location as page index in paginated mode, and handle resizes?
+ *  - maybe store location as CFI in paginated mode?
  */
 
 /**
@@ -52,69 +69,131 @@ const defaultInjectables: Injectable[] = [];
 const defaultInjectablesFixed: Injectable[] = [];
 
 export type HtmlAction =
-  | { type: 'SET_CURRENT_RESOURCE'; index: number }
+  | { type: 'MANIFEST_LOADED' }
+  | { type: 'IFRAME_LOADED' }
+  | { type: 'NAV_PREVIOUS_RESOURCE' }
+  | { type: 'NAV_NEXT_RESOURCE' }
+  | { type: 'TOC_LINK_CLICK'; link: ReadiumLink }
+  | { type: 'GO_FORWARD' }
+  | { type: 'GO_BACKWARD' }
+  // indicates completion of an inter-resource nav after iframe loads
+  | { type: 'NAV_COMPLETE' }
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
   | { type: 'SET_SCROLL'; isScrolling: boolean }
   | { type: 'SET_FONT_SIZE'; size: number }
-  | { type: 'SET_FONT_FAMILY'; family: FontFamily }
-  | { type: 'SET_PAGE_INDEX'; index: number }
-  | { type: 'RESOURCE_RESIZE'; height: number; width: number }
-  | { type: 'IFRAME_LOADED' };
+  | { type: 'SET_FONT_FAMILY'; family: FontFamily };
 
-function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
-  switch (action.type) {
-    case 'SET_CURRENT_RESOURCE':
-      return {
-        ...state,
-        currentResourceIndex: action.index,
-        isIframeLoaded: false,
-      };
+/**
+ * A higher order function that makes it easy to access arguments in the reducer
+ * without passing them in to every `dispatch` call.
+ */
+function htmlReducer(args: ReaderArguments) {
+  /**
+   * If there are no args, it's an inactive hook, just use a function that returns the state.
+   * This way you don't have to keep checking if args is defined.
+   */
+  if (!args) return (state: HtmlState, _action: HtmlAction) => state;
 
-    case 'SET_COLOR_MODE':
-      return {
-        ...state,
-        colorMode: action.mode,
-      };
+  // our actual reducer
+  return function reducer(state: HtmlState, action: HtmlAction): HtmlState {
+    const { manifest, webpubManifestUrl } = args;
 
-    case 'SET_SCROLL':
-      return {
-        ...state,
-        isScrolling: action.isScrolling,
-      };
+    switch (action.type) {
+      case 'MANIFEST_LOADED': {
+        /**
+         * Start at the beginning of first resource
+         * @todo - use the value from URL query param if any
+         */
+        const locator = linkToLocator(manifest.readingOrder[0]);
 
-    case 'SET_FONT_SIZE':
-      return {
-        ...state,
-        fontSize: action.size,
-      };
+        return {
+          ...state,
+          location: locator,
+        };
+      }
 
-    case 'SET_FONT_FAMILY':
-      return {
-        ...state,
-        fontFamily: action.family,
-      };
+      case 'IFRAME_LOADED':
+        return {
+          ...state,
+          isIframeLoaded: true,
+        };
 
-    case 'SET_PAGE_INDEX':
-      return {
-        ...state,
-        pageIndex: action.index,
-      };
+      case 'NAV_NEXT_RESOURCE': {
+        const currentIndex = getCurrentIndex(manifest, state);
+        const nextIndex = currentIndex + 1;
+        // if we are at the end, do nothing
+        if (nextIndex >= manifest.readingOrder.length) return state;
+        const nextResource = manifest.readingOrder[nextIndex];
+        const locator = linkToLocator(nextResource);
+        return {
+          ...state,
+          location: locator,
+          isNavigated: false,
+          isIframeLoaded: false,
+        };
+      }
 
-    case 'RESOURCE_RESIZE':
-      return {
-        ...state,
-        resourceSize: {
-          height: action.height,
-          width: action.width,
-        },
-      };
+      case 'NAV_PREVIOUS_RESOURCE': {
+        const currentIndex = getCurrentIndex(manifest, state);
+        const prevIndex = currentIndex - 1;
+        // if we are at the beginning, do nothing
+        if (prevIndex === 0) return state;
+        const prevResource = manifest.readingOrder[prevIndex];
+        // send them to the end of the next resource
+        const locator = linkToLocator(prevResource, { progression: 1 });
+        return {
+          ...state,
+          location: locator,
+          // we need to re-perform inter-resource nav
+          isNavigated: false,
+          isIframeLoaded: false,
+        };
+      }
 
-    case 'IFRAME_LOADED':
-      return {
-        ...state,
-        isIframeLoaded: true,
-      };
-  }
+      case 'GO_FORWARD': {
+        console.warn('unimplemented');
+        return {
+          ...state,
+        };
+      }
+
+      case 'GO_BACKWARD': {
+        console.warn('unimplemented');
+        return { ...state };
+      }
+
+      case 'NAV_COMPLETE': {
+        return {
+          ...state,
+          isNavigated: true,
+        };
+      }
+
+      case 'SET_COLOR_MODE':
+        return {
+          ...state,
+          colorMode: action.mode,
+        };
+
+      case 'SET_SCROLL':
+        return {
+          ...state,
+          isScrolling: action.isScrolling,
+        };
+
+      case 'SET_FONT_SIZE':
+        return {
+          ...state,
+          fontSize: action.size,
+        };
+
+      case 'SET_FONT_FAMILY':
+        return {
+          ...state,
+          fontFamily: action.family,
+        };
+    }
+  };
 }
 
 const FONT_SIZE_STEP = 4;
@@ -199,13 +278,12 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     growWhenScrolling = DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
   } = args ?? {};
 
-  const [state, dispatch] = React.useReducer(htmlReducer, {
+  const [state, dispatch] = React.useReducer(htmlReducer(args), {
     colorMode: 'day',
     isScrolling: true,
     fontSize: 100,
     fontFamily: 'sans-serif',
     currentTocUrl: null,
-    currentResourceIndex: 1,
     pageIndex: 0,
     totalPages: 0,
     atStart: false,
@@ -215,6 +293,9 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       width: 0,
     },
     isIframeLoaded: false,
+    isNavigated: false,
+    // start with dummy location
+    location: { href: '', locations: {} },
   });
 
   const [iframe, setIframe] = React.useState<HTMLIFrameElement | null>(null);
@@ -224,13 +305,17 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     height: containerHeight = 0,
   } = useResizeObserver<HTMLIFrameElement>();
 
-  const { currentResourceIndex, fontSize } = state;
+  const { fontSize, location } = state;
   const currentResourceUrl = manifest
-    ? new URL(
-        manifest.readingOrder[currentResourceIndex].href,
-        webpubManifestUrl
-      ).toString()
+    ? new URL(location.href, webpubManifestUrl).toString()
     : null;
+  const currentResourceIndex = manifest?.readingOrder.findIndex(
+    (link) => link.href === location.href
+  );
+  const isAtLastResource =
+    currentResourceIndex === manifest?.readingOrder.length;
+  const isAtFirstResource = currentResourceIndex === 0;
+  const totalPages = 0;
 
   const { resource, isLoading } = useResource(
     currentResourceUrl,
@@ -239,9 +324,60 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     state
   );
 
-  const isAtFirstResource = currentResourceIndex === 0;
-  const isAtLastResource =
-    currentResourceIndex === manifest?.readingOrder.length;
+  /**
+   * Set the initial location when the manifest changes.
+   * @todo - this should use the url query params
+   * @todo - do we actually need to do this? Shouldn't prop changes auto change the hook?
+   */
+  React.useEffect(() => {
+    if (!webpubManifestUrl || !manifest) return;
+    dispatch({ type: 'MANIFEST_LOADED' });
+  }, [manifest, webpubManifestUrl]);
+
+  /**
+   * Navigate after location change
+   * After loads, make sure we fire off effects to navigate the user if necessary.
+   */
+  React.useEffect(() => {
+    if (!state.isNavigated && state.isIframeLoaded && iframe) {
+      /**
+       * Check for progression info. This is used
+       *  - in paginated mode for changing pages
+       *  - navigating backward
+       *  - switching between scrolling and paginated mode (to keep location)
+       */
+      if (typeof state.location.locations.progression === 'number') {
+        const {
+          isHorizontalPaginated,
+          totalPages,
+          containerWidth,
+          containerHeight,
+          resourceSize,
+        } = calcPosition(iframe, state.isScrolling);
+
+        const newProgression = state.location.locations.progression;
+        const newPage = Math.floor(totalPages * newProgression);
+        const html = getIframeHTML(iframe);
+
+        if (isHorizontalPaginated) {
+          const newPage = Math.floor(totalPages * newProgression);
+          const newScrollLeft = newPage * containerWidth;
+          html.scrollTo({ left: newScrollLeft, top: 0 });
+        } else {
+          const newScrollTop = newPage * containerHeight;
+          console.log('scrolling to', newScrollTop, resourceSize);
+          html.scrollTo(0, newScrollTop);
+        }
+        dispatch({ type: 'NAV_COMPLETE' });
+      }
+    }
+  }, [
+    state.isIframeLoaded,
+    state.isNavigated,
+    state.location,
+    state.isScrolling,
+    iframe,
+  ]);
 
   /**
    * Set CSS variables when user state changes.
@@ -250,14 +386,10 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
    */
   React.useEffect(() => {
     if (!iframe || !manifest) return;
-    const html = getIframeHTML(iframe);
+    const html = getMaybeIframeHtml(iframe);
     if (!html) return;
     setCss(html, state);
   }, [state, iframe, manifest, resource]);
-
-  /**
-   *
-   */
 
   /**
    * In scroll mode we:
@@ -284,60 +416,20 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     resource,
   ]);
 
-  // on scroll, update the current page
-  React.useEffect(() => {
-    const document = iframe?.contentDocument;
-    if (!document) return;
-
-    console.log('Adding scroll');
-    function handleScroll() {
-      console.log('scroll');
-    }
-
-    document.addEventListener('scroll', handleScroll);
-    // return () => document.removeEventListener('scroll', handleScroll);
-  }, [iframe]);
-
-  // go to last page when navigating backwards from one
-  // resource to another. You need to know if it has been measured
-  // yet though in order to do this.
-  // React.useEffect(() => {}, []);
-
   const goToNextResource = React.useCallback(() => {
     if (isAtLastResource) return;
-    dispatch({
-      type: 'SET_CURRENT_RESOURCE',
-      index: currentResourceIndex + 1,
-    });
-    dispatch({
-      type: 'SET_PAGE_INDEX',
-      index: 0,
-    });
-  }, [isAtLastResource, currentResourceIndex]);
+    dispatch({ type: 'NAV_NEXT_RESOURCE' });
+  }, [isAtLastResource]);
 
   /**
-   * @TODO - you need to know the number of pages in the prev
-   * resource to scroll the user to the last one when navigating
-   * backwards.
+   * Dispatch the prev resource action and let the reducer handle it.
    */
   const goToPrevResource = React.useCallback(() => {
     if (isAtFirstResource) return;
     dispatch({
-      type: 'SET_CURRENT_RESOURCE',
-      index: currentResourceIndex - 1,
+      type: 'NAV_PREVIOUS_RESOURCE',
     });
-    dispatch({
-      type: 'SET_PAGE_INDEX',
-      index: 0,
-    });
-  }, [isAtFirstResource, currentResourceIndex]);
-
-  /**
-   * Calculate total number of pages. In scroll mode
-   * we use height. In paginated mode we use width.
-   */
-
-  const totalPages = containerWidth / state.resourceSize.width;
+  }, [isAtFirstResource]);
 
   /**
    * In scroll mode:
@@ -375,20 +467,9 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       }
     } else {
       if (isAtFirstResource) return;
-      dispatch({
-        type: 'SET_CURRENT_RESOURCE',
-        index: currentResourceIndex - 1,
-      });
+      goToPrevResource();
     }
-  }, [
-    iframe,
-    goToPrevResource,
-    manifest,
-    isAtFirstResource,
-    currentResourceIndex,
-    state.isScrolling,
-    state.pageIndex,
-  ]);
+  }, [iframe, goToPrevResource, manifest, state.isScrolling, state.pageIndex]);
 
   const setColorMode = React.useCallback(async (mode: ColorMode) => {
     dispatch({ type: 'SET_COLOR_MODE', mode });
@@ -424,6 +505,13 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     // what happens if there is no resource with that href?
   }, []);
 
+  /**
+   * Dispatch an action on iframe load
+   */
+  const onLoad = React.useCallback(() => {
+    dispatch({ type: 'IFRAME_LOADED' });
+  }, []);
+
   // this format is inactive, return null
   if (!webpubManifestUrl || !manifest) return null;
 
@@ -441,16 +529,6 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       manifest: null,
       state: null,
     };
-  }
-
-  function onLocationChange() {
-    console.log(iframe?.contentWindow?.location.href);
-  }
-
-  function onLoad() {
-    console.log('Loaded');
-    onLocationChange();
-    iframe?.contentWindow?.addEventListener('popstate', onLocationChange);
   }
 
   // the reader is active
@@ -504,6 +582,79 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     },
   };
 }
+
+/**
+ * gets the index of the current location href
+ */
+function getCurrentIndex(manifest: WebpubManifest, state: HtmlState): number {
+  return manifest.readingOrder.findIndex(
+    (link) => link.href === state.location.href
+  );
+}
+
+/**
+ * Converts a ReadiumLink to a Locator
+ */
+function linkToLocator(
+  link: ReadiumLink,
+  locations: Locator['locations'] = {}
+): Locator {
+  // use window.origin here because we are only trying to extract the hash
+  const hash = new URL(link.href, window.origin).hash;
+  // add the hash if we don't already have a fragment
+  if (hash && !locations?.fragment) locations.fragment = `#${hash}`;
+  return {
+    href: link.href,
+    title: link.title,
+    type: link.type ?? 'text/html',
+    locations,
+  };
+}
+
+/**
+ * Calculate current position information
+ */
+function calcPosition(iframe: HTMLIFrameElement, isScrolling: boolean) {
+  /**
+   * Calculate the current scroll position and number of pages,
+   * and thus the page index, total pages and progression
+   */
+  const containerHeight = iframe.offsetHeight;
+  const containerWidth = iframe.offsetWidth;
+  const isHorizontalPaginated = !isScrolling;
+  const containerSize = isHorizontalPaginated
+    ? containerWidth
+    : containerHeight;
+  const html = getIframeHTML(iframe);
+  const resourceHeight = html.scrollHeight;
+  const resourceWidth = html.scrollWidth;
+  const resourceSize = isHorizontalPaginated ? resourceWidth : resourceHeight;
+  const scrollYPosition = html.scrollTop;
+  const scrollXPosition = html.scrollLeft;
+  const scrollPosition = isHorizontalPaginated
+    ? scrollXPosition
+    : scrollYPosition;
+  const totalPages = Math.ceil(resourceSize / containerSize);
+  const progression = scrollPosition / resourceSize;
+  const currentPage = Math.floor(progression * totalPages);
+
+  return {
+    isHorizontalPaginated,
+    containerSize,
+    containerWidth,
+    containerHeight,
+    resourceSize,
+    scrollPosition,
+    totalPages,
+    progression,
+    currentPage,
+  };
+}
+
+/**
+ * Set scroll position of HTML element in iframe
+ */
+// function setScrollPosition(iframe: HTMLIFrameElement, progression: number,)
 
 /**
  * Fetches a resource as text
@@ -575,15 +726,21 @@ function getIsScrollStart(iframe: HTMLIFrameElement) {
   return currentScroll === 0;
 }
 
+function getMaybeIframeHtml(iframe: HTMLIFrameElement) {
+  try {
+    return getIframeHTML(iframe);
+  } catch (e) {
+    return undefined;
+  }
+}
+
 /**
  * Get the HTML element of the iframe
  */
 function getIframeHTML(iframe: HTMLIFrameElement) {
   const html = iframe?.contentDocument?.documentElement;
   if (!html) {
-    console.warn(
-      'Attempting to perform action on iframe HTML but the element is not there yet.'
-    );
+    throw new Error('Attempting to access iframe HTML before it exists');
   }
   return html;
 }
