@@ -15,19 +15,25 @@ import { DEFAULT_HEIGHT, DEFAULT_SHOULD_GROW_WHEN_SCROLLING } from '..';
 type HtmlState = HtmlReaderState & {
   currentResourceIndex: number;
   pageIndex: number;
-  totalPages: number | null;
+  totalPages: number;
+  resourceSize: {
+    height: number;
+    width: number;
+  };
+  isIframeLoaded: boolean;
 };
 
 /**
  * @TODO :
  *
- *  - Make loading screen show header and take full height
  *  - Keep track of resource size and container size
  *  - Use that to calculate number of pages and current page
  *  - Keep track of current location based on scroll value in current resource
  *      - Switching to paginated from scroll should keep your location
+ *      - store it in a Locator object
+ *      - calculate atStart / atEnd properly
  *  - don't show page buttons when in scroll mode
- *  - Separate out paginated and scrolling state types
+ *  - Separate out paginated and scrolling state types?
  *  - Go to last page of last resource when navigating backwards
  *  - Anchor links within a resource
  *
@@ -51,7 +57,9 @@ export type HtmlAction =
   | { type: 'SET_SCROLL'; isScrolling: boolean }
   | { type: 'SET_FONT_SIZE'; size: number }
   | { type: 'SET_FONT_FAMILY'; family: FontFamily }
-  | { type: 'SET_PAGE_INDEX'; index: number };
+  | { type: 'SET_PAGE_INDEX'; index: number }
+  | { type: 'RESOURCE_RESIZE'; height: number; width: number }
+  | { type: 'IFRAME_LOADED' };
 
 function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
   switch (action.type) {
@@ -59,6 +67,7 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
       return {
         ...state,
         currentResourceIndex: action.index,
+        isIframeLoaded: false,
       };
 
     case 'SET_COLOR_MODE':
@@ -89,6 +98,21 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
       return {
         ...state,
         pageIndex: action.index,
+      };
+
+    case 'RESOURCE_RESIZE':
+      return {
+        ...state,
+        resourceSize: {
+          height: action.height,
+          width: action.width,
+        },
+      };
+
+    case 'IFRAME_LOADED':
+      return {
+        ...state,
+        isIframeLoaded: true,
       };
   }
 }
@@ -181,15 +205,24 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     fontSize: 100,
     fontFamily: 'sans-serif',
     currentTocUrl: null,
-    currentResourceIndex: 0,
+    currentResourceIndex: 1,
     pageIndex: 0,
-    totalPages: null,
-    atStart: true,
+    totalPages: 0,
+    atStart: false,
     atEnd: false,
+    resourceSize: {
+      height: 0,
+      width: 0,
+    },
+    isIframeLoaded: false,
   });
 
   const [iframe, setIframe] = React.useState<HTMLIFrameElement | null>(null);
-  const { ref, width = 0 } = useResizeObserver<HTMLIFrameElement>();
+  const {
+    ref: containerRef,
+    width: containerWidth = 0,
+    height: containerHeight = 0,
+  } = useResizeObserver<HTMLIFrameElement>();
 
   const { currentResourceIndex, fontSize } = state;
   const currentResourceUrl = manifest
@@ -210,16 +243,21 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const isAtLastResource =
     currentResourceIndex === manifest?.readingOrder.length;
 
-  // update the user settings css variables
-  // also need to run this when the resource changes, or set them on the srcDoc directly (@TODO look into that)
-  // also need to wait for the iframe to be loaded before we do this. Otherwise there wont be html and we will do
-  // nothing.
+  /**
+   * Set CSS variables when user state changes.
+   * @todo - wait for iframe load?
+   * @todo - narrow down the dependencies so this doesn't run on _every_ state change.
+   */
   React.useEffect(() => {
     if (!iframe || !manifest) return;
     const html = getIframeHTML(iframe);
     if (!html) return;
     setCss(html, state);
   }, [state, iframe, manifest, resource]);
+
+  /**
+   *
+   */
 
   /**
    * In scroll mode we:
@@ -230,14 +268,35 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     if (!iframe || !manifest) return;
     if (state.isScrolling) return;
     // set the scroll offset based on page number
-    const offset = width * state.pageIndex;
+    const offset = containerWidth * state.pageIndex;
     const html = getIframeHTML(iframe);
     if (!html) {
       console.warn('Trying to scroll before html is present');
       return;
     }
     html.scrollTo(offset, 0);
-  }, [width, state.pageIndex, iframe, manifest, state.isScrolling, resource]);
+  }, [
+    containerWidth,
+    state.pageIndex,
+    iframe,
+    manifest,
+    state.isScrolling,
+    resource,
+  ]);
+
+  // on scroll, update the current page
+  React.useEffect(() => {
+    const document = iframe?.contentDocument;
+    if (!document) return;
+
+    console.log('Adding scroll');
+    function handleScroll() {
+      console.log('scroll');
+    }
+
+    document.addEventListener('scroll', handleScroll);
+    // return () => document.removeEventListener('scroll', handleScroll);
+  }, [iframe]);
 
   // go to last page when navigating backwards from one
   // resource to another. You need to know if it has been measured
@@ -273,19 +332,13 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     });
   }, [isAtFirstResource, currentResourceIndex]);
 
-  // on scroll, update the current page
-  React.useEffect(() => {
-    const document = iframe?.contentDocument;
-    if (!document) return;
+  /**
+   * Calculate total number of pages. In scroll mode
+   * we use height. In paginated mode we use width.
+   */
 
-    console.log('Adding scroll');
-    function handleScroll() {
-      console.log('scroll');
-    }
+  const totalPages = containerWidth / state.resourceSize.width;
 
-    document.addEventListener('scroll', handleScroll);
-    // return () => document.removeEventListener('scroll', handleScroll);
-  }, [iframe]);
   /**
    * In scroll mode:
    *    navigates one resource
@@ -390,35 +443,52 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     };
   }
 
+  function onLocationChange() {
+    console.log(iframe?.contentWindow?.location.href);
+  }
+
+  function onLoad() {
+    console.log('Loaded');
+    onLocationChange();
+    iframe?.contentWindow?.addEventListener('popstate', onLocationChange);
+  }
+
   // the reader is active
   return {
     type: 'HTML',
     isLoading: false,
     content: (
-      <iframe
-        ref={(el) => {
-          setIframe(el);
-          ref(el);
-        }}
-        // as="iframe"
-        style={{
-          /**
-           * This determines the height of the iframe.
-           *
-           * If we remove this, then in scrolling mode it simply grows to fit
-           * content. In paginated mode, however, we must have this set because
-           * we have to decide how big the content should be.
-           */
-          height: shouldGrow ? 'initial' : height,
-          /**
-           * We always want the height to be at least the defined height
-           */
-          minHeight: height,
-          overflow: 'hidden',
-        }}
-        title="CHANGEME"
-        srcDoc={resource}
-      />
+      <>
+        <div>
+          Page: {state.pageIndex} / {totalPages}
+        </div>
+        <iframe
+          onLoad={onLoad}
+          ref={(el) => {
+            setIframe(el);
+            containerRef(el);
+          }}
+          // as="iframe"
+          style={{
+            /**
+             * This determines the height of the iframe.
+             *
+             * If we remove this, then in scrolling mode it simply grows to fit
+             * content. In paginated mode, however, we must have this set because
+             * we have to decide how big the content should be.
+             */
+            height: shouldGrow ? 'initial' : height,
+            /**
+             * We always want the height to be at least the defined height
+             */
+            minHeight: height,
+            overflow: 'hidden',
+          }}
+          title="CHANGEME"
+          srcDoc={resource}
+          src={currentResourceUrl ?? undefined}
+        />
+      </>
     ),
     state,
     manifest,
