@@ -31,6 +31,8 @@ type HtmlState = HtmlReaderState & {
 /**
  * @TODO :
  *
+ * - working on GO_TO_LINK (toc click)
+ *
  *  - store location in locator object
  *    - on TOC click, set it to the href and fragment
  *    - on internal link click, use the href and fragment
@@ -54,6 +56,8 @@ type HtmlState = HtmlReaderState & {
  *  - Don't use ReadiumCSS for fixed layout
  *  - Make fixed layout work
  *  - Update to latest Readium CSS
+ *  - reorganize link comparison utils so that you compare only _absolute_ URLs, not
+ *    relative URLs. Always use the correct baseUrl for making absolute URLs.
  *
  * FOR PAGINATION:
  *  - maybe store location as page index in paginated mode, and handle resizes?
@@ -104,7 +108,7 @@ function htmlReducer(args: ReaderArguments) {
          * Start at the beginning of first resource
          * @todo - use the value from URL query param if any
          */
-        const locator = linkToLocator(manifest.readingOrder[0]);
+        const locator = linkToLocator(manifest.readingOrder[2]);
 
         return {
           ...state,
@@ -162,12 +166,20 @@ function htmlReducer(args: ReaderArguments) {
           );
           return state;
         }
-        // check if we are already on the resource, in which case
-        // we don't need to reset isIframeLoaded
+
+        // tells us whether we are staying on the same resource or going
+        // to load a new one
+        const isSameResource = pathnamesMatch(
+          action.link.href,
+          state.location.href
+        );
+
         const locator = linkToLocator(action.link);
         return {
           ...state,
           location: locator,
+          isNavigated: false,
+          isIframeLoaded: isSameResource,
         };
       }
 
@@ -250,12 +262,9 @@ function useResource(
   url: string | null,
   getContent: (url: string) => Promise<string>,
   injectables: Injectable[],
-  state: HtmlState,
-  dispatch: React.Dispatch<HtmlAction>
+  state: HtmlState
 ) {
-  const { data, isValidating, error } = useSWRImmutable(url, getContent, {
-    use: [dispatchMiddleware(dispatch)],
-  });
+  const { data, isValidating, error } = useSWRImmutable(url, getContent);
   // cast the data to a possibly undefined because, it is?
   const resource = data as string | undefined;
   if (error) throw error;
@@ -345,8 +354,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     currentResourceUrl,
     getContent,
     injectables,
-    state,
-    dispatch
+    state
   );
 
   /**
@@ -365,13 +373,30 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
    */
   React.useEffect(() => {
     if (!state.isNavigated && state.isIframeLoaded && iframe) {
+      const locations = state.location.locations;
+      const { fragment, progression, position } = locations;
       /**
-       * Check for progression info. This is used
-       *  - in paginated mode for changing pages
-       *  - navigating backward
-       *  - switching between scrolling and paginated mode (to keep location)
+       * First check for a fragment that we need to navigate to
        */
-      if (typeof state.location.locations.progression === 'number') {
+      if (typeof fragment === 'string') {
+        const isHash = fragment.indexOf('#') === 0;
+        if (isHash) {
+          // we get the element by the hash, and scroll it into view
+          const el = iframe.contentDocument?.querySelector(fragment);
+          console.log(iframe.contentDocument);
+          if (el) {
+            el.scrollIntoView();
+          } else {
+            console.error('Could not find an element with id', fragment);
+          }
+        }
+      } else if (typeof progression === 'number') {
+        /**
+         * Check for progression info. This is used
+         *  - in paginated mode for changing pages
+         *  - navigating backward
+         *  - switching between scrolling and paginated mode (to keep location)
+         */
         const {
           isHorizontalPaginated,
           totalPages,
@@ -380,12 +405,11 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
           resourceSize,
         } = calcPosition(iframe, state.isScrolling);
 
-        const newProgression = state.location.locations.progression;
-        const newPage = Math.floor(totalPages * newProgression);
+        const newPage = Math.floor(totalPages * progression);
         const html = getIframeHTML(iframe);
 
         if (isHorizontalPaginated) {
-          const newPage = Math.floor(totalPages * newProgression);
+          const newPage = Math.floor(totalPages * progression);
           const newScrollLeft = newPage * containerWidth;
           html.scrollTo({ left: newScrollLeft, top: 0 });
         } else {
@@ -393,8 +417,9 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
           console.log('scrolling to', newScrollTop, resourceSize);
           html.scrollTo(0, newScrollTop);
         }
-        dispatch({ type: 'NAV_COMPLETE' });
       }
+      // tell the reducer that we have now completed the navigation.
+      dispatch({ type: 'NAV_COMPLETE' });
     }
   }, [
     state.isIframeLoaded,
@@ -468,6 +493,8 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
         console.error(`No readingOrder entry found for href: ${href}`);
         return;
       }
+      // use the passed in href to preserve hash links
+      link.href = href;
       dispatch({ type: 'GO_TO_LINK', link });
     },
     [manifest]
@@ -634,12 +661,8 @@ function getFromReadingOrder(
   href: string,
   manifest: WebpubManifest
 ): { link: ReadiumLink; index: number } | undefined {
-  // use window.origin in case this is a relative path
-  const desiredUrl = new URL(href, window.origin);
-
   const i = manifest.readingOrder.findIndex((link) => {
-    const url = new URL(link.href, window.origin);
-    if (url.pathname === desiredUrl.pathname) return true;
+    return pathnamesMatch(link.href, href);
   });
 
   return i !== -1
@@ -648,6 +671,20 @@ function getFromReadingOrder(
         index: i,
       }
     : undefined;
+}
+
+/**
+ * Check if two hrefs share the same pathname. They can be absolute
+ * or relative, and this will ignore the host/origin (maybe not right decision)
+ * This will also ignore hash links.
+ */
+function pathnamesMatch(href1: string, href2: string): boolean {
+  // use window.origin in case this is a relative path, since
+  // we don't care about the host/origin
+  const url1 = new URL(href1, window.origin);
+  const url2 = new URL(href2, window.origin);
+  const doMatch = url1.pathname === url2.pathname;
+  return doMatch;
 }
 
 /**
@@ -660,7 +697,7 @@ function linkToLocator(
   // use window.origin here because we are only trying to extract the hash
   const hash = new URL(link.href, window.origin).hash;
   // add the hash if we don't already have a fragment
-  if (hash && !locations?.fragment) locations.fragment = `#${hash}`;
+  if (hash && !locations?.fragment) locations.fragment = hash;
   return {
     href: link.href,
     title: link.title,
