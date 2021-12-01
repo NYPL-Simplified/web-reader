@@ -15,13 +15,10 @@ import { DEFAULT_HEIGHT, DEFAULT_SHOULD_GROW_WHEN_SCROLLING } from '..';
 import { Locator } from '../Readium/Locator';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 
+/**
+ * @todo - split this into multiple states (inactive, loading resource, iframe loaded)
+ */
 type HtmlState = HtmlReaderState & {
-  pageIndex: number;
-  totalPages: number;
-  resourceSize: {
-    height: number;
-    width: number;
-  };
   isIframeLoaded: boolean;
   // tracks whether the inter-resource navigation effect has run.
   isNavigated: boolean;
@@ -31,7 +28,14 @@ type HtmlState = HtmlReaderState & {
 /**
  * @TODO :
  *
- * - working on GO_TO_LINK (toc click)
+ * - WORKING ON paginated mode
+ *    - go forward / backward
+ *      - problem: current page is wrong
+ *    - make it stay in same place when switching
+ *    - NOTE: I think the location needs to be "uncontrolled"... meaning
+ *      we can detect it upon user interaction, and manipulate it, but we aren't
+ *      constantly tracking it. The location then stores the "last known" location.
+ *      This is currently what we have now.
  *
  *  - store location in locator object
  *    - on TOC click, set it to the href and fragment
@@ -40,7 +44,6 @@ type HtmlState = HtmlReaderState & {
  *    - on next page click, set it to a CFI or progression or position
  *
  *  - location change effect that responds to
- *    - hash link
  *    - page number ?
  *    - cfi
  *  - calculate current page, total pages
@@ -91,7 +94,7 @@ export type HtmlAction =
  * A higher order function that makes it easy to access arguments in the reducer
  * without passing them in to every `dispatch` call.
  */
-function htmlReducer(args: ReaderArguments) {
+function htmlReducer(args: ReaderArguments, iframe: HTMLIFrameElement | null) {
   /**
    * If there are no args, it's an inactive hook, just use a function that returns the state.
    * This way you don't have to keep checking if args is defined.
@@ -110,7 +113,8 @@ function htmlReducer(args: ReaderArguments) {
          */
         const locator = linkToLocator(
           manifest.readingOrder[2],
-          webpubManifestUrl
+          webpubManifestUrl,
+          { progression: 0, position: 0 }
         );
 
         return {
@@ -191,9 +195,57 @@ function htmlReducer(args: ReaderArguments) {
       }
 
       case 'GO_FORWARD': {
-        console.warn('unimplemented');
+        /**
+         * We are going to scroll the user forward by one page unit,
+         * unless we are at the end of the resource, in which case we
+         * need to go to the next resource
+         */
+
+        // if the iframe isn't loaded and present, we can't do anything yet
+        if (!state.isIframeLoaded || !iframe) {
+          console.warn("Can't go forward before iframe is loaded");
+          return state;
+        }
+
+        const {
+          progression,
+          currentPage,
+          totalPages,
+          pageSize,
+          scrollPosition,
+          resourceSize,
+        } = calcPosition(iframe, state.isScrolling);
+
+        // console.log('current page', currentPage);
+        // console.log('total pages', totalPages);
+        // console.log('page size', pageSize);
+        // console.log('scroll position', scrollPosition);
+        // console.log('progression', progression);
+        // console.log('resource size', resourceSize);
+        // console.log('\n');
+
+        // if we are at the last page, go to next resource
+        if (progression === 1) {
+          console.error('unimplemented go to next resource');
+          return state;
+        }
+
+        /**
+         * Set the progression so that we scroll the user by
+         * one page, but also set the 'position' value
+         */
+        const percentToScroll = 1 / totalPages;
+        const newProgression = progression + percentToScroll;
+
         return {
           ...state,
+          location: {
+            ...state.location,
+            locations: {
+              progression: newProgression,
+            },
+          },
+          isNavigated: false,
         };
       }
 
@@ -318,27 +370,22 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     growWhenScrolling = DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
   } = args ?? {};
 
-  const [state, dispatch] = React.useReducer(htmlReducer(args), {
+  const [iframe, setIframe] = React.useState<HTMLIFrameElement | null>(null);
+
+  const [state, dispatch] = React.useReducer(htmlReducer(args, iframe), {
     colorMode: 'day',
-    isScrolling: true,
+    isScrolling: false,
     fontSize: 100,
     fontFamily: 'sans-serif',
     currentTocUrl: null,
-    pageIndex: 0,
-    totalPages: 0,
     atStart: false,
     atEnd: false,
-    resourceSize: {
-      height: 0,
-      width: 0,
-    },
     isIframeLoaded: false,
     isNavigated: false,
     // start with dummy location
     location: { href: '', locations: {} },
   });
 
-  const [iframe, setIframe] = React.useState<HTMLIFrameElement | null>(null);
   const {
     ref: containerRef,
     width: containerWidth = 0,
@@ -388,9 +435,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
         if (isHash) {
           // we get the element by the hash, and scroll it into view
           const el = iframe.contentDocument?.querySelector(fragment);
-          console.log('el found?', el);
           if (el) {
-            console.log('scrolling into view');
             el.scrollIntoView();
           } else {
             console.error('Could not find an element with id', fragment);
@@ -408,19 +453,23 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
           totalPages,
           containerWidth,
           containerHeight,
-          resourceSize,
+          scrollPosition,
         } = calcPosition(iframe, state.isScrolling);
 
-        const newPage = Math.floor(totalPages * progression);
+        const newPage = Math.round(totalPages * progression);
         const html = getIframeHTML(iframe);
 
         if (isHorizontalPaginated) {
-          const newPage = Math.floor(totalPages * progression);
           const newScrollLeft = newPage * containerWidth;
+          console.log(
+            scrollPosition,
+            newScrollLeft,
+            newPage,
+            totalPages * progression
+          );
           html.scrollTo({ left: newScrollLeft, top: 0 });
         } else {
           const newScrollTop = newPage * containerHeight;
-          console.log('scrolling to', newScrollTop, resourceSize);
           html.scrollTo(0, newScrollTop);
         }
       }
@@ -446,31 +495,6 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     if (!html) return;
     setCss(html, state);
   }, [state, iframe, manifest, resource]);
-
-  /**
-   * In scroll mode we:
-   *  - set the horizontal offset based on page number and witdh
-   *  - set the total pages so we know how far we can scroll
-   */
-  React.useEffect(() => {
-    if (!iframe || !manifest) return;
-    if (state.isScrolling) return;
-    // set the scroll offset based on page number
-    const offset = containerWidth * state.pageIndex;
-    const html = getIframeHTML(iframe);
-    if (!html) {
-      console.warn('Trying to scroll before html is present');
-      return;
-    }
-    html.scrollTo(offset, 0);
-  }, [
-    containerWidth,
-    state.pageIndex,
-    iframe,
-    manifest,
-    state.isScrolling,
-    resource,
-  ]);
 
   const goToNextResource = React.useCallback(() => {
     if (isAtLastResource) return;
@@ -507,45 +531,13 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     [manifest, webpubManifestUrl]
   );
 
-  /**
-   * In scroll mode:
-   *    navigates one resource
-   * In page mode:
-   *    Navigates one page unless at end of resource
-   *
-   * @TODO - check that you are not at the last page before going
-   * to next page.
-   */
   const goForward = React.useCallback(async () => {
-    if (!manifest || !iframe) return;
-    if (!state.isScrolling) {
-      const isScrollEnd = getIsScrollEnd(iframe);
-      if (isScrollEnd) {
-        goToNextResource();
-      } else {
-        // dispatch({ type: 'SET_PAGE_INDEX', index: state.pageIndex + 1 });
-      }
-    } else {
-      goToNextResource();
-    }
-  }, [iframe, goToNextResource, manifest, state.isScrolling, state.pageIndex]);
+    dispatch({ type: 'GO_FORWARD' });
+  }, []);
 
   const goBackward = React.useCallback(async () => {
-    if (!manifest || !iframe) return;
-    if (!state.isScrolling) {
-      const isScrollStart = getIsScrollStart(iframe);
-      if (isScrollStart) {
-        goToPrevResource();
-      } else {
-        if (state.pageIndex > 0) {
-          // dispatch({ type: 'SET_PAGE_INDEX', index: state.pageIndex - 1 });
-        }
-      }
-    } else {
-      if (isAtFirstResource) return;
-      goToPrevResource();
-    }
-  }, [iframe, goToPrevResource, manifest, state.isScrolling, state.pageIndex]);
+    dispatch({ type: 'GO_BACKWARD' });
+  }, []);
 
   const setColorMode = React.useCallback(async (mode: ColorMode) => {
     dispatch({ type: 'SET_COLOR_MODE', mode });
@@ -605,9 +597,6 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     isLoading: false,
     content: (
       <>
-        <div>
-          Page: {state.pageIndex} / {totalPages}
-        </div>
         <iframe
           onLoad={onLoad}
           ref={(el) => {
@@ -734,6 +723,7 @@ function calcPosition(iframe: HTMLIFrameElement, isScrolling: boolean) {
   const containerSize = isHorizontalPaginated
     ? containerWidth
     : containerHeight;
+  const pageSize = containerSize;
   const html = getIframeHTML(iframe);
   const resourceHeight = html.scrollHeight;
   const resourceWidth = html.scrollWidth;
@@ -743,20 +733,27 @@ function calcPosition(iframe: HTMLIFrameElement, isScrolling: boolean) {
   const scrollPosition = isHorizontalPaginated
     ? scrollXPosition
     : scrollYPosition;
-  const totalPages = Math.ceil(resourceSize / containerSize);
+  const totalPages = Math.ceil((resourceSize - containerSize) / containerSize);
   const progression = scrollPosition / resourceSize;
   const currentPage = Math.floor(progression * totalPages);
+
+  // you're at the end if the scroll position + containerSize === resourceSize
+  const isAtEnd = scrollPosition + containerSize === resourceSize;
+  const isAtStart = scrollPosition === 0;
 
   return {
     isHorizontalPaginated,
     containerSize,
     containerWidth,
     containerHeight,
+    pageSize,
     resourceSize,
     scrollPosition,
     totalPages,
     progression,
     currentPage,
+    isAtEnd,
+    isAtStart,
   };
 }
 
