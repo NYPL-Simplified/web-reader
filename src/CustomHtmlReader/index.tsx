@@ -108,7 +108,10 @@ function htmlReducer(args: ReaderArguments) {
          * Start at the beginning of first resource
          * @todo - use the value from URL query param if any
          */
-        const locator = linkToLocator(manifest.readingOrder[2]);
+        const locator = linkToLocator(
+          manifest.readingOrder[2],
+          webpubManifestUrl
+        );
 
         return {
           ...state,
@@ -128,7 +131,7 @@ function htmlReducer(args: ReaderArguments) {
         // if we are at the end, do nothing
         if (nextIndex >= manifest.readingOrder.length) return state;
         const nextResource = manifest.readingOrder[nextIndex];
-        const locator = linkToLocator(nextResource);
+        const locator = linkToLocator(nextResource, webpubManifestUrl);
         return {
           ...state,
           location: locator,
@@ -144,7 +147,9 @@ function htmlReducer(args: ReaderArguments) {
         if (prevIndex === 0) return state;
         const prevResource = manifest.readingOrder[prevIndex];
         // send them to the end of the next resource
-        const locator = linkToLocator(prevResource, { progression: 1 });
+        const locator = linkToLocator(prevResource, webpubManifestUrl, {
+          progression: 1,
+        });
         return {
           ...state,
           location: locator,
@@ -157,7 +162,8 @@ function htmlReducer(args: ReaderArguments) {
       case 'GO_TO_LINK': {
         const isInReadingOrder = !!getFromReadingOrder(
           action.link.href,
-          manifest
+          manifest,
+          webpubManifestUrl
         );
         if (!isInReadingOrder) {
           console.error(
@@ -169,17 +175,18 @@ function htmlReducer(args: ReaderArguments) {
 
         // tells us whether we are staying on the same resource or going
         // to load a new one
-        const isSameResource = pathnamesMatch(
+        const isIframeLoaded = isSameResource(
           action.link.href,
-          state.location.href
+          state.location.href,
+          webpubManifestUrl
         );
 
-        const locator = linkToLocator(action.link);
+        const locator = linkToLocator(action.link, webpubManifestUrl);
         return {
           ...state,
           location: locator,
           isNavigated: false,
-          isIframeLoaded: isSameResource,
+          isIframeLoaded,
         };
       }
 
@@ -339,9 +346,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   } = useResizeObserver<HTMLIFrameElement>();
 
   const { fontSize, location } = state;
-  const currentResourceUrl = manifest
-    ? new URL(location.href, webpubManifestUrl).toString()
-    : null;
+  const currentResourceUrl = location.href ?? null;
   const currentResourceIndex = manifest?.readingOrder.findIndex(
     (link) => link.href === location.href
   );
@@ -383,8 +388,9 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
         if (isHash) {
           // we get the element by the hash, and scroll it into view
           const el = iframe.contentDocument?.querySelector(fragment);
-          console.log(iframe.contentDocument);
+          console.log('el found?', el);
           if (el) {
+            console.log('scrolling into view');
             el.scrollIntoView();
           } else {
             console.error('Could not find an element with id', fragment);
@@ -487,8 +493,9 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
    */
   const goToPage = React.useCallback(
     (href) => {
-      if (!manifest) return;
-      const { link } = getFromReadingOrder(href, manifest) ?? {};
+      if (!manifest || !webpubManifestUrl) return;
+      const { link } =
+        getFromReadingOrder(href, manifest, webpubManifestUrl) ?? {};
       if (!link) {
         console.error(`No readingOrder entry found for href: ${href}`);
         return;
@@ -497,7 +504,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       link.href = href;
       dispatch({ type: 'GO_TO_LINK', link });
     },
-    [manifest]
+    [manifest, webpubManifestUrl]
   );
 
   /**
@@ -516,7 +523,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       if (isScrollEnd) {
         goToNextResource();
       } else {
-        dispatch({ type: 'SET_PAGE_INDEX', index: state.pageIndex + 1 });
+        // dispatch({ type: 'SET_PAGE_INDEX', index: state.pageIndex + 1 });
       }
     } else {
       goToNextResource();
@@ -531,7 +538,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
         goToPrevResource();
       } else {
         if (state.pageIndex > 0) {
-          dispatch({ type: 'SET_PAGE_INDEX', index: state.pageIndex - 1 });
+          // dispatch({ type: 'SET_PAGE_INDEX', index: state.pageIndex - 1 });
         }
       }
     } else {
@@ -655,14 +662,15 @@ function getCurrentIndex(manifest: WebpubManifest, state: HtmlState): number {
 }
 
 /**
- * Find a link in the reading order from a passed in href. Only uses pathname
+ * Find a link in the reading order from a passed in href.
  */
 function getFromReadingOrder(
   href: string,
-  manifest: WebpubManifest
+  manifest: WebpubManifest,
+  baseUrl: string
 ): { link: ReadiumLink; index: number } | undefined {
   const i = manifest.readingOrder.findIndex((link) => {
-    return pathnamesMatch(link.href, href);
+    return isSameResource(link.href, href, baseUrl);
   });
 
   return i !== -1
@@ -678,12 +686,15 @@ function getFromReadingOrder(
  * or relative, and this will ignore the host/origin (maybe not right decision)
  * This will also ignore hash links.
  */
-function pathnamesMatch(href1: string, href2: string): boolean {
-  // use window.origin in case this is a relative path, since
-  // we don't care about the host/origin
-  const url1 = new URL(href1, window.origin);
-  const url2 = new URL(href2, window.origin);
-  const doMatch = url1.pathname === url2.pathname;
+function isSameResource(
+  href1: string,
+  href2: string,
+  baseUrl: string
+): boolean {
+  const url1 = new URL(href1, baseUrl);
+  const url2 = new URL(href2, baseUrl);
+  const doMatch =
+    url1.origin === url2.origin && url1.pathname === url2.pathname;
   return doMatch;
 }
 
@@ -692,14 +703,17 @@ function pathnamesMatch(href1: string, href2: string): boolean {
  */
 function linkToLocator(
   link: ReadiumLink,
+  baseUrl: string,
   locations: Locator['locations'] = {}
 ): Locator {
-  // use window.origin here because we are only trying to extract the hash
-  const hash = new URL(link.href, window.origin).hash;
+  const url = new URL(link.href, baseUrl);
+  const hash = url.hash;
+  const hrefWithoutHash = url.origin + url.pathname;
   // add the hash if we don't already have a fragment
   if (hash && !locations?.fragment) locations.fragment = hash;
+  // const hrefWithoutHash =
   return {
-    href: link.href,
+    href: hrefWithoutHash,
     title: link.title,
     type: link.type ?? 'text/html',
     locations,
