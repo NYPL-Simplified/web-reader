@@ -61,6 +61,14 @@ export default function Tests(): JSX.Element {
           ]}
         />
       </Route>
+      <Route path={`${path}/missing-toc`}>
+        <WebReader
+          webpubManifestUrl={`${origin}/samples/test/missing-toc.json`}
+          getContent={async (_) => {
+            return `<h1>This manifest is missing Table of Contents</h1>`;
+          }}
+        />
+      </Route>
       <Route path={`${path}/*`}>
         <h1>404</h1>
         <p>Page not found.</p>
