@@ -8,9 +8,6 @@ describe('navigating an EPUB page using internal link', () => {
     });
 
     cy.loadPage('/moby-epub2');
-
-    // Use a consistent viewport
-    cy.viewport(1024, 768);
   });
 
   it('navigates user using the internal TOC link on the page', () => {
@@ -20,6 +17,8 @@ describe('navigating an EPUB page using internal link', () => {
     cy.findByLabelText('MOBY-DICK; or, THE WHALE.').click();
 
     cy.wait(3000);
+
+    cy.findByRole('button', { name: 'Next Page' }).click();
 
     cy.log('Go to ETYMOLOGY');
     cy.getIframeBody(IFRAME_SELECTOR)
