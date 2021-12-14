@@ -7,7 +7,11 @@ describe('navigating an EPUB page using internal link', () => {
       return false;
     });
 
-    cy.loadPage('/moby-epub2');
+    cy.visit('/moby-epub2', {
+      onBeforeLoad: (win) => {
+        win.sessionStorage.clear(); // clear storage so that we are always on page one
+      },
+    });
   });
 
   it('navigates user using the internal TOC link on the page', () => {
