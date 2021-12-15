@@ -101,9 +101,43 @@ function htmlReducer(args: ReaderArguments, iframe: HTMLIFrameElement | null) {
    */
   if (!args) return (state: HtmlState, _action: HtmlAction) => state;
 
+  const { manifest, webpubManifestUrl } = args;
+
   // our actual reducer
   return function reducer(state: HtmlState, action: HtmlAction): HtmlState {
-    const { manifest, webpubManifestUrl } = args;
+    function goToNextResource() {
+      const currentIndex = getCurrentIndex(manifest, state);
+      const nextIndex = currentIndex + 1;
+      // if we are at the end, do nothing
+      if (nextIndex >= manifest.readingOrder.length) return state;
+      const nextResource = manifest.readingOrder[nextIndex];
+      const locator = linkToLocator(nextResource, webpubManifestUrl);
+      return {
+        ...state,
+        location: locator,
+        isNavigated: false,
+        isIframeLoaded: false,
+      };
+    }
+
+    function goToPrevResource() {
+      const currentIndex = getCurrentIndex(manifest, state);
+      const prevIndex = currentIndex - 1;
+      // if we are at the beginning, do nothing
+      if (prevIndex === 0) return state;
+      const prevResource = manifest.readingOrder[prevIndex];
+      // send them to the end of the next resource
+      const locator = linkToLocator(prevResource, webpubManifestUrl, {
+        progression: 1,
+      });
+      return {
+        ...state,
+        location: locator,
+        // we need to re-perform inter-resource nav
+        isNavigated: false,
+        isIframeLoaded: false,
+      };
+    }
 
     switch (action.type) {
       case 'MANIFEST_LOADED': {
@@ -130,37 +164,11 @@ function htmlReducer(args: ReaderArguments, iframe: HTMLIFrameElement | null) {
         };
 
       case 'NAV_NEXT_RESOURCE': {
-        const currentIndex = getCurrentIndex(manifest, state);
-        const nextIndex = currentIndex + 1;
-        // if we are at the end, do nothing
-        if (nextIndex >= manifest.readingOrder.length) return state;
-        const nextResource = manifest.readingOrder[nextIndex];
-        const locator = linkToLocator(nextResource, webpubManifestUrl);
-        return {
-          ...state,
-          location: locator,
-          isNavigated: false,
-          isIframeLoaded: false,
-        };
+        return goToNextResource();
       }
 
       case 'NAV_PREVIOUS_RESOURCE': {
-        const currentIndex = getCurrentIndex(manifest, state);
-        const prevIndex = currentIndex - 1;
-        // if we are at the beginning, do nothing
-        if (prevIndex === 0) return state;
-        const prevResource = manifest.readingOrder[prevIndex];
-        // send them to the end of the next resource
-        const locator = linkToLocator(prevResource, webpubManifestUrl, {
-          progression: 1,
-        });
-        return {
-          ...state,
-          location: locator,
-          // we need to re-perform inter-resource nav
-          isNavigated: false,
-          isIframeLoaded: false,
-        };
+        return goToPrevResource();
       }
 
       case 'GO_TO_LINK': {
@@ -207,27 +215,14 @@ function htmlReducer(args: ReaderArguments, iframe: HTMLIFrameElement | null) {
           return state;
         }
 
-        const {
-          progression,
-          currentPage,
-          totalPages,
-          pageSize,
-          scrollPosition,
-          resourceSize,
-        } = calcPosition(iframe, state.isScrolling);
-
-        // console.log('current page', currentPage);
-        // console.log('total pages', totalPages);
-        // console.log('page size', pageSize);
-        // console.log('scroll position', scrollPosition);
-        // console.log('progression', progression);
-        // console.log('resource size', resourceSize);
-        // console.log('\n');
+        const { progression, totalPages, currentPage } = calcPosition(
+          iframe,
+          state.isScrolling
+        );
 
         // if we are at the last page, go to next resource
         if (progression === 1) {
-          console.error('unimplemented go to next resource');
-          return state;
+          return goToNextResource();
         }
 
         /**
@@ -243,6 +238,7 @@ function htmlReducer(args: ReaderArguments, iframe: HTMLIFrameElement | null) {
             ...state.location,
             locations: {
               progression: newProgression,
+              position: currentPage + 1,
             },
           },
           isNavigated: false,
@@ -426,7 +422,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   React.useEffect(() => {
     if (!state.isNavigated && state.isIframeLoaded && iframe) {
       const locations = state.location.locations;
-      const { fragment, progression, position } = locations;
+      const { fragment, progression } = locations;
       /**
        * First check for a fragment that we need to navigate to
        */
@@ -442,36 +438,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
           }
         }
       } else if (typeof progression === 'number') {
-        /**
-         * Check for progression info. This is used
-         *  - in paginated mode for changing pages
-         *  - navigating backward
-         *  - switching between scrolling and paginated mode (to keep location)
-         */
-        const {
-          isHorizontalPaginated,
-          totalPages,
-          containerWidth,
-          containerHeight,
-          scrollPosition,
-        } = calcPosition(iframe, state.isScrolling);
-
-        const newPage = Math.round(totalPages * progression);
-        const html = getIframeHTML(iframe);
-
-        if (isHorizontalPaginated) {
-          const newScrollLeft = newPage * containerWidth;
-          console.log(
-            scrollPosition,
-            newScrollLeft,
-            newPage,
-            totalPages * progression
-          );
-          html.scrollTo({ left: newScrollLeft, top: 0 });
-        } else {
-          const newScrollTop = newPage * containerHeight;
-          html.scrollTo(0, newScrollTop);
-        }
+        navigateToProgression(iframe, progression, state.isScrolling);
       }
       // tell the reducer that we have now completed the navigation.
       dispatch({ type: 'NAV_COMPLETE' });
@@ -483,6 +450,8 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     state.isScrolling,
     iframe,
   ]);
+
+  console.log('current page', state.location.locations.position);
 
   /**
    * Set CSS variables when user state changes.
@@ -641,6 +610,43 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
 }
 
 /**
+ * Scroll the HTML element to a given progression by
+ * setting the scrollTop or the scrollLeft.
+ */
+function navigateToProgression(
+  iframe: HTMLIFrameElement,
+  progression: number,
+  isScrolling: boolean
+) {
+  /**
+   * Check for progression info. This is used
+   *  - in paginated mode for changing pages
+   *  - navigating backward
+   *  - switching between scrolling and paginated mode (to keep location)
+   */
+  const { isHorizontalPaginated, resourceSize } = calcPosition(
+    iframe,
+    isScrolling
+  );
+  const html = getIframeHTML(iframe);
+
+  const newScrollPosition = progression * resourceSize;
+
+  console.log(
+    'new scroll position',
+    progression,
+    resourceSize,
+    newScrollPosition
+  );
+
+  if (isHorizontalPaginated) {
+    html.scrollLeft = newScrollPosition;
+  } else {
+    html.scrollTop = newScrollPosition;
+  }
+}
+
+/**
  * gets the index of the current location href
  */
 function getCurrentIndex(manifest: WebpubManifest, state: HtmlState): number {
@@ -735,11 +741,13 @@ function calcPosition(iframe: HTMLIFrameElement, isScrolling: boolean) {
     : scrollYPosition;
   const totalPages = Math.ceil((resourceSize - containerSize) / containerSize);
   const progression = scrollPosition / resourceSize;
-  const currentPage = Math.floor(progression * totalPages);
+
+  // we use round to get the closest page to the scrollTop
+  const currentPage = Math.ceil(progression * totalPages);
 
   // you're at the end if the scroll position + containerSize === resourceSize
-  const isAtEnd = scrollPosition + containerSize === resourceSize;
-  const isAtStart = scrollPosition === 0;
+  const isAtEnd = currentPage === totalPages;
+  const isAtStart = currentPage === 0;
 
   return {
     isHorizontalPaginated,
