@@ -40,7 +40,7 @@ export default function initWebReaderSW({
       await self.skipWaiting();
       log('INSTALLED');
     }
-    event.waitUntil(installSW);
+    event.waitUntil(installSW());
   });
 
   /**
