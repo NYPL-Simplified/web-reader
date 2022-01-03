@@ -22,8 +22,15 @@ type HtmlState = HtmlReaderState & {
   isIframeLoaded: boolean;
   // tracks whether the inter-resource navigation effect has run.
   isNavigated: boolean;
+  // location.locations.position is 1 indexed page
   location: Locator;
 };
+
+/**
+ * DECISIONS:
+ *  - We use webpubManifestUrl as the baseUrl when constructing URLs. This allows us to compare urls effectively.
+ *  - location.locations.position is 1 indexed page
+ */
 
 /**
  * @TODO :
@@ -106,7 +113,7 @@ function htmlReducer(args: ReaderArguments, iframe: HTMLIFrameElement | null) {
   // our actual reducer
   return function reducer(state: HtmlState, action: HtmlAction): HtmlState {
     function goToNextResource() {
-      const currentIndex = getCurrentIndex(manifest, state);
+      const currentIndex = getCurrentIndex(manifest, state, webpubManifestUrl);
       const nextIndex = currentIndex + 1;
       // if we are at the end, do nothing
       if (nextIndex >= manifest.readingOrder.length) return state;
@@ -121,10 +128,13 @@ function htmlReducer(args: ReaderArguments, iframe: HTMLIFrameElement | null) {
     }
 
     function goToPrevResource() {
-      const currentIndex = getCurrentIndex(manifest, state);
+      const currentIndex = getCurrentIndex(manifest, state, webpubManifestUrl);
       const prevIndex = currentIndex - 1;
       // if we are at the beginning, do nothing
-      if (prevIndex === 0) return state;
+      if (currentIndex === 0) {
+        console.warn('At the beginning');
+        return state;
+      }
       const prevResource = manifest.readingOrder[prevIndex];
       // send them to the end of the next resource
       const locator = linkToLocator(prevResource, webpubManifestUrl, {
@@ -142,13 +152,13 @@ function htmlReducer(args: ReaderArguments, iframe: HTMLIFrameElement | null) {
     switch (action.type) {
       case 'MANIFEST_LOADED': {
         /**
-         * Start at the beginning of first resource
+         * Start at the beginning of first resource.
          * @todo - use the value from URL query param if any
          */
         const locator = linkToLocator(
           manifest.readingOrder[2],
           webpubManifestUrl,
-          { progression: 0, position: 0 }
+          { progression: 0, position: 1 }
         );
 
         return {
@@ -219,7 +229,7 @@ function htmlReducer(args: ReaderArguments, iframe: HTMLIFrameElement | null) {
           iframe,
           state.isScrolling
         );
-        console.log(currentPage, totalPages);
+
         // if we are at the last page, go to next resource
         if (currentPage === totalPages) {
           return goToNextResource();
@@ -246,8 +256,40 @@ function htmlReducer(args: ReaderArguments, iframe: HTMLIFrameElement | null) {
       }
 
       case 'GO_BACKWARD': {
-        console.warn('unimplemented');
-        return { ...state };
+        // if the iframe isn't loaded and present, we can't do anything yet
+        if (!state.isIframeLoaded || !iframe) {
+          console.warn("Can't go forward before iframe is loaded");
+          return state;
+        }
+        const { progression, totalPages, currentPage } = calcPosition(
+          iframe,
+          state.isScrolling
+        );
+
+        // if we are at the last page, go to next resource
+        if (currentPage === 1) {
+          return goToPrevResource();
+        }
+
+        /**
+         * Set the progression so that we scroll the user back
+         * one page, but also set the 'position' value
+         */
+        const percentToScroll = 1 / totalPages;
+        const newProgression = Math.max(progression - percentToScroll, 0);
+        const newPosition = Math.max(currentPage - 1, 1);
+
+        return {
+          ...state,
+          location: {
+            ...state.location,
+            locations: {
+              progression: newProgression,
+              position: newPosition,
+            },
+          },
+          isNavigated: false,
+        };
       }
 
       case 'NAV_COMPLETE': {
@@ -396,7 +438,6 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const isAtLastResource =
     currentResourceIndex === manifest?.readingOrder.length;
   const isAtFirstResource = currentResourceIndex === 0;
-  const totalPages = 0;
 
   const { resource, isLoading } = useResource(
     currentResourceUrl,
@@ -450,8 +491,6 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     state.isScrolling,
     iframe,
   ]);
-
-  console.log('current page', state.location.locations.position);
 
   /**
    * Set CSS variables when user state changes.
@@ -646,10 +685,17 @@ function navigateToProgression(
 /**
  * gets the index of the current location href
  */
-function getCurrentIndex(manifest: WebpubManifest, state: HtmlState): number {
-  const i = manifest.readingOrder.findIndex(
-    (link) => link.href === state.location.href
+function getCurrentIndex(
+  manifest: WebpubManifest,
+  state: HtmlState,
+  baseUrl: string
+): number {
+  const i = manifest.readingOrder.findIndex((link) =>
+    isSameResource(link.href, state.location.href, baseUrl)
   );
+  if (i === -1) {
+    console.warn("Couldn't find current location in manifest. Returning 0.");
+  }
   return i === -1 ? 0 : i;
 }
 
@@ -745,7 +791,7 @@ function calcPosition(iframe: HTMLIFrameElement, isScrolling: boolean) {
 
   // you're at the end if the scroll position + containerSize === resourceSize
   const isAtEnd = currentPage === totalPages;
-  const isAtStart = currentPage === 0;
+  const isAtStart = currentPage === 1;
 
   return {
     isHorizontalPaginated,
