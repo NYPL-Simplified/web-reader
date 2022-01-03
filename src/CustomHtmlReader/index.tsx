@@ -23,7 +23,14 @@ type HtmlState = HtmlReaderState & {
   isNavigated: boolean;
   // location.locations.position is 1 indexed page
   location: Locator;
+  iframe: HTMLIFrameElement | null;
 };
+
+// state that affects the css variables
+type CSSState = Pick<
+  HtmlState,
+  'isScrolling' | 'colorMode' | 'fontFamily' | 'fontSize'
+>;
 
 /**
  * DECISIONS:
@@ -88,13 +95,15 @@ export type HtmlAction =
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
   | { type: 'SET_SCROLL'; isScrolling: boolean }
   | { type: 'SET_FONT_SIZE'; size: number }
-  | { type: 'SET_FONT_FAMILY'; family: FontFamily };
+  | { type: 'SET_FONT_FAMILY'; family: FontFamily }
+  | { type: 'USER_SCROLLED' }
+  | { type: 'SET_IFRAME'; iframe: HTMLIFrameElement | null };
 
 /**
  * A higher order function that makes it easy to access arguments in the reducer
  * without passing them in to every `dispatch` call.
  */
-function htmlReducer(args: ReaderArguments, iframe: HTMLIFrameElement | null) {
+function htmlReducer(args: ReaderArguments) {
   /**
    * If there are no args, it's an inactive hook, just use a function that returns the state.
    * This way you don't have to keep checking if args is defined.
@@ -213,13 +222,13 @@ function htmlReducer(args: ReaderArguments, iframe: HTMLIFrameElement | null) {
          */
 
         // if the iframe isn't loaded and present, we can't do anything yet
-        if (!state.isIframeLoaded || !iframe) {
+        if (!state.isIframeLoaded || !state.iframe) {
           console.warn("Can't go forward before iframe is loaded");
           return state;
         }
 
         const { progression, totalPages, currentPage } = calcPosition(
-          iframe,
+          state.iframe,
           state.isScrolling
         );
 
@@ -250,12 +259,12 @@ function htmlReducer(args: ReaderArguments, iframe: HTMLIFrameElement | null) {
 
       case 'GO_BACKWARD': {
         // if the iframe isn't loaded and present, we can't do anything yet
-        if (!state.isIframeLoaded || !iframe) {
+        if (!state.isIframeLoaded || !state.iframe) {
           console.warn("Can't go forward before iframe is loaded");
           return state;
         }
         const { progression, totalPages, currentPage } = calcPosition(
-          iframe,
+          state.iframe,
           state.isScrolling
         );
 
@@ -299,9 +308,13 @@ function htmlReducer(args: ReaderArguments, iframe: HTMLIFrameElement | null) {
         };
 
       case 'SET_SCROLL':
+        // set scroll state and trigger a navigation effect so
+        // the user is navigated to current progression after
+        // switching
         return {
           ...state,
           isScrolling: action.isScrolling,
+          isNavigated: false,
         };
 
       case 'SET_FONT_SIZE':
@@ -315,6 +328,35 @@ function htmlReducer(args: ReaderArguments, iframe: HTMLIFrameElement | null) {
           ...state,
           fontFamily: action.family,
         };
+
+      case 'SET_IFRAME':
+        return {
+          ...state,
+          iframe: action.iframe,
+        };
+
+      case 'USER_SCROLLED': {
+        if (!state.iframe || !state.isScrolling) return state;
+        // update the progression, but don't trigger a navigation effect
+        // update the y value
+        const { progression, currentPage } = calcPosition(
+          state.iframe,
+          state.isScrolling
+        );
+        return {
+          ...state,
+          // don't trigger a navigation effect because the user freely scrolled here
+          isNavigated: true,
+          location: {
+            ...state.location,
+            locations: {
+              ...state.location.locations,
+              progression,
+              position: currentPage,
+            },
+          },
+        };
+      }
     }
   };
 }
@@ -354,40 +396,42 @@ function useResource(
   injectables: Injectable[],
   state: HtmlState
 ) {
-  const { data, isValidating, error } = useSWRImmutable(url, getContent);
-  // cast the data to a possibly undefined because, it is?
-  const resource = data as string | undefined;
+  const { data: resource, isValidating, error } = useSWRImmutable(
+    url,
+    async (url: string) => {
+      const content = await getContent(url);
+      const document = new DOMParser().parseFromString(content, 'text/html');
+      // add base so relative URLs work.
+      const base = document?.createElement('base');
+      if (base && url) {
+        base.setAttribute('href', url);
+        document?.head.appendChild(base);
+      }
+
+      for (const injectable of injectables) {
+        const element = getInjectableElement(document, injectable);
+        if (element) document?.head.appendChild(element);
+      }
+
+      // set the initial CSS state
+      setCss(document.documentElement, {
+        colorMode: state.colorMode,
+        fontSize: state.fontSize,
+        fontFamily: state.fontFamily,
+        isScrolling: state.isScrolling,
+      });
+
+      // inject js to communicate with iframe
+      // injectJS(document);
+
+      return document.documentElement.outerHTML;
+    }
+  );
   if (error) throw error;
 
-  const document = resource
-    ? new DOMParser().parseFromString(resource, 'text/html')
-    : undefined;
+  const isLoading = isValidating && !resource;
 
-  // add base so relative URLs work.
-  const base = document?.createElement('base');
-  if (base && url) {
-    base.setAttribute('href', url);
-    document?.head.appendChild(base);
-  }
-
-  // add injectables
-  if (document) {
-    for (const injectable of injectables) {
-      const element = getInjectableElement(document, injectable);
-      if (element) document?.head.appendChild(element);
-    }
-
-    // set the initial CSS state
-    setCss(document.documentElement, state);
-
-    // inject js to communicate with iframe
-    // injectJS(document);
-  }
-
-  const isLoading = isValidating && !data;
-
-  const str = document?.documentElement.outerHTML;
-  return { resource: str, isLoading };
+  return { resource, isLoading };
 }
 
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
@@ -401,21 +445,22 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     growWhenScrolling = DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
   } = args ?? {};
 
-  const [iframe, setIframe] = React.useState<HTMLIFrameElement | null>(null);
-
-  const [state, dispatch] = React.useReducer(htmlReducer(args, iframe), {
+  const [state, dispatch] = React.useReducer(htmlReducer(args), {
     colorMode: 'day',
-    isScrolling: false,
+    isScrolling: true,
     fontSize: 100,
     fontFamily: 'sans-serif',
     currentTocUrl: null,
     atStart: false,
     atEnd: false,
+    iframe: null,
     isIframeLoaded: false,
     isNavigated: false,
     // start with dummy location
     location: { href: '', locations: {} },
   });
+
+  useUpdateScroll(state.iframe, state.isIframeLoaded, dispatch);
 
   const { fontSize, location } = state;
   const currentResourceUrl = location.href ?? null;
@@ -441,7 +486,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
    * After loads, make sure we fire off effects to navigate the user if necessary.
    */
   React.useEffect(() => {
-    if (!state.isNavigated && state.isIframeLoaded && iframe) {
+    if (!state.isNavigated && state.isIframeLoaded && state.iframe) {
       const locations = state.location.locations;
       const { fragment, progression } = locations;
       /**
@@ -451,7 +496,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
         const isHash = fragment.indexOf('#') === 0;
         if (isHash) {
           // we get the element by the hash, and scroll it into view
-          const el = iframe.contentDocument?.querySelector(fragment);
+          const el = state.iframe.contentDocument?.querySelector(fragment);
           if (el) {
             el.scrollIntoView();
           } else {
@@ -459,7 +504,8 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
           }
         }
       } else if (typeof progression === 'number') {
-        navigateToProgression(iframe, progression, state.isScrolling);
+        console.log('navigating to progression', progression);
+        navigateToProgression(state.iframe, progression, state.isScrolling);
       }
       // tell the reducer that we have now completed the navigation.
       dispatch({ type: 'NAV_COMPLETE' });
@@ -469,7 +515,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     state.isNavigated,
     state.location,
     state.isScrolling,
-    iframe,
+    state.iframe,
   ]);
 
   /**
@@ -478,11 +524,11 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
    * @todo - narrow down the dependencies so this doesn't run on _every_ state change.
    */
   React.useEffect(() => {
-    if (!iframe || !manifest) return;
-    const html = getMaybeIframeHtml(iframe);
+    if (!state.iframe || !manifest) return;
+    const html = getMaybeIframeHtml(state.iframe);
     if (!html) return;
     setCss(html, state);
-  }, [state, iframe, manifest, resource]);
+  }, [state, manifest, resource]);
 
   /**
    * Dispatch the go to link and let reducer handle it
@@ -566,7 +612,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
         <iframe
           onLoad={() => dispatch({ type: 'IFRAME_LOADED' })}
           ref={(el) => {
-            setIframe(el);
+            dispatch({ type: 'SET_IFRAME', iframe: el });
           }}
           // as="iframe"
           style={{
@@ -633,8 +679,10 @@ function navigateToProgression(
    */
 
   if (isHorizontalPaginated) {
+    console.log('setting scroll left to', newScrollPosition);
     html.scrollLeft = newScrollPosition;
   } else {
+    console.log('setting scroll top to', newScrollPosition);
     html.scrollTop = newScrollPosition;
   }
 }
@@ -734,8 +782,7 @@ function calcPosition(iframe: HTMLIFrameElement, isScrolling: boolean) {
   const resourceHeight = html.scrollHeight;
   const resourceWidth = html.scrollWidth;
   const resourceSize = isHorizontalPaginated ? resourceWidth : resourceHeight;
-  const scrollYPosition = html.scrollTop;
-  const scrollXPosition = html.scrollLeft;
+  const { x: scrollXPosition, y: scrollYPosition } = getScrollPosition(html);
   const scrollPosition = isHorizontalPaginated
     ? scrollXPosition
     : scrollYPosition;
@@ -766,10 +813,44 @@ function calcPosition(iframe: HTMLIFrameElement, isScrolling: boolean) {
   };
 }
 
+const SCROLL_STOP_DEBOUNCE = 500;
+
 /**
- * Set scroll position of HTML element in iframe
+ * Dispatch a USER_SCROLLED event after some delay
  */
-// function setScrollPosition(iframe: HTMLIFrameElement, progression: number,)
+function useUpdateScroll(
+  iframe: HTMLIFrameElement | null,
+  isIframeLoaded: boolean,
+  dispatch: React.Dispatch<HtmlAction>
+) {
+  const timeout = React.useRef<number>();
+
+  React.useLayoutEffect(() => {
+    const iframeDocument = iframe?.contentDocument;
+    if (!iframeDocument || !isIframeLoaded) return;
+
+    function handleScroll() {
+      if (timeout.current) clearTimeout(timeout.current);
+      timeout.current = window.setTimeout(() => {
+        dispatch({ type: 'USER_SCROLLED' });
+      }, SCROLL_STOP_DEBOUNCE);
+    }
+    iframeDocument.addEventListener('scroll', handleScroll);
+    return () => iframeDocument.removeEventListener('scroll', handleScroll);
+  }, [iframe, isIframeLoaded, dispatch]);
+}
+
+/**
+ * Gets scroll position of an element
+ */
+function getScrollPosition(element: HTMLElement | undefined | null) {
+  if (!element) return { x: 0, y: 0 };
+  const { scrollTop, scrollLeft } = element;
+  return {
+    x: scrollLeft,
+    y: scrollTop,
+  };
+}
 
 /**
  * Fetches a resource as text
@@ -798,7 +879,7 @@ function injectJS(document: Document) {
  * Takes the HTML element and sets CSS variables on it based on the
  * reader's state
  */
-function setCss(html: HTMLElement, state: HtmlState) {
+function setCss(html: HTMLElement, state: CSSState) {
   setCSSProperty(html, '--USER__scroll', getPagination(state.isScrolling));
   setCSSProperty(
     html,
