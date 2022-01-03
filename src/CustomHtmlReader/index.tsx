@@ -30,6 +30,7 @@ type HtmlState = HtmlReaderState & {
  *
  * - WORKING ON paginated mode
  *    - go forward / backward
+ *      - Now make it detect last page.
  *    - make it stay in same place when switching
  *    - NOTE: I think the location needs to be "uncontrolled"... meaning
  *      we can detect it upon user interaction, and manipulate it, but we aren't
@@ -218,8 +219,9 @@ function htmlReducer(args: ReaderArguments, iframe: HTMLIFrameElement | null) {
           iframe,
           state.isScrolling
         );
+        console.log(currentPage, totalPages);
         // if we are at the last page, go to next resource
-        if (progression === 1) {
+        if (currentPage === totalPages) {
           return goToNextResource();
         }
 
@@ -739,7 +741,7 @@ function calcPosition(iframe: HTMLIFrameElement, isScrolling: boolean) {
   const progression = scrollPosition / resourceSize;
 
   // we use round to get the closest page to the scrollTop
-  const currentPage = Math.ceil(progression * totalPages);
+  const currentPage = Math.ceil(progression * totalPages) + 1;
 
   // you're at the end if the scroll position + containerSize === resourceSize
   const isAtEnd = currentPage === totalPages;
