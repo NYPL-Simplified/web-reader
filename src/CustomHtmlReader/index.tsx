@@ -30,7 +30,6 @@ type HtmlState = HtmlReaderState & {
  *
  * - WORKING ON paginated mode
  *    - go forward / backward
- *      - problem: current page is wrong
  *    - make it stay in same place when switching
  *    - NOTE: I think the location needs to be "uncontrolled"... meaning
  *      we can detect it upon user interaction, and manipulate it, but we aren't
@@ -219,7 +218,6 @@ function htmlReducer(args: ReaderArguments, iframe: HTMLIFrameElement | null) {
           iframe,
           state.isScrolling
         );
-
         // if we are at the last page, go to next resource
         if (progression === 1) {
           return goToNextResource();
@@ -632,12 +630,9 @@ function navigateToProgression(
 
   const newScrollPosition = progression * resourceSize;
 
-  console.log(
-    'new scroll position',
-    progression,
-    resourceSize,
-    newScrollPosition
-  );
+  /**
+   * @todo - snap that progression to the nearest page.
+   */
 
   if (isHorizontalPaginated) {
     html.scrollLeft = newScrollPosition;
@@ -739,7 +734,8 @@ function calcPosition(iframe: HTMLIFrameElement, isScrolling: boolean) {
   const scrollPosition = isHorizontalPaginated
     ? scrollXPosition
     : scrollYPosition;
-  const totalPages = Math.ceil((resourceSize - containerSize) / containerSize);
+  const totalPages =
+    Math.ceil((resourceSize - containerSize) / containerSize) + 1;
   const progression = scrollPosition / resourceSize;
 
   // we use round to get the closest page to the scrollTop
