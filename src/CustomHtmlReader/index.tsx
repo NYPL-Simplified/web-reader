@@ -36,13 +36,7 @@ type HtmlState = HtmlReaderState & {
  * @TODO :
  *
  * - WORKING ON paginated mode
- *    - go forward / backward
- *      - Now make it detect last page.
- *    - make it stay in same place when switching
- *    - NOTE: I think the location needs to be "uncontrolled"... meaning
- *      we can detect it upon user interaction, and manipulate it, but we aren't
- *      constantly tracking it. The location then stores the "last known" location.
- *      This is currently what we have now.
+ *    - make it stay in same place when switching scrolled to paginated
  *
  *  - store location in locator object
  *    - on TOC click, set it to the href and fragment
@@ -424,12 +418,6 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     location: { href: '', locations: {} },
   });
 
-  const {
-    ref: containerRef,
-    width: containerWidth = 0,
-    height: containerHeight = 0,
-  } = useResizeObserver<HTMLIFrameElement>();
-
   const { fontSize, location } = state;
   const currentResourceUrl = location.href ?? null;
   const currentResourceIndex = manifest?.readingOrder.findIndex(
@@ -503,21 +491,6 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     if (!html) return;
     setCss(html, state);
   }, [state, iframe, manifest, resource]);
-
-  const goToNextResource = React.useCallback(() => {
-    if (isAtLastResource) return;
-    dispatch({ type: 'NAV_NEXT_RESOURCE' });
-  }, [isAtLastResource]);
-
-  /**
-   * Dispatch the prev resource action and let the reducer handle it.
-   */
-  const goToPrevResource = React.useCallback(() => {
-    if (isAtFirstResource) return;
-    dispatch({
-      type: 'NAV_PREVIOUS_RESOURCE',
-    });
-  }, [isAtFirstResource]);
 
   /**
    * Dispatch the go to link and let reducer handle it
@@ -609,7 +582,6 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
           onLoad={onLoad}
           ref={(el) => {
             setIframe(el);
-            containerRef(el);
           }}
           // as="iframe"
           style={{
