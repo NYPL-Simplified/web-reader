@@ -97,7 +97,8 @@ export type HtmlAction =
   | { type: 'SET_FONT_SIZE'; size: number }
   | { type: 'SET_FONT_FAMILY'; family: FontFamily }
   | { type: 'USER_SCROLLED' }
-  | { type: 'SET_IFRAME'; iframe: HTMLIFrameElement | null };
+  | { type: 'SET_IFRAME'; iframe: HTMLIFrameElement | null }
+  | { type: 'RESOURCE_CHANGED' };
 
 /**
  * A higher order function that makes it easy to access arguments in the reducer
@@ -357,6 +358,13 @@ function htmlReducer(args: ReaderArguments) {
           },
         };
       }
+
+      case 'RESOURCE_CHANGED':
+        console.log('resource changed');
+        return {
+          ...state,
+          isIframeLoaded: false,
+        };
     }
   };
 }
@@ -519,6 +527,13 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   ]);
 
   /**
+   * Whenever the resource changes, we need to set the iframe to not loaded
+   */
+  React.useEffect(() => {
+    dispatch({ type: 'RESOURCE_CHANGED' });
+  }, [resource]);
+
+  /**
    * Set CSS variables when user state changes.
    * @todo - wait for iframe load?
    * @todo - narrow down the dependencies so this doesn't run on _every_ state change.
@@ -570,6 +585,13 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     []
   );
 
+  const setIframe = React.useCallback(
+    (el: HTMLIFrameElement) => {
+      dispatch({ type: 'SET_IFRAME', iframe: el });
+    },
+    [dispatch]
+  );
+
   const increaseFontSize = React.useCallback(async () => {
     const newSize = fontSize + FONT_SIZE_STEP;
     dispatch({ type: 'SET_FONT_SIZE', size: newSize });
@@ -611,9 +633,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       <>
         <iframe
           onLoad={() => dispatch({ type: 'IFRAME_LOADED' })}
-          ref={(el) => {
-            dispatch({ type: 'SET_IFRAME', iframe: el });
-          }}
+          ref={setIframe}
           // as="iframe"
           style={{
             /**
