@@ -308,15 +308,32 @@ function htmlReducer(args: ReaderArguments) {
           colorMode: action.mode,
         };
 
-      case 'SET_SCROLL':
-        // set scroll state and trigger a navigation effect so
-        // the user is navigated to current progression after
-        // switching
+      case 'SET_SCROLL': {
+        /**
+         * - set scroll state
+         * - trigger a navigation effect
+         * - remove the progression value and only set a position
+         *   value so the user snaps to whichever page they were just
+         *   reading.
+         */
+        if (!state.iframe) return state;
+        const { currentPageFloor } = calcPosition(
+          state.iframe,
+          state.isScrolling
+        );
+
         return {
           ...state,
           isScrolling: action.isScrolling,
           isNavigated: false,
+          location: {
+            ...state.location,
+            locations: {
+              position: currentPageFloor,
+            },
+          },
         };
+      }
 
       case 'SET_FONT_SIZE':
         return {
@@ -360,7 +377,6 @@ function htmlReducer(args: ReaderArguments) {
       }
 
       case 'RESOURCE_CHANGED':
-        console.log('resource changed');
         return {
           ...state,
           isIframeLoaded: false,
@@ -494,30 +510,41 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
    * After loads, make sure we fire off effects to navigate the user if necessary.
    */
   React.useEffect(() => {
-    if (!state.isNavigated && state.isIframeLoaded && state.iframe) {
-      const locations = state.location.locations;
-      const { fragment, progression } = locations;
-      /**
-       * First check for a fragment that we need to navigate to
-       */
-      if (typeof fragment === 'string') {
-        const isHash = fragment.indexOf('#') === 0;
-        if (isHash) {
-          // we get the element by the hash, and scroll it into view
-          const el = state.iframe.contentDocument?.querySelector(fragment);
-          if (el) {
-            el.scrollIntoView();
-          } else {
-            console.error('Could not find an element with id', fragment);
+    // we do this on the next tick in case we are still calculating things.
+    process.nextTick(() => {
+      if (!state.isNavigated && state.isIframeLoaded && state.iframe) {
+        const locations = state.location.locations;
+        const { fragment, progression, position } = locations;
+        /**
+         * We first try a fragment, then a progression, then a position value.
+         */
+        if (typeof fragment === 'string') {
+          const isHash = fragment.indexOf('#') === 0;
+          if (isHash) {
+            // we get the element by the hash, and scroll it into view
+            const el = state.iframe.contentDocument?.querySelector(fragment);
+            if (el) {
+              el.scrollIntoView();
+            } else {
+              console.error('Could not find an element with id', fragment);
+            }
           }
+        } else if (typeof progression === 'number') {
+          navigateToProgression(state.iframe, progression, state.isScrolling);
+        } else if (typeof position === 'number') {
+          // get the progression value for that page
+          const { totalPages } = calcPosition(state.iframe, state.isScrolling);
+          const calculatedProgression = (position - 1) / totalPages;
+          navigateToProgression(
+            state.iframe,
+            calculatedProgression,
+            state.isScrolling
+          );
         }
-      } else if (typeof progression === 'number') {
-        console.log('navigating to progression', progression);
-        navigateToProgression(state.iframe, progression, state.isScrolling);
+        // tell the reducer that we have now completed the navigation.
+        dispatch({ type: 'NAV_COMPLETE' });
       }
-      // tell the reducer that we have now completed the navigation.
-      dispatch({ type: 'NAV_COMPLETE' });
-    }
+    });
   }, [
     state.isIframeLoaded,
     state.isNavigated,
@@ -695,14 +722,12 @@ function navigateToProgression(
   const newScrollPosition = progression * resourceSize;
 
   /**
-   * @todo - snap that progression to the nearest page.
+   * @todo - snap that progression to the nearest page if we are paginated
    */
 
   if (isHorizontalPaginated) {
-    console.log('setting scroll left to', newScrollPosition);
     html.scrollLeft = newScrollPosition;
   } else {
-    console.log('setting scroll top to', newScrollPosition);
     html.scrollTop = newScrollPosition;
   }
 }
@@ -811,7 +836,9 @@ function calcPosition(iframe: HTMLIFrameElement, isScrolling: boolean) {
   const progression = scrollPosition / resourceSize;
 
   // we use round to get the closest page to the scrollTop
-  const currentPage = Math.ceil(progression * totalPages) + 1;
+  const currentPage = Math.round(progression * totalPages) + 1;
+  // we use floor to get the nearest fully read page.
+  const currentPageFloor = Math.floor(progression * totalPages) + 1;
 
   // you're at the end if the scroll position + containerSize === resourceSize
   const isAtEnd = currentPage === totalPages;
@@ -828,6 +855,7 @@ function calcPosition(iframe: HTMLIFrameElement, isScrolling: boolean) {
     totalPages,
     progression,
     currentPage,
+    currentPageFloor,
     isAtEnd,
     isAtStart,
   };
