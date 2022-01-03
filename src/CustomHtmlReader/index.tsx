@@ -538,13 +538,6 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     dispatch({ type: 'SET_FONT_FAMILY', family });
   }, []);
 
-  /**
-   * Dispatch an action on iframe load
-   */
-  const onLoad = React.useCallback(() => {
-    dispatch({ type: 'IFRAME_LOADED' });
-  }, []);
-
   // this format is inactive, return null
   if (!webpubManifestUrl || !manifest) return null;
 
@@ -571,7 +564,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     content: (
       <>
         <iframe
-          onLoad={onLoad}
+          onLoad={() => dispatch({ type: 'IFRAME_LOADED' })}
           ref={(el) => {
             setIframe(el);
           }}
