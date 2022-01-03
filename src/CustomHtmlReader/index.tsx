@@ -420,13 +420,6 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
 
   const { fontSize, location } = state;
   const currentResourceUrl = location.href ?? null;
-  const currentResourceIndex = manifest?.readingOrder.findIndex(
-    (link) => link.href === location.href
-  );
-  const isAtLastResource =
-    currentResourceIndex === manifest?.readingOrder.length;
-  const isAtFirstResource = currentResourceIndex === 0;
-
   const { resource, isLoading } = useResource(
     currentResourceUrl,
     getContent,
@@ -833,27 +826,6 @@ function setCss(html: HTMLElement, state: HtmlState) {
   );
   setCSSProperty(html, '--USER__fontSize', `${state.fontSize}%`);
   setCSSProperty(html, 'overflow', state.isScrolling ? 'scroll' : 'hidden');
-}
-
-/**
- * Determine if you are at the end of a resource
- * NOTE: If this proves flaky we could use IntersectionObserver instead
- */
-function getIsScrollEnd(iframe: HTMLIFrameElement) {
-  const html = getIframeHTML(iframe);
-  if (!html) return false;
-  const scrollWidth = html.scrollWidth;
-  const currentScroll = html.scrollLeft + html.clientWidth;
-  return scrollWidth === currentScroll;
-}
-/**
- * Determine if you are at the start of a resource
- */
-function getIsScrollStart(iframe: HTMLIFrameElement) {
-  const html = getIframeHTML(iframe);
-  if (!html) return false;
-  const currentScroll = html.scrollLeft;
-  return currentScroll === 0;
 }
 
 function getMaybeIframeHtml(iframe: HTMLIFrameElement) {
