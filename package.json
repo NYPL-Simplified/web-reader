@@ -156,7 +156,6 @@
     "react-pdf": "^5.3.2",
     "react-resize-observer": "^1.1.1",
     "swr": "^1.0.1",
-    "use-resize-observer": "^8.0.0",
     "workbox-expiration": "^6.2.4",
     "workbox-precaching": "^6.2.4",
     "workbox-routing": "^6.3.0",

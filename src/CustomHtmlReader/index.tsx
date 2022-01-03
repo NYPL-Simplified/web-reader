@@ -10,7 +10,6 @@ import {
 import { Injectable } from '../Readium/Injectable';
 import useSWRImmutable from 'swr/immutable';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
-import useResizeObserver from 'use-resize-observer';
 import { DEFAULT_HEIGHT, DEFAULT_SHOULD_GROW_WHEN_SCROLLING } from '..';
 import { Locator } from '../Readium/Locator';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
