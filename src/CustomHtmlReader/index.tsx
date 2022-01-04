@@ -13,6 +13,8 @@ import {
 import makeHtmlReducer from './reducer';
 import { navigateToHash, navigateToProgression, setCss } from './effects';
 import useResource from './useResource';
+import useLocationQuery, { getLocationQuery } from './useLocationQuery';
+import { Locator } from '../Readium/Locator';
 
 /**
  * DECISIONS:
@@ -26,12 +28,11 @@ import useResource from './useResource';
  * @TODO :
  *
  * - WORKING ON
- *  - remove useSWR
  *  - keep location in url bar
- *  - Anchor links within a resource
+ *  - window resize
  *  - Make CFI's work in the location.locations.cfi
  *  - provide default injectables (Readium CSS)
- *  - split HtmlState into multiple
+ *  - make examples work
  *
  * Future:
  *  - Don't use ReadiumCSS for fixed layout
@@ -40,6 +41,9 @@ import useResource from './useResource';
  *  - reorganize link comparison utils so that you compare only _absolute_ URLs, not
  *    relative URLs. Always use the correct baseUrl for making absolute URLs.
  */
+
+const DEFAULT_LOCATION: Locator = { href: '', locations: {} };
+const initialLocation: Locator = getLocationQuery() ?? DEFAULT_LOCATION;
 
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const {
@@ -64,7 +68,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     isIframeLoaded: false,
     isNavigated: false,
     // start with dummy location
-    location: { href: '', locations: {} },
+    location: initialLocation,
     resource: undefined,
     isFetchingResource: false,
     resourceFetchError: undefined,
@@ -80,6 +84,11 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
    * Dispatches an action to update scroll position when the user *stops* scrolling.
    */
   useUpdateScroll(state.iframe, state.isIframeLoaded, dispatch);
+
+  /**
+   * Keep the location state also in the url query
+   */
+  useLocationQuery(state, dispatch);
 
   /**
    * Set the initial location when the manifest changes.

@@ -8,6 +8,7 @@ import {
   FONT_SIZE_STEP,
 } from './lib';
 import { HtmlAction, HtmlState } from './types';
+import { getLocationQuery } from './useLocationQuery';
 
 /**
  * A higher order function that makes it easy to access arguments in the reducer
@@ -17,8 +18,9 @@ export default function makeHtmlReducer(
   args: ReaderArguments
 ): (state: HtmlState, action: HtmlAction) => HtmlState {
   /**
-   * If there are no args, it's an inactive hook, just use a function that returns the state.
-   * This way you don't have to keep checking if args is defined.
+   * If there are no args, it's an inactive hook, or you are pre-first render.
+   * just use a function that returns the state in most cases so you don't have
+   * to keep checking if args is defined.
    */
   if (!args) return (state: HtmlState, _action: HtmlAction) => state;
 
@@ -90,11 +92,12 @@ export default function makeHtmlReducer(
          * Start at the beginning of first resource.
          * @todo - use the value from URL query param if any
          */
-        const locator = linkToLocator(
-          manifest.readingOrder[2],
-          webpubManifestUrl,
-          { progression: 0, position: 1 }
-        );
+        const locator =
+          getLocationQuery() ??
+          linkToLocator(manifest.readingOrder[0], webpubManifestUrl, {
+            progression: 0,
+            position: 1,
+          });
 
         return {
           ...state,
@@ -155,6 +158,24 @@ export default function makeHtmlReducer(
         return {
           ...state,
           location: locator,
+          isNavigated: false,
+          isIframeLoaded,
+        };
+      }
+
+      case 'GO_TO_LOCATION': {
+        // tells us whether we are staying on the same resource or going
+        // to load a new one
+        const isIframeLoaded = isSameResource(
+          action.location.href,
+          state.location.href,
+          webpubManifestUrl
+        );
+
+        console.log('GO TO LOC', action.location);
+        return {
+          ...state,
+          location: action.location,
           isNavigated: false,
           isIframeLoaded,
         };
