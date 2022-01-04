@@ -42,10 +42,7 @@ type CSSState = Pick<
  * @TODO :
  *
  * - WORKING ON
- *  - calculate current page, total pages
- *  - switching from scrolling to paginated should maintain position
  *  - keep location in url bar
- *  - calculate atstart atend properly
  *  - Go to last page of last resource when navigating backwards
  *  - Anchor links within a resource
  *  - show loading indicator while iframe is loading
@@ -870,7 +867,7 @@ function calcPosition(iframe: HTMLIFrameElement, isScrolling: boolean) {
   };
 }
 
-const SCROLL_STOP_DEBOUNCE = 500;
+const SCROLL_STOP_DEBOUNCE = 100;
 
 /**
  * Dispatch a USER_SCROLLED event after some delay

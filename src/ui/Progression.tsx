@@ -9,9 +9,11 @@ export default function Progression({
 }): JSX.Element | null {
   const { position, remainingPositions } = location?.locations ?? {};
   const totalPages =
-    position && remainingPositions ? position + remainingPositions : null;
+    position && typeof remainingPositions === 'number'
+      ? position + remainingPositions
+      : null;
 
-  if (!position || !totalPages) return null;
+  if (!position || typeof totalPages !== 'number') return null;
 
   return (
     <Text display="flex" alignItems="center">
