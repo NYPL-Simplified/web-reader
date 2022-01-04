@@ -1,6 +1,5 @@
 import {
   calcPosition,
-  CSSState,
   familyToReadiumFamily,
   getColorModeValue,
   getFontOverride,
@@ -8,6 +7,7 @@ import {
   getPagination,
   setCSSProperty,
 } from './lib';
+import { CSSState } from './types';
 
 /**
  * Scroll the HTML element to a given progression by
