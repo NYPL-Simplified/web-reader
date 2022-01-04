@@ -15,6 +15,7 @@ import { navigateToHash, navigateToProgression, setCss } from './effects';
 import useResource from './useResource';
 import useLocationQuery, { getLocationQuery } from './useLocationQuery';
 import { Locator } from '../Readium/Locator';
+import useWindowResize from './useWindowResize';
 
 /**
  * DECISIONS:
@@ -28,8 +29,8 @@ import { Locator } from '../Readium/Locator';
  * @TODO :
  *
  * - WORKING ON
- *  - keep location in url bar
  *  - window resize
+ *    - sometimes you can get three columns to show. There is some jank there.
  *  - Make CFI's work in the location.locations.cfi
  *  - provide default injectables (Readium CSS)
  *  - make examples work
@@ -58,7 +59,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
 
   const [state, dispatch] = React.useReducer(makeHtmlReducer(args), {
     colorMode: 'day',
-    isScrolling: true,
+    isScrolling: false,
     fontSize: 100,
     fontFamily: 'sans-serif',
     currentTocUrl: null,
@@ -89,6 +90,9 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
    * Keep the location state also in the url query
    */
   useLocationQuery(state, dispatch);
+
+  // dispatch action when window is resized
+  useWindowResize(dispatch);
 
   /**
    * Set the initial location when the manifest changes.

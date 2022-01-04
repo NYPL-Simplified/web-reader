@@ -24,21 +24,22 @@ export function navigateToProgression(
    *  - navigating backward
    *  - switching between scrolling and paginated mode (to keep location)
    */
-  const { isHorizontalPaginated, resourceSize } = calcPosition(
+  const { isHorizontalPaginated, resourceSize, totalPages } = calcPosition(
     iframe,
     isScrolling
   );
   const html = getIframeHTML(iframe);
 
-  const newScrollPosition = progression * resourceSize;
-
-  /**
-   * @todo - snap that progression to the nearest page if we are paginated
-   */
-
   if (isHorizontalPaginated) {
+    /**
+     * snap that progression to the nearest page
+     */
+    const nearestPage = Math.round(progression * totalPages);
+    const calculatedProgression = nearestPage / totalPages;
+    const newScrollPosition = calculatedProgression * resourceSize;
     html.scrollLeft = newScrollPosition;
   } else {
+    const newScrollPosition = progression * resourceSize;
     html.scrollTop = newScrollPosition;
   }
 }

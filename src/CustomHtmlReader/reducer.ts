@@ -172,12 +172,28 @@ export default function makeHtmlReducer(
           webpubManifestUrl
         );
 
-        console.log('GO TO LOC', action.location);
         return {
           ...state,
           location: action.location,
           isNavigated: false,
           isIframeLoaded,
+        };
+      }
+
+      case 'WINDOW_RESIZED': {
+        if (!state.iframe) return state;
+        /**
+         * Just set isNavigated to false so we recalculate everything
+         */
+        return {
+          ...state,
+          isNavigated: false,
+          location: {
+            ...state.location,
+            locations: {
+              progression: state.location.locations.progression,
+            },
+          },
         };
       }
 
@@ -265,9 +281,22 @@ export default function makeHtmlReducer(
       }
 
       case 'NAV_COMPLETE': {
+        if (!state.iframe) return state;
+        const { totalPages, currentPage } = calcPosition(
+          state.iframe,
+          state.isScrolling
+        );
         return {
           ...state,
           isNavigated: true,
+          location: {
+            ...state.location,
+            locations: {
+              ...state.location.locations,
+              position: currentPage,
+              remainingPositions: totalPages - currentPage,
+            },
+          },
         };
       }
 

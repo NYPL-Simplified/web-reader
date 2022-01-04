@@ -38,6 +38,7 @@ export type HtmlAction =
   | { type: 'GO_TO_LOCATION'; location: Locator }
   | { type: 'GO_FORWARD' }
   | { type: 'GO_BACKWARD' }
+  | { type: 'WINDOW_RESIZED' }
   // indicates completion of an inter-resource nav after iframe loads
   | { type: 'NAV_COMPLETE' }
   | { type: 'SET_COLOR_MODE'; mode: ColorMode }
