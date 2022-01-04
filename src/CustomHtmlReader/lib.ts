@@ -1,31 +1,46 @@
 import React from 'react';
+import { Injectable } from '../Readium/Injectable';
 import { Locator } from '../Readium/Locator';
-import {
-  WebpubManifest,
-  ColorMode,
-  FontFamily,
-  HtmlReaderState,
-} from '../types';
+import { WebpubManifest, ColorMode, FontFamily } from '../types';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
-import { HtmlAction } from './reducer';
+import { HtmlState, HtmlAction } from './types';
 
 /**
- * @todo - split this into multiple states (inactive, loading resource, iframe loaded)
+ * Constants
  */
-export type HtmlState = HtmlReaderState & {
-  isIframeLoaded: boolean;
-  // tracks whether the inter-resource navigation effect has run.
-  isNavigated: boolean;
-  // location.locations.position is 1 indexed page
-  location: Locator;
-  iframe: HTMLIFrameElement | null;
-};
+export const FONT_SIZE_STEP = 4;
+const SCROLL_STOP_DEBOUNCE = 100;
+/**
+ * If we provide injectables that are not found, the app won't load at all.
+ * Therefore we will not provide any default injectables.
+ * @todo - this is not true in our custom renderer. We should provide default injectables.
+ */
+export const defaultInjectables: Injectable[] = [];
+export const defaultInjectablesFixed: Injectable[] = [];
 
-// state that affects the css variables
-export type CSSState = Pick<
-  HtmlState,
-  'isScrolling' | 'colorMode' | 'fontFamily' | 'fontSize'
->;
+/**
+ * Creates an element for an injectable so it can be injected into the iframe.
+ */
+export function makeInjectableElement(
+  document: Document,
+  injectable: Injectable
+): HTMLElement | undefined {
+  switch (injectable.type) {
+    case 'style': {
+      const el = document.createElement('link');
+      el.setAttribute('rel', 'stylesheet');
+      if (injectable.url) {
+        el.setAttribute('href', injectable.url);
+      } else {
+        console.warn('Injectable missing url', injectable);
+      }
+      return el;
+    }
+
+    default:
+      return;
+  }
+}
 
 /**
  * gets the index of the current location href
@@ -175,8 +190,6 @@ export function calcPosition(
   };
 }
 
-const SCROLL_STOP_DEBOUNCE = 100;
-
 /**
  * Dispatch a USER_SCROLLED event after some delay
  */
@@ -237,32 +250,6 @@ export function injectJS(document: Document): void {
     }
   `;
   document.head.appendChild(script);
-}
-
-/**
- * Takes the HTML element and sets CSS variables on it based on the
- * reader's state
- */
-export function setCss(html: HTMLElement, state: CSSState): void {
-  setCSSProperty(html, '--USER__scroll', getPagination(state.isScrolling));
-  setCSSProperty(
-    html,
-    '--USER__appearance',
-    getColorModeValue(state.colorMode)
-  );
-  setCSSProperty(html, '--USER__advancedSettings', 'readium-advanced-on');
-  setCSSProperty(
-    html,
-    '--USER__fontOverride',
-    getFontOverride(state.fontFamily)
-  );
-  setCSSProperty(
-    html,
-    '--USER__fontFamily',
-    familyToReadiumFamily[state.fontFamily]
-  );
-  setCSSProperty(html, '--USER__fontSize', `${state.fontSize}%`);
-  setCSSProperty(html, 'overflow', state.isScrolling ? 'scroll' : 'hidden');
 }
 
 export function getMaybeIframeHtml(

@@ -5,16 +5,19 @@ import useSWRImmutable from 'swr/immutable';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
 import { DEFAULT_HEIGHT, DEFAULT_SHOULD_GROW_WHEN_SCROLLING } from '..';
 import {
-  HtmlState,
-  setCss,
   fetchAsTxt,
   useUpdateScroll,
   calcPosition,
   getMaybeIframeHtml,
   getFromReadingOrder,
-  getIframeHTML,
+  makeInjectableElement,
+  defaultInjectables,
+  defaultInjectablesFixed,
 } from './lib';
 import makeHtmlReducer from './reducer';
+import { navigateToHash, navigateToProgression, setCss } from './effects';
+import { HtmlState } from './types';
+import useResource from './useResource';
 
 /**
  * DECISIONS:
@@ -30,6 +33,7 @@ import makeHtmlReducer from './reducer';
  *  - keep location in url bar
  *  - Anchor links within a resource
  *  - Make CFI's work in the location.locations.cfi
+ *  - provide default injectables (Readium CSS)
  *
  * Future:
  *  - Don't use ReadiumCSS for fixed layout
@@ -40,85 +44,54 @@ import makeHtmlReducer from './reducer';
  */
 
 /**
- * If we provide injectables that are not found, the app won't load at all.
- * Therefore we will not provide any default injectables.
- * @todo - this is not true in our custom rendered. We should provide default injectables.
- */
-const defaultInjectables: Injectable[] = [];
-const defaultInjectablesFixed: Injectable[] = [];
-
-const FONT_SIZE_STEP = 4;
-
-function getInjectableElement(
-  document: Document,
-  injectable: Injectable
-): HTMLElement | undefined {
-  switch (injectable.type) {
-    case 'style': {
-      const el = document.createElement('link');
-      el.setAttribute('rel', 'stylesheet');
-      if (injectable.url) {
-        el.setAttribute('href', injectable.url);
-      } else {
-        console.warn('Injectable missing url', injectable);
-      }
-      return el;
-    }
-
-    default:
-      return;
-  }
-}
-
-/**
  * Fetches an HTML resource and prepares it by injecting:
  *  - Readium CSS
  *  - A `<base>` element with the resource url
  *  - Any other injectables passed in
  */
-function useResource(
-  url: string | null,
-  getContent: (url: string) => Promise<string>,
-  injectables: Injectable[],
-  state: HtmlState
-) {
-  const { data: resource, isValidating, error } = useSWRImmutable(
-    url,
-    async (url: string) => {
-      const content = await getContent(url);
-      const document = new DOMParser().parseFromString(content, 'text/html');
-      // add base so relative URLs work.
-      const base = document?.createElement('base');
-      if (base && url) {
-        base.setAttribute('href', url);
-        document?.head.appendChild(base);
-      }
+// function useResource(
+//   url: string | null,
+//   getContent: (url: string) => Promise<string>,
+//   injectables: Injectable[],
+//   state: HtmlState
+// ) {
+//   const { data: resource, isValidating, error } = useSWRImmutable(
+//     url,
+//     async (url: string) => {
+//       const content = await getContent(url);
+//       const document = new DOMParser().parseFromString(content, 'text/html');
+//       // add base so relative URLs work.
+//       const base = document?.createElement('base');
+//       if (base && url) {
+//         base.setAttribute('href', url);
+//         document?.head.appendChild(base);
+//       }
 
-      for (const injectable of injectables) {
-        const element = getInjectableElement(document, injectable);
-        if (element) document?.head.appendChild(element);
-      }
+//       for (const injectable of injectables) {
+//         const element = makeInjectableElement(document, injectable);
+//         if (element) document?.head.appendChild(element);
+//       }
 
-      // set the initial CSS state
-      setCss(document.documentElement, {
-        colorMode: state.colorMode,
-        fontSize: state.fontSize,
-        fontFamily: state.fontFamily,
-        isScrolling: state.isScrolling,
-      });
+//       // set the initial CSS state
+//       setCss(document.documentElement, {
+//         colorMode: state.colorMode,
+//         fontSize: state.fontSize,
+//         fontFamily: state.fontFamily,
+//         isScrolling: state.isScrolling,
+//       });
 
-      // inject js to communicate with iframe
-      // injectJS(document);
+//       // inject js to communicate with iframe
+//       // injectJS(document);
 
-      return document.documentElement.outerHTML;
-    }
-  );
-  if (error) throw error;
+//       return document.documentElement.outerHTML;
+//     }
+//   );
+//   if (error) throw error;
 
-  const isLoading = isValidating && !resource;
+//   const isLoading = isValidating && !resource;
 
-  return { resource, isLoading };
-}
+//   return { resource, isLoading };
+// }
 
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const {
@@ -144,18 +117,28 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     isNavigated: false,
     // start with dummy location
     location: { href: '', locations: {} },
+    resource: undefined,
+    isFetchingResource: false,
+    resourceFetchError: undefined,
   });
 
+  /**
+   * Fetches the resource and keeps it in the reducer state.
+   */
+  const currentResourceUrl = state.location.href ?? null;
+  useResource(state, getContent, injectables, dispatch);
+
+  /**
+   * Dispatches an action to update scroll position when the user *stops* scrolling.
+   */
   useUpdateScroll(state.iframe, state.isIframeLoaded, dispatch);
 
-  const { fontSize, location } = state;
-  const currentResourceUrl = location.href ?? null;
-  const { resource, isLoading } = useResource(
-    currentResourceUrl,
-    getContent,
-    injectables,
-    state
-  );
+  // const { resource, isLoading } = useResource(
+  //   currentResourceUrl,
+  //   getContent,
+  //   injectables,
+  //   state
+  // );
 
   /**
    * Set the initial location when the manifest changes.
@@ -175,22 +158,12 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     // we do this on the next tick in case we are still calculating things.
     process.nextTick(() => {
       if (!state.isNavigated && state.isIframeLoaded && state.iframe) {
-        const locations = state.location.locations;
-        const { fragment, progression, position } = locations;
+        const { fragment, progression, position } = state.location.locations;
         /**
          * We first try a fragment, then a progression, then a position value.
          */
         if (typeof fragment === 'string') {
-          const isHash = fragment.indexOf('#') === 0;
-          if (isHash) {
-            // we get the element by the hash, and scroll it into view
-            const el = state.iframe.contentDocument?.querySelector(fragment);
-            if (el) {
-              el.scrollIntoView();
-            } else {
-              console.error('Could not find an element with id', fragment);
-            }
-          }
+          navigateToHash(fragment, state.iframe);
         } else if (typeof progression === 'number') {
           navigateToProgression(state.iframe, progression, state.isScrolling);
         } else if (typeof position === 'number') {
@@ -216,13 +189,6 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   ]);
 
   /**
-   * Whenever the resource changes, we need to set the iframe to not loaded
-   */
-  React.useEffect(() => {
-    dispatch({ type: 'RESOURCE_CHANGED' });
-  }, [resource]);
-
-  /**
    * Set CSS variables when user state changes.
    * @todo - wait for iframe load?
    * @todo - narrow down the dependencies so this doesn't run on _every_ state change.
@@ -232,7 +198,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     const html = getMaybeIframeHtml(state.iframe);
     if (!html) return;
     setCss(html, state);
-  }, [state, manifest, resource]);
+  }, [state, manifest]);
 
   /**
    * Dispatch the go to link and let reducer handle it
@@ -282,14 +248,12 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   );
 
   const increaseFontSize = React.useCallback(async () => {
-    const newSize = fontSize + FONT_SIZE_STEP;
-    dispatch({ type: 'SET_FONT_SIZE', size: newSize });
-  }, [fontSize]);
+    dispatch({ type: 'INCREASE_FONT_SIZE' });
+  }, []);
 
   const decreaseFontSize = React.useCallback(async () => {
-    const newSize = fontSize - FONT_SIZE_STEP;
-    dispatch({ type: 'SET_FONT_SIZE', size: newSize });
-  }, [fontSize]);
+    dispatch({ type: 'DECREASE_FONT_SIZE' });
+  }, []);
 
   const setFontFamily = React.useCallback(async (family: FontFamily) => {
     dispatch({ type: 'SET_FONT_FAMILY', family });
@@ -303,7 +267,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const shouldGrow = state.isScrolling && growWhenScrolling;
 
   // we are initializing the reader
-  if (isLoading) {
+  if (state.isFetchingResource) {
     return {
       type: null,
       isLoading: true,
@@ -340,7 +304,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
             overflow: 'hidden',
           }}
           title="CHANGEME"
-          srcDoc={resource}
+          srcDoc={state.resource}
           src={currentResourceUrl ?? undefined}
         />
       </>
@@ -358,38 +322,4 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       goToPage,
     },
   };
-}
-
-/**
- * Scroll the HTML element to a given progression by
- * setting the scrollTop or the scrollLeft.
- */
-function navigateToProgression(
-  iframe: HTMLIFrameElement,
-  progression: number,
-  isScrolling: boolean
-) {
-  /**
-   * Check for progression info. This is used
-   *  - in paginated mode for changing pages
-   *  - navigating backward
-   *  - switching between scrolling and paginated mode (to keep location)
-   */
-  const { isHorizontalPaginated, resourceSize } = calcPosition(
-    iframe,
-    isScrolling
-  );
-  const html = getIframeHTML(iframe);
-
-  const newScrollPosition = progression * resourceSize;
-
-  /**
-   * @todo - snap that progression to the nearest page if we are paginated
-   */
-
-  if (isHorizontalPaginated) {
-    html.scrollLeft = newScrollPosition;
-  } else {
-    html.scrollTop = newScrollPosition;
-  }
 }

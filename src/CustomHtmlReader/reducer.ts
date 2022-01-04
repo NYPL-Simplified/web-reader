@@ -1,31 +1,13 @@
-import { ColorMode, FontFamily, ReaderArguments } from '../types';
-import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
+import { ReaderArguments } from '../types';
 import {
-  HtmlState,
   getCurrentIndex,
   linkToLocator,
   calcPosition,
   getFromReadingOrder,
   isSameResource,
+  FONT_SIZE_STEP,
 } from './lib';
-
-export type HtmlAction =
-  | { type: 'MANIFEST_LOADED' }
-  | { type: 'IFRAME_LOADED' }
-  | { type: 'NAV_PREVIOUS_RESOURCE' }
-  | { type: 'NAV_NEXT_RESOURCE' }
-  | { type: 'GO_TO_LINK'; link: ReadiumLink }
-  | { type: 'GO_FORWARD' }
-  | { type: 'GO_BACKWARD' }
-  // indicates completion of an inter-resource nav after iframe loads
-  | { type: 'NAV_COMPLETE' }
-  | { type: 'SET_COLOR_MODE'; mode: ColorMode }
-  | { type: 'SET_SCROLL'; isScrolling: boolean }
-  | { type: 'SET_FONT_SIZE'; size: number }
-  | { type: 'SET_FONT_FAMILY'; family: FontFamily }
-  | { type: 'USER_SCROLLED' }
-  | { type: 'SET_IFRAME'; iframe: HTMLIFrameElement | null }
-  | { type: 'RESOURCE_CHANGED' };
+import { HtmlAction, HtmlState } from './types';
 
 /**
  * A higher order function that makes it easy to access arguments in the reducer
@@ -82,6 +64,27 @@ export default function makeHtmlReducer(
     }
 
     switch (action.type) {
+      case 'RESOURCE_FETCH_REQUEST': {
+        return {
+          ...state,
+          isFetchingResource: true,
+        };
+      }
+      case 'RESOURCE_FETCH_SUCCESS': {
+        return {
+          ...state,
+          isFetchingResource: false,
+          resource: action.resource,
+        };
+      }
+      case 'RESOURCE_FETCH_ERROR': {
+        return {
+          ...state,
+          isFetchingResource: false,
+          resourceFetchError: action.error,
+        };
+      }
+
       case 'MANIFEST_LOADED': {
         /**
          * Start at the beginning of first resource.
@@ -283,11 +286,21 @@ export default function makeHtmlReducer(
         };
       }
 
-      case 'SET_FONT_SIZE':
+      case 'INCREASE_FONT_SIZE': {
+        const newSize = state.fontSize + FONT_SIZE_STEP;
         return {
           ...state,
-          fontSize: action.size,
+          fontSize: newSize > 0 ? newSize : 0,
         };
+      }
+
+      case 'DECREASE_FONT_SIZE': {
+        const newSize = state.fontSize - FONT_SIZE_STEP;
+        return {
+          ...state,
+          fontSize: newSize > 0 ? newSize : 0,
+        };
+      }
 
       case 'SET_FONT_FAMILY':
         return {
