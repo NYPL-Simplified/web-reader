@@ -1,6 +1,5 @@
 import { Locator } from '../Readium/Locator';
 import { ColorMode, FontFamily, HtmlReaderState } from '../types';
-import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 
 /**
  * @todo - split this into multiple states (inactive, loading resource, iframe loaded)
@@ -95,7 +94,7 @@ export type HtmlAction =
   | { type: 'IFRAME_LOADED' }
   | { type: 'NAV_PREVIOUS_RESOURCE' }
   | { type: 'NAV_NEXT_RESOURCE' }
-  | { type: 'GO_TO_LINK'; link: ReadiumLink }
+  | { type: 'GO_TO_HREF'; href: string }
   | { type: 'GO_FORWARD' }
   | { type: 'GO_BACKWARD' }
   // indicates completion of an inter-resource nav after iframe loads

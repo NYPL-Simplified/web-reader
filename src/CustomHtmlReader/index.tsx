@@ -1,7 +1,5 @@
 import React from 'react';
 import { ColorMode, ReaderReturn, ReaderArguments, FontFamily } from '../types';
-import { Injectable } from '../Readium/Injectable';
-import useSWRImmutable from 'swr/immutable';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
 import { DEFAULT_HEIGHT, DEFAULT_SHOULD_GROW_WHEN_SCROLLING } from '..';
 import {
@@ -9,20 +7,19 @@ import {
   useUpdateScroll,
   calcPosition,
   getMaybeIframeHtml,
-  getFromReadingOrder,
-  makeInjectableElement,
   defaultInjectables,
   defaultInjectablesFixed,
 } from './lib';
 import makeHtmlReducer from './reducer';
 import { navigateToHash, navigateToProgression, setCss } from './effects';
-import { HtmlState } from './types';
 import useResource from './useResource';
 
 /**
  * DECISIONS:
  *  - We use webpubManifestUrl as the baseUrl when constructing URLs. This allows us to compare urls effectively.
  *  - location.locations.position is 1 indexed page
+ *  - We keep all state in the reducer and try not to put logic into handlers. They should
+ *    just dispatch actions.
  */
 
 /**
@@ -34,6 +31,7 @@ import useResource from './useResource';
  *  - Anchor links within a resource
  *  - Make CFI's work in the location.locations.cfi
  *  - provide default injectables (Readium CSS)
+ *  - split HtmlState into multiple
  *
  * Future:
  *  - Don't use ReadiumCSS for fixed layout
@@ -42,56 +40,6 @@ import useResource from './useResource';
  *  - reorganize link comparison utils so that you compare only _absolute_ URLs, not
  *    relative URLs. Always use the correct baseUrl for making absolute URLs.
  */
-
-/**
- * Fetches an HTML resource and prepares it by injecting:
- *  - Readium CSS
- *  - A `<base>` element with the resource url
- *  - Any other injectables passed in
- */
-// function useResource(
-//   url: string | null,
-//   getContent: (url: string) => Promise<string>,
-//   injectables: Injectable[],
-//   state: HtmlState
-// ) {
-//   const { data: resource, isValidating, error } = useSWRImmutable(
-//     url,
-//     async (url: string) => {
-//       const content = await getContent(url);
-//       const document = new DOMParser().parseFromString(content, 'text/html');
-//       // add base so relative URLs work.
-//       const base = document?.createElement('base');
-//       if (base && url) {
-//         base.setAttribute('href', url);
-//         document?.head.appendChild(base);
-//       }
-
-//       for (const injectable of injectables) {
-//         const element = makeInjectableElement(document, injectable);
-//         if (element) document?.head.appendChild(element);
-//       }
-
-//       // set the initial CSS state
-//       setCss(document.documentElement, {
-//         colorMode: state.colorMode,
-//         fontSize: state.fontSize,
-//         fontFamily: state.fontFamily,
-//         isScrolling: state.isScrolling,
-//       });
-
-//       // inject js to communicate with iframe
-//       // injectJS(document);
-
-//       return document.documentElement.outerHTML;
-//     }
-//   );
-//   if (error) throw error;
-
-//   const isLoading = isValidating && !resource;
-
-//   return { resource, isLoading };
-// }
 
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const {
@@ -132,13 +80,6 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
    * Dispatches an action to update scroll position when the user *stops* scrolling.
    */
   useUpdateScroll(state.iframe, state.isIframeLoaded, dispatch);
-
-  // const { resource, isLoading } = useResource(
-  //   currentResourceUrl,
-  //   getContent,
-  //   injectables,
-  //   state
-  // );
 
   /**
    * Set the initial location when the manifest changes.
@@ -200,25 +141,9 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     setCss(html, state);
   }, [state, manifest]);
 
-  /**
-   * Dispatch the go to link and let reducer handle it
-   * @todo - rename this goToHref and make a separate goToLink
-   */
-  const goToPage = React.useCallback(
-    (href) => {
-      if (!manifest || !webpubManifestUrl) return;
-      const { link } =
-        getFromReadingOrder(href, manifest, webpubManifestUrl) ?? {};
-      if (!link) {
-        console.error(`No readingOrder entry found for href: ${href}`);
-        return;
-      }
-      // use the passed in href to preserve hash links
-      link.href = href;
-      dispatch({ type: 'GO_TO_LINK', link });
-    },
-    [manifest, webpubManifestUrl]
-  );
+  const goToPage = React.useCallback((href) => {
+    dispatch({ type: 'GO_TO_HREF', href });
+  }, []);
 
   const goForward = React.useCallback(async () => {
     dispatch({ type: 'GO_FORWARD' });

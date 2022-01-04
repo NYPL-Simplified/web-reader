@@ -131,29 +131,27 @@ export default function makeHtmlReducer(
         return goToPrevResource();
       }
 
-      case 'GO_TO_LINK': {
-        const isInReadingOrder = !!getFromReadingOrder(
-          action.link.href,
-          manifest,
-          webpubManifestUrl
-        );
-        if (!isInReadingOrder) {
-          console.error(
-            `Cannot navigate to a link not in the reading order`,
-            action.link
-          );
+      case 'GO_TO_HREF': {
+        const { link } =
+          getFromReadingOrder(action.href, manifest, webpubManifestUrl) ?? {};
+        if (!link) {
+          console.error(`No readingOrder entry found for href: ${action.href}`);
           return state;
         }
+        const linkwithOrigHref = {
+          ...link,
+          href: action.href,
+        };
 
         // tells us whether we are staying on the same resource or going
         // to load a new one
         const isIframeLoaded = isSameResource(
-          action.link.href,
+          linkwithOrigHref.href,
           state.location.href,
           webpubManifestUrl
         );
 
-        const locator = linkToLocator(action.link, webpubManifestUrl);
+        const locator = linkToLocator(linkwithOrigHref, webpubManifestUrl);
         return {
           ...state,
           location: locator,
