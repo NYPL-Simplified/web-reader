@@ -6,6 +6,7 @@ import { ReaderManagerArguments, ReaderReturn } from '../types';
 import Header from './Header';
 import useColorModeValue from './hooks/useColorModeValue';
 import PageButton from './PageButton';
+import Progression from './Progression';
 import { getTheme } from './theme';
 
 /**
@@ -72,6 +73,7 @@ const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
           <Icon as={MdKeyboardArrowLeft} w={6} h={6} />
           Previous
         </PageButton>
+        <Progression location={props.state?.location} />
         <PageButton
           onClick={props.navigator?.goForward}
           aria-label="Next Page"

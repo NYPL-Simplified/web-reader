@@ -1,4 +1,5 @@
 import { Injectable } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
+import { Locator } from './Readium/Locator';
 import { WebpubManifest } from './WebpubManifestTypes/WebpubManifest';
 
 export { WebpubManifest };
@@ -44,6 +45,7 @@ export type ReaderState = {
   currentTocUrl: string | null;
   atStart: boolean;
   atEnd: boolean;
+  location?: Locator;
 };
 
 // PDF specific reader state

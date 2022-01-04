@@ -41,18 +41,7 @@ type CSSState = Pick<
 /**
  * @TODO :
  *
- * - WORKING ON paginated mode
- *    - make it stay in same place when switching scrolled to paginated
- *
- *  - store location in locator object
- *    - on TOC click, set it to the href and fragment
- *    - on internal link click, use the href and fragment
- *    - on first load, set it to start of the initial resource
- *    - on next page click, set it to a CFI or progression or position
- *
- *  - location change effect that responds to
- *    - page number ?
- *    - cfi
+ * - WORKING ON
  *  - calculate current page, total pages
  *  - switching from scrolling to paginated should maintain position
  *  - keep location in url bar
@@ -61,6 +50,7 @@ type CSSState = Pick<
  *  - Anchor links within a resource
  *  - show loading indicator while iframe is loading
  *  - render iframe when in loading state
+ *  - Make CFI's work in the location.locations.cfi
  *
  * Future:
  *  - Don't use ReadiumCSS for fixed layout
@@ -170,11 +160,26 @@ function htmlReducer(args: ReaderArguments) {
         };
       }
 
-      case 'IFRAME_LOADED':
+      case 'IFRAME_LOADED': {
+        if (!state.iframe) return state;
+        const { currentPage, totalPages } = calcPosition(
+          state.iframe,
+          state.isScrolling
+        );
+
         return {
           ...state,
           isIframeLoaded: true,
+          location: {
+            ...state.location,
+            locations: {
+              ...state.location.locations,
+              position: currentPage,
+              remainingPositions: totalPages - currentPage,
+            },
+          },
         };
+      }
 
       case 'NAV_NEXT_RESOURCE': {
         return goToNextResource();
@@ -244,6 +249,7 @@ function htmlReducer(args: ReaderArguments) {
          */
         const percentToScroll = 1 / totalPages;
         const newProgression = progression + percentToScroll;
+        const newPosition = currentPage + 1;
 
         return {
           ...state,
@@ -251,7 +257,8 @@ function htmlReducer(args: ReaderArguments) {
             ...state.location,
             locations: {
               progression: newProgression,
-              position: currentPage + 1,
+              position: newPosition,
+              remainingPositions: totalPages - newPosition,
             },
           },
           isNavigated: false,
@@ -289,6 +296,7 @@ function htmlReducer(args: ReaderArguments) {
             locations: {
               progression: newProgression,
               position: newPosition,
+              remainingPositions: totalPages - newPosition,
             },
           },
           isNavigated: false,
@@ -317,7 +325,7 @@ function htmlReducer(args: ReaderArguments) {
          *   reading.
          */
         if (!state.iframe) return state;
-        const { currentPageFloor } = calcPosition(
+        const { currentPageFloor, totalPages } = calcPosition(
           state.iframe,
           state.isScrolling
         );
@@ -330,6 +338,7 @@ function htmlReducer(args: ReaderArguments) {
             ...state.location,
             locations: {
               position: currentPageFloor,
+              remainingPositions: totalPages - currentPageFloor,
             },
           },
         };
@@ -357,7 +366,7 @@ function htmlReducer(args: ReaderArguments) {
         if (!state.iframe || !state.isScrolling) return state;
         // update the progression, but don't trigger a navigation effect
         // update the y value
-        const { progression, currentPage } = calcPosition(
+        const { progression, currentPage, totalPages } = calcPosition(
           state.iframe,
           state.isScrolling
         );
@@ -368,9 +377,9 @@ function htmlReducer(args: ReaderArguments) {
           location: {
             ...state.location,
             locations: {
-              ...state.location.locations,
               progression,
               position: currentPage,
+              remainingPositions: totalPages - currentPage,
             },
           },
         };
