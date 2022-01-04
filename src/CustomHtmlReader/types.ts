@@ -2,9 +2,6 @@ import { Locator } from '../Readium/Locator';
 import { ColorMode, FontFamily, HtmlReaderState } from '../types';
 
 /**
- * @todo - split this into multiple states (inactive, loading resource, iframe loaded)
- *  and states for resource fetching.
- *
  * States:
  *  - Inactive
  *  - loading manifest
@@ -24,63 +21,6 @@ export type HtmlState = HtmlReaderState & {
   resource: string | undefined;
   isFetchingResource: boolean;
   resourceFetchError: Error | undefined;
-};
-
-export type LocalState =
-  | FetchingResource
-  | LoadingIframe
-  | IframeLoaded
-  | Navigated
-  | ResourceFetchError;
-
-export type FetchingResource = {
-  isIframeLoaded: false;
-  isNavigated: false;
-  location: Locator;
-  iframe: null;
-  resource: undefined;
-  isFetchingResource: true;
-  resourceFetchError: null;
-};
-
-export type LoadingIframe = {
-  isIframeLoaded: false;
-  isNavigated: false;
-  location: Locator;
-  iframe: HTMLIFrameElement;
-  resource: string;
-  isFetchingResource: false;
-  resourceFetchError: null;
-};
-
-export type IframeLoaded = {
-  isIframeLoaded: true;
-  isNavigated: false;
-  location: Locator;
-  iframe: HTMLIFrameElement;
-  resource: string;
-  isFetchingResource: false;
-  resourceFetchError: null;
-};
-
-export type Navigated = {
-  isIframeLoaded: true;
-  isNavigated: true;
-  location: Locator;
-  iframe: HTMLIFrameElement;
-  resource: string;
-  isFetchingResource: false;
-  resourceFetchError: null;
-};
-
-export type ResourceFetchError = {
-  isIframeLoaded: false;
-  isNavigated: false;
-  location: Locator;
-  iframe: null;
-  resource: undefined;
-  isFetchingResource: false;
-  resourceFetchError: Error;
 };
 
 // state that affects the css variables
