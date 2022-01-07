@@ -10,6 +10,12 @@ import {
 import { CSSState } from './types';
 
 /**
+ * These are effects that reach in to the iframe element and modify it.
+ * They are not part of the reducer, and should only be called from within a
+ * useEffect hook.
+ */
+
+/**
  * Scroll the HTML element to a given progression by
  * setting the scrollTop or the scrollLeft.
  */
