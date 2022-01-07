@@ -4,7 +4,6 @@ import {
   linkToLocator,
   calcPosition,
   getFromReadingOrder,
-  isSameResource,
   FONT_SIZE_STEP,
 } from './lib';
 import { HtmlAction, HtmlState } from './types';
@@ -70,6 +69,9 @@ export default function makeHtmlReducer(
         return {
           ...state,
           isFetchingResource: true,
+          // we are unloading the iframe. This will make the
+          // inter-resource nav cycle re-start.
+          isIframeLoaded: false,
         };
       }
       case 'RESOURCE_FETCH_SUCCESS': {
@@ -146,37 +148,19 @@ export default function makeHtmlReducer(
           href: action.href,
         };
 
-        // tells us whether we are staying on the same resource or going
-        // to load a new one
-        const isIframeLoaded = isSameResource(
-          linkwithOrigHref.href,
-          state.location.href,
-          webpubManifestUrl
-        );
-
         const locator = linkToLocator(linkwithOrigHref, webpubManifestUrl);
         return {
           ...state,
           location: locator,
           isNavigated: false,
-          isIframeLoaded,
         };
       }
 
       case 'GO_TO_LOCATION': {
-        // tells us whether we are staying on the same resource or going
-        // to load a new one
-        const isIframeLoaded = isSameResource(
-          action.location.href,
-          state.location.href,
-          webpubManifestUrl
-        );
-
         return {
           ...state,
           location: action.location,
           isNavigated: false,
-          isIframeLoaded,
         };
       }
 

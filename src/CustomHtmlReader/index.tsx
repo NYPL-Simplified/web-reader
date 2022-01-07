@@ -1,5 +1,12 @@
 import React from 'react';
-import { ColorMode, ReaderReturn, ReaderArguments, FontFamily } from '../types';
+import {
+  ColorMode,
+  ReaderReturn,
+  ReaderArguments,
+  FontFamily,
+  Navigator,
+  HtmlNavigator,
+} from '../types';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
 import { DEFAULT_HEIGHT, DEFAULT_SHOULD_GROW_WHEN_SCROLLING } from '..';
 import {
@@ -31,16 +38,18 @@ import useWindowResize from './useWindowResize';
  * - WORKING ON
  *  - window resize
  *    - sometimes you can get three columns to show. There is some jank there.
- *  - Make CFI's work in the location.locations.cfi
+ *  - Make CFI's work in the location.locations.cfi or fragment
  *  - provide default injectables (Readium CSS)
  *  - make examples work
+ *  - remove v1
  *
  * Future:
  *  - Don't use ReadiumCSS for fixed layout
  *  - Make fixed layout work
  *  - Update to latest Readium CSS
- *  - reorganize link comparison utils so that you compare only _absolute_ URLs, not
- *    relative URLs. Always use the correct baseUrl for making absolute URLs.
+ *  - Find some way to organize effects and actions together so you can navigate, wait for iframe to load,
+ *    then run some other effect.
+ *  - goForward and goBackward should return a promise that resolves once isNavigated flips to true.
  */
 
 const DEFAULT_LOCATION: Locator = { href: '', locations: {} };
@@ -154,48 +163,49 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     setCss(html, state);
   }, [state, manifest]);
 
-  const goToPage = React.useCallback((href) => {
-    dispatch({ type: 'GO_TO_HREF', href });
-  }, []);
+  type Blah = {
+    go: (direction: 'forward' | 'backward') => void;
+  };
 
-  const goForward = React.useCallback(async () => {
-    dispatch({ type: 'GO_FORWARD' });
-  }, []);
+  const blah: Blah = {
+    go(direction) {
+      console.log(direction);
+    },
+  };
 
-  const goBackward = React.useCallback(async () => {
-    dispatch({ type: 'GO_BACKWARD' });
-  }, []);
-
-  const setColorMode = React.useCallback(async (mode: ColorMode) => {
-    dispatch({ type: 'SET_COLOR_MODE', mode });
-  }, []);
-
-  const setScroll = React.useCallback(
-    async (val: 'scrolling' | 'paginated') => {
+  const navigator = React.useRef<HtmlNavigator>({
+    goToPage(href) {
+      dispatch({ type: 'GO_TO_HREF', href });
+    },
+    async goForward() {
+      dispatch({ type: 'GO_FORWARD' });
+    },
+    async goBackward() {
+      dispatch({ type: 'GO_BACKWARD' });
+    },
+    async setColorMode(mode: ColorMode) {
+      dispatch({ type: 'SET_COLOR_MODE', mode });
+    },
+    async setScroll(val) {
       const isScrolling = val === 'scrolling';
       dispatch({ type: 'SET_SCROLL', isScrolling });
     },
-    []
-  );
-
-  const setIframe = React.useCallback(
-    (el: HTMLIFrameElement) => {
-      dispatch({ type: 'SET_IFRAME', iframe: el });
+    async increaseFontSize() {
+      dispatch({ type: 'INCREASE_FONT_SIZE' });
     },
-    [dispatch]
-  );
+    async decreaseFontSize() {
+      dispatch({ type: 'DECREASE_FONT_SIZE' });
+    },
+    async setFontFamily(family: FontFamily) {
+      dispatch({ type: 'SET_FONT_FAMILY', family });
+    },
+  }).current;
 
-  const increaseFontSize = React.useCallback(async () => {
-    dispatch({ type: 'INCREASE_FONT_SIZE' });
-  }, []);
-
-  const decreaseFontSize = React.useCallback(async () => {
-    dispatch({ type: 'DECREASE_FONT_SIZE' });
-  }, []);
-
-  const setFontFamily = React.useCallback(async (family: FontFamily) => {
-    dispatch({ type: 'SET_FONT_FAMILY', family });
-  }, []);
+  // doesn't belong in navigator as it's internal, but if this
+  // is recreated every time, we end up in an infinite loop.
+  const setIframe = React.useRef((el: HTMLIFrameElement) => {
+    dispatch({ type: 'SET_IFRAME', iframe: el });
+  }).current;
 
   // this format is inactive, return null
   if (!webpubManifestUrl || !manifest) return null;
@@ -249,15 +259,6 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     ),
     state,
     manifest,
-    navigator: {
-      goForward,
-      goBackward,
-      setColorMode,
-      setScroll,
-      increaseFontSize,
-      decreaseFontSize,
-      setFontFamily,
-      goToPage,
-    },
+    navigator,
   };
 }
