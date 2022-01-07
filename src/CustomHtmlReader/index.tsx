@@ -4,14 +4,12 @@ import {
   ReaderReturn,
   ReaderArguments,
   FontFamily,
-  Navigator,
   HtmlNavigator,
 } from '../types';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
 import { DEFAULT_HEIGHT, DEFAULT_SHOULD_GROW_WHEN_SCROLLING } from '..';
 import {
   fetchAsTxt,
-  useUpdateScroll,
   calcPosition,
   getMaybeIframeHtml,
   defaultInjectables,
@@ -23,6 +21,7 @@ import useResource from './useResource';
 import useLocationQuery, { getLocationQuery } from './useLocationQuery';
 import { Locator } from '../Readium/Locator';
 import useWindowResize from './useWindowResize';
+import { useUpdateScroll } from './useUpdateScroll';
 
 /**
  * DECISIONS:
@@ -104,9 +103,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   useWindowResize(dispatch);
 
   /**
-   * Set the initial location when the manifest changes.
-   * @todo - this should use the url query params
-   * @todo - do we actually need to do this? Shouldn't prop changes auto change the hook?
+   * Reset the initial location when the manifest changes.
    */
   React.useEffect(() => {
     if (!webpubManifestUrl || !manifest) return;

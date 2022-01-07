@@ -1,15 +1,14 @@
-import React from 'react';
 import { Injectable } from '../Readium/Injectable';
 import { Locator } from '../Readium/Locator';
 import { WebpubManifest, ColorMode, FontFamily } from '../types';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
-import { HtmlState, HtmlAction } from './types';
+import { HtmlState } from './types';
 
 /**
  * Constants
  */
 export const FONT_SIZE_STEP = 4;
-const SCROLL_STOP_DEBOUNCE = 100;
+
 /**
  * If we provide injectables that are not found, the app won't load at all.
  * Therefore we will not provide any default injectables.
@@ -81,8 +80,7 @@ export function getFromReadingOrder(
 
 /**
  * Check if two hrefs share the same pathname. They can be absolute
- * or relative, and this will ignore the host/origin (maybe not right decision)
- * This will also ignore hash links.
+ * or relative. This will ignore hash and query params.
  */
 export function isSameResource(
   href1: string,
@@ -188,31 +186,6 @@ export function calcPosition(
     isAtEnd,
     isAtStart,
   };
-}
-
-/**
- * Dispatch a USER_SCROLLED event after some delay
- */
-export function useUpdateScroll(
-  iframe: HTMLIFrameElement | null,
-  isIframeLoaded: boolean,
-  dispatch: React.Dispatch<HtmlAction>
-): void {
-  const timeout = React.useRef<number>();
-
-  React.useLayoutEffect(() => {
-    const iframeDocument = iframe?.contentDocument;
-    if (!iframeDocument || !isIframeLoaded) return;
-
-    function handleScroll() {
-      if (timeout.current) clearTimeout(timeout.current);
-      timeout.current = window.setTimeout(() => {
-        dispatch({ type: 'USER_SCROLLED' });
-      }, SCROLL_STOP_DEBOUNCE);
-    }
-    iframeDocument.addEventListener('scroll', handleScroll);
-    return () => iframeDocument.removeEventListener('scroll', handleScroll);
-  }, [iframe, isIframeLoaded, dispatch]);
 }
 
 /**
