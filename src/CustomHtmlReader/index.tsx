@@ -163,16 +163,6 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     setCss(html, state);
   }, [state, manifest]);
 
-  type Blah = {
-    go: (direction: 'forward' | 'backward') => void;
-  };
-
-  const blah: Blah = {
-    go(direction) {
-      console.log(direction);
-    },
-  };
-
   const navigator = React.useRef<HtmlNavigator>({
     goToPage(href) {
       dispatch({ type: 'GO_TO_HREF', href });
@@ -210,10 +200,6 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   // this format is inactive, return null
   if (!webpubManifestUrl || !manifest) return null;
 
-  // determines if the reader should grow to fit content or stay the
-  // pre-determined height passed in
-  const shouldGrow = state.isScrolling && growWhenScrolling;
-
   // we are initializing the reader
   if (state.isFetchingResource) {
     return {
@@ -225,6 +211,15 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       state: null,
     };
   }
+
+  // determines if the reader should grow to fit content or stay the
+  // pre-determined height passed in
+  const shouldGrow = state.isScrolling && growWhenScrolling;
+
+  const englishTitle =
+    typeof manifest.metadata.title === 'string'
+      ? manifest.metadata.title
+      : manifest.metadata.title.en ?? 'Unknown Title';
 
   // the reader is active
   return {
@@ -251,7 +246,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
             minHeight: height,
             overflow: 'hidden',
           }}
-          title="CHANGEME"
+          title={englishTitle}
           srcDoc={state.resource}
           src={currentResourceUrl ?? undefined}
         />
