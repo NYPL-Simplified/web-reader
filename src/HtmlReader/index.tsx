@@ -22,6 +22,7 @@ import useLocationQuery from './useLocationQuery';
 import useWindowResize from './useWindowResize';
 import { useUpdateScroll } from './useUpdateScroll';
 import useUpdateCSS from './useUpdateCSS';
+import useIframeLinkClick from './useIframeLinkClick';
 
 /**
  * DECISIONS:
@@ -86,6 +87,9 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
 
   // update iframe css variables when css state changes
   useUpdateCSS(state, manifest);
+
+  // listen for internal link clicks
+  useIframeLinkClick(dispatch);
 
   // dispatch action when arguments change
   React.useEffect(() => {

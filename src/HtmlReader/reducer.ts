@@ -442,6 +442,12 @@ export default function makeHtmlReducer(
         };
 
       case 'SET_IFRAME': {
+        if (action.iframe === null) {
+          // if the iframe is null, it is being removed from the dom. We
+          // can ignore this, though we also could double check that this happens
+          // only in the right states.
+          return state;
+        }
         if (state.state !== 'RENDERING_IFRAME' || !action.iframe) {
           return handleInvalidTransition(state, action);
         }
@@ -482,7 +488,9 @@ export default function makeHtmlReducer(
 }
 
 function handleInvalidTransition(state: HtmlState, action: HtmlAction) {
-  console.warn('Inavlid state transition attempted', state, action);
+  console.trace(
+    `Inavlid state transition attempted: ${state.state} to ${action.type}`
+  );
   return state;
 }
 

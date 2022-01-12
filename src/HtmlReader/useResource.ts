@@ -42,6 +42,8 @@ export default function useResource(
           if (element) document?.head.appendChild(element);
         }
 
+        injectJS(document.body);
+
         // set the initial CSS state
         setCss(document.documentElement, {
           colorMode: state.colorMode,
@@ -74,4 +76,27 @@ export default function useResource(
     // because that would rerun it every time a user changes settings.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentResourceUrl, getContent, dispatch, injectables]);
+}
+
+/**
+ * Injects a script tag which intercepts link clicks and sends a message
+ * to the parent iframe.
+ */
+function injectJS(body: HTMLElement) {
+  const script = document.createElement('script');
+  const content = `
+      var links = document.querySelectorAll( 'a' );
+      for ( var i = 0; i < links.length; i ++ ) {
+            links[i].addEventListener('click', handleLinkClick);
+          }
+    function handleLinkClick(evt) {
+        // don't navigate
+        evt.preventDefault();
+        // send message to parent
+        window.parent.postMessage( { type: 'LINK_CLICKED', href: evt.target.href } );
+    };
+  `;
+  script.innerHTML = content;
+
+  body.appendChild(script);
 }
