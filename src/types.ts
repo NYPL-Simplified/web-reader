@@ -102,13 +102,6 @@ export type UseWebReaderArguments = {
   injectables?: Injectable[];
   injectablesFixed?: Injectable[];
   /**
-   * Forces the reader to use the new custom html renderer when
-   * viewing HTML documents.
-   *
-   * Default: `false`
-   */
-  _useCustomHtmlRenderer?: boolean;
-  /**
    * CSS string to set the height of the reader in paginated mode, and also
    * in scrolling mode if `growWhenScrolling` is `false`.
    *

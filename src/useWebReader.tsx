@@ -1,9 +1,7 @@
 import React from 'react';
 import { fetchJson } from './utils/fetch';
-import HtmlReaderContent from './HtmlReader/HtmlReaderContent';
 import usePdfReader from './PdfReader';
 import useHtmlReader from './HtmlReader';
-import useCustomHtmlReader from './HtmlReader';
 import {
   UseWebReaderArguments,
   HTMLActiveReader,
@@ -20,6 +18,7 @@ import {
   DEFAULT_HEIGHT,
   DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
 } from './constants';
+import LoadingSkeleton from './ui/LoadingSkeleton';
 
 function getReaderType(conformsTo: ConformsTo | null | undefined) {
   switch (conformsTo) {
@@ -52,7 +51,6 @@ export default function useWebReader(
     pdfWorkerSrc,
     injectables,
     injectablesFixed,
-    _useCustomHtmlRenderer,
     height = DEFAULT_HEIGHT,
     growWhenScrolling = DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
   } = args;
@@ -74,7 +72,7 @@ export default function useWebReader(
    * that format is inactive, and it will in turn return the InactiveState.
    */
   const htmlReader = useHtmlReader(
-    readerType === 'HTML' && manifest && !_useCustomHtmlRenderer
+    readerType === 'HTML' && manifest
       ? {
           webpubManifestUrl,
           manifest,
@@ -83,18 +81,6 @@ export default function useWebReader(
           injectablesFixed,
           height,
           growWhenScrolling,
-        }
-      : undefined
-  );
-
-  const customHtmlReader = useCustomHtmlReader(
-    _useCustomHtmlRenderer && readerType === 'HTML' && manifest
-      ? {
-          webpubManifestUrl,
-          manifest,
-          getContent,
-          injectables,
-          injectablesFixed,
         }
       : undefined
   );
@@ -123,13 +109,7 @@ export default function useWebReader(
   if (manifest === null) {
     return {
       isLoading: true,
-      content: (
-        <HtmlReaderContent
-          height={height}
-          isScrolling={false}
-          growsWhenScrolling={false}
-        />
-      ),
+      content: <LoadingSkeleton height={height} />,
       manifest: null,
       navigator: null,
       state: null,
@@ -140,9 +120,6 @@ export default function useWebReader(
   /**
    * Return whichever reader is not Inactive (not `null`)
    */
-  if (customHtmlReader) {
-    return customHtmlReader;
-  }
   if (htmlReader) {
     return htmlReader;
   }
