@@ -28,6 +28,7 @@ import useIframeLinkClick from './useIframeLinkClick';
  *
  * - WORKING ON
  *  - provide default injectables (Readium CSS)
+ *  - fix navigate to hash.
  *
  * Future:
  *  - Don't use ReadiumCSS for fixed layout
