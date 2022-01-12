@@ -73,12 +73,12 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   /**
    * Dispatches an action to update scroll position when the user *stops* scrolling.
    */
-  useUpdateScroll(state.iframe, state.isIframeLoaded, dispatch);
+  useUpdateScroll(state, dispatch);
 
   /**
-   * Keep the location state also in the url query
+   * Update url query param when location changes.
    */
-  useLocationQuery(state, dispatch);
+  useLocationQuery(state);
 
   // dispatch action when window is resized
   useWindowResize(dispatch);

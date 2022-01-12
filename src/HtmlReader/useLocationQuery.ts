@@ -1,6 +1,6 @@
 import React from 'react';
 import { Locator } from '../Readium/Locator';
-import { HtmlAction, HtmlState } from './types';
+import { HtmlState } from './types';
 
 const LOCATION_QUERY_TITLE = 'location';
 
@@ -8,14 +8,10 @@ const LOCATION_QUERY_TITLE = 'location';
  * Keep the Location state in the browser's url bar.
  * Dispatch location changed when the url changes.
  */
-export default function useLocationQuery(
-  state: HtmlState,
-  dispatch: React.Dispatch<HtmlAction>
-): void {
-  const { location, isIframeLoaded } = state;
+export default function useLocationQuery(state: HtmlState): void {
   React.useEffect(() => {
-    if (isIframeLoaded) updateQuery(location);
-  }, [location, isIframeLoaded]);
+    if (state.state === 'READY') updateQuery(state.location);
+  }, [state.location, state.state]);
 }
 
 function updateQuery(newLocation: Locator | undefined) {
