@@ -41,6 +41,7 @@ After fetching the resource, there are a couple things we need to do to it befor
 - Set a `<base>` element in the `<head>` with the url of the resource. This tells the iframe where relative urls within the resource are relative to.
 - Inject any injectables. For example, we need to add the Readium-CSS stylesheets to the `<head>`.
 - Set initial CSS variables like scroll settings and color mode.
+- Add a simple JS script that listens for internal link clicks and calls `window.parent.postMessage` to send a message to the parent about the clicked link.
 
 Note that we _could_ do all of this in a `useEffect` hook after the resource loads, but then there would be a flash of unstyled content between the first render and when we add our Readium-CSS stylesheet. To avoid this, we simple add it to the document string before it ever gets to the `<iframe>` for rendering.
 
@@ -66,3 +67,4 @@ Note on CFIs: In the future, we would like to support CFIs. These are strings re
 1. `useUpdateScroll`: When the user scrolls freely, we wait for them to stop scrolling and then update dispatch an action to update the `state.location.locations.progression`, keeping the location up to date.
 1. `useLocationQuery`: We now keep a copy of `state.location` sync'd to the `?location` query param in the URL. This allws users to share or save links to specific locations. So we use an effect to update the query whenever `state.location` changes.
 1. `useWindowResize`: When the window resizes, we need to re-scroll the user to the location they are meant to be on. Thus we need to move backwards to the `NavigatingState`.
+1. `useIframeLinkClick`: Uses `React.useEffect` to add a event listener for a "message" event, which is sent from the iframe upon internal link clicks. We then dispatch a `GO_TO_HREF` with the clicked value.
