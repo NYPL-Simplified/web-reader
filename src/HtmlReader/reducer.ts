@@ -296,6 +296,8 @@ export default function makeHtmlReducer(
           state.isScrolling
         );
 
+        console.log(totalPages, currentPage);
+
         // if we are at the last page, go to next resource
         if (currentPage === totalPages) {
           return goToNextResource();

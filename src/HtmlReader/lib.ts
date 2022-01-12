@@ -162,8 +162,13 @@ export function calcPosition(
     Math.ceil((resourceSize - containerSize) / containerSize) + 1;
   const progression = scrollPosition / resourceSize;
 
-  // we use round to get the closest page to the scrollTop
-  const currentPage = Math.round(progression * totalPages) + 1;
+  const isAtBottom = scrollPosition + containerSize === resourceSize;
+
+  // we use round to get the closest page to the scrollTop, unless
+  // you are at the complete bottom.
+  const currentPage = isAtBottom
+    ? totalPages
+    : Math.round(progression * totalPages) + 1;
   // we use floor to get the nearest fully read page.
   const currentPageFloor = Math.floor(progression * totalPages) + 1;
 
