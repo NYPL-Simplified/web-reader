@@ -2,7 +2,7 @@ import { Injectable } from '../Readium/Injectable';
 import { Locator } from '../Readium/Locator';
 import { WebpubManifest, ColorMode, FontFamily } from '../types';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
-import { HtmlState } from './types';
+import { ActiveState } from './types';
 
 /**
  * Constants
@@ -46,11 +46,11 @@ export function makeInjectableElement(
  */
 export function getCurrentIndex(
   manifest: WebpubManifest,
-  state: HtmlState,
+  state: ActiveState,
   baseUrl: string
 ): number {
   const i = manifest.readingOrder.findIndex((link) =>
-    isSameResource(link.href, state.location.href, baseUrl)
+    isSameResource(link.href, state.location?.href, baseUrl)
   );
   if (i === -1) {
     console.warn("Couldn't find current location in manifest. Returning 0.");

@@ -14,9 +14,9 @@ import {
  *  - We include a `state` property so that it is easy to narrow the type
  *    of a given HtmlState to a specific state in the union.
  */
-export type HtmlState =
-  | InactiveState
-  // | LoadingManifestState
+export type HtmlState = InactiveState | ActiveState;
+
+export type ActiveState =
   | FetchingResourceState
   | ResourceFetchErrorState
   | RenderingIframeState
@@ -31,7 +31,6 @@ export type InactiveState = ReaderState & {
   location: undefined;
   iframe: null;
   resource: undefined;
-  isFetchingResource: false;
   resourceFetchError: undefined;
 };
 
@@ -42,7 +41,6 @@ export type FetchingResourceState = HtmlReaderState & {
   location: Locator;
   iframe: null;
   resource: undefined;
-  isFetchingResource: true;
   resourceFetchError: undefined;
 };
 
@@ -53,7 +51,6 @@ export type ResourceFetchErrorState = HtmlReaderState & {
   location: Locator;
   iframe: null;
   resource: undefined;
-  isFetchingResource: false;
   resourceFetchError: Error;
 };
 
@@ -64,7 +61,6 @@ export type RenderingIframeState = HtmlReaderState & {
   location: Locator;
   iframe: null;
   resource: string;
-  isFetchingResource: false;
   resourceFetchError: undefined;
 };
 
@@ -75,7 +71,6 @@ export type LoadingIframeState = HtmlReaderState & {
   location: Locator;
   iframe: HTMLIFrameElement;
   resource: string;
-  isFetchingResource: false;
   resourceFetchError: undefined;
 };
 
@@ -86,7 +81,6 @@ export type NavigatingState = HtmlReaderState & {
   location: Locator;
   iframe: HTMLIFrameElement;
   resource: string;
-  isFetchingResource: false;
   resourceFetchError: undefined;
 };
 
@@ -97,7 +91,6 @@ export type ReadyState = HtmlReaderState & {
   location: Locator;
   iframe: HTMLIFrameElement;
   resource: string;
-  isFetchingResource: false;
   resourceFetchError: undefined;
 };
 

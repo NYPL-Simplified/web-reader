@@ -4,7 +4,9 @@ import { HtmlAction } from './types';
 /**
  * Simply dispatches an action when the window is resized.
  */
-export default function useWindowResize(dispatch: React.Dispatch<HtmlAction>) {
+export default function useWindowResize(
+  dispatch: React.Dispatch<HtmlAction>
+): void {
   React.useEffect(() => {
     function handleResize() {
       dispatch({ type: 'WINDOW_RESIZED' });

@@ -39,6 +39,9 @@ export default function makeHtmlReducer(
   // our actual reducer
   return function reducer(state: HtmlState, action: HtmlAction): HtmlState {
     function goToNextResource(): HtmlState {
+      if (state.state === 'INACTIVE') {
+        return handleInvalidTransition(state, action);
+      }
       const currentIndex = getCurrentIndex(manifest, state, webpubManifestUrl);
       const nextIndex = currentIndex + 1;
       // if we are at the end, do nothing
@@ -53,13 +56,15 @@ export default function makeHtmlReducer(
         isIframeLoaded: false,
         resource: undefined,
         resourceFetchError: undefined,
-        isFetchingResource: true,
         iframe: null,
       };
       return newState;
     }
 
     function goToPrevResource(): HtmlState {
+      if (state.state === 'INACTIVE') {
+        return handleInvalidTransition(state, action);
+      }
       const currentIndex = getCurrentIndex(manifest, state, webpubManifestUrl);
       const prevIndex = currentIndex - 1;
       // if we are at the beginning, do nothing
@@ -80,7 +85,6 @@ export default function makeHtmlReducer(
         isIframeLoaded: false,
         resource: undefined,
         resourceFetchError: undefined,
-        isFetchingResource: true,
         iframe: null,
       };
       return newState;
@@ -99,7 +103,6 @@ export default function makeHtmlReducer(
         const fetchingResource: FetchingResourceState = {
           ...state,
           state: 'FETCHING_RESOURCE',
-          isFetchingResource: true,
           location,
           resourceFetchError: undefined,
           resource: undefined,
@@ -116,7 +119,6 @@ export default function makeHtmlReducer(
         const newState: RenderingIframeState = {
           ...state,
           state: 'RENDERING_IFRAME',
-          isFetchingResource: false,
           resource: action.resource,
           resourceFetchError: undefined,
           isIframeLoaded: false,
@@ -132,7 +134,6 @@ export default function makeHtmlReducer(
         const newState: ResourceFetchErrorState = {
           ...state,
           state: 'RESOURCE_FETCH_ERROR',
-          isFetchingResource: false,
           resourceFetchError: action.error,
           resource: undefined,
           isIframeLoaded: false,
@@ -209,7 +210,6 @@ export default function makeHtmlReducer(
             isIframeLoaded: false,
             resource: undefined,
             resourceFetchError: undefined,
-            isFetchingResource: true,
             iframe: null,
           };
           return newState;
@@ -246,7 +246,6 @@ export default function makeHtmlReducer(
             isIframeLoaded: false,
             resource: undefined,
             resourceFetchError: undefined,
-            isFetchingResource: true,
             iframe: null,
           };
           return newState;
@@ -508,7 +507,6 @@ export const inactiveState: InactiveState = {
   isIframeLoaded: false,
   isNavigated: false,
   resource: undefined,
-  isFetchingResource: false,
   resourceFetchError: undefined,
   state: 'INACTIVE',
   location: undefined,
