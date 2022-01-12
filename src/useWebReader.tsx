@@ -3,7 +3,7 @@ import { fetchJson } from './utils/fetch';
 import HtmlReaderContent from './HtmlReader/HtmlReaderContent';
 import usePdfReader from './PdfReader';
 import useHtmlReader from './HtmlReader';
-import useCustomHtmlReader from './CustomHtmlReader';
+import useCustomHtmlReader from './HtmlReader';
 import {
   UseWebReaderArguments,
   HTMLActiveReader,
