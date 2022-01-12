@@ -83,7 +83,7 @@ const App = () => {
           <Route path="/pdf">
             <PdfReaders />
           </Route>
-          <Route path="/:version">
+          <Route path="/html">
             <HtmlReaders />
           </Route>
 
@@ -161,38 +161,31 @@ const PdfReaders = () => {
   );
 };
 
-/**
- * Allows switching between v1 and v2 of the HTML reader.
- */
 const HtmlReaders = () => {
-  const { path } = useRouteMatch();
-  const { version = 'v1' } = useParams<{ version: string | undefined }>();
-  const useCustomHtmlRenderer = version === 'v2';
-  console.log('Using Version:', version);
-
   return (
     <Switch>
-      <Route path={`${path}/axisnow-encrypted`}>
-        <AxisNowEncrypted
-          _useCustomHtmlRenderer={useCustomHtmlRenderer}
-          injectables={htmlInjectables}
-        />
+      <Route path={`/html/axisnow-encrypted`}>
+        <AxisNowEncrypted injectables={htmlInjectables} />
       </Route>
-      <Route path={`${path}/axisnow-decrypted`}>
+      <Route path={`/html/axisnow-decrypted`}>
         <WebReader
           injectables={htmlInjectables}
           webpubManifestUrl={`${origin}/samples/dickens-axisnow/decrypted/manifest.json`}
-          _useCustomHtmlRenderer={useCustomHtmlRenderer}
         />
       </Route>
-      <Route path={`${path}/moby-epub2`}>
+      <Route path={`/html/moby-epub2`}>
         <WebReader
           injectables={htmlInjectables}
           webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
-          _useCustomHtmlRenderer={useCustomHtmlRenderer}
         />
       </Route>
-      <Route path={`${path}/fixed-height-embedded-moby-epub2`}>
+      <Route path={`/html/moby-epub3`}>
+        <WebReader
+          injectables={htmlInjectables}
+          webpubManifestUrl={`${origin}/samples/moby-epub3-exploded/manifest.json`}
+        />
+      </Route>
+      <Route path={`/html/fixed-height-embedded-moby-epub2`}>
         <Box bg="lavenderblush" p={6} w="100vw">
           <Heading>Fixed-height Embedded Example</Heading>
           <Text as="p">
@@ -205,13 +198,12 @@ const HtmlReaders = () => {
             webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
             growWhenScrolling={false}
             height="70vh"
-            _useCustomHtmlRenderer={useCustomHtmlRenderer}
           />
           <Heading>The page continues...</Heading>
           <Text as="p">Here is some more content below the reader</Text>
         </Box>
       </Route>
-      <Route path={`${path}/growing-embedded-moby-epub2`}>
+      <Route path={`/html/growing-embedded-moby-epub2`}>
         <Box bg="lavenderblush" p={6} w="100vw">
           <Heading>Growing-height Embedded Example</Heading>
           <Text as="p">
@@ -223,44 +215,30 @@ const HtmlReaders = () => {
           <WebReader
             injectables={htmlInjectables}
             webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
-            _useCustomHtmlRenderer={useCustomHtmlRenderer}
           />
           <Heading>The page continues...</Heading>
           <Text as="p">Here is some more content below the reader</Text>
         </Box>
       </Route>
-      <Route path={`${path}/streamed-alice-epub`}>
+      <Route path={`/html/streamed-alice-epub`}>
         <WebReader
           injectables={htmlInjectables}
           webpubManifestUrl="https://alice.dita.digital/manifest.json"
-          _useCustomHtmlRenderer={useCustomHtmlRenderer}
         />
       </Route>
-      <Route path={`${path}/readium-css-docs`}>
+      <Route path={`/html/readium-css-docs`}>
         <WebReader
           injectables={htmlInjectables}
           webpubManifestUrl={`${origin}/samples/ReadiumCSS-docs/manifest.json`}
-          _useCustomHtmlRenderer={useCustomHtmlRenderer}
         />
       </Route>
-      <Route path={`${path}/url/:manifestUrl`}>
-        <DynamicReader _useCustomHtmlRenderer={useCustomHtmlRenderer} />
+      <Route path={`/html/url/:manifestUrl`}>
+        <DynamicReader />
       </Route>
-      <Route path={`${path}/test`}>
-        <Tests _useCustomHtmlRenderer={useCustomHtmlRenderer} />
+      <Route path={`/html/test`}>
+        <Tests />
       </Route>
     </Switch>
-  );
-};
-
-const HtmlReaderLink: React.FC<{ to: string }> = ({ to, children }) => {
-  return (
-    <Stack direction="row">
-      <Link to={`/v1${to}`}>{children}</Link>
-      <span>
-        - (<Link to={`/v2${to}`}>v2</Link>)
-      </span>
-    </Stack>
   );
 };
 
@@ -279,7 +257,7 @@ const HomePage = () => {
           EPUB2 Based Webpubs
           <UnorderedList>
             <ListItem>
-              <HtmlReaderLink to="/moby-epub2">Moby Dick </HtmlReaderLink>
+              <Link to="/html/moby-epub2">Moby Dick </Link>
             </ListItem>
           </UnorderedList>
         </ListItem>
@@ -287,14 +265,12 @@ const HomePage = () => {
           EPUB3 Based Webpubs
           <UnorderedList>
             <ListItem>
-              <HtmlReaderLink to="/moby-epub3">
-                Moby Dick (EPUB 3)
-              </HtmlReaderLink>
+              <Link to="/html/moby-epub3">Moby Dick (EPUB 3)</Link>
             </ListItem>
             <ListItem>
-              <HtmlReaderLink to="/readium-css-docs">
+              <Link to="/html/readium-css-docs">
                 Readium CSS Documentation (as Webpub)
-              </HtmlReaderLink>
+              </Link>
             </ListItem>
           </UnorderedList>
         </ListItem>
@@ -302,9 +278,9 @@ const HomePage = () => {
           Remote hosted WebPubs
           <UnorderedList>
             <ListItem>
-              <HtmlReaderLink to="streamed-alice-epub">
+              <Link to="/html/streamed-alice-epub">
                 Alice's Adventures in Wonderland
-              </HtmlReaderLink>
+              </Link>
               <Text as="i">
                 &nbsp;(streamed from https://alice.dita.digital)
               </Text>
@@ -315,12 +291,12 @@ const HomePage = () => {
           Embedded Reader
           <UnorderedList>
             <ListItem>
-              <Link to="/fixed-height-embedded-moby-epub2">
+              <Link to="/html/fixed-height-embedded-moby-epub2">
                 Fixed-height Embedded Moby Dick
               </Link>
             </ListItem>
             <ListItem>
-              <Link to="/growing-embedded-moby-epub2">
+              <Link to="/html/growing-embedded-moby-epub2">
                 Growing-height Embedded Moby Dick
               </Link>
             </ListItem>
@@ -360,11 +336,11 @@ const HomePage = () => {
               placeholder="Webpub Manifest URL"
               mr={2}
             />
-            <Button as={Link} to={`v1/url/${encodeURIComponent(dynamicHref)}`}>
-              V1
-            </Button>
-            <Button as={Link} to={`v2/url/${encodeURIComponent(dynamicHref)}`}>
-              V2
+            <Button
+              as={Link}
+              to={`/html/url/${encodeURIComponent(dynamicHref)}`}
+            >
+              Go
             </Button>
           </Stack>
         </ListItem>
@@ -378,9 +354,7 @@ const HomePage = () => {
       </Text>
       <UnorderedList p={4}>
         <ListItem>
-          <HtmlReaderLink to="/axisnow-encrypted">
-            AxisNow Encrypted EPUB
-          </HtmlReaderLink>
+          <Link to="/html/axisnow-encrypted">AxisNow Encrypted EPUB</Link>
           <UnorderedList>
             <ListItem>
               <Text fontSize="sm" as="i">
@@ -396,9 +370,7 @@ const HomePage = () => {
           </UnorderedList>
         </ListItem>
         <ListItem>
-          <HtmlReaderLink to="/axisnow-decrypted">
-            Decrypted AxisNow EPUB
-          </HtmlReaderLink>
+          <Link to="/html/axisnow-decrypted">Decrypted AxisNow EPUB</Link>
           <UnorderedList>
             <ListItem>
               <Text fontSize="sm" as="i">
@@ -414,17 +386,11 @@ const HomePage = () => {
   );
 };
 
-const DynamicReader: React.FC<{ _useCustomHtmlRenderer: boolean }> = ({
-  _useCustomHtmlRenderer = false,
-}) => {
+const DynamicReader: React.FC = () => {
   const { manifestUrl } = useParams<{ manifestUrl: string }>();
   const decoded = decodeURIComponent(manifestUrl);
   return (
-    <WebReader
-      injectables={htmlInjectables}
-      webpubManifestUrl={decoded}
-      _useCustomHtmlRenderer={_useCustomHtmlRenderer}
-    />
+    <WebReader injectables={htmlInjectables} webpubManifestUrl={decoded} />
   );
 };
 

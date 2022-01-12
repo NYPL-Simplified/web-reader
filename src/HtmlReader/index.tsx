@@ -35,7 +35,8 @@ import { useUpdateScroll } from './useUpdateScroll';
  * @TODO :
  *
  * - WORKING ON
- *  - Make CFI's work in the location.locations.cfi or fragment
+ *  - Fix router.push when scrolling. Should be replace.
+ *  - Fix language around page number.
  *  - provide default injectables (Readium CSS)
  *  - make examples work
  *  - remove v1
