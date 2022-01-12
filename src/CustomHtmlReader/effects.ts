@@ -90,4 +90,6 @@ export function setCss(html: HTMLElement, state: CSSState): void {
   );
   setCSSProperty(html, '--USER__fontSize', `${state.fontSize}%`);
   setCSSProperty(html, 'overflow', state.isScrolling ? 'scroll' : 'hidden');
+  // set the number of columns to only ever have 1.
+  setCSSProperty(html, '--USER__colCount', '1');
 }

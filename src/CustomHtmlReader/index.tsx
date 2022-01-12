@@ -35,12 +35,11 @@ import { useUpdateScroll } from './useUpdateScroll';
  * @TODO :
  *
  * - WORKING ON
- *  - window resize
- *    - sometimes you can get three columns to show. There is some jank there.
  *  - Make CFI's work in the location.locations.cfi or fragment
  *  - provide default injectables (Readium CSS)
  *  - make examples work
  *  - remove v1
+ *  - fix page number flashing when resizing
  *
  * Future:
  *  - Don't use ReadiumCSS for fixed layout
