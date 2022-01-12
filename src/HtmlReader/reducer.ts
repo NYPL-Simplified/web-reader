@@ -91,12 +91,25 @@ export default function makeHtmlReducer(
         if (!action.args) {
           return inactiveState;
         }
-        const location =
-          getLocationQuery() ??
-          linkToLocator(manifest.readingOrder[0], webpubManifestUrl, {
+        const defaultStartLocation = linkToLocator(
+          manifest.readingOrder[0],
+          webpubManifestUrl,
+          {
             progression: 0,
             position: 1,
-          });
+          }
+        );
+        const queryLocation = getLocationQuery();
+
+        const isQueryValid =
+          queryLocation &&
+          !!getFromReadingOrder(
+            queryLocation?.href,
+            manifest,
+            webpubManifestUrl
+          );
+
+        const location = isQueryValid ? queryLocation : defaultStartLocation;
 
         const fetchingResource: FetchingResourceState = {
           ...state,
