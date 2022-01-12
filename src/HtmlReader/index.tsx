@@ -21,6 +21,7 @@ import useResource from './useResource';
 import useLocationQuery from './useLocationQuery';
 import useWindowResize from './useWindowResize';
 import { useUpdateScroll } from './useUpdateScroll';
+import useUpdateCSS from './useUpdateCSS';
 
 /**
  * DECISIONS:
@@ -83,6 +84,9 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   // dispatch action when window is resized
   useWindowResize(dispatch);
 
+  // update iframe css variables when css state changes
+  useUpdateCSS(state, manifest);
+
   // dispatch action when arguments change
   React.useEffect(() => {
     if (!webpubManifestUrl || !manifest) {
@@ -141,18 +145,6 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       }
     });
   }, [state.state, state.iframe, state.isScrolling, state.location?.locations]);
-
-  /**
-   * Set CSS variables when user state changes.
-   * @todo - wait for iframe load?
-   * @todo - narrow down the dependencies so this doesn't run on _every_ state change.
-   */
-  React.useEffect(() => {
-    if (!state.iframe || !manifest) return;
-    const html = getMaybeIframeHtml(state.iframe);
-    if (!html) return;
-    setCss(html, state);
-  }, [state, manifest]);
 
   const navigator = React.useRef<HtmlNavigator>({
     goToPage(href) {
