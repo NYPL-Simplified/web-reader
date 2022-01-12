@@ -1,9 +1,8 @@
 import { IFRAME_SELECTOR } from '../../support/constants';
-import describev1v2 from '../../support/describev1v2';
 
-describev1v2('display settings', () => {
+describe('display settings', () => {
   beforeEach(() => {
-    cy.loadPage('/streamed-alice-epub');
+    cy.loadPage('/html/streamed-alice-epub');
   });
 
   it('should have the default settings', () => {

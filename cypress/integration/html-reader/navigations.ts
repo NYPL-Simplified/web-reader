@@ -1,9 +1,8 @@
 import { IFRAME_SELECTOR } from '../../support/constants';
-import describev1v2 from '../../support/describev1v2';
 
-describev1v2('navigating an EPUB page', () => {
+describe('navigating an EPUB page', () => {
   beforeEach(() => {
-    cy.loadPage('/streamed-alice-epub');
+    cy.loadPage('/html/streamed-alice-epub');
   });
 
   it('should contain a link to return to the homepage', () => {
@@ -30,5 +29,11 @@ describev1v2('navigating an EPUB page', () => {
     cy.findByText('Paginated').click();
 
     cy.findByRole('button', { name: 'Next Page' }).click();
+  });
+});
+
+describe('hash navigation', () => {
+  beforeEach(() => {
+    cy.loadPage('/html/moby-epub3');
   });
 });

@@ -1,9 +1,8 @@
 import { IFRAME_SELECTOR } from '../../support/constants';
-import describev1v2 from '../../support/describev1v2';
 
-describev1v2('navigating an EPUB page', () => {
+describe('navigating an EPUB page', () => {
   beforeEach(() => {
-    cy.loadPage('/streamed-alice-epub');
+    cy.loadPage('/html/streamed-alice-epub');
   });
 
   it('Paginated mode & TOC: should update page content after clicking on TOC link', () => {

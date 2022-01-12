@@ -1,7 +1,6 @@
 import { IFRAME_SELECTOR } from '../../support/constants';
-import describev1v2 from '../../support/describev1v2';
 
-describev1v2('getContent', () => {
+describe('getContent', () => {
   it('getContent returns HTML', () => {
     cy.visit('/test/get-content');
     cy.getIframeBody(IFRAME_SELECTOR)

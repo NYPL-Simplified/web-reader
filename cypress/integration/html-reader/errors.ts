@@ -1,6 +1,4 @@
-import describev1v2 from '../../support/describev1v2';
-
-describev1v2('error states', () => {
+describe('error states', () => {
   beforeEach(() => {
     /**
      * React re-throws caught exceptions in dev so that they appear in the

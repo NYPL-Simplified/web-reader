@@ -9,16 +9,17 @@ declare global {
     interface Chainable<Subject = any> {
       loadPage(
         pageName:
-          | '/moby-epub2'
-          | 'axisnow-encrypted'
-          | '/axisnow-decrypted'
-          | '/test/no-injectables'
-          | '/test/with-injectables'
-          | '/test/get-content'
-          | '/streamed-alice-epub'
-          | '/test/unparsable-manifest'
-          | '/test/missing-resource'
-          | '/test/missing-injectable'
+          | '/html/moby-epub2'
+          | '/html/moby-epub3'
+          | '/html/axisnow-encrypted'
+          | '/html/axisnow-decrypted'
+          | '/html/test/no-injectables'
+          | '/html/test/with-injectables'
+          | '/html/test/get-content'
+          | '/html/streamed-alice-epub'
+          | '/html/test/unparsable-manifest'
+          | '/html/test/missing-resource'
+          | '/html/test/missing-injectable'
       ): void;
       getIframeHtml(selector?: string): Chainable<Subject>;
       getIframeHead(selector?: string): Chainable<Subject>;
