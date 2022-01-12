@@ -52,8 +52,6 @@ export default function makeHtmlReducer(
         ...state,
         state: 'FETCHING_RESOURCE',
         location: locator,
-        isNavigated: false,
-        isIframeLoaded: false,
         resource: undefined,
         resourceFetchError: undefined,
         iframe: null,
@@ -81,8 +79,6 @@ export default function makeHtmlReducer(
         ...state,
         state: 'FETCHING_RESOURCE',
         location: locator,
-        isNavigated: false,
-        isIframeLoaded: false,
         resource: undefined,
         resourceFetchError: undefined,
         iframe: null,
@@ -106,9 +102,7 @@ export default function makeHtmlReducer(
           location,
           resourceFetchError: undefined,
           resource: undefined,
-          isNavigated: false,
           iframe: null,
-          isIframeLoaded: false,
         };
         return fetchingResource;
       }
@@ -121,8 +115,6 @@ export default function makeHtmlReducer(
           state: 'RENDERING_IFRAME',
           resource: action.resource,
           resourceFetchError: undefined,
-          isIframeLoaded: false,
-          isNavigated: false,
           iframe: null,
         };
         return newState;
@@ -136,8 +128,6 @@ export default function makeHtmlReducer(
           state: 'RESOURCE_FETCH_ERROR',
           resourceFetchError: action.error,
           resource: undefined,
-          isIframeLoaded: false,
-          isNavigated: false,
         };
         return newState;
       }
@@ -154,8 +144,6 @@ export default function makeHtmlReducer(
         const newState: NavigatingState = {
           ...state,
           state: 'NAVIGATING',
-          isIframeLoaded: true,
-          isNavigated: false,
           location: {
             ...state.location,
             locations: {
@@ -206,8 +194,6 @@ export default function makeHtmlReducer(
             ...state,
             state: 'FETCHING_RESOURCE',
             location: locator,
-            isNavigated: false,
-            isIframeLoaded: false,
             resource: undefined,
             resourceFetchError: undefined,
             iframe: null,
@@ -220,7 +206,6 @@ export default function makeHtmlReducer(
           ...state,
           state: 'NAVIGATING',
           location: locator,
-          isNavigated: false,
         };
         return newState;
       }
@@ -242,8 +227,6 @@ export default function makeHtmlReducer(
             ...state,
             state: 'FETCHING_RESOURCE',
             location: action.location,
-            isNavigated: false,
-            isIframeLoaded: false,
             resource: undefined,
             resourceFetchError: undefined,
             iframe: null,
@@ -256,7 +239,6 @@ export default function makeHtmlReducer(
           ...state,
           state: 'NAVIGATING',
           location: action.location,
-          isNavigated: false,
         };
 
         return newState;
@@ -272,7 +254,6 @@ export default function makeHtmlReducer(
         const newState: NavigatingState = {
           ...state,
           state: 'NAVIGATING',
-          isNavigated: false,
           location: {
             ...state.location,
             locations: {
@@ -324,7 +305,6 @@ export default function makeHtmlReducer(
               remainingPositions: totalPages - newPosition,
             },
           },
-          isNavigated: false,
         };
         return newState;
       }
@@ -362,7 +342,6 @@ export default function makeHtmlReducer(
               remainingPositions: totalPages - newPosition,
             },
           },
-          isNavigated: false,
         };
         return newState;
       }
@@ -378,7 +357,6 @@ export default function makeHtmlReducer(
         const newState: ReadyState = {
           ...state,
           state: 'READY',
-          isNavigated: true,
           location: {
             ...state.location,
             locations: {
@@ -415,7 +393,6 @@ export default function makeHtmlReducer(
         const newState: NavigatingState = {
           ...state,
           isScrolling: action.isScrolling,
-          isNavigated: false,
           location: {
             ...state.location,
             locations: {
@@ -474,7 +451,6 @@ export default function makeHtmlReducer(
         const newState: ReadyState = {
           ...state,
           // don't trigger a navigation effect because the user freely scrolled here
-          isNavigated: true,
           location: {
             ...state.location,
             locations: {
@@ -504,8 +480,6 @@ export const inactiveState: InactiveState = {
   atStart: false,
   atEnd: false,
   iframe: null,
-  isIframeLoaded: false,
-  isNavigated: false,
   resource: undefined,
   resourceFetchError: undefined,
   state: 'INACTIVE',

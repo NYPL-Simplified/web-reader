@@ -26,8 +26,6 @@ export type ActiveState =
 
 export type InactiveState = ReaderState & {
   state: 'INACTIVE';
-  isIframeLoaded: false;
-  isNavigated: false;
   location: undefined;
   iframe: null;
   resource: undefined;
@@ -36,8 +34,6 @@ export type InactiveState = ReaderState & {
 
 export type FetchingResourceState = HtmlReaderState & {
   state: 'FETCHING_RESOURCE';
-  isIframeLoaded: false;
-  isNavigated: false;
   location: Locator;
   iframe: null;
   resource: undefined;
@@ -46,8 +42,6 @@ export type FetchingResourceState = HtmlReaderState & {
 
 export type ResourceFetchErrorState = HtmlReaderState & {
   state: 'RESOURCE_FETCH_ERROR';
-  isIframeLoaded: false;
-  isNavigated: false;
   location: Locator;
   iframe: null;
   resource: undefined;
@@ -56,8 +50,6 @@ export type ResourceFetchErrorState = HtmlReaderState & {
 
 export type RenderingIframeState = HtmlReaderState & {
   state: 'RENDERING_IFRAME';
-  isIframeLoaded: false;
-  isNavigated: false;
   location: Locator;
   iframe: null;
   resource: string;
@@ -66,8 +58,6 @@ export type RenderingIframeState = HtmlReaderState & {
 
 export type LoadingIframeState = HtmlReaderState & {
   state: 'LOADING_IFRAME';
-  isIframeLoaded: false;
-  isNavigated: false;
   location: Locator;
   iframe: HTMLIFrameElement;
   resource: string;
@@ -76,8 +66,6 @@ export type LoadingIframeState = HtmlReaderState & {
 
 export type NavigatingState = HtmlReaderState & {
   state: 'NAVIGATING';
-  isIframeLoaded: true;
-  isNavigated: false;
   location: Locator;
   iframe: HTMLIFrameElement;
   resource: string;
@@ -86,8 +74,6 @@ export type NavigatingState = HtmlReaderState & {
 
 export type ReadyState = HtmlReaderState & {
   state: 'READY';
-  isIframeLoaded: true;
-  isNavigated: true;
   location: Locator;
   iframe: HTMLIFrameElement;
   resource: string;

@@ -117,7 +117,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   React.useEffect(() => {
     // we do this on the next tick in case we are still calculating things.
     process.nextTick(() => {
-      if (!state.isNavigated && state.isIframeLoaded && state.iframe) {
+      if (state.state === 'NAVIGATING') {
         const { fragment, progression, position } = state.location.locations;
         /**
          * We first try a fragment, then a progression, then a position value.
@@ -140,13 +140,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
         dispatch({ type: 'NAV_COMPLETE' });
       }
     });
-  }, [
-    state.isIframeLoaded,
-    state.isNavigated,
-    state.location,
-    state.isScrolling,
-    state.iframe,
-  ]);
+  }, [state.state, state.iframe, state.location?.locations]);
 
   /**
    * Set CSS variables when user state changes.
