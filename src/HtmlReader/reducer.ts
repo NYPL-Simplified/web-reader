@@ -392,13 +392,12 @@ export default function makeHtmlReducer(
 
       case 'SET_SCROLL': {
         /**
-         * - set scroll state
-         * - trigger a navigation effect
+         * - step back to the 'NAVIGATING' state
          * - remove the progression value and only set a position
          *   value so the user snaps to whichever page they were just
          *   reading.
          */
-        if (state.state !== 'NAVIGATING') {
+        if (state.state !== 'READY') {
           return handleInvalidTransition(state, action);
         }
         const { currentPageFloor, totalPages } = calcPosition(
@@ -407,6 +406,7 @@ export default function makeHtmlReducer(
         );
         const newState: NavigatingState = {
           ...state,
+          state: 'NAVIGATING',
           isScrolling: action.isScrolling,
           location: {
             ...state.location,
