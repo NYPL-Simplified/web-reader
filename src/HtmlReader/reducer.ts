@@ -5,8 +5,19 @@ import {
   calcPosition,
   getFromReadingOrder,
   FONT_SIZE_STEP,
+  isSameResource,
 } from './lib';
-import { HtmlAction, HtmlState } from './types';
+import {
+  FetchingResourceState,
+  HtmlAction,
+  HtmlState,
+  LoadingIframeState,
+  ReadyState,
+  NavigatingState,
+  RenderingIframeState,
+  ResourceFetchErrorState,
+  InactiveState,
+} from './types';
 import { getLocationQuery } from './useLocationQuery';
 
 /**
@@ -27,22 +38,28 @@ export default function makeHtmlReducer(
 
   // our actual reducer
   return function reducer(state: HtmlState, action: HtmlAction): HtmlState {
-    function goToNextResource() {
+    function goToNextResource(): HtmlState {
       const currentIndex = getCurrentIndex(manifest, state, webpubManifestUrl);
       const nextIndex = currentIndex + 1;
       // if we are at the end, do nothing
       if (nextIndex >= manifest.readingOrder.length) return state;
       const nextResource = manifest.readingOrder[nextIndex];
       const locator = linkToLocator(nextResource, webpubManifestUrl);
-      return {
+      const newState: FetchingResourceState = {
         ...state,
+        state: 'FETCHING_RESOURCE',
         location: locator,
         isNavigated: false,
         isIframeLoaded: false,
+        resource: undefined,
+        resourceFetchError: undefined,
+        isFetchingResource: true,
+        iframe: null,
       };
+      return newState;
     }
 
-    function goToPrevResource() {
+    function goToPrevResource(): HtmlState {
       const currentIndex = getCurrentIndex(manifest, state, webpubManifestUrl);
       const prevIndex = currentIndex - 1;
       // if we are at the beginning, do nothing
@@ -55,68 +72,89 @@ export default function makeHtmlReducer(
       const locator = linkToLocator(prevResource, webpubManifestUrl, {
         progression: 1,
       });
-      return {
+      const newState: FetchingResourceState = {
         ...state,
+        state: 'FETCHING_RESOURCE',
         location: locator,
-        // we need to re-perform inter-resource nav
         isNavigated: false,
         isIframeLoaded: false,
+        resource: undefined,
+        resourceFetchError: undefined,
+        isFetchingResource: true,
+        iframe: null,
       };
+      return newState;
     }
 
     switch (action.type) {
-      case 'RESOURCE_FETCH_REQUEST': {
-        return {
+      case 'ARGS_CHANGED': {
+        if (!action.args) {
+          return inactiveState;
+        }
+        const location = getLocationQuery() ?? {
+          href: args.manifest.readingOrder[0].href,
+          locations: {},
+        };
+
+        const fetchingResource: FetchingResourceState = {
           ...state,
+          state: 'FETCHING_RESOURCE',
           isFetchingResource: true,
-          // we are unloading the iframe. This will make the
-          // inter-resource nav cycle re-start.
+          location,
+          resourceFetchError: undefined,
+          resource: undefined,
+          isNavigated: false,
+          iframe: null,
           isIframeLoaded: false,
         };
+        return fetchingResource;
       }
       case 'RESOURCE_FETCH_SUCCESS': {
-        return {
+        if (state.state === 'INACTIVE') {
+          return handleInvalidTransition(state, action);
+        }
+        const newState: RenderingIframeState = {
           ...state,
+          state: 'RENDERING_IFRAME',
           isFetchingResource: false,
           resource: action.resource,
+          resourceFetchError: undefined,
+          isIframeLoaded: false,
+          isNavigated: false,
+          iframe: null,
         };
+        return newState;
       }
       case 'RESOURCE_FETCH_ERROR': {
-        return {
+        if (state.state !== 'FETCHING_RESOURCE') {
+          return handleInvalidTransition(state, action);
+        }
+        const newState: ResourceFetchErrorState = {
           ...state,
+          state: 'RESOURCE_FETCH_ERROR',
           isFetchingResource: false,
           resourceFetchError: action.error,
+          resource: undefined,
+          isIframeLoaded: false,
+          isNavigated: false,
         };
-      }
-
-      case 'MANIFEST_LOADED': {
-        /**
-         * Start at the beginning of first resource.
-         * @todo - use the value from URL query param if any
-         */
-        const locator =
-          getLocationQuery() ??
-          linkToLocator(manifest.readingOrder[0], webpubManifestUrl, {
-            progression: 0,
-            position: 1,
-          });
-
-        return {
-          ...state,
-          location: locator,
-        };
+        return newState;
       }
 
       case 'IFRAME_LOADED': {
-        if (!state.iframe) return state;
+        if (state.state !== 'LOADING_IFRAME') {
+          return handleInvalidTransition(state, action);
+        }
         const { currentPage, totalPages } = calcPosition(
           state.iframe,
           state.isScrolling
         );
 
-        return {
+        const newState: NavigatingState = {
           ...state,
+          state: 'NAVIGATING',
           isIframeLoaded: true,
+          isNavigated: false,
           location: {
             ...state.location,
             locations: {
@@ -126,6 +164,7 @@ export default function makeHtmlReducer(
             },
           },
         };
+        return newState;
       }
 
       case 'NAV_NEXT_RESOURCE': {
@@ -137,6 +176,9 @@ export default function makeHtmlReducer(
       }
 
       case 'GO_TO_HREF': {
+        if (state.state !== 'READY') {
+          return handleInvalidTransition(state, action);
+        }
         const { link } =
           getFromReadingOrder(action.href, manifest, webpubManifestUrl) ?? {};
         if (!link) {
@@ -149,28 +191,88 @@ export default function makeHtmlReducer(
         };
 
         const locator = linkToLocator(linkwithOrigHref, webpubManifestUrl);
-        return {
+
+        const isNewResource = !isSameResource(
+          action.href,
+          state.location.href,
+          webpubManifestUrl
+        );
+
+        // we are going to a new resource, so we go back to the
+        // FetchingResourceState
+        if (isNewResource) {
+          const newState: FetchingResourceState = {
+            ...state,
+            state: 'FETCHING_RESOURCE',
+            location: locator,
+            isNavigated: false,
+            isIframeLoaded: false,
+            resource: undefined,
+            resourceFetchError: undefined,
+            isFetchingResource: true,
+            iframe: null,
+          };
+          return newState;
+        }
+
+        // otherwise it is the same resource, just navigate
+        const newState: NavigatingState = {
           ...state,
+          state: 'NAVIGATING',
           location: locator,
           isNavigated: false,
         };
+        return newState;
       }
 
       case 'GO_TO_LOCATION': {
-        return {
+        if (state.state !== 'READY') {
+          return handleInvalidTransition(state, action);
+        }
+        const isNewResource = !isSameResource(
+          action.location.href,
+          state.location.href,
+          webpubManifestUrl
+        );
+
+        // we are going to a new resource, so we go back to the
+        // FetchingResourceState
+        if (isNewResource) {
+          const newState: FetchingResourceState = {
+            ...state,
+            state: 'FETCHING_RESOURCE',
+            location: action.location,
+            isNavigated: false,
+            isIframeLoaded: false,
+            resource: undefined,
+            resourceFetchError: undefined,
+            isFetchingResource: true,
+            iframe: null,
+          };
+          return newState;
+        }
+
+        // otherwise it is the same resource, just navigate
+        const newState: NavigatingState = {
           ...state,
+          state: 'NAVIGATING',
           location: action.location,
           isNavigated: false,
         };
+
+        return newState;
       }
 
       case 'WINDOW_RESIZED': {
-        if (!state.iframe) return state;
+        if (state.state !== 'READY' && state.state !== 'NAVIGATING') {
+          return state;
+        }
         /**
-         * Just set isNavigated to false so we recalculate everything
+         * We just go back to navigating when the window is resized.
          */
-        return {
+        const newState: NavigatingState = {
           ...state,
+          state: 'NAVIGATING',
           isNavigated: false,
           location: {
             ...state.location,
@@ -179,6 +281,7 @@ export default function makeHtmlReducer(
             },
           },
         };
+        return newState;
       }
 
       case 'GO_FORWARD': {
@@ -189,9 +292,8 @@ export default function makeHtmlReducer(
          */
 
         // if the iframe isn't loaded and present, we can't do anything yet
-        if (!state.isIframeLoaded || !state.iframe) {
-          console.warn("Can't go forward before iframe is loaded");
-          return state;
+        if (state.state !== 'READY') {
+          return handleInvalidTransition(state, action);
         }
 
         const { progression, totalPages, currentPage } = calcPosition(
@@ -212,8 +314,9 @@ export default function makeHtmlReducer(
         const newProgression = progression + percentToScroll;
         const newPosition = currentPage + 1;
 
-        return {
+        const newState: NavigatingState = {
           ...state,
+          state: 'NAVIGATING',
           location: {
             ...state.location,
             locations: {
@@ -224,13 +327,12 @@ export default function makeHtmlReducer(
           },
           isNavigated: false,
         };
+        return newState;
       }
 
       case 'GO_BACKWARD': {
-        // if the iframe isn't loaded and present, we can't do anything yet
-        if (!state.isIframeLoaded || !state.iframe) {
-          console.warn("Can't go forward before iframe is loaded");
-          return state;
+        if (state.state !== 'READY') {
+          return handleInvalidTransition(state, action);
         }
         const { progression, totalPages, currentPage } = calcPosition(
           state.iframe,
@@ -250,8 +352,9 @@ export default function makeHtmlReducer(
         const newProgression = Math.max(progression - percentToScroll, 0);
         const newPosition = Math.max(currentPage - 1, 1);
 
-        return {
+        const newState: NavigatingState = {
           ...state,
+          state: 'NAVIGATING',
           location: {
             ...state.location,
             locations: {
@@ -262,16 +365,20 @@ export default function makeHtmlReducer(
           },
           isNavigated: false,
         };
+        return newState;
       }
 
       case 'NAV_COMPLETE': {
-        if (!state.iframe) return state;
+        if (state.state !== 'NAVIGATING') {
+          return handleInvalidTransition(state, action);
+        }
         const { totalPages, currentPage } = calcPosition(
           state.iframe,
           state.isScrolling
         );
-        return {
+        const newState: ReadyState = {
           ...state,
+          state: 'READY',
           isNavigated: true,
           location: {
             ...state.location,
@@ -282,6 +389,7 @@ export default function makeHtmlReducer(
             },
           },
         };
+        return newState;
       }
 
       case 'SET_COLOR_MODE':
@@ -298,13 +406,14 @@ export default function makeHtmlReducer(
          *   value so the user snaps to whichever page they were just
          *   reading.
          */
-        if (!state.iframe) return state;
+        if (state.state !== 'NAVIGATING') {
+          return handleInvalidTransition(state, action);
+        }
         const { currentPageFloor, totalPages } = calcPosition(
           state.iframe,
           state.isScrolling
         );
-
-        return {
+        const newState: NavigatingState = {
           ...state,
           isScrolling: action.isScrolling,
           isNavigated: false,
@@ -316,6 +425,7 @@ export default function makeHtmlReducer(
             },
           },
         };
+        return newState;
       }
 
       case 'INCREASE_FONT_SIZE': {
@@ -340,21 +450,29 @@ export default function makeHtmlReducer(
           fontFamily: action.family,
         };
 
-      case 'SET_IFRAME':
-        return {
+      case 'SET_IFRAME': {
+        if (state.state !== 'RENDERING_IFRAME' || !action.iframe) {
+          return handleInvalidTransition(state, action);
+        }
+        const newState: LoadingIframeState = {
           ...state,
+          state: 'LOADING_IFRAME',
           iframe: action.iframe,
         };
+        return newState;
+      }
 
       case 'USER_SCROLLED': {
-        if (!state.iframe || !state.isScrolling) return state;
+        if (state.state !== 'READY') {
+          return handleInvalidTransition(state, action);
+        }
         // update the progression, but don't trigger a navigation effect
         // update the y value
         const { progression, currentPage, totalPages } = calcPosition(
           state.iframe,
           state.isScrolling
         );
-        return {
+        const newState: ReadyState = {
           ...state,
           // don't trigger a navigation effect because the user freely scrolled here
           isNavigated: true,
@@ -367,13 +485,31 @@ export default function makeHtmlReducer(
             },
           },
         };
+        return newState;
       }
-
-      case 'RESOURCE_CHANGED':
-        return {
-          ...state,
-          isIframeLoaded: false,
-        };
     }
   };
 }
+
+function handleInvalidTransition(state: HtmlState, action: HtmlAction) {
+  console.warn('Inavlid state transition attempted', state, action);
+  return state;
+}
+
+export const inactiveState: InactiveState = {
+  colorMode: 'day',
+  isScrolling: false,
+  fontSize: 100,
+  fontFamily: 'sans-serif',
+  currentTocUrl: null,
+  atStart: false,
+  atEnd: false,
+  iframe: null,
+  isIframeLoaded: false,
+  isNavigated: false,
+  resource: undefined,
+  isFetchingResource: false,
+  resourceFetchError: undefined,
+  state: 'INACTIVE',
+  location: undefined,
+};

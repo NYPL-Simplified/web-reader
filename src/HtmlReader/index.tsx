@@ -15,11 +15,10 @@ import {
   defaultInjectables,
   defaultInjectablesFixed,
 } from './lib';
-import makeHtmlReducer from './reducer';
+import makeHtmlReducer, { inactiveState } from './reducer';
 import { navigateToHash, navigateToProgression, setCss } from './effects';
 import useResource from './useResource';
-import useLocationQuery, { getLocationQuery } from './useLocationQuery';
-import { Locator } from '../Readium/Locator';
+import useLocationQuery from './useLocationQuery';
 import useWindowResize from './useWindowResize';
 import { useUpdateScroll } from './useUpdateScroll';
 
@@ -49,9 +48,6 @@ import { useUpdateScroll } from './useUpdateScroll';
  *  - Maybe use history.pushState when navigating via nextPage or previousPage or toc.
  */
 
-const DEFAULT_LOCATION: Locator = { href: '', locations: {} };
-const initialLocation: Locator = getLocationQuery() ?? DEFAULT_LOCATION;
-
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const {
     webpubManifestUrl,
@@ -63,28 +59,15 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     growWhenScrolling = DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
   } = args ?? {};
 
-  const [state, dispatch] = React.useReducer(makeHtmlReducer(args), {
-    colorMode: 'day',
-    isScrolling: false,
-    fontSize: 100,
-    fontFamily: 'sans-serif',
-    currentTocUrl: null,
-    atStart: false,
-    atEnd: false,
-    iframe: null,
-    isIframeLoaded: false,
-    isNavigated: false,
-    // start with dummy location
-    location: initialLocation,
-    resource: undefined,
-    isFetchingResource: false,
-    resourceFetchError: undefined,
-  });
+  const [state, dispatch] = React.useReducer(
+    makeHtmlReducer(args),
+    inactiveState
+  );
 
   /**
    * Fetches the resource and keeps it in the reducer state.
    */
-  const currentResourceUrl = state.location.href ?? null;
+  const currentResourceUrl = state.location?.href ?? null;
   useResource(state, getContent, injectables, dispatch);
 
   /**
@@ -100,13 +83,32 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   // dispatch action when window is resized
   useWindowResize(dispatch);
 
-  /**
-   * Reset the initial location when the manifest changes.
-   */
+  // dispatch action when arguments change
   React.useEffect(() => {
-    if (!webpubManifestUrl || !manifest) return;
-    dispatch({ type: 'MANIFEST_LOADED' });
-  }, [manifest, webpubManifestUrl]);
+    if (!webpubManifestUrl || !manifest) {
+      return dispatch({ type: 'ARGS_CHANGED', args: undefined });
+    }
+    dispatch({
+      type: 'ARGS_CHANGED',
+      args: {
+        webpubManifestUrl,
+        manifest,
+        getContent,
+        injectables,
+        injectablesFixed,
+        height,
+        growWhenScrolling,
+      },
+    });
+  }, [
+    webpubManifestUrl,
+    manifest,
+    getContent,
+    injectables,
+    injectablesFixed,
+    height,
+    growWhenScrolling,
+  ]);
 
   /**
    * Navigate after location change
@@ -195,8 +197,12 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   // this format is inactive, return null
   if (!webpubManifestUrl || !manifest) return null;
 
-  // we are initializing the reader
-  if (state.isFetchingResource) {
+  /**
+   * Note: It is possible we are still in an "Inactive" state while there
+   * are arguments to the hook, for exactly one render cycle. Thus if that's the
+   * case, we also render the loading screen.
+   */
+  if (state.state === 'FETCHING_RESOURCE' || state.state === 'INACTIVE') {
     return {
       type: null,
       isLoading: true,

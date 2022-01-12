@@ -19,13 +19,12 @@ export default function useResource(
   injectables: Injectable[],
   dispatch: React.Dispatch<HtmlAction>
 ): void {
-  const currentResourceUrl = state.location.href ?? null;
+  const currentResourceUrl = state.location?.href ?? null;
 
   React.useEffect(() => {
     if (!currentResourceUrl) {
       return;
     }
-    dispatch({ type: 'RESOURCE_FETCH_REQUEST' });
 
     async function fetchResource(url: string) {
       try {
