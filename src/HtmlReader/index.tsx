@@ -15,21 +15,13 @@ import {
   defaultInjectablesFixed,
 } from './lib';
 import makeHtmlReducer, { inactiveState } from './reducer';
-import { navigateToHash, navigateToProgression, setCss } from './effects';
+import { navigateToHash, navigateToProgression } from './effects';
 import useResource from './useResource';
 import useLocationQuery from './useLocationQuery';
 import useWindowResize from './useWindowResize';
 import { useUpdateScroll } from './useUpdateScroll';
 import useUpdateCSS from './useUpdateCSS';
 import useIframeLinkClick from './useIframeLinkClick';
-
-/**
- * DECISIONS:
- *  - We use webpubManifestUrl as the baseUrl when constructing URLs. This allows us to compare urls effectively.
- *  - location.locations.position is 1 indexed page
- *  - We keep all state in the reducer and try not to put logic into handlers. They should
- *    just dispatch actions.
- */
 
 /**
  * @TODO :

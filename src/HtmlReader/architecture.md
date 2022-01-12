@@ -68,3 +68,11 @@ Note on CFIs: In the future, we would like to support CFIs. These are strings re
 1. `useLocationQuery`: We now keep a copy of `state.location` sync'd to the `?location` query param in the URL. This allws users to share or save links to specific locations. So we use an effect to update the query whenever `state.location` changes.
 1. `useWindowResize`: When the window resizes, we need to re-scroll the user to the location they are meant to be on. Thus we need to move backwards to the `NavigatingState`.
 1. `useIframeLinkClick`: Uses `React.useEffect` to add a event listener for a "message" event, which is sent from the iframe upon internal link clicks. We then dispatch a `GO_TO_HREF` with the clicked value.
+
+## Decisions
+
+- Store all state in `useReducer`.
+- Use the `webpubManifestUrl` as the base url when constructing urls from relative urls. If we get a webpub manifest with relative urls, we must assume they are relative to the webpub manifest url itself. We always resolve urls to full URL objects instead of leaving them as possible relative strings.
+- Don't put any logic into navigator handlers. All state updating logic should go in the reducer. The navigator API should just dispatch plain actions.
+- Try to use actions that describe what happened instead of describing the state transition you would like. For example, steer away from `SET_xx` actions, unless they are necessary.
+-
