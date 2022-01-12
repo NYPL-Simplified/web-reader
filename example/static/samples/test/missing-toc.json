@@ -1,0 +1,18 @@
+{
+  "@context": "https://readium.org/webpub-manifest/context.jsonld",
+  "metadata": {
+    "title": "Moby-Dick",
+    "language": "en-US",
+    "author": "Herman Melville"
+  },
+  "resources": [],
+  "readingOrder": [
+    {
+      "href": "OPS/copyright.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "copyright"
+    }
+  ],
+  "toc": [],
+  "links": []
+}
