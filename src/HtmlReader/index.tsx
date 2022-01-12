@@ -11,7 +11,6 @@ import { DEFAULT_HEIGHT, DEFAULT_SHOULD_GROW_WHEN_SCROLLING } from '..';
 import {
   fetchAsTxt,
   calcPosition,
-  getMaybeIframeHtml,
   defaultInjectables,
   defaultInjectablesFixed,
 } from './lib';
