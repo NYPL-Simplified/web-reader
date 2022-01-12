@@ -140,7 +140,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
         dispatch({ type: 'NAV_COMPLETE' });
       }
     });
-  }, [state.state, state.iframe, state.location?.locations]);
+  }, [state.state, state.iframe, state.isScrolling, state.location?.locations]);
 
   /**
    * Set CSS variables when user state changes.
