@@ -10,7 +10,15 @@ export default function LoadingSkeleton({
   return (
     <>
       <HeaderWrapper />
-      <Box padding="6" bg="white" mt="7" height={height}>
+      <Box
+        padding="6"
+        bg="white"
+        mt="7"
+        height={height}
+        aria-label="Loading book..."
+        aria-busy="true"
+        role="progressbar"
+      >
         <Flex justifyContent="center">
           <Skeleton height="20px" mb="7" w="30%" />
         </Flex>

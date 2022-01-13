@@ -30,9 +30,9 @@ declare global {
 }
 
 const pagesUsingAliceInWonderlandExample: string[] = [
-  '/streamed-alice-epub',
-  '/test/with-injectables',
-  '/test/no-injectables',
+  '/html/streamed-alice-epub',
+  '/html/test/with-injectables',
+  '/html/test/no-injectables',
 ];
 
 Cypress.Commands.add('loadPage', (pageName) => {
@@ -41,6 +41,7 @@ Cypress.Commands.add('loadPage', (pageName) => {
   )
     ? 'https://alice.dita.digital/**'
     : '/samples/**';
+
   cy.intercept(resourceInterceptUrl, { middleware: true }, (req) => {
     req.on('before:response', (res) => {
       // force all API responses to not be cached
@@ -48,15 +49,16 @@ Cypress.Commands.add('loadPage', (pageName) => {
     });
   }).as('sample');
   cy.visit(pageName, {
-    onBeforeLoad: (win) => {
-      win.sessionStorage.clear(); // clear storage so that we are always on page one
-    },
+    // re-enable this once we start storing location and settings in storage.
+    // onBeforeLoad: (win) => {
+    //   win.sessionStorage.clear(); // clear storage so that we are always on page one
+    // },
   });
-  cy.get('#reader-loading').should('be.visible');
+  cy.findByRole('progressbar', { name: 'Loading book...' }).should('exist');
   cy.wait('@sample', { timeout: 20000 }).then((interception) => {
     assert.isNotNull(interception?.response?.body, 'API call has data');
   });
-  cy.get('#reader-loading').should('not.be.visible');
+  cy.findByRole('progressbar', { name: 'Loading book...' }).should('not.exist');
 });
 
 Cypress.Commands.add('getIframeHtml', (selector: string = IFRAME_SELECTOR) => {
