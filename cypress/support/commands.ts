@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 import '@testing-library/cypress/add-commands';
-import { IFRAME_SELECTOR } from './constants';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -23,7 +22,7 @@ declare global {
       ): void;
       getIframeHtml(selector?: string): Chainable<Subject>;
       getIframeHead(selector?: string): Chainable<Subject>;
-      getIframeBody(selector?: string): Chainable<Subject>;
+      getIframeBody(): Chainable<Subject>;
       loadPdf(path: '/pdf' | '/pdf-collection'): Chainable<Subject>;
     }
   }
@@ -61,28 +60,62 @@ Cypress.Commands.add('loadPage', (pageName) => {
   cy.findByRole('progressbar', { name: 'Loading book...' }).should('not.exist');
 });
 
-Cypress.Commands.add('getIframeHtml', (selector: string = IFRAME_SELECTOR) => {
+Cypress.Commands.add('getIframeHtml', { prevSubject: false }, () => {
+  Cypress.log({
+    name: 'Get Iframe HTML',
+    // shorter name for the Command Log
+    displayName: 'getIframeHtml',
+    message: `Get the iframe html, and wait for it to load.`,
+  });
+
   return cy
-    .get(selector, { timeout: 15000 })
-    .its('0.contentDocument.documentElement')
-    .should('not.be.empty')
-    .then(cy.wrap);
+    .get('iframe', { log: false })
+    .should(($frame) => {
+      const readyState = $frame.prop('contentWindow').document.readyState;
+      expect(readyState).to.eq('complete');
+      const body = $frame.prop('contentDocument').documentElement.body;
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      expect(body).to.not.be.empty;
+    })
+    .its('0.contentDocument', { log: false })
+    .then(($el) => cy.wrap($el, { log: false }));
 });
 
-Cypress.Commands.add('getIframeHead', (selector: string = IFRAME_SELECTOR) => {
+Cypress.Commands.add('getIframeHead', { prevSubject: false }, () => {
+  Cypress.log({
+    name: 'Get Iframe Head',
+    // shorter name for the Command Log
+    displayName: 'getIframeHead',
+    message: `Get the iframe head, and wait for it to load.`,
+  });
+
   return cy
-    .get(selector, { timeout: 15000 })
-    .its(`0.contentDocument.head`)
-    .should('not.be.empty')
-    .then(cy.wrap);
+    .get('iframe', { log: false })
+    .should(($frame) => {
+      const readyState = $frame.prop('contentWindow').document.readyState;
+      expect(readyState).to.eq('complete');
+    })
+    .its('0.contentDocument.head', { log: false })
+    .then(($el) => cy.wrap($el, { log: false }));
 });
 
-Cypress.Commands.add('getIframeBody', (selector: string = IFRAME_SELECTOR) => {
+Cypress.Commands.add('getIframeBody', { prevSubject: false }, () => {
+  Cypress.log({
+    name: 'Get Iframe Body',
+    // shorter name for the Command Log
+    displayName: 'getIframeBody',
+    message: `Get the iframe body, and wait for it to load.`,
+  });
+
   return cy
-    .get(selector, { timeout: 15000 })
-    .its(`0.contentDocument.body`)
+    .get('iframe', { log: false })
+    .should(($frame) => {
+      const readyState = $frame.prop('contentWindow').document.readyState;
+      expect(readyState).to.eq('complete');
+    })
+    .its('0.contentDocument.body', { log: false })
     .should('not.be.empty')
-    .then(cy.wrap);
+    .then(($el) => cy.wrap($el, { log: false }));
 });
 
 Cypress.Commands.add('loadPdf', (path: '/pdf' | '/pdf-collection') => {

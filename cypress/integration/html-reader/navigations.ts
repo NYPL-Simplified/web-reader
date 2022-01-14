@@ -1,5 +1,3 @@
-import { IFRAME_SELECTOR } from '../../support/constants';
-
 describe('navigating an EPUB page', () => {
   beforeEach(() => {
     cy.loadPage('/html/streamed-alice-epub');
@@ -13,10 +11,9 @@ describe('navigating an EPUB page', () => {
     );
   });
 
-  // FIXME: Finish writing this test once https://jira.nypl.org/browse/SFR-1332 is resolved
   it('Should navigate forward and backwards with page buttons', () => {
     cy.log('make sure we are on the homepage');
-    cy.getIframeBody(IFRAME_SELECTOR)
+    cy.getIframeBody()
       .find('img')
       .should(
         'have.attr',
@@ -29,6 +26,24 @@ describe('navigating an EPUB page', () => {
     cy.findByText('Paginated').click();
 
     cy.findByRole('button', { name: 'Next Page' }).click();
+
+    // make sure correct content exists now
+    cy.getIframeBody()
+      .findByRole('heading', { name: 'Im­print' })
+      .should('exist');
+
+    cy.getIframeBody();
+
+    // go back
+    cy.findByRole('button', { name: 'Previous Page' }).click();
+
+    cy.getIframeBody()
+      .find('img')
+      .should(
+        'have.attr',
+        'alt',
+        "Alice's Adventures in Wonderland, by Lewis Carroll"
+      );
   });
 });
 

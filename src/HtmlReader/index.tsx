@@ -211,6 +211,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     content: (
       <>
         <iframe
+          id="html-reader-iframe"
           onLoad={() => dispatch({ type: 'IFRAME_LOADED' })}
           ref={setIframe}
           // as="iframe"
