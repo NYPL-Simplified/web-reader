@@ -13,6 +13,7 @@ import {
   calcPosition,
   defaultInjectables,
   defaultInjectablesFixed,
+  isSameResource,
 } from './lib';
 import makeHtmlReducer, { inactiveState } from './reducer';
 import { navigateToHash, navigateToProgression } from './effects';
@@ -204,6 +205,20 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       ? manifest.metadata.title
       : manifest.metadata.title.en ?? 'Unknown Title';
 
+  const resourceIndex = manifest.readingOrder.findIndex((link) =>
+    isSameResource(link.href, state.location.href, webpubManifestUrl)
+  );
+  const numResources = manifest.readingOrder.length;
+
+  const isFirstResource = resourceIndex === 0;
+  const isLastResource = resourceIndex === numResources - 1;
+
+  const isStartOfResource = state.location.locations.position === 1;
+  const isEndOfResource = state.location.locations.remainingPositions === 0;
+
+  const atStart = isFirstResource && isStartOfResource;
+  const atEnd = isLastResource && isEndOfResource;
+
   // the reader is active
   return {
     type: 'HTML',
@@ -236,7 +251,11 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
         />
       </>
     ),
-    state,
+    state: {
+      ...state,
+      atStart,
+      atEnd,
+    },
     manifest,
     navigator,
   };
