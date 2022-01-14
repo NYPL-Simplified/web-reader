@@ -1,5 +1,3 @@
-import { IFRAME_SELECTOR } from '../../support/constants';
-
 describe('navigating an EPUB page using internal link', () => {
   beforeEach(() => {
     // FIXME: Ignore random reader bug for now, remove this after [OE-300]
@@ -7,7 +5,7 @@ describe('navigating an EPUB page using internal link', () => {
       return false;
     });
 
-    cy.loadPage('/moby-epub2');
+    cy.loadPage('/html/moby-epub2');
   });
 
   it('navigates user using the internal TOC link on the page', () => {
@@ -21,12 +19,12 @@ describe('navigating an EPUB page using internal link', () => {
     cy.findByRole('button', { name: 'Next Page' }).click();
 
     cy.log('Go to ETYMOLOGY');
-    cy.getIframeBody(IFRAME_SELECTOR)
+    cy.getIframeBody()
       .find('.toc a', { timeout: 3000 })
       .contains(/^ETYMOLOGY\.$/)
       .click();
 
-    cy.getIframeBody(IFRAME_SELECTOR)
+    cy.getIframeBody()
       .find('h4', { timeout: 3000 })
       .contains('Original Transcriber’s Notes:');
   });

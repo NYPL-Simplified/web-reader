@@ -1,5 +1,3 @@
-import { IFRAME_SELECTOR } from '../../support/constants';
-
 describe('render page content', () => {
   it('Renders content on the epub2 based webpub page', () => {
     cy.loadPage('/html/streamed-alice-epub');
@@ -13,7 +11,7 @@ describe('render page content', () => {
     cy.findByRole('button', { name: 'Previous Page' }).should('be.disabled');
 
     cy.log('page one contains an image');
-    cy.getIframeBody(IFRAME_SELECTOR)
+    cy.getIframeBody()
       .find('img')
       .should(
         'have.attr',

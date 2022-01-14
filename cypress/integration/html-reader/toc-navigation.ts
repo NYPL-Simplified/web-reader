@@ -1,5 +1,3 @@
-import { IFRAME_SELECTOR } from '../../support/constants';
-
 describe('navigating an EPUB page', () => {
   beforeEach(() => {
     cy.loadPage('/html/streamed-alice-epub');
@@ -10,7 +8,7 @@ describe('navigating an EPUB page', () => {
       'chapterOne'
     );
 
-    cy.getIframeBody(IFRAME_SELECTOR)
+    cy.getIframeBody()
       .find('img', { timeout: 10000 })
       .should(
         'have.attr',
@@ -38,10 +36,7 @@ describe('navigating an EPUB page', () => {
 
     cy.wait(3000);
 
-    cy.getIframeHead(IFRAME_SELECTOR).contains(
-      'title',
-      'Chapter 1: Down the Rabbit-Hole'
-    );
+    cy.getIframeHead().contains('title', 'Chapter 1: Down the Rabbit-Hole');
   });
 
   it('Scrolling mode & TOC: should update page content after clicking on TOC link', () => {
@@ -49,7 +44,7 @@ describe('navigating an EPUB page', () => {
       'chapterOne'
     );
 
-    cy.getIframeBody(IFRAME_SELECTOR)
+    cy.getIframeBody()
       .find('img', { timeout: 10000 })
       .should(
         'have.attr',
@@ -77,9 +72,6 @@ describe('navigating an EPUB page', () => {
 
     cy.wait(3000);
 
-    cy.getIframeHead(IFRAME_SELECTOR).contains(
-      'title',
-      'Chapter 1: Down the Rabbit-Hole'
-    );
+    cy.getIframeHead().contains('title', 'Chapter 1: Down the Rabbit-Hole');
   });
 });

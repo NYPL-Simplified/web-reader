@@ -1,8 +1,6 @@
-import { IFRAME_SELECTOR } from '../../support/constants';
-
 describe('PageButton visibility on useHtmlReader', () => {
   beforeEach(() => {
-    cy.loadPage('/streamed-alice-epub');
+    cy.loadPage('/html/streamed-alice-epub');
   });
 
   it('Should disable previous page button at the start of the book', () => {
@@ -57,7 +55,7 @@ describe('PageButton visibility on useHtmlReader', () => {
 
     cy.wait(1000);
 
-    cy.getIframeBody(IFRAME_SELECTOR).find('.copyright-page').should('exist');
+    cy.getIframeBody().find('.copyright-page').should('exist');
 
     cy.wait(1000);
 
@@ -94,7 +92,7 @@ describe('PageButton visibility on useHtmlReader', () => {
 
     cy.wait(1000);
 
-    cy.getIframeBody(IFRAME_SELECTOR).find('.copyright-page').should('exist');
+    cy.getIframeBody().find('.copyright-page').should('exist');
 
     cy.wait(1000);
 
