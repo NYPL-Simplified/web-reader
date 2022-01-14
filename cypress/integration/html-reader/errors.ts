@@ -17,7 +17,7 @@ describe('error states', () => {
       we use visit here instead of 'loadPage' because 'loadPage'
       checks for an iframe that should fail to render in this test 
     */
-    cy.visit('/test/unparsable-manifest');
+    cy.visit('/html/test/unparsable-manifest');
 
     cy.findByRole('heading', { name: 'An error occurred' });
     cy.findByRole('alert', {
@@ -27,13 +27,13 @@ describe('error states', () => {
 
   // @TODO - Improve this error UX. Requires change in R2D2BC.
   it('throws error for missing resource', () => {
-    cy.visit('/test/missing-resource');
+    cy.visit('/html/test/missing-resource');
 
     cy.getIframeBody().contains('Page not found.', { timeout: 10000 });
   });
 
   it('throws error for missing injectable', () => {
-    cy.visit('/test/missing-injectable');
+    cy.visit('/html/test/missing-injectable');
 
     cy.findByRole('heading', { name: 'An error occurred' });
     // FIXME: This is failing in CI with a "scrollingElement" not found error
