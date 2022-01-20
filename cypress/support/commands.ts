@@ -20,9 +20,10 @@ declare global {
           | '/html/test/missing-resource'
           | '/html/test/missing-injectable'
       ): void;
-      getIframeHtml(selector?: string): Chainable<Subject>;
-      getIframeHead(selector?: string): Chainable<Subject>;
+      getIframeHtml(): Chainable<Subject>;
+      getIframeHead(): Chainable<Subject>;
       getIframeBody(): Chainable<Subject>;
+      finishNavigation(): void;
       loadPdf(path: '/pdf' | '/pdf-collection'): Chainable<Subject>;
     }
   }
@@ -116,6 +117,12 @@ Cypress.Commands.add('getIframeBody', { prevSubject: false }, () => {
     .its('0.contentDocument.body', { log: false })
     .should('not.be.empty')
     .then(($el) => cy.wrap($el, { log: false }));
+});
+
+Cypress.Commands.add('finishNavigation', { prevSubject: false }, () => {
+  // we use this to simply wait for the user to be scrolled to wherever they need to be.
+  // any other method would be very tough to use.
+  cy.wait(100);
 });
 
 Cypress.Commands.add('loadPdf', (path: '/pdf' | '/pdf-collection') => {

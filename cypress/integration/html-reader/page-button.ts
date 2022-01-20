@@ -22,7 +22,12 @@ describe('PageButton visibility on useHtmlReader', () => {
     cy.findByRole('button', { name: 'Settings' }).click();
     cy.findByText('Paginated').click();
 
+    cy.finishNavigation();
+
     cy.findByRole('button', { name: 'Next Page' }).click();
+
+    // wait for iframe to finish loading
+    cy.finishNavigation();
 
     cy.findByRole('button', { name: 'Next Page' }).should('not.be.disabled');
     cy.findByRole('button', { name: 'Previous Page' }).should(
