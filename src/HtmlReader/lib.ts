@@ -107,7 +107,6 @@ export function linkToLocator(
   const hrefWithoutHash = url.origin + url.pathname;
   // add the hash if we don't already have a fragment
   if (hash && !locations?.fragment) locations.fragment = hash;
-  // const hrefWithoutHash =
   return {
     href: hrefWithoutHash,
     title: link.title,
