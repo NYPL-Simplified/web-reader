@@ -52,9 +52,6 @@ export default function useResource(
           isScrolling: state.isScrolling,
         });
 
-        // inject js to communicate with iframe
-        // injectJS(document);
-
         const finalResource = document.documentElement.outerHTML;
         dispatch({ type: 'RESOURCE_FETCH_SUCCESS', resource: finalResource });
       } catch (e) {
