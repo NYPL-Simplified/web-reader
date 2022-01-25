@@ -48,14 +48,14 @@ function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
   switch (action.type) {
     case 'SET_READER': {
       // set all the initial settings taken from the reader
-      const settings = action.reader.currentSettings();
+      const settings = action.reader.currentSettings;
       return {
         reader: action.reader,
         isScrolling: settings.verticalScroll,
         colorMode: getColorMode(settings.appearance),
         fontSize: settings.fontSize,
         fontFamily: r2FamilyToFamily[settings.fontFamily] ?? 'publisher',
-        currentTocUrl: action.reader.mostRecentNavigatedTocItem(),
+        currentTocUrl: action.reader.mostRecentNavigatedTocItem,
         location: undefined,
         atStart: true,
         atEnd: false,
@@ -153,20 +153,13 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
       verticalScroll: defaultIsScrolling,
     };
 
-    D2Reader.build({
+    D2Reader.load({
       url,
       injectables: injectables,
       injectablesFixed: injectablesFixed,
       attributes: {
         navHeight: HEADER_HEIGHT,
         margin: 16,
-      },
-      rights: {
-        /**
-         * Makes the reader fetch every resource before rendering, which
-         * takes forever.
-         */
-        autoGeneratePositions: false,
       },
       userSettings: userSettings,
       api: {
@@ -201,26 +194,26 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   // prev and next page functions
   const goForward = React.useCallback(async () => {
     if (!reader) return;
-    const isLastPage = await reader.atEnd();
+    const isLastPage = await reader.atEnd;
     reader.nextPage();
     if (isLastPage) {
       // FIXME: This will not work for links containing sub-links
       // b/c reader.nextPage saves the raw toc link without the elementID
       dispatch({
         type: 'SET_CURRENT_TOC_URL',
-        currentTocUrl: reader.mostRecentNavigatedTocItem(),
+        currentTocUrl: reader.mostRecentNavigatedTocItem,
       });
     }
   }, [reader]);
 
   const goBackward = React.useCallback(async () => {
     if (!reader) return;
-    const isFirstPage = await reader.atStart();
+    const isFirstPage = await reader.atStart;
     reader.previousPage();
     if (isFirstPage) {
       dispatch({
         type: 'SET_CURRENT_TOC_URL',
-        currentTocUrl: reader.mostRecentNavigatedTocItem(),
+        currentTocUrl: reader.mostRecentNavigatedTocItem,
       });
     }
   }, [reader]);
@@ -369,12 +362,12 @@ async function setBookBoundary(
   reader: D2Reader,
   dispatch: React.Dispatch<HtmlAction>
 ): Promise<void> {
-  const isFirstResource = (await reader.currentResource()) === 0;
-  const isResourceStart = (await reader.atStart()) && isFirstResource;
+  const isFirstResource = (await reader.currentResource) === 0;
+  const isResourceStart = (await reader.atStart) && isFirstResource;
 
   const isLastResource =
-    (await reader.currentResource()) === (await reader.totalResources()) - 1; // resource index starts with 0
-  const isResourceEnd = (await reader.atEnd()) && isLastResource;
+    (await reader.currentResource) === (await reader.totalResources) - 1; // resource index starts with 0
+  const isResourceEnd = (await reader.atEnd) && isLastResource;
 
   dispatch({
     type: 'BOOK_BOUNDARY_CHANGED',
