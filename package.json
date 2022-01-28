@@ -145,7 +145,7 @@
   },
   "dependencies": {
     "@chakra-ui/react": "1.6.9",
-    "@d-i-t-a/reader": "^2.0.0-beta.6",
+    "@d-i-t-a/reader": "2.0.0-beta.6",
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
     "comlink": "^4.3.1",
