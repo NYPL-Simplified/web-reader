@@ -5,7 +5,7 @@ jobs:
   install:
     name: Install cypress
     runs-on: ubuntu-latest
-    if: github.event.deployment_status.state == 'success' && github.event.deployment_status.environment == 'Preview – web-reader'
+    if: github.event.deployment_status.state == 'success' && github.event.deployment_status.environment == 'Preview'
     container:
       image: cypress/browsers:node14.17.0-chrome88-ff89
       options: --user 1001 # https://github.com/cypress-io/github-action#firefox
@@ -72,7 +72,7 @@ jobs:
           browser: chrome
           record: true
           parallel: true
-          group: 'UI - Chrome'
+          group: "UI - Chrome"
 
       - name: Upload failure screenshots
         uses: actions/upload-artifact@v2
