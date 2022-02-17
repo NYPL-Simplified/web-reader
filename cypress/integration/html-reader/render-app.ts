@@ -52,7 +52,7 @@ describe('render page content', () => {
   });
 
   // Scroll to the bottom of the page, but if the screen is resized to be smaller, vertical scroll bar should re-appear to allow user to scroll down
-  it.only('Scrolling mode & resize to smaller screen shows you are not at the end of the chapter', () => {
+  it('Scrolling mode & resize to smaller screen shows you are not at the end of the chapter', () => {
     cy.findByRole('button', { name: 'Settings' }).click();
     cy.findByText('Scrolling').click();
 
@@ -65,7 +65,10 @@ describe('render page content', () => {
     cy.log('scroll to the bottom of the page');
     cy.window().scrollTo('bottom');
     cy.window().then((win) => {
-      expect(win.innerHeight + win.scrollY).eq(win.document.body.offsetHeight);
+      // https://stackoverflow.com/a/9439807/17573442
+      const scrolledPosition = win.innerHeight + win.scrollY;
+      const elmHeight = win.document.body.offsetHeight;
+      expect(scrolledPosition).eq(elmHeight);
     });
 
     cy.log(
@@ -74,9 +77,9 @@ describe('render page content', () => {
     cy.viewport(500, 500);
 
     cy.window().then((win) => {
-      expect(win.innerHeight + win.scrollY).not.eq(
-        win.document.body.offsetHeight
-      );
+      const scrolledPosition = win.innerHeight + win.scrollY;
+      const elmHeight = win.document.body.offsetHeight;
+      expect(scrolledPosition).not.eq(elmHeight);
     });
   });
 });
