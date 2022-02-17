@@ -185,6 +185,12 @@ const HtmlReaders = () => {
           webpubManifestUrl={`${origin}/samples/moby-epub3-exploded/manifest.json`}
         />
       </Route>
+      <Route path={`/html/fixed-layout`}>
+        <WebReader
+          injectables={htmlInjectables}
+          webpubManifestUrl={`${origin}/samples/fixed-layout/manifest.json`}
+        />
+      </Route>
       <Route path={`/html/fixed-height-embedded-moby-epub2`}>
         <Box bg="lavenderblush" p={6} w="100vw">
           <Heading>Fixed-height Embedded Example</Heading>
@@ -271,6 +277,9 @@ const HomePage = () => {
               <Link to="/html/readium-css-docs">
                 Readium CSS Documentation (as Webpub)
               </Link>
+            </ListItem>
+            <ListItem>
+              <Link to="/html/fixed-layout">Fixed Layout (Poems)</Link>
             </ListItem>
           </UnorderedList>
         </ListItem>
