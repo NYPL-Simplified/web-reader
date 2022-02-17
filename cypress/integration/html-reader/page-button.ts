@@ -97,7 +97,7 @@ describe('PageButton visibility on useHtmlReader', () => {
     );
   });
 
-  it('Paginated mode & screen resize should toggle the page buttons visibility', () => {
+  it('Paginated mode & screen resize should show/hide the page buttons', () => {
     cy.intercept('GET', 'https://alice.dita.digital/text/uncopyright.xhtml').as(
       'uncopyright'
     );
@@ -139,7 +139,7 @@ describe('PageButton visibility on useHtmlReader', () => {
     );
   });
 
-  it('Scrolling mode & screen resize should toggle the page button visibility', () => {
+  it('Scrolling mode & screen resize should show/hide the page buttons', () => {
     cy.intercept('GET', 'https://alice.dita.digital/text/uncopyright.xhtml').as(
       'uncopyright'
     );

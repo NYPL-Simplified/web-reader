@@ -34,7 +34,7 @@ describe('render page content', () => {
     cy.window().its('scrollX').should('eq', 0);
   });
 
-  it('Scrolling mode & horizontal scroll bars should not exist', () => {
+  it('Scrolling mode & horizontal scroll bars should not exist but should be able to scroll vertically', () => {
     cy.findByRole('button', { name: 'Settings' }).click();
     cy.findByText('Scrolling').click();
 
@@ -44,9 +44,9 @@ describe('render page content', () => {
 
     cy.wait(1000);
 
+    cy.log('scrollable vertically but not horizontally');
     cy.window().scrollTo(100, 100, { ensureScrollable: false });
 
-    cy.log('scrollable vertically but not horizontally');
     cy.window().its('scrollY').should('eq', 100);
     cy.window().its('scrollX').should('eq', 0);
   });
