@@ -1,9 +1,7 @@
-import { IFRAME_SELECTOR } from '../../support/constants';
-
 describe('missing-toc', () => {
   it('Shows mssing TOC message', () => {
     cy.visit('/test/missing-toc');
-    cy.getIframeBody(IFRAME_SELECTOR)
+    cy.getIframeBody()
       .find('h1')
       .should('include.text', 'missing Table of Contents');
 

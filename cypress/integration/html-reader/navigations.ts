@@ -1,5 +1,3 @@
-import { IFRAME_SELECTOR } from '../../support/constants';
-
 describe('navigating an EPUB page', () => {
   beforeEach(() => {
     cy.loadPage('/streamed-alice-epub');
@@ -15,7 +13,7 @@ describe('navigating an EPUB page', () => {
 
   it('Paginated mode & page buttons should navigate users forward and backwards', () => {
     cy.log('make sure we are on the homepage');
-    cy.getIframeBody(IFRAME_SELECTOR)
+    cy.getIframeBody()
       .find('img')
       .should(
         'have.attr',
@@ -30,11 +28,11 @@ describe('navigating an EPUB page', () => {
     cy.findByRole('button', { name: 'Next Page' }).click();
     cy.wait(1000);
 
-    cy.getIframeBody(IFRAME_SELECTOR)
+    cy.getIframeBody()
       .find('a')
       .first()
       .should('have.attr', 'href', 'https://standardebooks.org');
-    cy.getIframeBody(IFRAME_SELECTOR)
+    cy.getIframeBody()
       .find('img')
       .should('have.attr', 'alt', 'The Standard Ebooks logo');
 
@@ -43,7 +41,7 @@ describe('navigating an EPUB page', () => {
     cy.findByRole('button', { name: 'Previous Page' }).click();
     cy.wait(1000);
 
-    cy.getIframeBody(IFRAME_SELECTOR)
+    cy.getIframeBody()
       .find('img')
       .should(
         'have.attr',
@@ -59,12 +57,12 @@ describe('navigating an EPUB page', () => {
     cy.findByRole('button', { name: 'Next Page' }).click();
     cy.wait(1000);
 
-    cy.getIframeBody(IFRAME_SELECTOR)
+    cy.getIframeBody()
       .find('a')
       .first()
       .should('have.attr', 'href', 'https://standardebooks.org');
 
-    cy.getIframeBody(IFRAME_SELECTOR)
+    cy.getIframeBody()
       .find('img')
       .should('have.attr', 'alt', 'The Standard Ebooks logo');
 
@@ -73,7 +71,7 @@ describe('navigating an EPUB page', () => {
     cy.findByRole('button', { name: 'Previous Page' }).click();
     cy.wait(1000);
 
-    cy.getIframeBody(IFRAME_SELECTOR)
+    cy.getIframeBody()
       .find('img')
       .should(
         'have.attr',
@@ -102,8 +100,6 @@ describe('navigating an EPUB page', () => {
     cy.findByRole('button', { name: 'Next Page' }).click();
     cy.wait(1000);
 
-    cy.getIframeBody(IFRAME_SELECTOR)
-      .find('h2')
-      .should('contain.text', 'The Pool of Tears');
+    cy.getIframeBody().find('h2').should('contain.text', 'The Pool of Tears');
   });
 });
