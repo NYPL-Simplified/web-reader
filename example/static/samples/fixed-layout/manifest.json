@@ -1,121 +1,130 @@
 {
   "@context": "https://readium.org/webpub-manifest/context.jsonld",
   "metadata": {
-    "title": "The War Poems Of Siegfried Sassoon",
-    "language": "en",
-    "author": "Siegfreid Sassoon"
+    "title": "Page Blanche",
+    "language": "fr",
+    "author": ["Boulet", "Bagieu Pénélope"]
   },
   "resources": [
+    { "href": "EPUB/Style/style.css", "type": "text/css", "id": "css" },
     {
-      "href": "OPS/TOC.xhtml",
+      "href": "EPUB/Navigation/nav.xhtml",
       "type": "application/xhtml+xml",
-      "id": "toc",
+      "id": "nav",
       "rel": "contents"
     },
     {
-      "href": "OPS/images/ss_fixed_online.jpg",
+      "href": "EPUB/Navigation/toc.ncx",
+      "type": "application/x-dtbncx+xml",
+      "id": "ncx"
+    },
+    {
+      "href": "EPUB/Image/cover.jpg",
       "type": "image/jpeg",
-      "id": "cover-image",
+      "id": "id-cover-jpg",
       "rel": "cover",
-      "width": 500,
-      "height": 708
-    },
-    { "href": "OPS/css/igp-twss-fxl.css", "type": "text/css", "id": "css-001" },
-    {
-      "href": "OPS/fonts/texgyrebonum-bold.woff",
-      "type": "application/font-woff",
-      "id": "fonts-001"
+      "width": 1200,
+      "height": 1577
     },
     {
-      "href": "OPS/fonts/texgyrebonum-bolditalic.woff",
-      "type": "application/font-woff",
-      "id": "fonts-002"
+      "href": "EPUB/Image/PageBlanche_Page_001.jpg",
+      "type": "image/jpeg",
+      "id": "id-PageBlanche_Page_001-jpg"
     },
     {
-      "href": "OPS/fonts/texgyrebonum-italic.woff",
-      "type": "application/font-woff",
-      "id": "fonts-003"
+      "href": "EPUB/Image/PageBlanche_Page_002.jpg",
+      "type": "image/jpeg",
+      "id": "id-PageBlanche_Page_002-jpg"
     },
     {
-      "href": "OPS/fonts/texgyrebonum-regular.woff",
-      "type": "application/font-woff",
-      "id": "fonts-004"
+      "href": "EPUB/Image/PageBlanche_Page_003.jpg",
+      "type": "image/jpeg",
+      "id": "id-PageBlanche_Page_003-jpg"
+    },
+    {
+      "href": "EPUB/Image/PageBlanche_Page_004.jpg",
+      "type": "image/jpeg",
+      "id": "id-PageBlanche_Page_004-jpg"
+    },
+    {
+      "href": "EPUB/Image/PageBlanche_Page_005.jpg",
+      "type": "image/jpeg",
+      "id": "id-PageBlanche_Page_005-jpg"
+    },
+    {
+      "href": "EPUB/Image/PageBlanche_Page_006.jpg",
+      "type": "image/jpeg",
+      "id": "id-PageBlanche_Page_006-jpg"
+    },
+    {
+      "href": "EPUB/Image/PageBlanche_Page_007.jpg",
+      "type": "image/jpeg",
+      "id": "id-PageBlanche_Page_007-jpg"
+    },
+    {
+      "href": "EPUB/Image/PageBlanche_Page_008.jpg",
+      "type": "image/jpeg",
+      "id": "id-PageBlanche_Page_008-jpg"
     }
   ],
   "readingOrder": [
     {
-      "href": "OPS/s001-Cover-01.xhtml",
+      "href": "EPUB/Content/cover.xhtml",
       "type": "application/xhtml+xml",
-      "id": "s001"
+      "id": "id-cover-xhtml"
     },
     {
-      "href": "OPS/s002-BookTitlePage-01.xhtml",
+      "href": "EPUB/Content/PageBlanche_Page_000.xhtml",
       "type": "application/xhtml+xml",
-      "id": "s002"
+      "id": "white-xhtml"
     },
     {
-      "href": "OPS/s003-Section-01.xhtml",
+      "href": "EPUB/Content/PageBlanche_Page_001.xhtml",
       "type": "application/xhtml+xml",
-      "id": "s003"
+      "id": "id-PageBlanche_Page_001-xhtml"
     },
     {
-      "href": "OPS/s004-Copyright-01.xhtml",
+      "href": "EPUB/Content/PageBlanche_Page_002.xhtml",
       "type": "application/xhtml+xml",
-      "id": "s004"
+      "id": "id-PageBlanche_Page_002-xhtml"
     },
     {
-      "href": "OPS/s005-Epigraph-01.xhtml",
+      "href": "EPUB/Content/PageBlanche_Page_003.xhtml",
       "type": "application/xhtml+xml",
-      "id": "s005"
+      "id": "id-PageBlanche_Page_003-xhtml"
     },
     {
-      "href": "OPS/s006-TableOfContents-01.xhtml",
+      "href": "EPUB/Content/PageBlanche_Page_004.xhtml",
       "type": "application/xhtml+xml",
-      "id": "s006"
+      "id": "id-PageBlanche_Page_004-xhtml"
     },
     {
-      "href": "OPS/s007-Section-02.xhtml",
+      "href": "EPUB/Content/PageBlanche_Page_005.xhtml",
       "type": "application/xhtml+xml",
-      "id": "s007"
+      "id": "id-PageBlanche_Page_005-xhtml"
     },
     {
-      "href": "OPS/s008-Section-03.xhtml",
+      "href": "EPUB/Content/PageBlanche_Page_006.xhtml",
       "type": "application/xhtml+xml",
-      "id": "s008"
+      "id": "id-PageBlanche_Page_006-xhtml"
     },
     {
-      "href": "OPS/s009-Part-001.xhtml",
+      "href": "EPUB/Content/PageBlanche_Page_007.xhtml",
       "type": "application/xhtml+xml",
-      "id": "s009"
+      "id": "id-PageBlanche_Page_007-xhtml"
     },
     {
-      "href": "OPS/s010-Section-004.xhtml",
+      "href": "EPUB/Content/PageBlanche_Page_008.xhtml",
       "type": "application/xhtml+xml",
-      "id": "s010"
-    },
-    {
-      "href": "OPS/s011-Poem-001.xhtml",
-      "type": "application/xhtml+xml",
-      "id": "s011"
-    },
-    {
-      "href": "OPS/s012-Poem-002.xhtml",
-      "type": "application/xhtml+xml",
-      "id": "s012"
+      "id": "id-PageBlanche_Page_008-xhtml"
     }
   ],
   "toc": [
-    { "title": "cover", "href": "OPS/s001-Cover-01.xhtml" },
+    { "title": "Dédicace", "href": "EPUB/Content/PageBlanche_Page_002.xhtml" },
     {
-      "title": "THE WAR POEMS OF SIEGFRIED SASSOON",
-      "href": "OPS/s003-Section-01.xhtml"
-    },
-    { "title": "Copyright", "href": "OPS/s004-Copyright-01.xhtml" },
-    { "title": "Epigraph", "href": "OPS/s005-Epigraph-01.xhtml" },
-    { "title": "Contents", "href": "OPS/s006-TableOfContents-01.xhtml" },
-    { "title": "Part I", "href": "OPS/s009-Part-001.xhtml" },
-    { "title": "Prelude: The Troops", "href": "OPS/s011-Poem-001.xhtml" },
-    { "title": "Dreamers", "href": "OPS/s012-Poem-002.xhtml" }
+      "title": "Commencer la lecture",
+      "href": "EPUB/Content/PageBlanche_Page_005.xhtml"
+    }
   ],
   "links": []
 }
