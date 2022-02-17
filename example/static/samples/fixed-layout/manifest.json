@@ -1,0 +1,121 @@
+{
+  "@context": "https://readium.org/webpub-manifest/context.jsonld",
+  "metadata": {
+    "title": "The War Poems Of Siegfried Sassoon",
+    "language": "en",
+    "author": "Siegfreid Sassoon"
+  },
+  "resources": [
+    {
+      "href": "OPS/TOC.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "toc",
+      "rel": "contents"
+    },
+    {
+      "href": "OPS/images/ss_fixed_online.jpg",
+      "type": "image/jpeg",
+      "id": "cover-image",
+      "rel": "cover",
+      "width": 500,
+      "height": 708
+    },
+    { "href": "OPS/css/igp-twss-fxl.css", "type": "text/css", "id": "css-001" },
+    {
+      "href": "OPS/fonts/texgyrebonum-bold.woff",
+      "type": "application/font-woff",
+      "id": "fonts-001"
+    },
+    {
+      "href": "OPS/fonts/texgyrebonum-bolditalic.woff",
+      "type": "application/font-woff",
+      "id": "fonts-002"
+    },
+    {
+      "href": "OPS/fonts/texgyrebonum-italic.woff",
+      "type": "application/font-woff",
+      "id": "fonts-003"
+    },
+    {
+      "href": "OPS/fonts/texgyrebonum-regular.woff",
+      "type": "application/font-woff",
+      "id": "fonts-004"
+    }
+  ],
+  "readingOrder": [
+    {
+      "href": "OPS/s001-Cover-01.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s001"
+    },
+    {
+      "href": "OPS/s002-BookTitlePage-01.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s002"
+    },
+    {
+      "href": "OPS/s003-Section-01.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s003"
+    },
+    {
+      "href": "OPS/s004-Copyright-01.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s004"
+    },
+    {
+      "href": "OPS/s005-Epigraph-01.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s005"
+    },
+    {
+      "href": "OPS/s006-TableOfContents-01.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s006"
+    },
+    {
+      "href": "OPS/s007-Section-02.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s007"
+    },
+    {
+      "href": "OPS/s008-Section-03.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s008"
+    },
+    {
+      "href": "OPS/s009-Part-001.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s009"
+    },
+    {
+      "href": "OPS/s010-Section-004.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s010"
+    },
+    {
+      "href": "OPS/s011-Poem-001.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s011"
+    },
+    {
+      "href": "OPS/s012-Poem-002.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s012"
+    }
+  ],
+  "toc": [
+    { "title": "cover", "href": "OPS/s001-Cover-01.xhtml" },
+    {
+      "title": "THE WAR POEMS OF SIEGFRIED SASSOON",
+      "href": "OPS/s003-Section-01.xhtml"
+    },
+    { "title": "Copyright", "href": "OPS/s004-Copyright-01.xhtml" },
+    { "title": "Epigraph", "href": "OPS/s005-Epigraph-01.xhtml" },
+    { "title": "Contents", "href": "OPS/s006-TableOfContents-01.xhtml" },
+    { "title": "Part I", "href": "OPS/s009-Part-001.xhtml" },
+    { "title": "Prelude: The Troops", "href": "OPS/s011-Poem-001.xhtml" },
+    { "title": "Dreamers", "href": "OPS/s012-Poem-002.xhtml" }
+  ],
+  "links": []
+}
