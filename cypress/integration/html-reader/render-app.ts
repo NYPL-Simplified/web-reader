@@ -50,4 +50,33 @@ describe('render page content', () => {
     cy.window().its('scrollY').should('eq', 100);
     cy.window().its('scrollX').should('eq', 0);
   });
+
+  // Scroll to the bottom of the page, but if the screen is resized to be smaller, vertical scroll bar should re-appear to allow user to scroll down
+  it.only('Scrolling mode & resize to smaller screen shows you are not at the end of the chapter', () => {
+    cy.findByRole('button', { name: 'Settings' }).click();
+    cy.findByText('Scrolling').click();
+
+    cy.findByRole('button', { name: 'Table of Contents' }).click();
+    cy.log('open chapter 1');
+    cy.findByRole('menuitem', { name: 'I: Down the Rab­bit-Hole' }).click();
+
+    cy.wait(1000);
+
+    cy.log('scroll to the bottom of the page');
+    cy.window().scrollTo('bottom');
+    cy.window().then((win) => {
+      expect(win.innerHeight + win.scrollY).eq(win.document.body.offsetHeight);
+    });
+
+    cy.log(
+      'resize the screen to be smaller so the vertical scroll bar appears'
+    );
+    cy.viewport(500, 500);
+
+    cy.window().then((win) => {
+      expect(win.innerHeight + win.scrollY).not.eq(
+        win.document.body.offsetHeight
+      );
+    });
+  });
 });
