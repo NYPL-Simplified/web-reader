@@ -7,7 +7,10 @@ import {
   HtmlNavigator,
 } from '../types';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
-import { DEFAULT_HEIGHT, DEFAULT_SHOULD_GROW_WHEN_SCROLLING } from '..';
+import {
+  DEFAULT_HEIGHT,
+  DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
+} from '../constants';
 import {
   fetchAsTxt,
   calcPosition,
