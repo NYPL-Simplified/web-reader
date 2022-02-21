@@ -124,7 +124,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
          * We first try a fragment, then a progression, then a position value.
          */
         if (typeof fragment === 'string') {
-          navigateToHash(fragment, state.iframe);
+          navigateToHash(fragment, state.iframe, state.isScrolling);
         } else if (typeof progression === 'number') {
           navigateToProgression(state.iframe, progression, state.isScrolling);
         } else if (typeof position === 'number') {

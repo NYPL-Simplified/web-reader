@@ -52,7 +52,8 @@ export function navigateToProgression(
 
 export function navigateToHash(
   fragment: string,
-  iframe: HTMLIFrameElement
+  iframe: HTMLIFrameElement,
+  isScrolling: boolean
 ): void {
   const isHash = fragment.indexOf('#') === 0;
   if (isHash) {
@@ -60,6 +61,10 @@ export function navigateToHash(
     const el = iframe.contentDocument?.querySelector(fragment);
     if (el) {
       el.scrollIntoView();
+      // the element is now in view, but likely off center. We now
+      // need to call navigateToProgression to re-align ourselves
+      const { progression } = calcPosition(iframe, isScrolling);
+      navigateToProgression(iframe, progression, isScrolling);
     } else {
       console.error('Could not find an element with id', fragment);
     }
