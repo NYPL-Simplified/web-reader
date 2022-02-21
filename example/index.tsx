@@ -279,7 +279,7 @@ const HomePage = () => {
               </Link>
             </ListItem>
             <ListItem>
-              <Link to="/html/fixed-layout">Fixed Layout (Poems)</Link>
+              <Link to="/html/fixed-layout">Fixed Layout (Illustrated)</Link>
             </ListItem>
           </UnorderedList>
         </ListItem>
