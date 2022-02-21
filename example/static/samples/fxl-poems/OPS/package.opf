@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" version="3.0" xml:lang="en" unique-identifier="pub-id" prefix="rendition: http://www.idpf.org/vocab/rendition/#">
+<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <dc:title id="title">The War Poems Of Siegfried Sassoon</dc:title>
+    <dc:creator id="creator">Siegfreid Sassoon</dc:creator>
+    <dc:language>en</dc:language>
+    <dc:identifier id="pub-id">igp-twss-fxl</dc:identifier>
+    <dc:source>igp-twss-pb</dc:source>
+    <meta property="dcterms:modified">2013-05-18T03:55:58Z</meta>
+    <dc:date>2013</dc:date>
+    <dc:publisher>Infogrid Pacific Pte. Ltd.</dc:publisher>
+    <dc:contributor id="contrib1">Translated by Albert M.C. McMaster, B.A., A.E.  Henderson, B.A., Mme. Quesada and others</dc:contributor>
+    <dc:rights>Creative Commons, Attribution-No Derivative Works 3.0 License</dc:rights>
+    <dc:description> In this collection the poems are arranged in chronological order. The reader can follow Sassoon's emotional journey from a naive young officer with a fervent sense of mission, to a man  who could only see madness in the brutality, hypocrisy and waste of war. Sassoon's intelligence and writing skills create stunning and often horrifying word pictures in just a few lines. 
+</dc:description>
+    <dc:subject>Poetry</dc:subject>
+	<meta property="rendition:layout">pre-paginated</meta>
+	<meta property="rendition:orientation">auto</meta>
+	<meta property="rendition:spread">auto</meta>
+</metadata>
+<manifest>
+    <item id="toc" properties="nav" href="TOC.xhtml" media-type="application/xhtml+xml" />
+    <item id="cover-image" properties="cover-image" href="images/ss_fixed_online.jpg" media-type="image/jpeg" />
+    <item id="s001"  href="s001-Cover-01.xhtml" media-type="application/xhtml+xml" />
+    <item id="s002"  href="s002-BookTitlePage-01.xhtml" media-type="application/xhtml+xml" />
+    <item id="s003"  href="s003-Section-01.xhtml" media-type="application/xhtml+xml" />
+    <item id="s004"  href="s004-Copyright-01.xhtml" media-type="application/xhtml+xml" />
+    <item id="s005"  href="s005-Epigraph-01.xhtml" media-type="application/xhtml+xml" />
+    <item id="s006"  href="s006-TableOfContents-01.xhtml" media-type="application/xhtml+xml" />
+    <item id="s007"  href="s007-Section-02.xhtml" media-type="application/xhtml+xml" />
+    <item id="s008"  href="s008-Section-03.xhtml" media-type="application/xhtml+xml" />
+    <item id="s009"  href="s009-Part-001.xhtml" media-type="application/xhtml+xml" />
+    <item id="s010"  href="s010-Section-004.xhtml" media-type="application/xhtml+xml" />
+    <item id="s011"  href="s011-Poem-001.xhtml" media-type="application/xhtml+xml" />
+    <item id="s012"  href="s012-Poem-002.xhtml" media-type="application/xhtml+xml" />
+    <item id="s013"  href="s013-Poem-003.xhtml" media-type="application/xhtml+xml" />
+    <item id="s014"  href="s014-Section-005.xhtml" media-type="application/xhtml+xml" />
+    <item id="s015"  href="s015-Poem-004.xhtml" media-type="application/xhtml+xml" />
+    <item id="s016"  href="s016-Poem-005.xhtml" media-type="application/xhtml+xml" />
+    <item id="s017"  href="s017-Poem-006.xhtml" media-type="application/xhtml+xml" />
+    <item id="s018"  href="s018-Section-006.xhtml" media-type="application/xhtml+xml" />
+    <item id="s019"  href="s019-Poem-007.xhtml" media-type="application/xhtml+xml" />
+    <item id="s020"  href="s020-Section-007.xhtml" media-type="application/xhtml+xml" />
+    <item id="s021"  href="s021-Poem-008.xhtml" media-type="application/xhtml+xml" />
+    <item id="s022"  href="s022-Poem-009.xhtml" media-type="application/xhtml+xml" />
+    <item id="s023"  href="s023-Poem-010.xhtml" media-type="application/xhtml+xml" />
+    <item id="s024"  href="s024-Poem-011.xhtml" media-type="application/xhtml+xml" />
+    <item id="s025"  href="s025-Poem-012.xhtml" media-type="application/xhtml+xml" />
+    <item id="s026"  href="s026-Poem-013.xhtml" media-type="application/xhtml+xml" />
+    <item id="s027"  href="s027-Poem-014.xhtml" media-type="application/xhtml+xml" />
+    <item id="s028"  href="s028-Section-008.xhtml" media-type="application/xhtml+xml" />
+    <item id="s029"  href="s029-Poem-015.xhtml" media-type="application/xhtml+xml" />
+    <item id="s030"  href="s030-Poem-016.xhtml" media-type="application/xhtml+xml" />
+    <item id="s031"  href="s031-Poem-017.xhtml" media-type="application/xhtml+xml" />
+    <item id="s032"  href="s032-Poem-018.xhtml" media-type="application/xhtml+xml" />
+    <item id="s033"  href="s033-Poem-019.xhtml" media-type="application/xhtml+xml" />
+    <item id="s034"  href="s034-Poem-020.xhtml" media-type="application/xhtml+xml" />
+    <item id="s035"  href="s035-Poem-021.xhtml" media-type="application/xhtml+xml" />
+    <item id="s036"  href="s036-Poem-022.xhtml" media-type="application/xhtml+xml" />
+    <item id="s037"  href="s037-Section-009.xhtml" media-type="application/xhtml+xml" />
+    <item id="s038"  href="s038-Poem-023.xhtml" media-type="application/xhtml+xml" />
+    <item id="s039"  href="s039-Poem-024.xhtml" media-type="application/xhtml+xml" />
+    <item id="s040"  href="s040-Poem-025.xhtml" media-type="application/xhtml+xml" />
+    <item id="s041"  href="s041-Poem-026.xhtml" media-type="application/xhtml+xml" />
+    <item id="s042"  href="s042-Section-010.xhtml" media-type="application/xhtml+xml" />
+    <item id="s043"  href="s043-Part-002.xhtml" media-type="application/xhtml+xml" />
+    <item id="s044"  href="s044-Section-011.xhtml" media-type="application/xhtml+xml" />
+    <item id="s045"  href="s045-Poem-027.xhtml" media-type="application/xhtml+xml" />
+    <item id="s046"  href="s046-Poem-028.xhtml" media-type="application/xhtml+xml" />
+    <item id="s047"  href="s047-Poem-029.xhtml" media-type="application/xhtml+xml" />
+    <item id="s048"  href="s048-Poem-030.xhtml" media-type="application/xhtml+xml" />
+    <item id="s049"  href="s049-Poem-031.xhtml" media-type="application/xhtml+xml" />
+    <item id="s050"  href="s050-Poem-032.xhtml" media-type="application/xhtml+xml" />
+    <item id="s051"  href="s051-Poem-033.xhtml" media-type="application/xhtml+xml" />
+    <item id="s052"  href="s052-Poem-034.xhtml" media-type="application/xhtml+xml" />
+    <item id="s053"  href="s053-Poem-035.xhtml" media-type="application/xhtml+xml" />
+    <item id="s054"  href="s054-Poem-036.xhtml" media-type="application/xhtml+xml" />
+    <item id="s055"  href="s055-Poem-037.xhtml" media-type="application/xhtml+xml" />
+    <item id="s056"  href="s056-Poem-038.xhtml" media-type="application/xhtml+xml" />
+    <item id="s057"  href="s057-Poem-039.xhtml" media-type="application/xhtml+xml" />
+    <item id="s058"  href="s058-Poem-040.xhtml" media-type="application/xhtml+xml" />
+    <item id="s059"  href="s059-Poem-041.xhtml" media-type="application/xhtml+xml" />
+    <item id="s060"  href="s060-Poem-042.xhtml" media-type="application/xhtml+xml" />
+    <item id="s061"  href="s061-Poem-043.xhtml" media-type="application/xhtml+xml" />
+    <item id="s062"  href="s062-Poem-044.xhtml" media-type="application/xhtml+xml" />
+    <item id="s063"  href="s063-Poem-045.xhtml" media-type="application/xhtml+xml" />
+    <item id="s064"  href="s064-Poem-046.xhtml" media-type="application/xhtml+xml" />
+    <item id="s065"  href="s065-Poem-047.xhtml" media-type="application/xhtml+xml" />
+    <item id="s066"  href="s066-Section-012.xhtml" media-type="application/xhtml+xml" />
+    <item id="s067"  href="s067-Part-003.xhtml" media-type="application/xhtml+xml" />
+    <item id="s068"  href="s068-Section-013.xhtml" media-type="application/xhtml+xml" />
+    <item id="s069"  href="s069-Poem-048.xhtml" media-type="application/xhtml+xml" />
+    <item id="s070"  href="s070-Poem-049.xhtml" media-type="application/xhtml+xml" />
+    <item id="s071"  href="s071-Section-014.xhtml" media-type="application/xhtml+xml" />
+    <item id="s072"  href="s072-Poem-050.xhtml" media-type="application/xhtml+xml" />
+    <item id="s073"  href="s073-Poem-051.xhtml" media-type="application/xhtml+xml" />
+    <item id="s074"  href="s074-Poem-052.xhtml" media-type="application/xhtml+xml" />
+    <item id="s075"  href="s075-Poem-053.xhtml" media-type="application/xhtml+xml" />
+    <item id="s076"  href="s076-Section-015.xhtml" media-type="application/xhtml+xml" />
+    <item id="s077"  href="s077-Poem-054.xhtml" media-type="application/xhtml+xml" />
+    <item id="s078"  href="s078-Poem-055.xhtml" media-type="application/xhtml+xml" />
+    <item id="s079"  href="s079-Poem-056.xhtml" media-type="application/xhtml+xml" />
+    <item id="s080"  href="s080-Poem-057.xhtml" media-type="application/xhtml+xml" />
+    <item id="s081"  href="s081-Poem-058.xhtml" media-type="application/xhtml+xml" />
+    <item id="s082"  href="s082-Section-016.xhtml" media-type="application/xhtml+xml" />
+    <item id="s083"  href="s083-Section-017.xhtml" media-type="application/xhtml+xml" />
+    <item id="s084"  href="s084-Poem-059.xhtml" media-type="application/xhtml+xml" />
+    <item id="s085"  href="s085-Poem-060.xhtml" media-type="application/xhtml+xml" />
+    <item id="s086"  href="s086-Poem-061.xhtml" media-type="application/xhtml+xml" />
+    <item id="s087"  href="s087-Section-018.xhtml" media-type="application/xhtml+xml" />
+    <item id="s088"  href="s088-Poem-062.xhtml" media-type="application/xhtml+xml" />
+    <item id="s089"  href="s089-Section-019.xhtml" media-type="application/xhtml+xml" />
+    <item id="s090"  href="s090-Poem-063.xhtml" media-type="application/xhtml+xml" />
+    <item id="s091"  href="s091-Poem-064.xhtml" media-type="application/xhtml+xml" />
+    <item id="css-001"  href="css/igp-twss-fxl.css" media-type="text/css" />
+    <item id="fonts-001"  href="fonts/texgyrebonum-bold.woff" media-type="application/font-woff" />
+    <item id="fonts-002"  href="fonts/texgyrebonum-bolditalic.woff" media-type="application/font-woff" />
+    <item id="fonts-003"  href="fonts/texgyrebonum-italic.woff" media-type="application/font-woff" />
+    <item id="fonts-004"  href="fonts/texgyrebonum-regular.woff" media-type="application/font-woff" />
+</manifest>
+<spine page-progression-direction="ltr">
+    <itemref idref="s001" linear="yes" />
+    <itemref idref="s002" linear="yes" properties="rendition:page-spread-left"/>
+    <itemref idref="s003" linear="yes" />
+    <itemref idref="s004" linear="yes" />
+    <itemref idref="s005" linear="yes" />
+    <itemref idref="s006" linear="yes" />
+    <itemref idref="s007" linear="yes" />
+    <itemref idref="s008" linear="yes" />
+    <itemref idref="s009" linear="yes" />
+    <itemref idref="s010" linear="yes" properties="rendition:page-spread-left"/>
+    <itemref idref="s011" linear="yes" />
+    <itemref idref="s012" linear="yes" />
+    <itemref idref="s013" linear="yes" />
+    <itemref idref="s014" linear="yes" />
+    <itemref idref="s015" linear="yes" />
+    <itemref idref="s016" linear="yes" />
+    <itemref idref="s017" linear="yes" />
+    <itemref idref="s018" linear="yes" />
+    <itemref idref="s019" linear="yes" />
+    <itemref idref="s020" linear="yes" />
+    <itemref idref="s021" linear="yes" />
+    <itemref idref="s022" linear="yes" />
+    <itemref idref="s023" linear="yes" />
+    <itemref idref="s024" linear="yes" />
+    <itemref idref="s025" linear="yes" />
+    <itemref idref="s026" linear="yes" />
+    <itemref idref="s027" linear="yes" />
+    <itemref idref="s028" linear="yes" />
+    <itemref idref="s029" linear="yes" />
+    <itemref idref="s030" linear="yes" />
+    <itemref idref="s031" linear="yes" />
+    <itemref idref="s032" linear="yes" />
+    <itemref idref="s033" linear="yes" />
+    <itemref idref="s034" linear="yes" />
+    <itemref idref="s035" linear="yes" />
+    <itemref idref="s036" linear="yes" />
+    <itemref idref="s037" linear="yes" />
+    <itemref idref="s038" linear="yes" />
+    <itemref idref="s039" linear="yes" />
+    <itemref idref="s040" linear="yes" />
+    <itemref idref="s041" linear="yes" />
+    <itemref idref="s042" linear="yes" />
+    <itemref idref="s043" linear="yes" />
+    <itemref idref="s044" linear="yes" properties="rendition:page-spread-left"/>
+    <itemref idref="s045" linear="yes" />
+    <itemref idref="s046" linear="yes" />
+    <itemref idref="s047" linear="yes" />
+    <itemref idref="s048" linear="yes" />
+    <itemref idref="s049" linear="yes" />
+    <itemref idref="s050" linear="yes" />
+    <itemref idref="s051" linear="yes" />
+    <itemref idref="s052" linear="yes" />
+    <itemref idref="s053" linear="yes" />
+    <itemref idref="s054" linear="yes" />
+    <itemref idref="s055" linear="yes" />
+    <itemref idref="s056" linear="yes" />
+    <itemref idref="s057" linear="yes" />
+    <itemref idref="s058" linear="yes" />
+    <itemref idref="s059" linear="yes" />
+    <itemref idref="s060" linear="yes" />
+    <itemref idref="s061" linear="yes" />
+    <itemref idref="s062" linear="yes" />
+    <itemref idref="s063" linear="yes" />
+    <itemref idref="s064" linear="yes" />
+    <itemref idref="s065" linear="yes" />
+    <itemref idref="s066" linear="yes" />
+    <itemref idref="s067" linear="yes" />
+    <itemref idref="s068" linear="yes" properties="rendition:page-spread-left"/>
+    <itemref idref="s069" linear="yes" />
+    <itemref idref="s070" linear="yes" />
+    <itemref idref="s071" linear="yes" />
+    <itemref idref="s072" linear="yes" />
+    <itemref idref="s073" linear="yes" />
+    <itemref idref="s074" linear="yes" />
+    <itemref idref="s075" linear="yes" />
+    <itemref idref="s076" linear="yes" />
+    <itemref idref="s077" linear="yes" />
+    <itemref idref="s078" linear="yes" />
+    <itemref idref="s079" linear="yes" />
+    <itemref idref="s080" linear="yes" />
+    <itemref idref="s081" linear="yes" />
+    <itemref idref="s082" linear="yes" />
+    <itemref idref="s083" linear="yes" />
+    <itemref idref="s084" linear="yes" />
+    <itemref idref="s085" linear="yes" />
+    <itemref idref="s086" linear="yes" />
+    <itemref idref="s087" linear="yes" />
+    <itemref idref="s088" linear="yes" />
+    <itemref idref="s089" linear="yes" />
+    <itemref idref="s090" linear="yes" />
+    <itemref idref="s091" linear="yes" />
+</spine>
+</package>

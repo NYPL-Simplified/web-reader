@@ -191,6 +191,12 @@ const HtmlReaders = () => {
           webpubManifestUrl={`${origin}/samples/fixed-layout/manifest.json`}
         />
       </Route>
+      <Route path={`/html/fxl-poems`}>
+        <WebReader
+          injectables={htmlInjectables}
+          webpubManifestUrl={`${origin}/samples/fxl-poems/manifest.json`}
+        />
+      </Route>
       <Route path={`/html/fixed-height-embedded-moby-epub2`}>
         <Box bg="lavenderblush" p={6} w="100vw">
           <Heading>Fixed-height Embedded Example</Heading>
@@ -280,6 +286,9 @@ const HomePage = () => {
             </ListItem>
             <ListItem>
               <Link to="/html/fixed-layout">Fixed Layout (Illustrated)</Link>
+            </ListItem>
+            <ListItem>
+              <Link to="/html/fxl-poems">Fixed Layout (Poems)</Link>
             </ListItem>
           </UnorderedList>
         </ListItem>

@@ -1,0 +1,182 @@
+/*DESIGN PROFILE - Default */
+/* Copyright 2013 Infogrid Pacific Pte. Ltd. All rights reserved. */
+/* Profile Name: CSS Minification */
+/* Created By: Infogrid Pacific */
+/* Creation Date: 2013-05-18 */
+/* Modified By: Infogrid Pacific */
+@font-face { font-family: "Galley"; font-weight: 400; font-style: italic; font-stretch: normal; font-variant: normal; src: url("../fonts/texgyrebonum-italic.woff"); }
+@font-face { font-family: "Galley"; font-weight: 700; font-style: normal; font-stretch: normal; font-variant: normal; src: url("../fonts/texgyrebonum-bold.woff"); }
+@font-face { font-family: "Galley"; font-weight: 400; font-style: normal; font-stretch: normal; font-variant: normal; src: url("../fonts/texgyrebonum-regular.woff"); }
+@font-face { font-family: "Galley"; font-weight: 700; font-style: italic; font-stretch: normal; font-variant: normal; src: url("../fonts/texgyrebonum-bolditalic.woff"); }
+.date-rw { font-family: Date, NamedPara, Galley; }
+ol { font-family: NumberList, Galley; }
+.list-toc-rw { font-family: TableOfContents, NamedLists, Galley; }
+.frontmatter-rw .title-block-rw .title-num-rw { font-family: FrontmatterTitleNumber, FrontmatterTitleBlock, TitleBlock, Galley; }
+.epigraph-rw { font-family: Epigraph, TextBlock, Galley; }
+body, section, div, table, thead, tbody, tfoot, th, td, p, pre, ul, ol, dl, dt, dd, li, span, nav, header, footer { margin: 0; padding: 0; }
+body { margin: 0; padding: 0; }
+div, section { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -o-box-sizing: border-box; box-sizing: border-box; }
+.copyright-rw {font-size: 20px; padding-right: 0; padding-top: 90px; font-family: Copyright, TextBlock, Galley; line-height: 24px; padding-left: 0; }
+.copyright-rw p { text-align: left; text-indent: 0; margin-bottom: 0; padding-bottom: 15px; }
+.frontmatter-rw, .body-rw, .Poem-rw { position:relative; width:850px; height:1190px; padding:72px 108px 96px 108px; font-size:22px; line-height:30px; background-color:white; border:0px solid gray; overflow:hidden; }
+.Cover-rw img { width:850px; height:1190px; position:absolute; top:0; left:0; }
+.galley-rw {word-spacing: 0; font-size: 22px; font-weight: normal; text-align: left; font-family: Galley, serif; letter-spacing: 0; line-height: 30px; }
+p { text-indent: 0; padding-bottom: 0; }
+p+p { text-indent: 1.3em; }
+.align-center-rw { text-align: center; text-indent: 0; }
+.align-left-rw { text-align: left; }
+.align-right-rw { text-align: right; }
+.blank-line-rw { height: 1em; }
+.firstpara-rw { text-indent: 0; }
+.quarter-line-below-rw { margin-bottom: 0.25em; }
+.attribution-rw {font-family: Attribution, NamedPara, Galley; font-style: italic; text-align: right; }
+p.date-rw { text-align: right; font-style: italic; }
+p.decoration-rw { text-align: center; text-indent: 0; vertical-align: middle; margin-top: 1em; margin-right: 0; margin-bottom: 1.0em; margin-left: 0; }
+p.epigraph-rw { display:block; width: auto; font-style: italic; text-align: center; text-indent: 0; margin-top: 1em; margin-right: 1em; margin-bottom: 1em; margin-left: 1em; }
+.ornament-rw { text-align: center; text-indent: 0; margin-top: 0.5em; margin-bottom: 0.5em; }
+div+p { text-indent: 0; }
+p.blank-line-rw+p { text-indent: 0; }
+p.decoration-rw+p { text-indent: 0; }
+h4+p { text-indent: 0; }
+h5+p { text-indent: 0; }
+.block-rw p:first-child { text-indent: 0; }
+.layout-rw p:first-child { text-indent: 0; }
+.paras-rw p:first-child { text-indent: 0; }
+.media-rw p:first-child { text-indent: 0; }
+ol+p { text-indent: 0; }
+div.blank-line-rw { height: 1em; text-align: center; margin: 0; }
+div.decoration-rw { text-align: center; vertical-align: middle; margin-top: 1em; margin-bottom: 1em; }
+div.decoration-rw p { text-indent: 0; text-align: center; margin-top: 1em; margin-bottom: 1em; }
+span.date-rw { font-style: italic; }
+a:link { color: rgb(0, 100, 150); text-decoration: none; }
+a:visited { color: rgb(0, 100, 150); }
+a:hover { color: rgb(0, 100, 150); text-decoration: underline; }
+a:active { color: rgb(0, 100, 150); }
+span.pagebreak-rw { display: none; }
+.-epub-media-overlay-active, .-readium-epub-media-overlay-active { color: red; background-color: inherit; }
+.galley-rw h4 {font-size: 1em; line-height: 1em; color: rgb(0, 0, 0); margin-top: 1.5em; margin-bottom: 0.5em; page-break-after: avoid; font-weight: bold; text-transform: none; font-style: italic; text-align: center; }
+.galley-rw h5 {font-size: 1em; line-height: 1em; color: rgb(0, 0, 0); margin-top: 1.5em; margin-bottom: 0.5em; page-break-after: avoid; font-weight: bold; text-transform: none; font-style: normal; text-align: left; }
+.galley-rw h4+div { margin-top: 0; }
+.galley-rw h5+div { margin-top: 0; }
+h4 {hyphens: none; font-family: Galley, Heading4, Heading, Galley; -webkit-hyphens: none; -moz-hyphens: none; -o-hyphens: none; }
+h5 {hyphens: none; font-family: Heading5, Heading, Galley; -webkit-hyphens: none; -moz-hyphens: none; -o-hyphens: none; }
+.Part-rw .title-block-rw p { text-indent: 0; }
+.frontmatter-rw .title-block-rw p { text-indent: 0; }
+.frontmatter-rw .title-block-rw {-moz-box-sizing: border-box; margin: 0 0 60px 0; padding-left: 0px; height: 180px; box-sizing: border-box; padding-right: 0px; padding-bottom: 0px; padding-top: 60px; font-family: FrontmatterTitleBlock, TitleBlock, Galley; -webkit-box-sizing: border-box; text-align: center; }
+.frontmatter-rw .title-block-rw h1 {font-size: 44px; font-weight: normal; color: rgb(0, 0, 0); padding-bottom: 30px; font-family: FrontmatterTitle, TitleBlock, Galley; text-transform: uppercase; line-height: 60px; text-align: center; }
+.frontmatter-rw .title-block-rw .title-sub-rw {font-size: 1.5em; font-family: FrontmatterTitleSubTitle, FrontmatterTitleBlock, TitleBlock, Galley; line-height: 1em; text-align: inherit; }
+.frontmatter-rw .title-block-rw .title-author-rw {line-height: 1em; font-family: FrontmatterTitleAuthor, FrontmatterTitleBlock, TitleBlock, Galley; font-style: italic; text-align: inherit; }
+.frontmatter-rw .title-block-rw .title-other-rw {font-size: 1em; font-family: FrontmatterTitleOther, FrontmatterTitleBlock, TitleBlock, Galley; text-align: inherit; }
+.Part-rw .title-block-rw {padding-right: 1em; margin-bottom: 1em; padding-bottom: 0em; padding-top: 2em; font-family: PartTitleBlock, TitleBlock, Galley, sans-serif; padding-left: 1em; text-align: center; }
+.Part-rw .title-block-rw .title-num-rw {font-size: 2.00em; font-weight: normal; padding-bottom: 1em; color: rgb(0, 0, 0); font-family: PartTitleNumber, PartTitleBlock, TitleBlock, Galley; line-height: 1em; text-align: inherit; }
+.Part-rw .title-block-rw h1 {font-size: 44px; font-weight: normal; color: rgb(0, 0, 0); padding-bottom: 15px; font-family: PartTitle, PartTitleBlock, TitleBlock, Galley; text-transform: uppercase; line-height: 60px; text-align: center; }
+.Part-rw .title-block-rw .title-sub-rw {font-size: 1.4em; font-family: PartTitleSubTitle, PartTitleBlock, TitleBlock, Galley; line-height: 1em; text-align: inherit; }
+.Part-rw .title-block-rw .title-author-rw {font-style: italic; font-size: 1.1em; font-family: PartTitleAuthor, PartTitleBlock, TitleBlock, Galley; line-height: 1em; text-align: inherit; }
+.Part-rw .title-block-rw .title-other-rw {font-style: italic; font-size: 1em; font-family: PartTitleOther, PartTitleBlock, TitleBlock, Galley; line-height: 1em; text-align: inherit; }
+.title-block-book-rw {font-size: 1em; font-family: BookTitlePage, Galley; line-height: 1em; padding-top: 4em; text-align: center; }
+.title-block-book-rw h1 {font-size: 2.5em; font-weight: normal; color: rgb(0, 0, 0); line-height: 1em; padding-bottom: 0.5em; font-family: BookTitle, BookTitlePage, Galley; font-style: normal; text-align: inherit; }
+.title-block-book-rw .title-sub-rw {font-size: 1.8em; font-weight: normal; color: rgb(0, 0, 0); text-indent: 0; line-height: 1em; padding-bottom: 1.5em; font-family: BookTitleSubTitle, BookTitlePage, Galley; font-style: normal; text-align: inherit; }
+.title-block-book-rw .title-author-rw {font-size: 1.7em; font-weight: normal; text-indent: 0; line-height: 1em; padding-bottom: 1.5em; font-family: BookTitleAuthor, BookTitlePage, Galley; font-style: normal; text-align: inherit; }
+.title-block-book-rw .title-other-rw {font-size: 1em; font-weight: normal; text-indent: 0; line-height: 1em; padding-bottom: 1em; font-family: BookTitleOther, BookTitlePage, Galley; font-style: normal; text-align: inherit; }
+.imprint-rw {margin-bottom: 8px; border-top: 1px solid rgb(0, 0, 0); border-bottom: 1px solid rgb(0, 0, 0); margin-top: 90px; padding-bottom: 8px; padding-top: 8px; font-family: Imprint, BookTitlePage, Galley; text-align: center; }
+.imprint-rw p { font-size: 20px; font-style: normal; font-weight: normal; line-height: 30px; text-indent: 0; }
+.title-block-book-rw p {font-size: 1em; line-height: 1em; padding-bottom: 0.5em; text-align: inherit; font-weight: normal; font-style: normal; text-indent: 0em; }
+.title-block-book-rw p+p { text-indent: 0em; }
+.galley-rw ol { text-align: left; margin-top: 0.55em; margin-right: 0; margin-bottom: 0.55em; margin-left: 1.64em }
+.galley-rw li { padding-top: 0; padding-bottom: 0em; }
+.galley-rw ol li { list-style: decimal; }
+.galley-rw ol ol li { list-style: upper-latin; margin-left: 1.64em; }
+.galley-rw ol ol ol li { list-style: lower-latin; margin-left: 1.64em; }
+.galley-rw ol ol ol ol li { list-style: upper-roman; margin-left: 1.64em; }
+.galley-rw ol ol ol ol ol li { list-style: lower-roman; margin-left: 1.64em; }
+.galley-rw ol+p { text-indent: 0; }
+.galley-rw div+ol { margin-top: 0; }
+.galley-rw ol+div { margin-top: 0; }
+.list-named-rw { position: relative; padding: 0; margin: 0; }
+.list-named-rw ol { list-style-type: none; }
+.list-named-rw ol li { list-style-type: none; }
+.list-named-rw p { text-indent: 0; }
+.list-named-rw p+p { text-indent: 0; }
+.named-lists-rw { margin-top: 1em; margin-bottom: 1em; }
+.list-toc-rw ol { line-height: 1.2em; margin-left: 0em; }
+li.toc-fm-rw { font-size: 20px; font-style: italic; font-weight: normal; text-indent: 15px; padding-top: 0; padding-bottom: 0; margin-right: 32px; margin-bottom: 4px; margin-left: 0 !important; }
+li.toc-part-rw { font-size: 20px; text-indent: 0px; font-style: normal; font-weight: bold; text-transform: uppercase; padding-top: 0; padding-bottom: 0em; margin-left: 0 !important; }
+li.toc-fm-rw+li.toc-part-rw { padding-top: 0em; }
+.TableOfContents-rw { font-size: 20px; line-height: 30px; }
+.toc-body-rw { margin-left: 16px; }
+.block-rw h4 { font-size: 0.9em; line-height: 1.2em; text-align: left; text-indent: 0; font-style: normal; font-weight: bold; margin-top: 1em; margin-right: 0; margin-bottom: 1em; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; }
+.block-rw h5 { font-size: 22px; line-height: 30px; text-align: left; text-indent: 0; font-style: normal; font-weight: bold; margin-top: 16px; margin-right: 0; margin-bottom: 10px; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; }
+.block-rw h6 { font-size: 0.9em; line-height: 1.2em; text-align: left; font-style: italic; margin-top: 0.5em; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; }
+div.epigraph-rw { width: 85%; font-size: 20px; line-height: 24px; margin-top: 30px; margin-right: auto; margin-bottom: 30px; margin-left: auto; text-align: justify; }
+.media-rw { page-break-inside: avoid; text-indent: 0; text-align: left; }
+.media-rw h4 { font-size: 1em; font-weight: bold; padding: 0.5em 0 0.5em 0; text-align: left; }
+.media-rw h5 { font-size: 1em; font-weight: bold; padding: 0.75em 0 0.25em 0; }
+.media-rw h6 { font-size: 1em; font-style: italic; padding: 0.75em 0 0.5em 0; }
+.media-rw p { text-indent: 0; text-align: left; }
+.image-rw { margin-top: 0.5em; margin-right: 0; margin-bottom: 0.5em; padding: 0; }
+.layout-rw table { table-layout: auto; border-collapse: collapse; margin-top: 0.5em; margin-bottom: 0.5em; }
+.layout-rw table th { font-size: 1em; line-height: 1em; font-weight: normal; vertical-align: top; }
+.layout-rw table td { font-size: 1em; line-height: 1em; font-weight: normal; vertical-align: top; }
+.layout-rw table thead th { font-size: 1em; line-height: 1em; font-weight: normal; vertical-align: top; }
+.layout-rw table tbody td { font-size: 1em; line-height: 1em; font-weight: normal; vertical-align: top; }
+.col-2-rw { -moz-column-count: 2; -webkit-column-count: 2; -o-column-count: 2; column-count: 2; -moz-column-gap: 1em; -webkit-column-gap: 1em; -o-column-gap: 1em; column-gap: 1em; -moz-column-rule: 1px solid gray; -webkit-column-rule: 1px solid gray; -o-column-rule: 1px solid gray; column-rule: 1px solid gray; margin: 1em 0 1em 0; }
+.width-auto-rw .pc-rw { width: auto; }
+.pc-rw { margin: 0; padding: 0; }
+.pc-rw img { width: 100%; margin: 0; padding: 0; }
+.pc-rw table { width: 100%; margin: 0; padding: 0; }
+.pc-rw p { text-align: left; }
+div.pc-rw>:first-child { margin-top: 0; padding-top: 0; }
+div.pc-rw>:last-child { margin-bottom: 0; padding-top: 0; }
+div.align-left-rw { display: block; text-align: left; margin-right: auto; }
+.align-left-rw table { margin: 0 auto 0 0; }
+.align-left-rw .pc-rw { margin: 0 auto 0 0; }
+.align-left-rw .pc-rw img { margin: 0 auto 0 0; }
+.align-left-rw .pc-rw object { margin: 0 auto 0 0; }
+div.align-right-rw { display: block; text-align:right; margin-left: auto; }
+.align-right-rw table { margin: 0 0 0 auto; }
+.align-right-rw .pc-rw { margin: 0 0 0 auto; }
+.align-right-rw .pc-rw img { margin: 0 0 0 auto; }
+.align-right-rw .pc-rw object { margin: 0 0 0 auto; }
+div.align-center-rw { display: block; text-align:center; margin-left: auto; margin-right: auto; }
+.align-center-rw table { margin: 0 auto 0 auto; }
+.align-center-rw .pc-rw { margin: 0 auto 0 auto; }
+.align-center-rw .pc-rw img { margin: 0 auto 0 auto; }
+.align-center-rw .pc-rw object { margin: 0 auto 0 auto; }
+div.poem-normal-rw { margin: 0 auto 0 auto; }
+div.poem-normal-rw .poem-body-rw { margin: 0 auto 1em auto !important; display: table; }
+div.poem-normal-rw div+p { text-indent: 0 !important; margin-left: 0; }
+div.poem-normal-rw p+p { text-indent: 1.3em; margin-left: 0; }
+div.poem-normal-rw .title-block-rw { padding: 2px; margin: 0 0 1em 1em; display: block; }
+div.poem-title-block-rw {padding: 0 0 0 0; margin: 0 0 0 0; display: block; }
+div.poem-rw .title-block-rw h1 { font-size: 44px; color: black; font-weight: normal; font-style: normal; font-size: 60px; text-align: center; padding-bottom: 15px; text-transform: uppercase; }
+div.poem-title-block-rw h1 { color: black; font-weight: normal; font-style: normal; font-size: 1.3em; text-align: center; padding-bottom: 0; text-transform: uppercase; }
+div.poem-normal-rw .title-block-rw .title-sub-rw { font-weight: normal; font-style: normal; text-align: center; font-size: 1.25em; padding: 0 0 1em 0; }
+div.poem-title-block-rw .title-sub-rw { font-weight: normal; font-style: normal; text-align: center; font-size: 1.25em; padding: 0 0 1em 0; text-indent: 0; }
+div.poem-normal-rw .title-block-rw .title-other-rw { text-align: center; font-style: normal; }
+div.poem-title-block-rw .title-other-rw { text-align: center; font-style: normal; }
+div.poem-normal-rw .title-block-rw .epigraph-rw { font-size: 20px; margin: 0 auto 0 auto; padding: 0; text-indent: 0; font-style: normal; }
+div.poem-title-block-rw .epigraph-rw { font-size: 0.9em; margin: 0 auto 0 auto; padding: 0; text-indent: 0; font-style: normal; display: table; }
+div.poem-normal-rw .title-block-rw .epigraph-rw p { text-indent: 0; }
+div.poem-title-block-rw .epigraph-rw p { text-indent: 0; }
+div.poem-normal-rw .title-block-rw .title-num-rw { font-weight: bold; text-align: center; }
+div.poem-title-block-rw .title-num-rw { font-weight: bold; text-align: center; }
+div.poem-normal-rw div.decoration-rw { text-align: center; margin: 0 !important; padding: 0 0 0.5em 0 !important; }
+div.poem-rw .decoration-rw p { text-align: center; }
+div.poem-rw h4 { font-weight: normal; font-style: normal; font-size: inherit; line-height: 1em; text-align: center; padding: 0.5em 0 0.5em 0; margin: 0; }
+div.poem-rw h2 {padding: 0.5em 0 0.5em 0; font-size: inherit; text-transform: uppercase; text-align: center; font-weight: normal; margin: 0; line-height: 1em; font-style: inherit; }
+div.poem-rw h3 {padding: 0.5em 0 0.5em 0; font-size: inherit; text-align: center; font-weight: normal; margin: 0; line-height: 1em; font-style: inherit; }
+div.poem-rw h5 {padding: 0.5em 0 0.5em 0; font-size: inherit; text-align: center; font-weight: bold; margin: 0; line-height: 1em; font-style: italic; }
+div.poem-rw div.stanza-rw h4 { font-weight: normal; font-style: normal; font-size: inherit; line-height: 1em; text-align: center; padding: 0em 0 1em 0 !important; margin: 0 !important; }
+div.poem-rw .poem-body-rw div.stanza-rw { margin: 0 0 1em 0; }
+div.stanza-rw p { text-indent: -18px; margin-left: 18px; padding-bottom: 0; margin-bottom: 0; }
+div.stanza-rw p+p { text-indent: -18px; margin-left: 18px; padding-bottom: 0; margin-bottom: 0; }
+div.poem-rw div.poem-title-block-rw p.title-other-rw { font-family: inherit; font-size: 20px; line-height: 30px; text-align: center; margin-top: 0pt; margin-right: 0pt; margin-left: 0pt; padding-top: 0pt; padding-right: 0pt; padding-bottom: 10px; padding-left: 0pt; }
+div.poem-rw div.title-block-rw p.title-other-rw { font-family: inherit; font-size: 20px; line-height: 30px; text-align: center; margin-top: 0pt; margin-right: 0pt; margin-left: 0pt; padding-top: 0pt; padding-right: 0pt; padding-bottom: 10px; padding-left: 0pt; }
+#p1177, #pagebreak-rw_blankpage { display: none !important; visibility: hidden !important; color: red !important; }
+#p173, #p423, #p1108, #p1131 { word-spacing: -0.75pt; }
+p.alt-rw { font-family: sans-serif; }
+.running-header-rw { position: absolute; top: 0; left: 0; width: 100%; height: 30px; }
+.header-left-rw { font-style: italic; }
+.header-right-rw { font-style: normal; }
+.folio-left-rw { display: block; text-align: center; }
+.folio-right-rw { display: block; text-align: center; }
