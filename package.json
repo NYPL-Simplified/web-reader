@@ -1,6 +1,6 @@
 {
   "name": "@nypl/web-reader",
-  "version": "0.3.3",
+  "version": "1.0.0",
   "license": "MIT",
   "repository": "https://github.com/NYPL-Simplified/web-reader",
   "homepage": "https://github.com/NYPL-Simplified/web-reader",
@@ -106,7 +106,7 @@
     "babel-loader": "^8.2.2",
     "cypress": "^9.2.1",
     "debounce": "^1.2.1",
-    "esbuild": "^0.12.28",
+    "esbuild": "^0.14.13",
     "esbuild-jest": "^0.5.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
@@ -144,8 +144,8 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
-    "@chakra-ui/react": "^1.6.9",
-    "@d-i-t-a/reader": "^2.0.0-beta.6",
+    "@chakra-ui/react": "1.6.9",
+    "@d-i-t-a/reader": "2.0.0-beta.6",
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
     "comlink": "^4.3.1",
