@@ -29,7 +29,10 @@ export default function useResource(
     async function fetchResource(url: string) {
       try {
         const content = await getContent(url);
-        const document = new DOMParser().parseFromString(content, 'text/html');
+        const mimetype = url.endsWith('.html')
+          ? 'text/html'
+          : 'application/xhtml+xml';
+        const document = new DOMParser().parseFromString(content, mimetype);
         // add base so relative URLs work.
         const base = document?.createElement('base');
         if (base && url) {
@@ -52,7 +55,7 @@ export default function useResource(
           isScrolling: state.isScrolling,
         });
 
-        const finalResource = document.documentElement.outerHTML;
+        const finalResource = new XMLSerializer().serializeToString(document);
         dispatch({ type: 'RESOURCE_FETCH_SUCCESS', resource: finalResource });
       } catch (e) {
         if (e instanceof Error) {
@@ -78,22 +81,31 @@ export default function useResource(
 /**
  * Injects a script tag which intercepts link clicks and sends a message
  * to the parent iframe.
+ *
+ * Note: When injecting script text content into XHTML documents, we get
+ * an error due to the XHTML escaping the '<' sign, and then not replacing
+ * it when the browser interprets it. So instead of inlining our JS, we create
+ * an object url and add a <script src="<object-url>" /> to the body. This gets
+ * around our parsing error.
  */
 function injectJS(body: HTMLElement) {
   const script = document.createElement('script');
+  script.type = 'text/javascript';
   const content = `
       var links = document.querySelectorAll( 'a' );
-      for ( var i = 0; i < links.length; i ++ ) {
-            links[i].addEventListener('click', handleLinkClick);
-          }
-    function handleLinkClick(evt) {
+      function handleLinkClick(evt) {
         // don't navigate
         evt.preventDefault();
         // send message to parent
         window.parent.postMessage( { type: 'LINK_CLICKED', href: evt.target.href } );
-    };
+      };
+      for ( var i = 0; i < links.length; i ++ ) {
+        links[i].addEventListener('click', handleLinkClick);
+      }
   `;
-  script.innerHTML = content;
+  const blob = new Blob([content], { type: 'application/javascript' });
+  const url = URL.createObjectURL(blob);
+  script.src = url;
 
   body.appendChild(script);
 }
