@@ -1,9 +1,7 @@
-import { IFRAME_SELECTOR } from '../../support/constants';
-
-describe('missing-toc', () => {
+describe('Book without a TOC or empty TOC menulist', () => {
   it('Shows mssing TOC message', () => {
     cy.visit('/test/missing-toc');
-    cy.getIframeBody(IFRAME_SELECTOR)
+    cy.getIframeBody()
       .find('h1')
       .should('include.text', 'missing Table of Contents');
 

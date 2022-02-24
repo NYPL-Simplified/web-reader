@@ -1,9 +1,7 @@
-import { IFRAME_SELECTOR } from '../../support/constants';
-
 describe('getContent', () => {
   it('getContent returns HTML', () => {
     cy.visit('/test/get-content');
-    cy.getIframeBody(IFRAME_SELECTOR)
+    cy.getIframeBody()
       .find('p')
       .should('include.text', '/samples/moby-epub2-exploded/OEBPS/');
   });
