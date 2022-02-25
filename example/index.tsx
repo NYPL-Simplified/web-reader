@@ -8,7 +8,6 @@ import {
   Route,
   Link,
   useParams,
-  useRouteMatch,
 } from 'react-router-dom';
 import WebReader from '../src';
 import {
