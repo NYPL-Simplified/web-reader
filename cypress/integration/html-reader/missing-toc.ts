@@ -1,4 +1,4 @@
-describe('missing-toc', () => {
+describe('Book without a TOC or empty TOC menulist', () => {
   it('Shows mssing TOC message', () => {
     cy.visit('/html/test/missing-toc');
     cy.getIframeBody()
