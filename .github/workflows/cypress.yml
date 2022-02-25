@@ -1,6 +1,12 @@
 name: Cypress Tests (Chrome, Firefox, Safari) x5
 on: [deployment_status]
 
+# we have to supply something, but don't want to supply the
+# real token to install the real package here, so we just
+# provide a dummy
+env:
+  GH_PACKAGE_AUTH_TOKEN: 'dummy'
+
 jobs:
   install:
     name: Install cypress
@@ -72,7 +78,7 @@ jobs:
           browser: chrome
           record: true
           parallel: true
-          group: "UI - Chrome"
+          group: 'UI - Chrome'
 
       - name: Upload failure screenshots
         uses: actions/upload-artifact@v2
