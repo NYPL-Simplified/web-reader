@@ -32,20 +32,18 @@ export type HtmlNavigator = Navigator & {
   setColorMode: (mode: ColorMode) => Promise<void>;
 };
 
-// Optional settings to initialize the reader with
 export type ReaderSettings = {
-  isScrolling?: boolean;
-};
-
-export type ReaderState = {
   colorMode: ColorMode;
   isScrolling: boolean;
   fontSize: number;
   fontFamily: FontFamily;
-  currentTocUrl: string | null;
+};
+
+export type ReaderState = {
   atStart: boolean;
   atEnd: boolean;
   location?: Locator;
+  settings: ReaderSettings | undefined;
 };
 
 // PDF specific reader state
@@ -121,7 +119,7 @@ export type UseWebReaderArguments = {
   /**
    * Initial user settings for the reader
    */
-  readerSettings?: ReaderSettings;
+  readerSettings?: Partial<ReaderSettings>;
 };
 
 export type ActiveReaderArguments = UseWebReaderArguments & {

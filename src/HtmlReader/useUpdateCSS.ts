@@ -17,6 +17,6 @@ export default function useUpdateCSS(
     if (state.state !== 'NAVIGATING' && state.state !== 'READY') return;
     const html = getMaybeIframeHtml(state.iframe);
     if (!html) return;
-    setCss(html, state);
+    setCss(html, state.settings);
   }, [state, manifest]);
 }

@@ -1,3 +1,4 @@
+import { ReaderSettings } from '../types';
 import {
   calcPosition,
   familyToReadiumFamily,
@@ -7,7 +8,6 @@ import {
   getPagination,
   setCSSProperty,
 } from './lib';
-import { CSSState } from './types';
 
 /**
  * These are effects that reach in to the iframe element and modify it.
@@ -75,26 +75,26 @@ export function navigateToHash(
  * Takes the HTML element and sets CSS variables on it based on the
  * reader's state
  */
-export function setCss(html: HTMLElement, state: CSSState): void {
-  setCSSProperty(html, '--USER__scroll', getPagination(state.isScrolling));
+export function setCss(html: HTMLElement, settings: ReaderSettings): void {
+  setCSSProperty(html, '--USER__scroll', getPagination(settings.isScrolling));
   setCSSProperty(
     html,
     '--USER__appearance',
-    getColorModeValue(state.colorMode)
+    getColorModeValue(settings.colorMode)
   );
   setCSSProperty(html, '--USER__advancedSettings', 'readium-advanced-on');
   setCSSProperty(
     html,
     '--USER__fontOverride',
-    getFontOverride(state.fontFamily)
+    getFontOverride(settings.fontFamily)
   );
   setCSSProperty(
     html,
     '--USER__fontFamily',
-    familyToReadiumFamily[state.fontFamily]
+    familyToReadiumFamily[settings.fontFamily]
   );
-  setCSSProperty(html, '--USER__fontSize', `${state.fontSize}%`);
-  setCSSProperty(html, 'overflow', state.isScrolling ? 'scroll' : 'hidden');
+  setCSSProperty(html, '--USER__fontSize', `${settings.fontSize}%`);
+  setCSSProperty(html, 'overflow', settings.isScrolling ? 'scroll' : 'hidden');
   // set the number of columns to only ever have 1.
   setCSSProperty(html, '--USER__colCount', '1');
 }

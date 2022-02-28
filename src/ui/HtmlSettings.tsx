@@ -13,9 +13,10 @@ export type HtmlSettingsProps = {
 
 export default function HtmlSettings(
   props: HtmlSettingsProps
-): React.ReactElement {
+): React.ReactElement | null {
   const { navigator, readerState, paginationValue } = props;
-  const { fontFamily, colorMode } = readerState;
+  if (!readerState.settings) return null;
+  const { fontFamily, colorMode } = readerState.settings;
   const {
     setFontFamily,
     decreaseFontSize,

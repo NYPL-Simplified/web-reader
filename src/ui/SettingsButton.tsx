@@ -26,7 +26,9 @@ export default function SettingsCard(
   const open = () => setIsOpen(true);
   const close = () => setIsOpen(false);
 
-  const paginationValue = props.state?.isScrolling ? 'scrolling' : 'paginated';
+  const paginationValue = props.state?.settings?.isScrolling
+    ? 'scrolling'
+    : 'paginated';
   const contentBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.white');
 
   return (

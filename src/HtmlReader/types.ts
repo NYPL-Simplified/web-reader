@@ -4,6 +4,7 @@ import {
   FontFamily,
   HtmlReaderState,
   ReaderArguments,
+  ReaderSettings,
   ReaderState,
 } from '../types';
 
@@ -38,6 +39,7 @@ export type FetchingResourceState = HtmlReaderState & {
   iframe: null;
   resource: undefined;
   resourceFetchError: undefined;
+  settings: ReaderSettings;
 };
 
 export type ResourceFetchErrorState = HtmlReaderState & {
@@ -46,6 +48,7 @@ export type ResourceFetchErrorState = HtmlReaderState & {
   iframe: null;
   resource: undefined;
   resourceFetchError: Error;
+  settings: ReaderSettings;
 };
 
 export type RenderingIframeState = HtmlReaderState & {
@@ -54,6 +57,7 @@ export type RenderingIframeState = HtmlReaderState & {
   iframe: null;
   resource: string;
   resourceFetchError: undefined;
+  settings: ReaderSettings;
 };
 
 export type LoadingIframeState = HtmlReaderState & {
@@ -62,6 +66,7 @@ export type LoadingIframeState = HtmlReaderState & {
   iframe: HTMLIFrameElement;
   resource: string;
   resourceFetchError: undefined;
+  settings: ReaderSettings;
 };
 
 export type NavigatingState = HtmlReaderState & {
@@ -70,6 +75,7 @@ export type NavigatingState = HtmlReaderState & {
   iframe: HTMLIFrameElement;
   resource: string;
   resourceFetchError: undefined;
+  settings: ReaderSettings;
 };
 
 export type ReadyState = HtmlReaderState & {
@@ -78,13 +84,8 @@ export type ReadyState = HtmlReaderState & {
   iframe: HTMLIFrameElement;
   resource: string;
   resourceFetchError: undefined;
+  settings: ReaderSettings;
 };
-
-// state that affects the css variables
-export type CSSState = Pick<
-  HtmlState,
-  'isScrolling' | 'colorMode' | 'fontFamily' | 'fontSize'
->;
 
 export type HtmlAction =
   | { type: 'ARGS_CHANGED'; args: ReaderArguments }

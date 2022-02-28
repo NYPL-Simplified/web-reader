@@ -1,4 +1,8 @@
-import { ReaderArguments } from '../types';
+import {
+  getLocalStorageLocation,
+  getLocalStorageSettings,
+} from '../utils/localstorage';
+import { ReaderArguments, ReaderSettings } from '../types';
 import {
   getCurrentIndex,
   linkToLocator,
@@ -109,10 +113,27 @@ export default function makeHtmlReducer(
             webpubManifestUrl
           );
 
-        const location = isQueryValid ? queryLocation : defaultStartLocation;
+        const localStorageRecord = getLocalStorageLocation(webpubManifestUrl);
+        const isLocalStorageLocationValid =
+          !!localStorageRecord &&
+          !!getFromReadingOrder(
+            localStorageRecord.location.href,
+            manifest,
+            webpubManifestUrl
+          );
+
+        const location = isQueryValid
+          ? queryLocation
+          : isLocalStorageLocationValid
+          ? localStorageRecord.location
+          : defaultStartLocation;
+
+        // get initial settings from local storage, if they exist
+        const settings = getLocalStorageSettings() ?? DEFAULT_SETTINGS;
 
         const fetchingResource: FetchingResourceState = {
           ...state,
+          settings,
           state: 'FETCHING_RESOURCE',
           location,
           resourceFetchError: undefined,
@@ -153,7 +174,7 @@ export default function makeHtmlReducer(
         }
         const { currentPage, totalPages } = calcPosition(
           state.iframe,
-          state.isScrolling
+          state.settings.isScrolling
         );
 
         const newState: NavigatingState = {
@@ -293,7 +314,7 @@ export default function makeHtmlReducer(
 
         const { progression, totalPages, currentPage } = calcPosition(
           state.iframe,
-          state.isScrolling
+          state.settings.isScrolling
         );
 
         // if we are at the last page, go to next resource
@@ -330,7 +351,7 @@ export default function makeHtmlReducer(
         }
         const { progression, totalPages, currentPage } = calcPosition(
           state.iframe,
-          state.isScrolling
+          state.settings.isScrolling
         );
 
         // if we are at the last page, go to next resource
@@ -367,7 +388,7 @@ export default function makeHtmlReducer(
         }
         const { totalPages, currentPage } = calcPosition(
           state.iframe,
-          state.isScrolling
+          state.settings.isScrolling
         );
         const newState: ReadyState = {
           ...state,
@@ -385,9 +406,15 @@ export default function makeHtmlReducer(
       }
 
       case 'SET_COLOR_MODE':
+        if (state.state === 'INACTIVE') {
+          return handleInvalidTransition(state, action);
+        }
         return {
           ...state,
-          colorMode: action.mode,
+          settings: {
+            ...state.settings,
+            colorMode: action.mode,
+          },
         };
 
       case 'SET_SCROLL': {
@@ -402,12 +429,15 @@ export default function makeHtmlReducer(
         }
         const { currentPageFloor, totalPages } = calcPosition(
           state.iframe,
-          state.isScrolling
+          state.settings.isScrolling
         );
         const newState: NavigatingState = {
           ...state,
           state: 'NAVIGATING',
-          isScrolling: action.isScrolling,
+          settings: {
+            ...state.settings,
+            isScrolling: action.isScrolling,
+          },
           location: {
             ...state.location,
             locations: {
@@ -420,25 +450,43 @@ export default function makeHtmlReducer(
       }
 
       case 'INCREASE_FONT_SIZE': {
-        const newSize = state.fontSize + FONT_SIZE_STEP;
+        if (state.state === 'INACTIVE') {
+          return handleInvalidTransition(state, action);
+        }
+        const newSize = state.settings.fontSize + FONT_SIZE_STEP;
         return {
           ...state,
-          fontSize: newSize > 0 ? newSize : 0,
+          settings: {
+            ...state.settings,
+            fontSize: newSize > 0 ? newSize : 0,
+          },
         };
       }
 
       case 'DECREASE_FONT_SIZE': {
-        const newSize = state.fontSize - FONT_SIZE_STEP;
+        if (state.state === 'INACTIVE') {
+          return handleInvalidTransition(state, action);
+        }
+        const newSize = state.settings.fontSize - FONT_SIZE_STEP;
         return {
           ...state,
-          fontSize: newSize > 0 ? newSize : 0,
+          settings: {
+            ...state.settings,
+            fontSize: newSize > 0 ? newSize : 0,
+          },
         };
       }
 
       case 'SET_FONT_FAMILY':
+        if (state.state === 'INACTIVE') {
+          return handleInvalidTransition(state, action);
+        }
         return {
           ...state,
-          fontFamily: action.family,
+          settings: {
+            ...state.settings,
+            fontFamily: action.family,
+          },
         };
 
       case 'SET_IFRAME': {
@@ -467,7 +515,7 @@ export default function makeHtmlReducer(
         // update the y value
         const { progression, currentPage, totalPages } = calcPosition(
           state.iframe,
-          state.isScrolling
+          state.settings.isScrolling
         );
         const newState: ReadyState = {
           ...state,
@@ -494,12 +542,14 @@ function handleInvalidTransition(state: HtmlState, action: HtmlAction) {
   return state;
 }
 
-export const inactiveState: InactiveState = {
+const DEFAULT_SETTINGS: ReaderSettings = {
   colorMode: 'day',
   isScrolling: false,
   fontSize: 100,
   fontFamily: 'sans-serif',
-  currentTocUrl: null,
+};
+
+export const inactiveState: InactiveState = {
   atStart: false,
   atEnd: false,
   iframe: null,
@@ -507,4 +557,5 @@ export const inactiveState: InactiveState = {
   resourceFetchError: undefined,
   state: 'INACTIVE',
   location: undefined,
+  settings: undefined,
 };
