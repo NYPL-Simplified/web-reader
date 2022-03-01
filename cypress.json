@@ -4,5 +4,6 @@
   "retries": {
     "runMode": 1,
     "openMode": 0
-  }
+  },
+  "pluginsFile": false
 }
