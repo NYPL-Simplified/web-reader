@@ -76,3 +76,23 @@ describe('display settings', () => {
       .should('be.visible');
   });
 });
+
+it.only('should save settings in local storage', () => {
+  cy.visit('/html/moby-epub3', {
+    onBeforeLoad: (win) => {
+      win.localStorage.clear();
+    },
+  });
+
+  cy.log('Page should be loaded with default settings');
+  cy.getIframeHtml()
+    .should('have.css', '--USER__appearance', 'readium-default-on')
+    .should('have.css', '--USER__fontFamily', 'Original')
+    .should('have.css', '--USER__scroll', 'readium-scroll-off');
+
+  // cy.log('Settings overlay should show correct values');
+  // cy.findByRole('button', { name: 'Settings' }).click();
+  // cy.findByRole('radio', { name: 'Sans-Serif' }).should('be.checked');
+  // cy.findByRole('radio', { name: 'Day' }).should('be.checked');
+  // cy.findByRole('radio', { name: 'Scrolling' }).should('be.checked');
+});
