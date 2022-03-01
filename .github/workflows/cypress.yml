@@ -5,7 +5,7 @@ on: [deployment_status]
 # real token to install the real package here, so we just
 # provide a dummy
 env:
-  GH_PACKAGE_AUTH_TOKEN: 'dummy'
+  GH_PACKAGE_AUTH_TOKEN: "dummy"
 
 jobs:
   install:
@@ -34,7 +34,7 @@ jobs:
 
       - name: Install Cypress 📥
         # don't install every node_module however
-        run: npm install --no-package-lock --no-save cypress
+        run: npm install cypress
 
   chrome:
     name: Run Chrome Tests
@@ -64,7 +64,7 @@ jobs:
           key: my-cache-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
       - name: Install Cypress 📥
-        run: npm install --no-package-lock --no-save cypress
+        run: npm install cypress
 
       - name: Run Chrome
         uses: cypress-io/github-action@v2
@@ -79,7 +79,7 @@ jobs:
           browser: chrome
           record: true
           parallel: true
-          group: 'UI - Chrome'
+          group: "UI - Chrome"
 
       - name: Upload failure screenshots
         uses: actions/upload-artifact@v2
