@@ -1,6 +1,6 @@
 describe('Single PDF navigation', () => {
   beforeEach(() => {
-    cy.loadPdf('/pdf');
+    cy.loadPdf('/pdf/single-resource-short');
   });
 
   it('should navigate forward and backwards with page buttons', () => {

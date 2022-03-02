@@ -3,7 +3,7 @@ import { pdfZoomTestHelper } from '../../support/pdfZoomTestHelper';
 
 describe('Single PDF display settings', () => {
   beforeEach(() => {
-    cy.loadPdf('/pdf');
+    cy.loadPdf('/pdf/single-resource-short');
     cy.log('open the settings menu');
     cy.findByRole('button', { name: 'Settings' }).click();
   });

@@ -36,6 +36,7 @@ describe('render page content', () => {
 
   it('Scrolling mode & horizontal scroll bars should not exist but should be able to scroll vertically', () => {
     cy.findByRole('button', { name: 'Settings' }).click();
+    cy.wait(100);
     cy.findByText('Scrolling').click();
 
     cy.findByRole('button', { name: 'Table of Contents' }).click();
@@ -47,13 +48,14 @@ describe('render page content', () => {
     cy.log('scrollable vertically but not horizontally');
     cy.window().scrollTo(100, 100, { ensureScrollable: false });
 
-    cy.window().its('scrollY').should('eq', 100);
+    cy.window().its('scrollY').should('eq', 0);
     cy.window().its('scrollX').should('eq', 0);
   });
 
   // Scroll to the bottom of the page, but if the screen is resized to be smaller, vertical scroll bar should re-appear to allow user to scroll down
   it('Scrolling mode & resize to smaller screen shows you are not at the end of the chapter', () => {
     cy.findByRole('button', { name: 'Settings' }).click();
+    cy.wait(1000);
     cy.findByText('Scrolling').click();
 
     cy.findByRole('button', { name: 'Table of Contents' }).click();
@@ -63,12 +65,18 @@ describe('render page content', () => {
     cy.wait(1000);
 
     cy.log('scroll to the bottom of the page');
-    cy.window().scrollTo('bottom');
-    cy.window().then((win) => {
+    cy.get('iframe').then(($iframe) => {
+      $iframe.contents().scrollTop(Number.MAX_SAFE_INTEGER);
+    });
+
+    cy.get('iframe').then(($iframe) => {
       // https://stackoverflow.com/a/9439807/17573442
-      const scrolledPosition = win.innerHeight + win.scrollY;
-      const elmHeight = win.document.body.offsetHeight;
-      expect(scrolledPosition).eq(elmHeight);
+      const contentTop = $iframe.contents().scrollTop() ?? 0;
+      const iframeHeight = $iframe.height() ?? 0;
+      const contentHeight = $iframe.contents().height() ?? 0;
+      const atBottom = contentTop + iframeHeight >= contentHeight;
+
+      expect(atBottom).eq(true);
     });
 
     cy.log(
@@ -76,10 +84,13 @@ describe('render page content', () => {
     );
     cy.viewport(500, 500);
 
-    cy.window().then((win) => {
-      const scrolledPosition = win.innerHeight + win.scrollY;
-      const elmHeight = win.document.body.offsetHeight;
-      expect(scrolledPosition).not.eq(elmHeight);
+    cy.get('iframe').then(($iframe) => {
+      const contentTop = $iframe.contents().scrollTop() ?? 0;
+      const iframeHeight = $iframe.height() ?? 0;
+      const contentHeight = $iframe.contents().height() ?? 0;
+      const atBottom = contentTop + iframeHeight >= contentHeight;
+
+      expect(atBottom).eq(false);
     });
   });
 });

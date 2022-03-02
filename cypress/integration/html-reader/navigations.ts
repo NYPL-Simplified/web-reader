@@ -83,6 +83,7 @@ describe('navigating an EPUB page', () => {
   it('should load the next chapter if user scrolled to the buttom of the page and pressed the next button', () => {
     cy.log('scrolling mode');
     cy.findByRole('button', { name: 'Settings' }).click();
+    cy.wait(1000);
     cy.findByText('Scrolling').click();
 
     cy.findByRole('button', { name: 'Table of Contents' }).click();
@@ -93,7 +94,11 @@ describe('navigating an EPUB page', () => {
     cy.wait(1000);
 
     cy.log('scroll to the bottom of the page');
-    cy.window().scrollTo('bottom');
+
+    cy.get('iframe').then(($iframe) => {
+      $iframe.contents().scrollTop(Number.MAX_SAFE_INTEGER);
+    });
+
     cy.wait(1000);
 
     cy.log('click next button');

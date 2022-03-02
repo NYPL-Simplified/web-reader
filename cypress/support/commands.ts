@@ -24,7 +24,9 @@ declare global {
       getIframeHead(): Chainable<Subject>;
       getIframeBody(): Chainable<Subject>;
       finishNavigation(): void;
-      loadPdf(path: '/pdf' | '/pdf-collection'): Chainable<Subject>;
+      loadPdf(
+        path: '/pdf/single-resource-short' | '/pdf/collection'
+      ): Chainable<Subject>;
     }
   }
 }
@@ -74,11 +76,11 @@ Cypress.Commands.add('getIframeHtml', { prevSubject: false }, () => {
     .should(($frame) => {
       const readyState = $frame.prop('contentWindow').document.readyState;
       expect(readyState).to.eq('complete');
-      const body = $frame.prop('contentDocument').documentElement.body;
+      const body = $frame.contents().find('body');
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       expect(body).to.not.be.empty;
     })
-    .its('0.contentDocument', { log: false })
+    .its('0.contentDocument.documentElement', { log: false })
     .then(($el) => cy.wrap($el, { log: false }));
 });
 
@@ -125,24 +127,27 @@ Cypress.Commands.add('finishNavigation', { prevSubject: false }, () => {
   cy.wait(100);
 });
 
-Cypress.Commands.add('loadPdf', (path: '/pdf' | '/pdf-collection') => {
-  const pdfProxyInterceptUrl =
-    Cypress.config().baseUrl === 'http://localhost:1234'
-      ? 'http://localhost:3001'
-      : 'https://drb-api-qa.nypl.org/utils';
-  cy.intercept(`${pdfProxyInterceptUrl}/**`, { middleware: true }, (req) => {
-    req.on('before:response', (res) => {
-      // force all API responses to not be cached
-      res.headers['cache-control'] = 'no-store';
+Cypress.Commands.add(
+  'loadPdf',
+  (path: '/pdf/single-resource-short' | '/pdf/collection') => {
+    const pdfProxyInterceptUrl =
+      Cypress.config().baseUrl === 'http://localhost:1234'
+        ? 'http://localhost:3001'
+        : 'https://drb-api-qa.nypl.org/utils';
+    cy.intercept(`${pdfProxyInterceptUrl}/**`, { middleware: true }, (req) => {
+      req.on('before:response', (res) => {
+        // force all API responses to not be cached
+        res.headers['cache-control'] = 'no-store';
+      });
+    }).as('pdf');
+    cy.visit(path, {
+      onBeforeLoad: (win) => {
+        win.sessionStorage.clear(); // clear storage so that we are always on page one
+      },
     });
-  }).as('pdf');
-  cy.visit(path, {
-    onBeforeLoad: (win) => {
-      win.sessionStorage.clear(); // clear storage so that we are always on page one
-    },
-  });
-  cy.wait('@pdf', { timeout: 30000 });
-  cy.get('#iframe-wrapper')
-    .find('div[class="react-pdf__Page__textContent"]', { timeout: 10000 })
-    .should('have.attr', 'style');
-});
+    cy.wait('@pdf', { timeout: 30000 });
+    cy.get('#iframe-wrapper')
+      .find('div[class="react-pdf__Page__textContent"]', { timeout: 10000 })
+      .should('have.attr', 'style');
+  }
+);

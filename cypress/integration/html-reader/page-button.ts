@@ -42,6 +42,7 @@ describe('PageButton visibility on useHtmlReader', () => {
     cy.wait(1000);
 
     cy.getIframeBody().find('.copyright-page').should('exist');
+    cy.findByRole('button', { name: 'Next Page' }).click();
 
     cy.wait(1000);
 
@@ -78,6 +79,7 @@ describe('PageButton visibility on useHtmlReader', () => {
     cy.wait(1000);
 
     cy.getIframeBody().find('.copyright-page').should('exist');
+    cy.findByRole('button', { name: 'Next Page' }).click();
 
     cy.wait(1000);
 
@@ -114,6 +116,7 @@ describe('PageButton visibility on useHtmlReader', () => {
     cy.wait(1000);
 
     cy.getIframeBody().find('.copyright-page').should('exist');
+    cy.findByRole('button', { name: 'Next Page' }).click();
 
     cy.wait(1000);
 
@@ -139,15 +142,15 @@ describe('PageButton visibility on useHtmlReader', () => {
     );
   });
 
-  // FIXME: This test is currently broken because the next button on scrolling mode doesn't scroll the page,
-  // but instead just shows the next chapter/resource.
-  // Bug Filed: OE-376
-  it.skip('Scrolling mode & screen resize should show/hide the page buttons', () => {
+  it('Scrolling mode & screen resize should show/hide the page buttons', () => {
     cy.intercept('GET', 'https://alice.dita.digital/text/uncopyright.xhtml').as(
       'uncopyright'
     );
 
     cy.findByRole('button', { name: 'Settings' }).click();
+
+    cy.wait(1000);
+
     cy.findByText('Scrolling').click();
 
     cy.findByRole('button', { name: 'Table of Contents' }).click();
@@ -163,7 +166,9 @@ describe('PageButton visibility on useHtmlReader', () => {
     cy.wait(1000);
 
     cy.log('scroll to the bottom of the page');
-    cy.window().scrollTo('bottom');
+    cy.get('iframe').then(($iframe) => {
+      console.log($iframe.contents().scrollTop(Number.MAX_SAFE_INTEGER));
+    });
     cy.wait(1000);
 
     cy.findByRole('button', { name: 'Next Page' }).should('be.disabled');
@@ -172,7 +177,7 @@ describe('PageButton visibility on useHtmlReader', () => {
     );
 
     cy.log('Small screen should disable next button');
-    cy.viewport(100, 100);
+    cy.viewport(300, 300);
 
     cy.findByRole('button', { name: 'Next Page' }).should('not.be.disabled');
     cy.findByRole('button', { name: 'Previous Page' }).should(
