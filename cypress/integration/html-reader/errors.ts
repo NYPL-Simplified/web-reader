@@ -31,14 +31,4 @@ describe('error states', () => {
 
     cy.getIframeBody().contains('Page not found.', { timeout: 10000 });
   });
-
-  it('throws error for missing injectable', () => {
-    cy.visit('/html/test/missing-injectable');
-
-    cy.findByRole('heading', { name: 'An error occurred' });
-    // FIXME: This is failing in CI with a "scrollingElement" not found error
-    // cy.findByRole('alert', {
-    //   name: `Injectable failed to load at: http://example.com/doesnt-exist.css`,
-    // });
-  });
 });
