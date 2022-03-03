@@ -34,7 +34,7 @@ jobs:
 
       - name: Install Cypress 📥
         # don't install every node_module however
-        run: npm install --no-package-lock --no-save cypress
+        run: npm install
 
   chrome:
     name: Run Chrome Tests
@@ -64,7 +64,7 @@ jobs:
           key: my-cache-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
       - name: Install Cypress 📥
-        run: npm install --no-package-lock --no-save cypress
+        run: npm install
 
       - name: Run Chrome
         uses: cypress-io/github-action@v2
