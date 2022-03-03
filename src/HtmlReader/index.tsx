@@ -196,6 +196,8 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     };
   }
 
+  if (state.state === 'RESOURCE_FETCH_ERROR') throw state.resourceFetchError;
+
   // determines if the reader should grow to fit content or stay the
   // pre-determined height passed in
   const shouldGrow = state.isScrolling && growWhenScrolling;
