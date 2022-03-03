@@ -42,6 +42,7 @@ export default function SettingsCard(
           <Button
             onClick={open}
             border="none"
+            aria-label="Settings"
             leftIcon={
               <Icon
                 as={isOpen ? MdOutlineCancel : MdOutlineSettings}

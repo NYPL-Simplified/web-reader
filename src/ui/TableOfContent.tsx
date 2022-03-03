@@ -35,6 +35,7 @@ export default function TableOfContent({
           <MenuButton
             as={Button}
             border="none"
+            aria-label="Table of Contents"
             leftIcon={
               <Icon as={isOpen ? MdOutlineCancel : MdOutlineToc} w={6} h={6} />
             }
