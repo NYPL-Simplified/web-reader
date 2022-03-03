@@ -5,7 +5,7 @@ on: [deployment_status]
 # real token to install the real package here, so we just
 # provide a dummy
 env:
-  GH_PACKAGE_AUTH_TOKEN: 'dummy'
+  GH_PACKAGE_AUTH_TOKEN: ${{ secrets.GH_PACKAGE_AUTH_TOKEN }}
 
 jobs:
   install:
