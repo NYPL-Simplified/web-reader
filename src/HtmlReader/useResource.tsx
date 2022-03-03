@@ -29,9 +29,10 @@ export default function useResource(
     async function fetchResource(url: string) {
       try {
         const content = await getContent(url);
-        const mimetype = url.endsWith('.html')
-          ? 'text/html'
-          : 'application/xhtml+xml';
+        const mimetype =
+          state.location?.type ?? url.endsWith('.html')
+            ? 'text/html'
+            : 'application/xhtml+xml';
         const document = new DOMParser().parseFromString(content, mimetype);
         // add base so relative URLs work.
         const base = document?.createElement('base');

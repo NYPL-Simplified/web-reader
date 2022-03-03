@@ -64,7 +64,7 @@ export default function Tests(): JSX.Element {
         <WebReader
           webpubManifestUrl={`${origin}/samples/test/missing-toc.json`}
           getContent={async (_) => {
-            return `<h1>This manifest is missing Table of Contents</h1>`;
+            return `<!DOCTYPE html><html><head></head><body><h1>This manifest is missing Table of Contents</h1></body></html>`;
           }}
         />
       </Route>
