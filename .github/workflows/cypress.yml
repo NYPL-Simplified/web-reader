@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.deployment_status.state == 'success' && github.event.deployment_status.environment == 'Preview'
     container:
-      image: cypress/browsers:node14.17.0-chrome88-ff89
+      image: cypress/browsers:node16.5.0-chrome97-ff96
       options: --user 1001 # https://github.com/cypress-io/github-action#firefox
     steps:
       - name: Checkout
@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: install
     container:
-      image: cypress/browsers:node14.17.0-chrome88-ff89
+      image: cypress/browsers:node16.5.0-chrome97-ff96
       options: --user 1001 # https://github.com/cypress-io/github-action#firefox
     strategy:
       fail-fast: false
