@@ -25,8 +25,8 @@ import { getTheme } from '../src/ui/theme';
 import usePublicationSW from '../src/ServiceWorker/client';
 import AxisNowEncrypted from './axisnow-encrypted';
 import htmlStyles from 'url:../src/HtmlReader/injectable-styles.css';
-import { Injectable } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
 import Tests from './Tests';
+import { Injectable } from '../src/Readium/Injectable';
 
 const origin = window.location.origin;
 

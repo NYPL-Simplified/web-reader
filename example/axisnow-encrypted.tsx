@@ -4,7 +4,7 @@ import { GetContent } from '../src/types';
 // import createDecryptor from './axisnow/createWorkerlessDecryptor';
 import createDecryptor from './axisnow/createWorkerDecryptor';
 import { Heading, Box, Text } from '@chakra-ui/react';
-import { Injectable } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
+import { Injectable } from '../src/Readium/Injectable';
 
 type AxisNowEncryptedProps = {
   injectables: Injectable[];

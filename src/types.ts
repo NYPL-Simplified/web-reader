@@ -1,4 +1,3 @@
-import { Injectable } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
 import { Locator } from './Readium/Locator';
 import { WebpubManifest } from './WebpubManifestTypes/WebpubManifest';
 
