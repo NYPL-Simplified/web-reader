@@ -64,7 +64,7 @@ jobs:
           key: my-cache-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
       - name: Install Cypress 📥
-        run: npm i --no-optional
+        run: npm i --omit=optional
 
       - name: Run Chrome
         uses: cypress-io/github-action@v2
