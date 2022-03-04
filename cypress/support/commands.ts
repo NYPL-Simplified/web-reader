@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /// <reference types="cypress" />
 import '@testing-library/cypress/add-commands';
 
@@ -20,9 +21,9 @@ declare global {
           | '/html/test/missing-resource'
           | '/html/test/missing-injectable'
       ): void;
-      getIframeHtml(): Chainable<Subject>;
+      getIframeHtml(): Chainable<HTMLIFrameElement>;
       getIframeHead(): Chainable<Subject>;
-      getIframeBody(): Chainable<Subject>;
+      getIframeBody(): Chainable<JQuery<HTMLBodyElement>>;
       finishNavigation(): void;
       loadPdf(path: '/pdf' | '/pdf-collection'): Chainable<Subject>;
     }
@@ -61,6 +62,20 @@ Cypress.Commands.add('loadPage', (pageName) => {
   cy.findByRole('progressbar', { name: 'Loading book...' }).should('not.exist');
 });
 
+/**
+ * Ensures the iframe has loaded and is not on about:blank since
+ * chrome starts iframes as loaded on about:blank.
+ */
+const isIframeLoaded = ($iframe: HTMLIFrameElement) => {
+  const contentWindow = $iframe.contentWindow;
+  const src = $iframe.src;
+  const href = contentWindow?.location.href;
+  if (contentWindow?.document.readyState === 'complete') {
+    return href !== 'about:blank' || src === 'about:blank' || src === '';
+  }
+  return false;
+};
+
 Cypress.Commands.add('getIframeHtml', { prevSubject: false }, () => {
   Cypress.log({
     name: 'Get Iframe HTML',
@@ -71,15 +86,13 @@ Cypress.Commands.add('getIframeHtml', { prevSubject: false }, () => {
 
   return cy
     .get('iframe', { log: false })
-    .should(($frame) => {
-      const readyState = $frame.prop('contentWindow').document.readyState;
-      expect(readyState).to.eq('complete');
-      const body = $frame.prop('contentDocument').documentElement.body;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      expect(body).to.not.be.empty;
-    })
-    .its('0.contentDocument', { log: false })
-    .then(($el) => cy.wrap($el, { log: false }));
+    .its('0')
+    .should(isIframeLoaded)
+    .its('contentDocument', { log: false })
+    .should('not.be.empty')
+    .then((html) => {
+      return cy.wrap(html, { log: false });
+    });
 });
 
 Cypress.Commands.add('getIframeHead', { prevSubject: false }, () => {
@@ -92,11 +105,9 @@ Cypress.Commands.add('getIframeHead', { prevSubject: false }, () => {
 
   return cy
     .get('iframe', { log: false })
-    .should(($frame) => {
-      const readyState = $frame.prop('contentWindow').document.readyState;
-      expect(readyState).to.eq('complete');
-    })
-    .its('0.contentDocument.head', { log: false })
+    .its('0', { log: false })
+    .should(isIframeLoaded)
+    .its('contentDocument.head', { log: false })
     .then(($el) => cy.wrap($el, { log: false }));
 });
 
@@ -110,11 +121,9 @@ Cypress.Commands.add('getIframeBody', { prevSubject: false }, () => {
 
   return cy
     .get('iframe', { log: false })
-    .should(($frame) => {
-      const readyState = $frame.prop('contentWindow').document.readyState;
-      expect(readyState).to.eq('complete');
-    })
-    .its('0.contentDocument.body', { log: false })
+    .its('0', { log: false })
+    .should(isIframeLoaded)
+    .its('contentDocument.body', { log: false })
     .should('not.be.empty')
     .then(($el) => cy.wrap($el, { log: false }));
 });
