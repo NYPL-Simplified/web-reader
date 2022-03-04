@@ -21,7 +21,7 @@ declare global {
           | '/html/test/missing-resource'
           | '/html/test/missing-injectable'
       ): void;
-      getIframeHtml(): Chainable<HTMLIFrameElement>;
+      getIframeHtml(): Chainable<JQuery<HTMLIFrameElement>>;
       getIframeHead(): Chainable<Subject>;
       getIframeBody(): Chainable<JQuery<HTMLBodyElement>>;
       finishNavigation(): void;
@@ -84,15 +84,26 @@ Cypress.Commands.add('getIframeHtml', { prevSubject: false }, () => {
     message: `Get the iframe html, and wait for it to load.`,
   });
 
-  return cy
-    .get('iframe', { log: false })
-    .its('0')
-    .should(isIframeLoaded)
-    .its('contentDocument', { log: false })
-    .should('not.be.empty')
-    .then((html) => {
-      return cy.wrap(html, { log: false });
-    });
+  return (
+    cy
+      .get('iframe', { log: false })
+      // .its('0')
+      // .should(isIframeLoaded)
+      // .its('contentDocument', { log: false })
+      // .should('not.be.empty')
+      // .then((html) => {
+      //   return cy.wrap(html, { log: false });
+      // });
+      .should(($frame) => {
+        const readyState = $frame.prop('contentWindow').document.readyState;
+        expect(readyState).to.eq('complete');
+        const body = $frame.contents().find('body');
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        expect(body).to.not.be.empty;
+      })
+      .its('0.contentDocument.documentElement', { log: false })
+      .then(($el) => cy.wrap($el, { log: false }))
+  );
 });
 
 Cypress.Commands.add('getIframeHead', { prevSubject: false }, () => {
