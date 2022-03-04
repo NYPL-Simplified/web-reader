@@ -1,6 +1,6 @@
 describe('Renders single PDF', () => {
   it('Render page content', () => {
-    cy.loadPdf('/pdf');
+    cy.loadPdf('/pdf/single-resource-short');
 
     cy.log('check that all the essential buttons are on the page');
     cy.findByRole('link', { name: 'Return to Homepage' }).should('exist');

@@ -3,7 +3,7 @@ import { pdfZoomTestHelper } from '../../support/pdfZoomTestHelper';
 
 describe('Multi PDF display settings', () => {
   beforeEach(() => {
-    cy.loadPdf('/pdf-collection');
+    cy.loadPdf('/pdf/collection');
     cy.log('open the settings menu');
     cy.findByRole('button', { name: 'Settings' }).click();
   });

@@ -1,3 +1,4 @@
+import { Injectable } from './Readium/Injectable';
 import { Locator } from './Readium/Locator';
 import { WebpubManifest } from './WebpubManifestTypes/WebpubManifest';
 

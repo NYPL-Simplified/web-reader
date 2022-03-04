@@ -1,6 +1,6 @@
 describe('Multi PDF navigation', () => {
   beforeEach(() => {
-    cy.loadPdf('/pdf-collection');
+    cy.loadPdf('/pdf/collection');
   });
 
   it('Paginated mode & TOC: should update page content after clicking on TOC link', () => {

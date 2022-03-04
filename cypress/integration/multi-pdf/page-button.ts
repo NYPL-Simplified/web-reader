@@ -1,6 +1,6 @@
 describe('Page button on Multiple PDF page', () => {
   beforeEach(() => {
-    cy.loadPdf('/pdf-collection');
+    cy.loadPdf('/pdf/collection');
   });
 
   it('Should enable next button at the start of the book', () => {

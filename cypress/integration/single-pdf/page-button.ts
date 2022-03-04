@@ -1,6 +1,6 @@
 describe('Pagebutton on single PDF page', () => {
   beforeEach(() => {
-    cy.loadPdf('/pdf');
+    cy.loadPdf('/pdf/single-resource-short');
   });
 
   it('Should disable page buttons on scrolling mode', () => {
