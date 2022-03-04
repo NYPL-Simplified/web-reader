@@ -1,31 +1,19 @@
 describe('display settings', () => {
   beforeEach(() => {
-    cy.loadPage('/html/moby-epub3');
+    cy.loadPage('/html/streamed-alice-epub');
   });
 
-  it.only('should have the default settings', () => {
+  it('should have the default settings', () => {
     cy.getIframeBody()
       .findByRole('img', {
-        name: 'title page',
+        name: "Alice's Adventures in Wonderland, by Lewis Carroll",
       })
       .should('exist');
 
-    // cy.getIframeBody().then((body) =>
-    //   cy.window().then((win) => {
-    //     console.log('WHAT', win.getComputedStyle(body[0]));
-    //   })
-    // );
-
     cy.getIframeHtml()
-      .then((html) =>
-        cy.window().then((win) => {
-          console.log('WHAT', html);
-          console.log('WHAT', win.getComputedStyle(html));
-        })
-      )
-      .should('have.css', '--USER__appearance', 'readium-default-on');
-    // .should('have.css', '--USER__fontFamily', 'Original')
-    // .should('have.css', '--USER__scroll', 'readium-scroll-off');
+      .should('have.css', '--USER__appearance', 'readium-default-on')
+      .should('have.css', '--USER__fontFamily', 'sans-serif')
+      .should('have.css', '--USER__scroll', 'readium-scroll-off');
   });
 
   it('should update the font family to serif, scroll mode, and on sepia theme', () => {
@@ -33,17 +21,25 @@ describe('display settings', () => {
     cy.findByRole('button', { name: 'Settings' }).click();
 
     cy.findByText('Serif').click();
-    cy.findByText('Scrolling').click();
-    cy.findByText('Sepia').click();
+    cy.getIframeHtml().should('have.css', '--USER__fontFamily', 'serif');
 
-    cy.getIframeHtml()
-      .should('have.attr', 'data-viewer-font', 'serif')
-      .should('have.css', '--USER__appearance', 'readium-sepia-on')
-      .should('have.css', '--USER__scroll', 'readium-scroll-on');
+    cy.findByText('Scrolling').click();
+    cy.getIframeHtml().should(
+      'have.css',
+      '--USER__scroll',
+      'readium-scroll-on'
+    );
+
+    cy.findByText('Sepia').click();
+    cy.getIframeHtml().should(
+      'have.css',
+      '--USER__appearance',
+      'readium-sepia-on'
+    );
   });
 
   it('should trigger font size setting', () => {
-    cy.getIframeHtml().should('not.have.css', '--USER__fontSize'); // by default, there's no font size set on the page
+    cy.getIframeHtml().should('have.css', '--USER__fontSize', '100%');
 
     cy.findByRole('button', { name: 'Settings' }).click();
     cy.findByRole('button', { name: 'Decrease font size' }).click();
