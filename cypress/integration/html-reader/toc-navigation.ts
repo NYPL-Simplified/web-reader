@@ -17,6 +17,7 @@ describe('navigating an EPUB page', () => {
       );
 
     cy.findByRole('button', { name: 'Settings' }).click();
+    cy.wait(1000);
     cy.findByText('Scrolling').click();
     cy.findByRole('radio', { name: 'Paginated' }).should('not.be.checked');
     cy.findByRole('radio', { name: 'Scrolling' }).should('be.checked');
