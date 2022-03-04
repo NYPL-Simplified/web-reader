@@ -7,7 +7,7 @@ describe('navigating an EPUB page', () => {
     cy.findByRole('link', { name: 'Return to Homepage' }).should(
       'have.prop',
       'href',
-      `${Cypress.config().baseUrl?.replace('/v1', '').replace('/v2', '')}/`
+      `${Cypress.config().baseUrl}/`
     );
   });
 
@@ -22,8 +22,10 @@ describe('navigating an EPUB page', () => {
       );
 
     cy.findByRole('button', { name: 'Settings' }).click();
+    cy.wait(500);
     cy.log('make sure we are on paginated mode');
     cy.findByText('Paginated').click();
+    cy.wait(500);
 
     cy.findByRole('button', { name: 'Next Page' }).click();
     cy.wait(1000);

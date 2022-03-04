@@ -4,7 +4,6 @@ export interface Locator {
   title?: string;
   locations: Locations;
   text?: LocatorText;
-  // displayInfo?: any;
 }
 export interface LocatorText {
   after?: string;
