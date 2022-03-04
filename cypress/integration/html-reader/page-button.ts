@@ -32,8 +32,9 @@ describe('PageButton visibility on useHtmlReader', () => {
 
     cy.findByRole('button', { name: 'Settings' }).click();
     cy.findByText('Paginated').click();
-
+    cy.wait(1000);
     cy.findByRole('button', { name: 'Table of Contents' }).click();
+    cy.wait(1000);
     cy.log('move to last chapter');
     cy.findByRole('menuitem', { name: /(.*copy.*right$)/ }).click();
 
@@ -41,7 +42,8 @@ describe('PageButton visibility on useHtmlReader', () => {
 
     cy.wait(1000);
 
-    cy.getIframeBody().find('.copyright-page').should('exist');
+    cy.log('move to last page');
+    cy.findByRole('button', { name: 'Next Page' }).click();
 
     cy.wait(1000);
 
@@ -67,6 +69,7 @@ describe('PageButton visibility on useHtmlReader', () => {
     );
 
     cy.findByRole('button', { name: 'Settings' }).click();
+    cy.wait(500);
     cy.findByText('Scrolling').click();
 
     cy.findByRole('button', { name: 'Table of Contents' }).click();
@@ -81,6 +84,11 @@ describe('PageButton visibility on useHtmlReader', () => {
 
     cy.wait(1000);
 
+    cy.log('move to last page');
+    cy.findByRole('button', { name: 'Next Page' }).click();
+
+    cy.wait(1000);
+
     cy.findByRole('button', { name: 'Next Page' }).should('be.disabled');
     cy.findByRole('button', { name: 'Previous Page' }).should(
       'not.be.disabled'
@@ -92,48 +100,6 @@ describe('PageButton visibility on useHtmlReader', () => {
     cy.wait(1000);
 
     cy.findByRole('button', { name: 'Next Page' }).should('not.be.disabled');
-    cy.findByRole('button', { name: 'Previous Page' }).should(
-      'not.be.disabled'
-    );
-  });
-
-  it('Paginated mode & screen resize should show/hide the page buttons', () => {
-    cy.intercept('GET', 'https://alice.dita.digital/text/uncopyright.xhtml').as(
-      'uncopyright'
-    );
-
-    cy.findByRole('button', { name: 'Settings' }).click();
-    cy.findByText('Paginated').click();
-
-    cy.findByRole('button', { name: 'Table of Contents' }).click();
-    cy.log('move to last chapter');
-    cy.findByRole('menuitem', { name: /(.*copy.*right$)/ }).click();
-
-    cy.wait('@uncopyright', { timeout: 10000 });
-
-    cy.wait(1000);
-
-    cy.getIframeBody().find('.copyright-page').should('exist');
-
-    cy.wait(1000);
-
-    cy.findByRole('button', { name: 'Next Page' }).should('be.disabled');
-    cy.findByRole('button', { name: 'Previous Page' }).should(
-      'not.be.disabled'
-    );
-
-    cy.log('Small screen should reveal next button');
-    cy.viewport(100, 100);
-
-    cy.findByRole('button', { name: 'Next Page' }).should('not.be.disabled');
-    cy.findByRole('button', { name: 'Previous Page' }).should(
-      'not.be.disabled'
-    );
-
-    cy.log('switch back to default viewport');
-    cy.viewport(1000, 600);
-
-    cy.findByRole('button', { name: 'Next Page' }).should('be.disabled');
     cy.findByRole('button', { name: 'Previous Page' }).should(
       'not.be.disabled'
     );

@@ -1,17 +1,31 @@
 describe('display settings', () => {
   beforeEach(() => {
-    cy.loadPage('/html/streamed-alice-epub');
+    cy.loadPage('/html/moby-epub3');
   });
 
-  it('should have the default settings', () => {
-    cy.get('#reader-loading').should('not.be.visible');
-    // without this wait we are getting "element is detached from dom" errors
-    cy.wait(3000);
+  it.only('should have the default settings', () => {
+    cy.getIframeBody()
+      .findByRole('img', {
+        name: 'title page',
+      })
+      .should('exist');
+
+    // cy.getIframeBody().then((body) =>
+    //   cy.window().then((win) => {
+    //     console.log('WHAT', win.getComputedStyle(body[0]));
+    //   })
+    // );
+
     cy.getIframeHtml()
-      .should('have.attr', 'data-viewer-font', 'publisher')
-      .should('have.css', '--USER__appearance', 'readium-default-on')
-      .should('have.css', '--USER__fontFamily', 'Original')
-      .should('have.css', '--USER__scroll', 'readium-scroll-off');
+      .then((html) =>
+        cy.window().then((win) => {
+          console.log('WHAT', html);
+          console.log('WHAT', win.getComputedStyle(html));
+        })
+      )
+      .should('have.css', '--USER__appearance', 'readium-default-on');
+    // .should('have.css', '--USER__fontFamily', 'Original')
+    // .should('have.css', '--USER__scroll', 'readium-scroll-off');
   });
 
   it('should update the font family to serif, scroll mode, and on sepia theme', () => {
