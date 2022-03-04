@@ -47,7 +47,7 @@ describe('display settings', () => {
     cy.getIframeHtml().should('have.css', '--USER__fontSize', '96%'); // 4% per step?
   });
 
-  it.only('should stay on the same page when switching between reading modes', () => {
+  it('should stay on the same page when switching between reading modes', () => {
     cy.log('Make sure we are on paginated mode');
     cy.findByRole('button', { name: 'Settings' }).click();
     cy.findByText('Paginated').click();
