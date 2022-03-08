@@ -1,0 +1,592 @@
+{
+  "@context": "https://readium.org/webpub-manifest/context.jsonld",
+  "metadata": {
+    "title": "The War Poems Of Siegfried Sassoon",
+    "language": "en",
+    "author": "Siegfreid Sassoon"
+  },
+  "resources": [
+    {
+      "href": "OPS/TOC.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "toc",
+      "rel": "contents"
+    },
+    {
+      "href": "OPS/images/ss_fixed_online.jpg",
+      "type": "image/jpeg",
+      "id": "cover-image",
+      "rel": "cover",
+      "width": 500,
+      "height": 708
+    },
+    { "href": "OPS/css/igp-twss-fxl.css", "type": "text/css", "id": "css-001" },
+    {
+      "href": "OPS/fonts/texgyrebonum-bold.woff",
+      "type": "application/font-woff",
+      "id": "fonts-001"
+    },
+    {
+      "href": "OPS/fonts/texgyrebonum-bolditalic.woff",
+      "type": "application/font-woff",
+      "id": "fonts-002"
+    },
+    {
+      "href": "OPS/fonts/texgyrebonum-italic.woff",
+      "type": "application/font-woff",
+      "id": "fonts-003"
+    },
+    {
+      "href": "OPS/fonts/texgyrebonum-regular.woff",
+      "type": "application/font-woff",
+      "id": "fonts-004"
+    }
+  ],
+  "readingOrder": [
+    {
+      "href": "OPS/s001-Cover-01.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s001"
+    },
+    {
+      "href": "OPS/s002-BookTitlePage-01.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s002"
+    },
+    {
+      "href": "OPS/s003-Section-01.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s003"
+    },
+    {
+      "href": "OPS/s004-Copyright-01.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s004"
+    },
+    {
+      "href": "OPS/s005-Epigraph-01.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s005"
+    },
+    {
+      "href": "OPS/s006-TableOfContents-01.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s006"
+    },
+    {
+      "href": "OPS/s007-Section-02.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s007"
+    },
+    {
+      "href": "OPS/s008-Section-03.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s008"
+    },
+    {
+      "href": "OPS/s009-Part-001.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s009"
+    },
+    {
+      "href": "OPS/s010-Section-004.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s010"
+    },
+    {
+      "href": "OPS/s011-Poem-001.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s011"
+    },
+    {
+      "href": "OPS/s012-Poem-002.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s012"
+    },
+    {
+      "href": "OPS/s013-Poem-003.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s013"
+    },
+    {
+      "href": "OPS/s014-Section-005.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s014"
+    },
+    {
+      "href": "OPS/s015-Poem-004.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s015"
+    },
+    {
+      "href": "OPS/s016-Poem-005.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s016"
+    },
+    {
+      "href": "OPS/s017-Poem-006.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s017"
+    },
+    {
+      "href": "OPS/s018-Section-006.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s018"
+    },
+    {
+      "href": "OPS/s019-Poem-007.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s019"
+    },
+    {
+      "href": "OPS/s020-Section-007.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s020"
+    },
+    {
+      "href": "OPS/s021-Poem-008.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s021"
+    },
+    {
+      "href": "OPS/s022-Poem-009.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s022"
+    },
+    {
+      "href": "OPS/s023-Poem-010.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s023"
+    },
+    {
+      "href": "OPS/s024-Poem-011.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s024"
+    },
+    {
+      "href": "OPS/s025-Poem-012.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s025"
+    },
+    {
+      "href": "OPS/s026-Poem-013.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s026"
+    },
+    {
+      "href": "OPS/s027-Poem-014.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s027"
+    },
+    {
+      "href": "OPS/s028-Section-008.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s028"
+    },
+    {
+      "href": "OPS/s029-Poem-015.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s029"
+    },
+    {
+      "href": "OPS/s030-Poem-016.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s030"
+    },
+    {
+      "href": "OPS/s031-Poem-017.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s031"
+    },
+    {
+      "href": "OPS/s032-Poem-018.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s032"
+    },
+    {
+      "href": "OPS/s033-Poem-019.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s033"
+    },
+    {
+      "href": "OPS/s034-Poem-020.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s034"
+    },
+    {
+      "href": "OPS/s035-Poem-021.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s035"
+    },
+    {
+      "href": "OPS/s036-Poem-022.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s036"
+    },
+    {
+      "href": "OPS/s037-Section-009.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s037"
+    },
+    {
+      "href": "OPS/s038-Poem-023.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s038"
+    },
+    {
+      "href": "OPS/s039-Poem-024.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s039"
+    },
+    {
+      "href": "OPS/s040-Poem-025.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s040"
+    },
+    {
+      "href": "OPS/s041-Poem-026.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s041"
+    },
+    {
+      "href": "OPS/s042-Section-010.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s042"
+    },
+    {
+      "href": "OPS/s043-Part-002.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s043"
+    },
+    {
+      "href": "OPS/s044-Section-011.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s044"
+    },
+    {
+      "href": "OPS/s045-Poem-027.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s045"
+    },
+    {
+      "href": "OPS/s046-Poem-028.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s046"
+    },
+    {
+      "href": "OPS/s047-Poem-029.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s047"
+    },
+    {
+      "href": "OPS/s048-Poem-030.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s048"
+    },
+    {
+      "href": "OPS/s049-Poem-031.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s049"
+    },
+    {
+      "href": "OPS/s050-Poem-032.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s050"
+    },
+    {
+      "href": "OPS/s051-Poem-033.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s051"
+    },
+    {
+      "href": "OPS/s052-Poem-034.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s052"
+    },
+    {
+      "href": "OPS/s053-Poem-035.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s053"
+    },
+    {
+      "href": "OPS/s054-Poem-036.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s054"
+    },
+    {
+      "href": "OPS/s055-Poem-037.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s055"
+    },
+    {
+      "href": "OPS/s056-Poem-038.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s056"
+    },
+    {
+      "href": "OPS/s057-Poem-039.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s057"
+    },
+    {
+      "href": "OPS/s058-Poem-040.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s058"
+    },
+    {
+      "href": "OPS/s059-Poem-041.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s059"
+    },
+    {
+      "href": "OPS/s060-Poem-042.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s060"
+    },
+    {
+      "href": "OPS/s061-Poem-043.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s061"
+    },
+    {
+      "href": "OPS/s062-Poem-044.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s062"
+    },
+    {
+      "href": "OPS/s063-Poem-045.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s063"
+    },
+    {
+      "href": "OPS/s064-Poem-046.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s064"
+    },
+    {
+      "href": "OPS/s065-Poem-047.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s065"
+    },
+    {
+      "href": "OPS/s066-Section-012.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s066"
+    },
+    {
+      "href": "OPS/s067-Part-003.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s067"
+    },
+    {
+      "href": "OPS/s068-Section-013.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s068"
+    },
+    {
+      "href": "OPS/s069-Poem-048.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s069"
+    },
+    {
+      "href": "OPS/s070-Poem-049.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s070"
+    },
+    {
+      "href": "OPS/s071-Section-014.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s071"
+    },
+    {
+      "href": "OPS/s072-Poem-050.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s072"
+    },
+    {
+      "href": "OPS/s073-Poem-051.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s073"
+    },
+    {
+      "href": "OPS/s074-Poem-052.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s074"
+    },
+    {
+      "href": "OPS/s075-Poem-053.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s075"
+    },
+    {
+      "href": "OPS/s076-Section-015.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s076"
+    },
+    {
+      "href": "OPS/s077-Poem-054.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s077"
+    },
+    {
+      "href": "OPS/s078-Poem-055.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s078"
+    },
+    {
+      "href": "OPS/s079-Poem-056.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s079"
+    },
+    {
+      "href": "OPS/s080-Poem-057.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s080"
+    },
+    {
+      "href": "OPS/s081-Poem-058.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s081"
+    },
+    {
+      "href": "OPS/s082-Section-016.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s082"
+    },
+    {
+      "href": "OPS/s083-Section-017.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s083"
+    },
+    {
+      "href": "OPS/s084-Poem-059.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s084"
+    },
+    {
+      "href": "OPS/s085-Poem-060.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s085"
+    },
+    {
+      "href": "OPS/s086-Poem-061.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s086"
+    },
+    {
+      "href": "OPS/s087-Section-018.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s087"
+    },
+    {
+      "href": "OPS/s088-Poem-062.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s088"
+    },
+    {
+      "href": "OPS/s089-Section-019.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s089"
+    },
+    {
+      "href": "OPS/s090-Poem-063.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s090"
+    },
+    {
+      "href": "OPS/s091-Poem-064.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "s091"
+    }
+  ],
+  "toc": [
+    { "title": "cover", "href": "OPS/s001-Cover-01.xhtml" },
+    {
+      "title": "THE WAR POEMS OF SIEGFRIED SASSOON",
+      "href": "OPS/s003-Section-01.xhtml"
+    },
+    { "title": "Copyright", "href": "OPS/s004-Copyright-01.xhtml" },
+    { "title": "Epigraph", "href": "OPS/s005-Epigraph-01.xhtml" },
+    { "title": "Contents", "href": "OPS/s006-TableOfContents-01.xhtml" },
+    { "title": "Part I", "href": "OPS/s009-Part-001.xhtml" },
+    { "title": "Prelude: The Troops", "href": "OPS/s011-Poem-001.xhtml" },
+    { "title": "Dreamers", "href": "OPS/s012-Poem-002.xhtml" },
+    { "title": "The Redeemer", "href": "OPS/s013-Poem-003.xhtml" },
+    { "title": "Trench Duty", "href": "OPS/s015-Poem-004.xhtml" },
+    { "title": "Wirers", "href": "OPS/s016-Poem-005.xhtml" },
+    { "title": "Break of Day", "href": "OPS/s017-Poem-006.xhtml" },
+    { "title": "A Working Party", "href": "OPS/s019-Poem-007.xhtml" },
+    {
+      "title": "Stand-to: Good Friday Morning",
+      "href": "OPS/s021-Poem-008.xhtml"
+    },
+    { "title": "“In The Pink”", "href": "OPS/s022-Poem-009.xhtml" },
+    { "title": "The Hero", "href": "OPS/s023-Poem-010.xhtml" },
+    { "title": "Before The Battle", "href": "OPS/s024-Poem-011.xhtml" },
+    { "title": "The Road", "href": "OPS/s025-Poem-012.xhtml" },
+    { "title": "Two Hundred Years After", "href": "OPS/s026-Poem-013.xhtml" },
+    { "title": "The Dream", "href": "OPS/s027-Poem-014.xhtml" },
+    { "title": "At Carnoy", "href": "OPS/s029-Poem-015.xhtml" },
+    { "title": "Battalion Relief", "href": "OPS/s030-Poem-016.xhtml" },
+    { "title": "The Dug-Out", "href": "OPS/s031-Poem-017.xhtml" },
+    { "title": "The Rear-Guard", "href": "OPS/s032-Poem-018.xhtml" },
+    { "title": "I Stood With The Dead", "href": "OPS/s033-Poem-019.xhtml" },
+    { "title": "Suicide In trenches", "href": "OPS/s034-Poem-020.xhtml" },
+    { "title": "Attack", "href": "OPS/s035-Poem-021.xhtml" },
+    { "title": "Counter-Attack", "href": "OPS/s036-Poem-022.xhtml" },
+    { "title": "The Effect", "href": "OPS/s038-Poem-023.xhtml" },
+    { "title": "Remorse", "href": "OPS/s039-Poem-024.xhtml" },
+    {
+      "title": "In An Underground Dressing-Station",
+      "href": "OPS/s040-Poem-025.xhtml"
+    },
+    { "title": "Died Of Wounds", "href": "OPS/s041-Poem-026.xhtml" },
+    { "title": "Part II", "href": "OPS/s043-Part-002.xhtml" },
+    { "title": "“They”", "href": "OPS/s045-Poem-027.xhtml" },
+    { "title": "Base Details", "href": "OPS/s046-Poem-028.xhtml" },
+    { "title": "Lamentations", "href": "OPS/s047-Poem-029.xhtml" },
+    { "title": "The General", "href": "OPS/s048-Poem-030.xhtml" },
+    { "title": "How To Die", "href": "OPS/s049-Poem-031.xhtml" },
+    { "title": "Editorial Impression", "href": "OPS/s050-Poem-032.xhtml" },
+    { "title": "Fight To A Finish", "href": "OPS/s051-Poem-033.xhtml" },
+    { "title": "Atrocities", "href": "OPS/s052-Poem-034.xhtml" },
+    { "title": "The Fathers", "href": "OPS/s053-Poem-035.xhtml" },
+    { "title": "“BLIGHTERS”", "href": "OPS/s054-Poem-036.xhtml" },
+    { "title": "Glory Of Women", "href": "OPS/s055-Poem-037.xhtml" },
+    { "title": "Their Frailty", "href": "OPS/s056-Poem-038.xhtml" },
+    { "title": "Does It Matter?", "href": "OPS/s057-Poem-039.xhtml" },
+    { "title": "Survivors", "href": "OPS/s058-Poem-040.xhtml" },
+    { "title": "Joy-Bells", "href": "OPS/s059-Poem-041.xhtml" },
+    { "title": "Arms And The Man", "href": "OPS/s060-Poem-042.xhtml" },
+    {
+      "title": "When I’m Among A Blaze Of Lights…",
+      "href": "OPS/s061-Poem-043.xhtml"
+    },
+    { "title": "The Kiss", "href": "OPS/s062-Poem-044.xhtml" },
+    { "title": "The Tombstone-Maker", "href": "OPS/s063-Poem-045.xhtml" },
+    { "title": "The One-Legged Man", "href": "OPS/s064-Poem-046.xhtml" },
+    { "title": "Return Of The Heroes", "href": "OPS/s065-Poem-047.xhtml" },
+    { "title": "Part III", "href": "OPS/s067-Part-003.xhtml" },
+    { "title": "Twelve Months After", "href": "OPS/s069-Poem-048.xhtml" },
+    { "title": "To Any Dead Officer", "href": "OPS/s070-Poem-049.xhtml" },
+    { "title": "Sick Leave", "href": "OPS/s072-Poem-050.xhtml" },
+    { "title": "Banishment", "href": "OPS/s073-Poem-051.xhtml" },
+    { "title": "Autumn", "href": "OPS/s074-Poem-052.xhtml" },
+    {
+      "title": "Repression Of War Experience",
+      "href": "OPS/s075-Poem-053.xhtml"
+    },
+    { "title": "Together", "href": "OPS/s077-Poem-054.xhtml" },
+    { "title": "The Hawthorn Tree", "href": "OPS/s078-Poem-055.xhtml" },
+    { "title": "Concert Party", "href": "OPS/s079-Poem-056.xhtml" },
+    { "title": "Night On The Convoy", "href": "OPS/s080-Poem-057.xhtml" },
+    { "title": "A Letter Home", "href": "OPS/s081-Poem-058.xhtml" },
+    { "title": "Reconciliation", "href": "OPS/s084-Poem-059.xhtml" },
+    { "title": "Memorial Tablet", "href": "OPS/s085-Poem-060.xhtml" },
+    { "title": "The Death-Bed", "href": "OPS/s086-Poem-061.xhtml" },
+    { "title": "Aftermath", "href": "OPS/s088-Poem-062.xhtml" },
+    { "title": "Song-Books Of The War", "href": "OPS/s090-Poem-063.xhtml" },
+    { "title": "Everyone Sang", "href": "OPS/s091-Poem-064.xhtml" }
+  ],
+  "links": []
+}

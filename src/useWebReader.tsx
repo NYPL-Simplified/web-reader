@@ -1,6 +1,5 @@
 import React from 'react';
 import { fetchJson } from './utils/fetch';
-import HtmlReaderContent from './HtmlReader/HtmlReaderContent';
 import usePdfReader from './PdfReader';
 import useHtmlReader from './HtmlReader';
 import {
@@ -19,6 +18,7 @@ import {
   DEFAULT_HEIGHT,
   DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
 } from './constants';
+import LoadingSkeleton from './ui/LoadingSkeleton';
 
 function getReaderType(conformsTo: ConformsTo | null | undefined) {
   switch (conformsTo) {
@@ -109,13 +109,7 @@ export default function useWebReader(
   if (manifest === null) {
     return {
       isLoading: true,
-      content: (
-        <HtmlReaderContent
-          height={height}
-          isScrolling={false}
-          growsWhenScrolling={false}
-        />
-      ),
+      content: <LoadingSkeleton height={height} />,
       manifest: null,
       navigator: null,
       state: null,

@@ -1,6 +1,6 @@
 describe('useHtmlReader configuration settings', () => {
   it('should have no injectables by default', () => {
-    cy.loadPage('/test/no-injectables');
+    cy.loadPage('/html/test/no-injectables');
     cy.getIframeHead()
       .find('link[href$="/fonts/opensyslexic/opendyslexic.css"]')
       .should('not.exist');
@@ -10,7 +10,7 @@ describe('useHtmlReader configuration settings', () => {
   });
 
   it('should render css injectables when provided', () => {
-    cy.loadPage('/test/with-injectables');
+    cy.loadPage('/html/test/with-injectables');
     cy.getIframeHead()
       .find(`link[href$="/fonts/opensyslexic/opendyslexic.css"]`)
       .should('exist');

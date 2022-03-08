@@ -1,6 +1,6 @@
 describe('Book without a TOC or empty TOC menulist', () => {
   it('Shows mssing TOC message', () => {
-    cy.visit('/test/missing-toc');
+    cy.visit('/html/test/missing-toc');
     cy.getIframeBody()
       .find('h1')
       .should('include.text', 'missing Table of Contents');

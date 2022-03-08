@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /// <reference types="cypress" />
 import '@testing-library/cypress/add-commands';
-import { IFRAME_SELECTOR } from './constants';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -9,29 +9,33 @@ declare global {
     interface Chainable<Subject = any> {
       loadPage(
         pageName:
-          | '/moby-epub2'
-          | 'axisnow-encrypted'
-          | '/axisnow-decrypted'
-          | '/test/no-injectables'
-          | '/test/with-injectables'
-          | '/test/get-content'
-          | '/streamed-alice-epub'
-          | '/test/unparsable-manifest'
-          | '/test/missing-resource'
-          | '/test/missing-injectable'
+          | '/html/moby-epub2'
+          | '/html/moby-epub3'
+          | '/html/axisnow-encrypted'
+          | '/html/axisnow-decrypted'
+          | '/html/test/no-injectables'
+          | '/html/test/with-injectables'
+          | '/html/test/get-content'
+          | '/html/streamed-alice-epub'
+          | '/html/test/unparsable-manifest'
+          | '/html/test/missing-resource'
+          | '/html/test/missing-injectable'
       ): void;
-      getIframeHtml(selector?: string): Chainable<Subject>;
-      getIframeHead(selector?: string): Chainable<Subject>;
-      getIframeBody(selector?: string): Chainable<Subject>;
-      loadPdf(path: '/pdf' | '/pdf-collection'): Chainable<Subject>;
+      getIframeHtml(): Chainable<JQuery<HTMLIFrameElement>>;
+      getIframeHead(): Chainable<Subject>;
+      getIframeBody(): Chainable<JQuery<HTMLBodyElement>>;
+      finishNavigation(): void;
+      loadPdf(
+        path: '/pdf/single-resource-short' | '/pdf/collection'
+      ): Chainable<Subject>;
     }
   }
 }
 
 const pagesUsingAliceInWonderlandExample: string[] = [
-  '/streamed-alice-epub',
-  '/test/with-injectables',
-  '/test/no-injectables',
+  '/html/streamed-alice-epub',
+  '/html/test/with-injectables',
+  '/html/test/no-injectables',
 ];
 
 Cypress.Commands.add('loadPage', (pageName) => {
@@ -40,6 +44,7 @@ Cypress.Commands.add('loadPage', (pageName) => {
   )
     ? 'https://alice.dita.digital/**'
     : '/samples/**';
+
   cy.intercept(resourceInterceptUrl, { middleware: true }, (req) => {
     req.on('before:response', (res) => {
       // force all API responses to not be cached
@@ -47,59 +52,122 @@ Cypress.Commands.add('loadPage', (pageName) => {
     });
   }).as('sample');
   cy.visit(pageName, {
-    onBeforeLoad: (win) => {
-      win.sessionStorage.clear(); // clear storage so that we are always on page one
-    },
+    // re-enable this once we start storing location and settings in storage.
+    // onBeforeLoad: (win) => {
+    //   win.sessionStorage.clear(); // clear storage so that we are always on page one
+    // },
   });
-  cy.get('#reader-loading').should('be.visible');
+  cy.findByRole('progressbar', { name: 'Loading book...' }).should('exist');
   cy.wait('@sample', { timeout: 20000 }).then((interception) => {
     assert.isNotNull(interception?.response?.body, 'API call has data');
   });
-  cy.get('#reader-loading').should('not.be.visible');
+  cy.findByRole('progressbar', { name: 'Loading book...' }).should('not.exist');
 });
 
-Cypress.Commands.add('getIframeHtml', (selector: string = IFRAME_SELECTOR) => {
-  return cy
-    .get(selector, { timeout: 15000 })
-    .its('0.contentDocument.documentElement')
-    .should('not.be.empty')
-    .then(cy.wrap);
-});
+/**
+ * Ensures the iframe has loaded and is not on about:blank since
+ * chrome starts iframes as loaded on about:blank.
+ */
+const isIframeLoaded = ($iframe: HTMLIFrameElement) => {
+  const contentWindow = $iframe.contentWindow;
+  const src = $iframe.src;
+  const href = contentWindow?.location.href;
+  if (contentWindow?.document.readyState === 'complete') {
+    return href !== 'about:blank' || src === 'about:blank' || src === '';
+  }
+  return false;
+};
 
-Cypress.Commands.add('getIframeHead', (selector: string = IFRAME_SELECTOR) => {
-  return cy
-    .get(selector, { timeout: 15000 })
-    .its(`0.contentDocument.head`)
-    .should('not.be.empty')
-    .then(cy.wrap);
-});
-
-Cypress.Commands.add('getIframeBody', (selector: string = IFRAME_SELECTOR) => {
-  return cy
-    .get(selector, { timeout: 15000 })
-    .its(`0.contentDocument.body`)
-    .should('not.be.empty')
-    .then(cy.wrap);
-});
-
-Cypress.Commands.add('loadPdf', (path: '/pdf' | '/pdf-collection') => {
-  const pdfProxyInterceptUrl =
-    Cypress.config().baseUrl === 'http://localhost:1234'
-      ? 'http://localhost:3001'
-      : 'https://drb-api-qa.nypl.org/utils';
-  cy.intercept(`${pdfProxyInterceptUrl}/**`, { middleware: true }, (req) => {
-    req.on('before:response', (res) => {
-      // force all API responses to not be cached
-      res.headers['cache-control'] = 'no-store';
-    });
-  }).as('pdf');
-  cy.visit(path, {
-    onBeforeLoad: (win) => {
-      win.sessionStorage.clear(); // clear storage so that we are always on page one
-    },
+Cypress.Commands.add('getIframeHtml', { prevSubject: false }, () => {
+  Cypress.log({
+    name: 'Get Iframe HTML',
+    // shorter name for the Command Log
+    displayName: 'getIframeHtml',
+    message: `Get the iframe html, and wait for it to load.`,
   });
-  cy.wait('@pdf', { timeout: 30000 });
-  cy.get('#iframe-wrapper')
-    .find('div[class="react-pdf__Page__textContent"]', { timeout: 10000 })
-    .should('have.attr', 'style');
+
+  return (
+    cy
+      .get('iframe', { log: false })
+      // .its('0')
+      // .should(isIframeLoaded)
+      // .its('contentDocument', { log: false })
+      // .should('not.be.empty')
+      // .then((html) => {
+      //   return cy.wrap(html, { log: false });
+      // });
+      .should(($frame) => {
+        const readyState = $frame.prop('contentWindow').document.readyState;
+        expect(readyState).to.eq('complete');
+        const body = $frame.contents().find('body');
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        expect(body).to.not.be.empty;
+      })
+      .its('0.contentDocument.documentElement', { log: false })
+      .then(($el) => cy.wrap($el, { log: false }))
+  );
 });
+
+Cypress.Commands.add('getIframeHead', { prevSubject: false }, () => {
+  Cypress.log({
+    name: 'Get Iframe Head',
+    // shorter name for the Command Log
+    displayName: 'getIframeHead',
+    message: `Get the iframe head, and wait for it to load.`,
+  });
+
+  return cy
+    .get('iframe', { log: false })
+    .its('0', { log: false })
+    .should(isIframeLoaded)
+    .its('contentDocument.head', { log: false })
+    .then(($el) => cy.wrap($el, { log: false }));
+});
+
+Cypress.Commands.add('getIframeBody', { prevSubject: false }, () => {
+  Cypress.log({
+    name: 'Get Iframe Body',
+    // shorter name for the Command Log
+    displayName: 'getIframeBody',
+    message: `Get the iframe body, and wait for it to load.`,
+  });
+
+  return cy
+    .get('iframe', { log: false })
+    .its('0', { log: false })
+    .should(isIframeLoaded)
+    .its('contentDocument.body', { log: false })
+    .should('not.be.empty')
+    .then(($el) => cy.wrap($el, { log: false }));
+});
+
+Cypress.Commands.add('finishNavigation', { prevSubject: false }, () => {
+  // we use this to simply wait for the user to be scrolled to wherever they need to be.
+  // any other method would be very tough to use.
+  cy.wait(100);
+});
+
+Cypress.Commands.add(
+  'loadPdf',
+  (path: '/pdf/single-resource-short' | '/pdf/collection') => {
+    const pdfProxyInterceptUrl =
+      Cypress.config().baseUrl === 'http://localhost:1234'
+        ? 'http://localhost:3001'
+        : 'https://drb-api-qa.nypl.org/utils';
+    cy.intercept(`${pdfProxyInterceptUrl}/**`, { middleware: true }, (req) => {
+      req.on('before:response', (res) => {
+        // force all API responses to not be cached
+        res.headers['cache-control'] = 'no-store';
+      });
+    }).as('pdf');
+    cy.visit(path, {
+      onBeforeLoad: (win) => {
+        win.sessionStorage.clear(); // clear storage so that we are always on page one
+      },
+    });
+    cy.wait('@pdf', { timeout: 30000 });
+    cy.get('#iframe-wrapper')
+      .find('div[class="react-pdf__Page__textContent"]', { timeout: 10000 })
+      .should('have.attr', 'style');
+  }
+);

@@ -26,7 +26,7 @@ A big thanks to [R2D2BC](https://github.com/d-i-t-a/R2D2BC) for providing the un
 - [x] Offline support (prefetch and cache desired content via Service Worker, along with host app shell.
 - [ ] Saving bookmarks / highlights
 - [x] WAI-ARIA compliant accessibility
-- [ ] Integration tested
+- [x] Integration tested
 
 ## Example
 

@@ -5,7 +5,7 @@ describe('navigating an EPUB page using internal link', () => {
       return false;
     });
 
-    cy.loadPage('/moby-epub2');
+    cy.loadPage('/html/moby-epub2');
   });
 
   it('Paginated mode & internal links should navigates users', () => {
@@ -33,6 +33,7 @@ describe('navigating an EPUB page using internal link', () => {
     cy.log('Go to a page with TOC');
 
     cy.findByRole('button', { name: 'Table of Contents' }).click();
+    cy.wait(1000);
     cy.findByLabelText('MOBY-DICK; or, THE WHALE.').click();
 
     cy.wait(3000);

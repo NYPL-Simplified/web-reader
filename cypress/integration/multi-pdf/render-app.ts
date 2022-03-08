@@ -1,6 +1,6 @@
 describe('Renders multi PDF', () => {
   it('Renders page content', () => {
-    cy.loadPdf('/pdf-collection');
+    cy.loadPdf('/pdf/collection');
 
     cy.log('check that all the essential buttons are on the page');
     cy.findByRole('link', { name: 'Return to Homepage' }).should('exist');

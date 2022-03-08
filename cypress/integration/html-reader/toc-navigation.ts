@@ -1,6 +1,6 @@
 describe('navigating an EPUB page', () => {
   beforeEach(() => {
-    cy.loadPage('/streamed-alice-epub');
+    cy.loadPage('/html/streamed-alice-epub');
   });
 
   it('Paginated mode & TOC: should update page content after clicking on TOC link', () => {
@@ -17,6 +17,7 @@ describe('navigating an EPUB page', () => {
       );
 
     cy.findByRole('button', { name: 'Settings' }).click();
+    cy.wait(1000);
     cy.findByText('Scrolling').click();
     cy.findByRole('radio', { name: 'Paginated' }).should('not.be.checked');
     cy.findByRole('radio', { name: 'Scrolling' }).should('be.checked');

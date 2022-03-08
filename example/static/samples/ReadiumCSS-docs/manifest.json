@@ -1,0 +1,1144 @@
+{
+  "@context": "https://readium.org/webpub-manifest/context.jsonld",
+  "metadata": {
+    "title": "Readium CSS Implementers’ doc",
+    "language": "en",
+    "author": "Readium"
+  },
+  "resources": [
+    {
+      "href": "OEBPS/toc.ncx",
+      "type": "application/x-dtbncx+xml",
+      "id": "ncx"
+    },
+    {
+      "href": "OEBPS/Styles/stylesheet.css",
+      "type": "text/css",
+      "id": "style"
+    },
+    {
+      "href": "OEBPS/Text/nav.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "nav",
+      "rel": "contents"
+    },
+    {
+      "href": "OEBPS/Images/cover.jpg",
+      "type": "image/jpeg",
+      "id": "cover_jpg",
+      "rel": "cover",
+      "width": 1400,
+      "height": 2100
+    },
+    {
+      "href": "OEBPS/Images/Page-Model.jpg",
+      "type": "image/jpeg",
+      "id": "Page-Model.jpg"
+    },
+    {
+      "href": "OEBPS/Images/spread-model.jpg",
+      "type": "image/jpeg",
+      "id": "spread-model.jpg"
+    },
+    {
+      "href": "OEBPS/Images/charis-sil.png",
+      "type": "image/png",
+      "id": "charis-sil.png"
+    },
+    {
+      "href": "OEBPS/Images/clear-sans.png",
+      "type": "image/png",
+      "id": "clear-sans.png"
+    },
+    {
+      "href": "OEBPS/Images/faustina.png",
+      "type": "image/png",
+      "id": "faustina.png"
+    },
+    {
+      "href": "OEBPS/Images/fira-sans.png",
+      "type": "image/png",
+      "id": "fira-sans.png"
+    },
+    {
+      "href": "OEBPS/Images/libre-franklin.png",
+      "type": "image/png",
+      "id": "libre-franklin.png"
+    },
+    {
+      "href": "OEBPS/Images/literata.png",
+      "type": "image/png",
+      "id": "literata.png"
+    },
+    {
+      "href": "OEBPS/Images/merriweather-sans.png",
+      "type": "image/png",
+      "id": "merriweather-sans.png"
+    },
+    {
+      "href": "OEBPS/Images/merriweather.png",
+      "type": "image/png",
+      "id": "merriweather.png"
+    },
+    {
+      "href": "OEBPS/Images/plex-serif.png",
+      "type": "image/png",
+      "id": "plex-serif.png"
+    },
+    {
+      "href": "OEBPS/Images/pt-sans.png",
+      "type": "image/png",
+      "id": "pt-sans.png"
+    },
+    {
+      "href": "OEBPS/Images/pt-serif.png",
+      "type": "image/png",
+      "id": "pt-serif.png"
+    },
+    {
+      "href": "OEBPS/Images/source-sans-pro.png",
+      "type": "image/png",
+      "id": "source-sans-pro.png"
+    },
+    {
+      "href": "OEBPS/Images/vollkorn.png",
+      "type": "image/png",
+      "id": "vollkorn.png"
+    },
+    {
+      "href": "OEBPS/Images/dynamic-leading.jpg",
+      "type": "image/jpeg",
+      "id": "dynamic-leading.jpg"
+    },
+    {
+      "href": "OEBPS/Images/Fragmented-Model.jpg",
+      "type": "image/jpeg",
+      "id": "Fragmented-Model.jpg"
+    },
+    {
+      "href": "OEBPS/Images/alt-lines.png",
+      "type": "image/png",
+      "id": "alt-lines.png"
+    }
+  ],
+  "readingOrder": [
+    {
+      "href": "OEBPS/Text/cover.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "cover_xhtml"
+    },
+    {
+      "href": "OEBPS/Text/title_page.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "title_page_xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-001.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-001.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-002.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-002.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-003.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-003.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-004.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-004.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-005.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-005.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-006.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-006.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-007.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-007.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-008.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-008.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-009.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-009.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-010.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-010.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-011.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-011.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-012.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-012.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-013.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-013.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-014.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-014.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-015.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-015.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-016.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-016.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-017.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-017.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-018.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-018.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-019.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-019.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-020.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-020.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-021.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-021.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-022.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-022.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-023.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-023.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-024.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-024.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-025.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-025.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-026.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-026.xhtml"
+    },
+    {
+      "href": "OEBPS/Text/Section-027.xhtml",
+      "type": "application/xhtml+xml",
+      "id": "Section-027.xhtml"
+    }
+  ],
+  "toc": [
+    {
+      "title": "Readium CSS Implementers’ doc",
+      "href": "OEBPS/Text/title_page.xhtml"
+    },
+    {
+      "title": "Readium CSS Fundamental Concepts",
+      "href": "OEBPS/Text/Section-001.xhtml",
+      "children": [
+        {
+          "title": "1. We’re the User Agent",
+          "href": "OEBPS/Text/Section-001.xhtml#sigil_toc_id_1"
+        },
+        {
+          "title": "2. Aim at Interoperability",
+          "href": "OEBPS/Text/Section-001.xhtml#sigil_toc_id_2"
+        },
+        {
+          "title": "3. Leverage Modern CSS",
+          "href": "OEBPS/Text/Section-001.xhtml#sigil_toc_id_3"
+        },
+        {
+          "title": "4. Openness and Transparency",
+          "href": "OEBPS/Text/Section-001.xhtml#sigil_toc_id_4"
+        }
+      ]
+    },
+    {
+      "title": "Quickstart",
+      "href": "OEBPS/Text/Section-002.xhtml",
+      "children": [
+        {
+          "title": "Important info",
+          "href": "OEBPS/Text/Section-002.xhtml#sigil_toc_id_163"
+        },
+        {
+          "title": "How To",
+          "href": "OEBPS/Text/Section-002.xhtml#sigil_toc_id_164"
+        },
+        {
+          "title": "Customize",
+          "href": "OEBPS/Text/Section-002.xhtml#sigil_toc_id_165"
+        },
+        {
+          "title": "Build dist stylesheets",
+          "href": "OEBPS/Text/Section-002.xhtml#sigil_toc_id_59"
+        },
+        {
+          "title": "Manage User Settings",
+          "href": "OEBPS/Text/Section-002.xhtml#sigil_toc_id_166"
+        },
+        {
+          "title": "Create Themes",
+          "href": "OEBPS/Text/Section-002.xhtml#sigil_toc_id_167"
+        }
+      ]
+    },
+    {
+      "title": "Inject and paginate EPUB contents",
+      "href": "OEBPS/Text/Section-003.xhtml",
+      "children": [
+        {
+          "title": "Injection",
+          "href": "OEBPS/Text/Section-003.xhtml#sigil_toc_id_8"
+        },
+        {
+          "title": "Pagination",
+          "href": "OEBPS/Text/Section-003.xhtml#sigil_toc_id_9"
+        }
+      ]
+    },
+    {
+      "title": "How the multicolumn layout works",
+      "href": "OEBPS/Text/Section-004.xhtml",
+      "children": [
+        {
+          "title": "Introduction",
+          "href": "OEBPS/Text/Section-004.xhtml#sigil_toc_id_10"
+        },
+        {
+          "title": "The multi-column model",
+          "href": "OEBPS/Text/Section-004.xhtml#sigil_toc_id_11"
+        },
+        {
+          "title": "The number and width of columns",
+          "href": "OEBPS/Text/Section-004.xhtml#sigil_toc_id_12"
+        },
+        {
+          "title": "Column gaps and rules",
+          "href": "OEBPS/Text/Section-004.xhtml#sigil_toc_id_13"
+        },
+        {
+          "title": "Fragmentation (column break)",
+          "href": "OEBPS/Text/Section-004.xhtml#sigil_toc_id_14"
+        },
+        {
+          "title": "Column span",
+          "href": "OEBPS/Text/Section-004.xhtml#sigil_toc_id_15"
+        },
+        {
+          "title": "Filling columns",
+          "href": "OEBPS/Text/Section-004.xhtml#sigil_toc_id_16"
+        },
+        {
+          "title": "Overflow",
+          "href": "OEBPS/Text/Section-004.xhtml#sigil_toc_id_17"
+        },
+        {
+          "title": "Reflow",
+          "href": "OEBPS/Text/Section-004.xhtml#sigil_toc_id_55"
+        },
+        {
+          "title": "Notorious limitations",
+          "href": "OEBPS/Text/Section-004.xhtml#sigil_toc_id_18"
+        },
+        {
+          "title": "Notes",
+          "href": "OEBPS/Text/Section-004.xhtml#sigil_toc_id_19"
+        }
+      ]
+    },
+    {
+      "title": "Reading Systems Requirements for reflowable text",
+      "href": "OEBPS/Text/Section-005.xhtml",
+      "children": [
+        {
+          "title": "CSS Snapshot",
+          "href": "OEBPS/Text/Section-005.xhtml#sigil_toc_id_20"
+        },
+        {
+          "title": "Prefixed properties",
+          "href": "OEBPS/Text/Section-005.xhtml#sigil_toc_id_21"
+        },
+        {
+          "title": "HTML Suggested Rendering",
+          "href": "OEBPS/Text/Section-005.xhtml#sigil_toc_id_22"
+        },
+        {
+          "title": "Reading System Overrides",
+          "href": "OEBPS/Text/Section-005.xhtml#sigil_toc_id_23"
+        },
+        {
+          "title": "Notes",
+          "href": "OEBPS/Text/Section-005.xhtml#sigil_toc_id_24"
+        }
+      ]
+    },
+    {
+      "title": "Order in which to append Readium CSS reflowable modules",
+      "href": "OEBPS/Text/Section-006.xhtml",
+      "children": [
+        {
+          "title": "Dist stylesheets",
+          "href": "OEBPS/Text/Section-006.xhtml#sigil_toc_id_5"
+        },
+        {
+          "title": "Src modules",
+          "href": "OEBPS/Text/Section-006.xhtml#sigil_toc_id_6"
+        }
+      ]
+    },
+    {
+      "title": "How to use CSS custom properties (a.k.a. variables)",
+      "href": "OEBPS/Text/Section-007.xhtml",
+      "children": [
+        {
+          "title": "What are CSS variables?",
+          "href": "OEBPS/Text/Section-007.xhtml#sigil_toc_id_28"
+        },
+        {
+          "title": "Cascade and inheritance",
+          "href": "OEBPS/Text/Section-007.xhtml#sigil_toc_id_29"
+        },
+        {
+          "title": "Fallback",
+          "href": "OEBPS/Text/Section-007.xhtml#sigil_toc_id_30"
+        },
+        {
+          "title": "Using CSS variables in JavaScript",
+          "href": "OEBPS/Text/Section-007.xhtml#sigil_toc_id_31"
+        },
+        {
+          "title": "Interesting hacks",
+          "href": "OEBPS/Text/Section-007.xhtml#sigil_toc_id_32"
+        }
+      ]
+    },
+    {
+      "title": "Defaults",
+      "href": "OEBPS/Text/Section-008.xhtml",
+      "children": [
+        {
+          "title": "Base",
+          "href": "OEBPS/Text/Section-008.xhtml#sigil_toc_id_56"
+        },
+        {
+          "title": "Day Mode",
+          "href": "OEBPS/Text/Section-008.xhtml#sigil_toc_id_57"
+        },
+        {
+          "title": "Default",
+          "href": "OEBPS/Text/Section-008.xhtml#sigil_toc_id_58"
+        },
+        {
+          "title": "User highlights and media overlays",
+          "href": "OEBPS/Text/Section-008.xhtml#sigil_toc_id_134"
+        }
+      ]
+    },
+    {
+      "title": "Typefaces and font-stacks",
+      "href": "OEBPS/Text/Section-009.xhtml",
+      "children": [
+        {
+          "title": "Test files",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_124"
+        },
+        {
+          "title": "Fundamentals",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_65"
+        },
+        {
+          "title": "UI",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_66"
+        },
+        {
+          "title": "Latin",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_67"
+        },
+        {
+          "title": "Amharic (am)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_68"
+        },
+        {
+          "title": "Arabic (ar)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_69"
+        },
+        {
+          "title": "Bengali/Bangla (bn)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_70"
+        },
+        {
+          "title": "Tibetan (bo)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_71"
+        },
+        {
+          "title": "Cherokee (chr)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_72"
+        },
+        {
+          "title": "Persian (fa)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_38"
+        },
+        {
+          "title": "Gujarati (gu)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_73"
+        },
+        {
+          "title": "Hebrew (he)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_74"
+        },
+        {
+          "title": "Hindi (hi)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_75"
+        },
+        {
+          "title": "Armenian (hy)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_76"
+        },
+        {
+          "title": "Inuktitut (iu)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_77"
+        },
+        {
+          "title": "Japanese (ja)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_78"
+        },
+        {
+          "title": "Khmer (km)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_79"
+        },
+        {
+          "title": "Kannada (kn)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_80"
+        },
+        {
+          "title": "Korean (ko)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_81"
+        },
+        {
+          "title": "Lao (lo)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_82"
+        },
+        {
+          "title": "Malayalam (ml)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_83"
+        },
+        {
+          "title": "Oriya (or)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_84"
+        },
+        {
+          "title": "Punjabi (pa)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_85"
+        },
+        {
+          "title": "Sinhalese (si)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_86"
+        },
+        {
+          "title": "Tamil (ta)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_87"
+        },
+        {
+          "title": "Telugu (te)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_88"
+        },
+        {
+          "title": "Thai (th)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_89"
+        },
+        {
+          "title": "Chinese (zh-CN)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_90"
+        },
+        {
+          "title": "Chinese – Hong Kong (zh-HK)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_91"
+        },
+        {
+          "title": "Chinese – Taiwan (zh-TW)",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_92"
+        },
+        {
+          "title": "Dyslexic",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_93"
+        },
+        {
+          "title": "Math",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_94"
+        },
+        {
+          "title": "EBPAJ patch for Japanese",
+          "href": "OEBPS/Text/Section-009.xhtml#sigil_toc_id_130"
+        }
+      ]
+    },
+    {
+      "title": "Open Source and Libre Fonts We Can Recommend",
+      "href": "OEBPS/Text/Section-010.xhtml",
+      "children": [
+        {
+          "title": "How were those fonts reviewed",
+          "href": "OEBPS/Text/Section-010.xhtml#sigil_toc_id_117"
+        },
+        {
+          "title": "Results",
+          "href": "OEBPS/Text/Section-010.xhtml#sigil_toc_id_118"
+        },
+        {
+          "title": "Recommended Typefaces",
+          "href": "OEBPS/Text/Section-010.xhtml#sigil_toc_id_119"
+        },
+        {
+          "title": "Recommended fonts for Accessibility",
+          "href": "OEBPS/Text/Section-010.xhtml#sigil_toc_id_168"
+        },
+        {
+          "title": "Recommended fonts for CJK",
+          "href": "OEBPS/Text/Section-010.xhtml#sigil_toc_id_131"
+        },
+        {
+          "title": "Recommended fonts for Hebrew",
+          "href": "OEBPS/Text/Section-010.xhtml#sigil_toc_id_132"
+        },
+        {
+          "title": "Recommended fonts for Arabic and Persian",
+          "href": "OEBPS/Text/Section-010.xhtml#sigil_toc_id_133"
+        },
+        {
+          "title": "Recommended fonts for Indic",
+          "href": "OEBPS/Text/Section-010.xhtml#sigil_toc_id_140"
+        }
+      ]
+    },
+    {
+      "title": "User Overrides’ Classification",
+      "href": "OEBPS/Text/Section-011.xhtml",
+      "children": [
+        {
+          "title": "Chrome",
+          "href": "OEBPS/Text/Section-011.xhtml#sigil_toc_id_139"
+        },
+        {
+          "title": "Chrome advanced",
+          "href": "OEBPS/Text/Section-011.xhtml#sigil_toc_id_173"
+        },
+        {
+          "title": "User overrides",
+          "href": "OEBPS/Text/Section-011.xhtml#sigil_toc_id_174"
+        },
+        {
+          "title": "User overrides advanced",
+          "href": "OEBPS/Text/Section-011.xhtml#sigil_toc_id_175"
+        }
+      ]
+    },
+    {
+      "title": "User Settings, Reading Modes and Themes",
+      "href": "OEBPS/Text/Section-012.xhtml",
+      "children": [
+        {
+          "title": "Mechanism for user settings",
+          "href": "OEBPS/Text/Section-012.xhtml#sigil_toc_id_176"
+        },
+        {
+          "title": "Flags",
+          "href": "OEBPS/Text/Section-012.xhtml#sigil_toc_id_177"
+        },
+        {
+          "title": "List of variables",
+          "href": "OEBPS/Text/Section-012.xhtml#sigil_toc_id_178"
+        },
+        {
+          "title": "Themes",
+          "href": "OEBPS/Text/Section-012.xhtml#sigil_toc_id_179"
+        },
+        {
+          "title": "Alternative options",
+          "href": "OEBPS/Text/Section-012.xhtml#sigil_toc_id_180"
+        },
+        {
+          "title": "User settings can be language-specific",
+          "href": "OEBPS/Text/Section-012.xhtml#sigil_toc_id_181"
+        }
+      ]
+    },
+    {
+      "title": "Baseline for a11y-related user settings",
+      "href": "OEBPS/Text/Section-013.xhtml",
+      "children": [
+        {
+          "title": "OS settings",
+          "href": "OEBPS/Text/Section-013.xhtml#sigil_toc_id_99"
+        },
+        {
+          "title": "Current a11y Features on the market",
+          "href": "OEBPS/Text/Section-013.xhtml#sigil_toc_id_100"
+        },
+        {
+          "title": "Vestibular disorders",
+          "href": "OEBPS/Text/Section-013.xhtml#sigil_toc_id_169"
+        },
+        {
+          "title": "Internationalization",
+          "href": "OEBPS/Text/Section-013.xhtml#sigil_toc_id_142"
+        }
+      ]
+    },
+    {
+      "title": "Recommendations for User Settings Management",
+      "href": "OEBPS/Text/Section-014.xhtml",
+      "children": [
+        {
+          "title": "Managing conflicts",
+          "href": "OEBPS/Text/Section-014.xhtml#sigil_toc_id_41"
+        },
+        {
+          "title": "!important",
+          "href": "OEBPS/Text/Section-014.xhtml#sigil_toc_id_42"
+        },
+        {
+          "title": "Number of columns",
+          "href": "OEBPS/Text/Section-014.xhtml#sigil_toc_id_48"
+        },
+        {
+          "title": "Page margins",
+          "href": "OEBPS/Text/Section-014.xhtml#sigil_toc_id_49"
+        },
+        {
+          "title": "Reading modes",
+          "href": "OEBPS/Text/Section-014.xhtml#sigil_toc_id_50"
+        },
+        {
+          "title": "Font family (typeface)",
+          "href": "OEBPS/Text/Section-014.xhtml#sigil_toc_id_43"
+        },
+        {
+          "title": "Font size",
+          "href": "OEBPS/Text/Section-014.xhtml#sigil_toc_id_44"
+        },
+        {
+          "title": "Line height (leading)",
+          "href": "OEBPS/Text/Section-014.xhtml#sigil_toc_id_45"
+        },
+        {
+          "title": "Text align (justification)",
+          "href": "OEBPS/Text/Section-014.xhtml#sigil_toc_id_46"
+        },
+        {
+          "title": "Hyphenation",
+          "href": "OEBPS/Text/Section-014.xhtml#sigil_toc_id_47"
+        },
+        {
+          "title": "Paragraphs’ formatting",
+          "href": "OEBPS/Text/Section-014.xhtml#sigil_toc_id_7"
+        },
+        {
+          "title": "Characters’ spacing",
+          "href": "OEBPS/Text/Section-014.xhtml#sigil_toc_id_25"
+        },
+        {
+          "title": "Ligatures (Arabic & Persian scripts)",
+          "href": "OEBPS/Text/Section-014.xhtml#sigil_toc_id_26"
+        }
+      ]
+    },
+    {
+      "title": "User preferences’ insights",
+      "href": "OEBPS/Text/Section-015.xhtml",
+      "children": [
+        {
+          "title": "User Settings",
+          "href": "OEBPS/Text/Section-015.xhtml#sigil_toc_id_101"
+        },
+        {
+          "title": "Typography",
+          "href": "OEBPS/Text/Section-015.xhtml#sigil_toc_id_102"
+        }
+      ]
+    },
+    {
+      "title": "Internationalization",
+      "href": "OEBPS/Text/Section-016.xhtml",
+      "children": [
+        {
+          "title": "The current situation",
+          "href": "OEBPS/Text/Section-016.xhtml#sigil_toc_id_143"
+        },
+        {
+          "title": "Resources",
+          "href": "OEBPS/Text/Section-016.xhtml#sigil_toc_id_144"
+        },
+        {
+          "title": "What implementers need",
+          "href": "OEBPS/Text/Section-016.xhtml#sigil_toc_id_145"
+        },
+        {
+          "title": "How authors can help",
+          "href": "OEBPS/Text/Section-016.xhtml#sigil_toc_id_146"
+        },
+        {
+          "title": "Overarching issues",
+          "href": "OEBPS/Text/Section-016.xhtml#sigil_toc_id_147"
+        },
+        {
+          "title": "Out of scope",
+          "href": "OEBPS/Text/Section-016.xhtml#sigil_toc_id_148"
+        },
+        {
+          "title": "Glossary",
+          "href": "OEBPS/Text/Section-016.xhtml#sigil_toc_id_149"
+        }
+      ]
+    },
+    {
+      "title": "Internationalization – A Typography Primer",
+      "href": "OEBPS/Text/Section-017.xhtml",
+      "children": [
+        {
+          "title": "Abstract",
+          "href": "OEBPS/Text/Section-017.xhtml#sigil_toc_id_135"
+        },
+        {
+          "title": "Fonts",
+          "href": "OEBPS/Text/Section-017.xhtml#sigil_toc_id_151"
+        },
+        {
+          "title": "Text decoration",
+          "href": "OEBPS/Text/Section-017.xhtml#sigil_toc_id_152"
+        },
+        {
+          "title": "Emphasis",
+          "href": "OEBPS/Text/Section-017.xhtml#sigil_toc_id_153"
+        },
+        {
+          "title": "Line breaking",
+          "href": "OEBPS/Text/Section-017.xhtml#sigil_toc_id_154"
+        },
+        {
+          "title": "Hyphenation",
+          "href": "OEBPS/Text/Section-017.xhtml#sigil_toc_id_155"
+        },
+        {
+          "title": "Justification",
+          "href": "OEBPS/Text/Section-017.xhtml#sigil_toc_id_156"
+        },
+        {
+          "title": "Indents",
+          "href": "OEBPS/Text/Section-017.xhtml#sigil_toc_id_157"
+        },
+        {
+          "title": "Vertical text",
+          "href": "OEBPS/Text/Section-017.xhtml#sigil_toc_id_158"
+        }
+      ]
+    },
+    {
+      "title": "Readium CSS Further Details: Explaining the CSS Voodoo",
+      "href": "OEBPS/Text/Section-018.xhtml",
+      "children": [
+        {
+          "title": "The Internal Framework",
+          "href": "OEBPS/Text/Section-018.xhtml#sigil_toc_id_51"
+        },
+        {
+          "title": "Font Size Normalize and the Type Scale",
+          "href": "OEBPS/Text/Section-018.xhtml#sigil_toc_id_52"
+        },
+        {
+          "title": "Dynamic leading",
+          "href": "OEBPS/Text/Section-018.xhtml#sigil_toc_id_35"
+        },
+        {
+          "title": "Conditional Selectors for user settings",
+          "href": "OEBPS/Text/Section-018.xhtml#sigil_toc_id_53"
+        },
+        {
+          "title": "Themes",
+          "href": "OEBPS/Text/Section-018.xhtml#sigil_toc_id_54"
+        }
+      ]
+    },
+    {
+      "title": "Readium CSS Variables API",
+      "href": "OEBPS/Text/Section-019.xhtml",
+      "children": [
+        {
+          "title": "How to set and remove user preferences",
+          "href": "OEBPS/Text/Section-019.xhtml#sigil_toc_id_182"
+        },
+        {
+          "title": "Customizable medias",
+          "href": "OEBPS/Text/Section-019.xhtml#sigil_toc_id_183"
+        },
+        {
+          "title": "Customizable flags",
+          "href": "OEBPS/Text/Section-019.xhtml#sigil_toc_id_184"
+        },
+        {
+          "title": "Reading System Styles",
+          "href": "OEBPS/Text/Section-019.xhtml#sigil_toc_id_185"
+        },
+        {
+          "title": "Reading Modes",
+          "href": "OEBPS/Text/Section-019.xhtml#sigil_toc_id_186"
+        },
+        {
+          "title": "User Settings",
+          "href": "OEBPS/Text/Section-019.xhtml#sigil_toc_id_187"
+        }
+      ]
+    },
+    {
+      "title": "List of proposals and specs impacting Readium CSS",
+      "href": "OEBPS/Text/Section-020.xhtml",
+      "children": [
+        {
+          "title": "Media Queries Level 5",
+          "href": "OEBPS/Text/Section-020.xhtml#sigil_toc_id_103"
+        },
+        {
+          "title": "Logical Properties and Values",
+          "href": "OEBPS/Text/Section-020.xhtml#sigil_toc_id_128"
+        },
+        {
+          "title": "CSS Extensions",
+          "href": "OEBPS/Text/Section-020.xhtml#sigil_toc_id_33"
+        },
+        {
+          "title": "Calc notation: min() and max()",
+          "href": "OEBPS/Text/Section-020.xhtml#sigil_toc_id_104"
+        },
+        {
+          "title": "User Agent Properties",
+          "href": "OEBPS/Text/Section-020.xhtml#sigil_toc_id_105"
+        },
+        {
+          "title": "CSS Rhythmic Sizing",
+          "href": "OEBPS/Text/Section-020.xhtml#sigil_toc_id_106"
+        },
+        {
+          "title": "CSS Fonts Module Level 4",
+          "href": "OEBPS/Text/Section-020.xhtml#sigil_toc_id_107"
+        },
+        {
+          "title": "COGA Semantics to Enable Personalization",
+          "href": "OEBPS/Text/Section-020.xhtml#sigil_toc_id_108"
+        },
+        {
+          "title": "Multicol editing",
+          "href": "OEBPS/Text/Section-020.xhtml#sigil_toc_id_109"
+        },
+        {
+          "title": "W3C i18n",
+          "href": "OEBPS/Text/Section-020.xhtml#sigil_toc_id_110"
+        },
+        {
+          "title": "CSSOM (a.k.a. Houdini)",
+          "href": "OEBPS/Text/Section-020.xhtml#sigil_toc_id_111"
+        }
+      ]
+    },
+    {
+      "title": "EPUB Compatibility",
+      "href": "OEBPS/Text/Section-021.xhtml",
+      "children": [
+        {
+          "title": "Introduction",
+          "href": "OEBPS/Text/Section-021.xhtml#sigil_toc_id_39"
+        },
+        {
+          "title": "CSS At-rules",
+          "href": "OEBPS/Text/Section-021.xhtml#sigil_toc_id_40"
+        },
+        {
+          "title": "Non-standard Kindle Media queries",
+          "href": "OEBPS/Text/Section-021.xhtml#sigil_toc_id_95"
+        },
+        {
+          "title": "Interactive and Fixed-layout EPUB 2",
+          "href": "OEBPS/Text/Section-021.xhtml#sigil_toc_id_96"
+        },
+        {
+          "title": "Metadata",
+          "href": "OEBPS/Text/Section-021.xhtml#sigil_toc_id_97"
+        },
+        {
+          "title": "Attributes",
+          "href": "OEBPS/Text/Section-021.xhtml#sigil_toc_id_98"
+        },
+        {
+          "title": "Webkit’s CSS multi-column extensions",
+          "href": "OEBPS/Text/Section-021.xhtml#sigil_toc_id_129"
+        },
+        {
+          "title": "Non-standard CSS properties",
+          "href": "OEBPS/Text/Section-021.xhtml#sigil_toc_id_136"
+        },
+        {
+          "title": "EPUB properties",
+          "href": "OEBPS/Text/Section-021.xhtml#sigil_toc_id_137"
+        }
+      ]
+    },
+    {
+      "title": "Install, test and build Readium CSS",
+      "href": "OEBPS/Text/Section-022.xhtml",
+      "children": [
+        {
+          "title": "Install and init references for regression tests",
+          "href": "OEBPS/Text/Section-022.xhtml#sigil_toc_id_27"
+        },
+        {
+          "title": "Build",
+          "href": "OEBPS/Text/Section-022.xhtml#sigil_toc_id_36"
+        },
+        {
+          "title": "Test",
+          "href": "OEBPS/Text/Section-022.xhtml#sigil_toc_id_37"
+        }
+      ]
+    },
+    {
+      "title": "Fixed-layouts’ Reading Systems Requirements",
+      "href": "OEBPS/Text/Section-023.xhtml",
+      "children": [
+        {
+          "title": "Styling",
+          "href": "OEBPS/Text/Section-023.xhtml#sigil_toc_id_60"
+        },
+        {
+          "title": "Scaling",
+          "href": "OEBPS/Text/Section-023.xhtml#sigil_toc_id_61"
+        },
+        {
+          "title": "Notes",
+          "href": "OEBPS/Text/Section-023.xhtml#sigil_toc_id_62"
+        }
+      ]
+    },
+    {
+      "title": "E-production feedback and requests",
+      "href": "OEBPS/Text/Section-024.xhtml",
+      "children": [
+        {
+          "title": "CSS Authors’ typical profile",
+          "href": "OEBPS/Text/Section-024.xhtml#sigil_toc_id_112"
+        },
+        {
+          "title": "Workflow and authoring",
+          "href": "OEBPS/Text/Section-024.xhtml#sigil_toc_id_113"
+        },
+        {
+          "title": "Worries and issues",
+          "href": "OEBPS/Text/Section-024.xhtml#sigil_toc_id_114"
+        },
+        {
+          "title": "Popular requests",
+          "href": "OEBPS/Text/Section-024.xhtml#sigil_toc_id_115"
+        },
+        {
+          "title": "Interoperability issues reported",
+          "href": "OEBPS/Text/Section-024.xhtml#sigil_toc_id_116"
+        }
+      ]
+    },
+    {
+      "title": "CSS Performance Hacks",
+      "href": "OEBPS/Text/Section-025.xhtml",
+      "children": [
+        {
+          "title": "Will-change",
+          "href": "OEBPS/Text/Section-025.xhtml#sigil_toc_id_63"
+        },
+        {
+          "title": "CSS Containment",
+          "href": "OEBPS/Text/Section-025.xhtml#sigil_toc_id_64"
+        }
+      ]
+    },
+    {
+      "title": "i18n glossary",
+      "href": "OEBPS/Text/Section-026.xhtml",
+      "children": [
+        {
+          "title": "Arabic",
+          "href": "OEBPS/Text/Section-026.xhtml#sigil_toc_id_159"
+        },
+        {
+          "title": "Chinese",
+          "href": "OEBPS/Text/Section-026.xhtml#sigil_toc_id_160"
+        },
+        {
+          "title": "Indic",
+          "href": "OEBPS/Text/Section-026.xhtml#sigil_toc_id_161"
+        },
+        {
+          "title": "Japanese",
+          "href": "OEBPS/Text/Section-026.xhtml#sigil_toc_id_162"
+        }
+      ]
+    },
+    {
+      "title": "Features that were considered but not implemented",
+      "href": "OEBPS/Text/Section-027.xhtml",
+      "children": [
+        {
+          "title": "Alternate background colors for lines (A11Y)",
+          "href": "OEBPS/Text/Section-027.xhtml#sigil_toc_id_188"
+        },
+        {
+          "title": "Contrasting text against backgrounds in custom user themes",
+          "href": "OEBPS/Text/Section-027.xhtml#sigil_toc_id_189"
+        },
+        {
+          "title": "Handle day/night theme based on OSs’ light/dark mode",
+          "href": "OEBPS/Text/Section-027.xhtml#sigil_toc_id_190"
+        }
+      ]
+    }
+  ],
+  "links": []
+}

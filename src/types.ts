@@ -1,4 +1,5 @@
-import { Injectable } from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
+import { Injectable } from './Readium/Injectable';
+import { Locator } from './Readium/Locator';
 import { WebpubManifest } from './WebpubManifestTypes/WebpubManifest';
 
 export { WebpubManifest };
@@ -44,6 +45,7 @@ export type ReaderState = {
   currentTocUrl: string | null;
   atStart: boolean;
   atEnd: boolean;
+  location?: Locator;
 };
 
 // PDF specific reader state
@@ -99,8 +101,26 @@ export type UseWebReaderArguments = {
   pdfWorkerSrc?: string;
   injectables?: Injectable[];
   injectablesFixed?: Injectable[];
-  height?: string; // CSS string (ie: "800px" or `calc(100vh-${CHROME_HEIGHT}`)
-  growWhenScrolling?: boolean; // should the reader grow to fit content in scroll mode (ie. disregard the height)?
+  /**
+   * CSS string to set the height of the reader in paginated mode, and also
+   * in scrolling mode if `growWhenScrolling` is `false`.
+   *
+   * eg: "800px" or `calc(100vh-${CHROME_HEIGHT})`
+   *
+   * Default: `calc(100vh-${CHROME_HEIGHT})`
+   */
+  height?: string;
+  /**
+   * Tells the renderer if it should grow to fit content in scrolling mode, or if should
+   * remain the same height and instead show an internal scroll bar. Set to `true` by
+   * default, as this should be used in a full-page reader, the most common use case.
+   *
+   * Default: `true`
+   */
+  growWhenScrolling?: boolean;
+  /**
+   * Initial user settings for the reader
+   */
   readerSettings?: ReaderSettings;
 };
 

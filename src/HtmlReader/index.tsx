@@ -1,396 +1,264 @@
-import D2Reader from '@d-i-t-a/reader';
 import React from 'react';
 import {
   ColorMode,
-  HtmlReaderState,
   ReaderReturn,
   ReaderArguments,
   FontFamily,
+  HtmlNavigator,
 } from '../types';
-import HtmlReaderContent from './HtmlReaderContent';
-import { Locator } from '@d-i-t-a/reader';
-import '../../node_modules/@d-i-t-a/reader/dist/reader.css';
+import LoadingSkeleton from '../ui/LoadingSkeleton';
 import {
   DEFAULT_HEIGHT,
   DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
-  HEADER_HEIGHT,
 } from '../constants';
 import {
-  GetContent,
-  Injectable,
-  NavigatorAPI,
-} from '@d-i-t-a/reader/dist/types/navigator/IFrameNavigator';
-import debounce from 'debounce';
-
-type HtmlState = HtmlReaderState & {
-  reader: D2Reader | undefined;
-  location: undefined | Locator;
-};
+  fetchAsTxt,
+  calcPosition,
+  defaultInjectables,
+  defaultInjectablesFixed,
+  isSameResource,
+} from './lib';
+import makeHtmlReducer, { inactiveState } from './reducer';
+import { navigateToHash, navigateToProgression } from './effects';
+import useResource from './useResource';
+import useLocationQuery from './useLocationQuery';
+import useWindowResize from './useWindowResize';
+import { useUpdateScroll } from './useUpdateScroll';
+import useUpdateCSS from './useUpdateCSS';
+import useIframeLinkClick from './useIframeLinkClick';
 
 /**
- * If we provide injectables that are not found, the app won't load at all.
- * Therefore we will not provide any default injectables.
+ * @TODO :
+ *
+ * Future:
+ *  - provide default injectables (Readium CSS)
+ *  - Don't use ReadiumCSS for fixed layout
+ *  - Make fixed layout work
+ *  - Update to latest Readium CSS
+ *  - Find some way to organize effects and actions together so you can navigate, wait for iframe to load,
+ *    then run some other effect.
+ *  - goForward and goBackward should return a promise that resolves once isNavigated flips to true.
+ *  - Sync settings to localStorage or something similar.
+ *  - Add a way to call a callback when current reading position changes (so OE web can save current position).
+ *  - Maybe use history.pushState when navigating via nextPage or previousPage or toc.
  */
-const defaultInjectables: Injectable[] = [];
-const defaultInjectablesFixed: Injectable[] = [];
-
-export type HtmlAction =
-  | { type: 'SET_READER'; reader: D2Reader }
-  | { type: 'SET_COLOR_MODE'; mode: ColorMode }
-  | { type: 'SET_SCROLL'; isScrolling: boolean }
-  | { type: 'SET_FONT_SIZE'; size: number }
-  | { type: 'SET_FONT_FAMILY'; family: FontFamily }
-  | { type: 'SET_CURRENT_TOC_URL'; currentTocUrl: string }
-  | { type: 'LOCATION_CHANGED'; location: Locator }
-  | { type: 'BOOK_BOUNDARY_CHANGED'; atStart: boolean; atEnd: boolean };
-
-function htmlReducer(state: HtmlState, action: HtmlAction): HtmlState {
-  switch (action.type) {
-    case 'SET_READER': {
-      // set all the initial settings taken from the reader
-      const settings = action.reader.currentSettings();
-      return {
-        reader: action.reader,
-        isScrolling: settings.verticalScroll,
-        colorMode: getColorMode(settings.appearance),
-        fontSize: settings.fontSize,
-        fontFamily: r2FamilyToFamily[settings.fontFamily] ?? 'publisher',
-        currentTocUrl: action.reader.mostRecentNavigatedTocItem(),
-        location: undefined,
-        atStart: true,
-        atEnd: false,
-      };
-    }
-
-    case 'SET_COLOR_MODE':
-      return {
-        ...state,
-        colorMode: action.mode,
-      };
-
-    case 'SET_SCROLL':
-      return {
-        ...state,
-        isScrolling: action.isScrolling,
-      };
-
-    case 'SET_FONT_SIZE':
-      return {
-        ...state,
-        fontSize: action.size,
-      };
-
-    case 'SET_FONT_FAMILY':
-      return {
-        ...state,
-        fontFamily: action.family,
-      };
-
-    case 'SET_CURRENT_TOC_URL':
-      return {
-        ...state,
-        currentTocUrl: action.currentTocUrl,
-      };
-
-    case 'LOCATION_CHANGED':
-      return {
-        ...state,
-        location: action.location,
-      };
-
-    case 'BOOK_BOUNDARY_CHANGED':
-      return {
-        ...state,
-        atStart: action.atStart,
-        atEnd: action.atEnd,
-      };
-  }
-}
-
-const FONT_SIZE_STEP = 4;
 
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const {
     webpubManifestUrl,
     manifest,
-    getContent,
+    getContent = fetchAsTxt,
     injectables = defaultInjectables,
     injectablesFixed = defaultInjectablesFixed,
     height = DEFAULT_HEIGHT,
     growWhenScrolling = DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
-    readerSettings,
   } = args ?? {};
 
-  const defaultIsScrolling = readerSettings?.isScrolling ?? false;
+  const [state, dispatch] = React.useReducer(
+    makeHtmlReducer(args),
+    inactiveState
+  );
 
-  const [state, dispatch] = React.useReducer(htmlReducer, {
-    colorMode: 'day',
-    isScrolling: defaultIsScrolling,
-    fontSize: 16,
-    fontFamily: 'sans-serif',
-    currentTocUrl: null,
-    reader: undefined,
-    location: undefined,
-    atStart: true,
-    atEnd: false,
-  });
+  /**
+   * Fetches the resource and keeps it in the reducer state.
+   */
+  const currentResourceUrl = state.location?.href ?? null;
+  useResource(state, getContent, injectables, dispatch);
 
-  // used to handle async errors thrown in useEffect
-  const [error, setError] = React.useState<Error | undefined>(undefined);
-  if (error) {
-    throw error;
-  }
+  /**
+   * Dispatches an action to update scroll position when the user *stops* scrolling.
+   */
+  useUpdateScroll(state, dispatch);
 
-  const { reader, fontSize, location } = state;
+  /**
+   * Update url query param when location changes.
+   */
+  useLocationQuery(state);
 
-  // initialize the reader
+  // dispatch action when window is resized
+  useWindowResize(dispatch);
+
+  // update iframe css variables when css state changes
+  useUpdateCSS(state, manifest);
+
+  // listen for internal link clicks
+  useIframeLinkClick(dispatch);
+
+  // dispatch action when arguments change
   React.useEffect(() => {
-    // bail out if there is no webpubManifestUrl. It indicates this format is not being used.
-    if (!webpubManifestUrl) return;
-    const url = new URL(webpubManifestUrl);
-
-    const userSettings = {
-      verticalScroll: defaultIsScrolling,
-    };
-
-    D2Reader.build({
-      url,
-      injectables: injectables,
-      injectablesFixed: injectablesFixed,
-      attributes: {
-        navHeight: HEADER_HEIGHT,
-        margin: 16,
+    if (!webpubManifestUrl || !manifest) {
+      return dispatch({ type: 'ARGS_CHANGED', args: undefined });
+    }
+    dispatch({
+      type: 'ARGS_CHANGED',
+      args: {
+        webpubManifestUrl,
+        manifest,
+        getContent,
+        injectables,
+        injectablesFixed,
+        height,
+        growWhenScrolling,
       },
-      rights: {
-        /**
-         * Makes the reader fetch every resource before rendering, which
-         * takes forever.
-         */
-        autoGeneratePositions: false,
-      },
-      userSettings: userSettings,
-      api: {
-        getContent: getContent as GetContent,
-        updateCurrentLocation: async (location: Locator) => {
-          // This is needed so that setBookBoundary has the updated "reader" value.
-          dispatch({ type: 'LOCATION_CHANGED', location: location });
-          return location;
-        },
-        onError: function (e: Error) {
-          setError(e);
-        },
-      } as NavigatorAPI,
-    }).then((reader) => {
-      dispatch({ type: 'SET_READER', reader });
-      enableResizeEvent(reader, dispatch);
     });
   }, [
     webpubManifestUrl,
+    manifest,
     getContent,
     injectables,
     injectablesFixed,
-    defaultIsScrolling,
+    height,
+    growWhenScrolling,
   ]);
 
-  // Re-calculate page location on scroll/TOC navigation/page button press
+  /**
+   * Navigate after location change
+   * After loads, make sure we fire off effects to navigate the user if necessary.
+   */
   React.useEffect(() => {
-    if (!location || !reader) return;
-    setBookBoundary(reader, dispatch);
-  }, [location, reader, state.isScrolling]);
+    // we do this on the next tick in case we are still calculating things.
+    process.nextTick(() => {
+      if (state.state === 'NAVIGATING') {
+        const { fragment, progression, position } = state.location.locations;
+        /**
+         * We first try a fragment, then a progression, then a position value.
+         */
+        if (typeof fragment === 'string') {
+          navigateToHash(fragment, state.iframe, state.isScrolling);
+        } else if (typeof progression === 'number') {
+          navigateToProgression(state.iframe, progression, state.isScrolling);
+        } else if (typeof position === 'number') {
+          // get the progression value for that page
+          const { totalPages } = calcPosition(state.iframe, state.isScrolling);
+          const calculatedProgression = (position - 1) / totalPages;
+          navigateToProgression(
+            state.iframe,
+            calculatedProgression,
+            state.isScrolling
+          );
+        }
+        // tell the reducer that we have now completed the navigation.
+        dispatch({ type: 'NAV_COMPLETE' });
+      }
+    });
+  }, [state.state, state.iframe, state.isScrolling, state.location?.locations]);
 
-  // prev and next page functions
-  const goForward = React.useCallback(async () => {
-    if (!reader) return;
-    const isLastPage = await reader.atEnd();
-    reader.nextPage();
-    if (isLastPage) {
-      // FIXME: This will not work for links containing sub-links
-      // b/c reader.nextPage saves the raw toc link without the elementID
-      dispatch({
-        type: 'SET_CURRENT_TOC_URL',
-        currentTocUrl: reader.mostRecentNavigatedTocItem(),
-      });
-    }
-  }, [reader]);
-
-  const goBackward = React.useCallback(async () => {
-    if (!reader) return;
-    const isFirstPage = await reader.atStart();
-    reader.previousPage();
-    if (isFirstPage) {
-      dispatch({
-        type: 'SET_CURRENT_TOC_URL',
-        currentTocUrl: reader.mostRecentNavigatedTocItem(),
-      });
-    }
-  }, [reader]);
-
-  const setColorMode = React.useCallback(
-    async (mode: ColorMode) => {
-      if (!reader) return;
-      dispatch({ type: 'SET_COLOR_MODE', mode });
-      await reader.applyUserSettings({ appearance: mode });
+  const navigator = React.useRef<HtmlNavigator>({
+    goToPage(href) {
+      dispatch({ type: 'GO_TO_HREF', href });
     },
-    [reader]
-  );
-
-  const setScroll = React.useCallback(
-    async (val: 'scrolling' | 'paginated') => {
+    async goForward() {
+      dispatch({ type: 'GO_FORWARD' });
+    },
+    async goBackward() {
+      dispatch({ type: 'GO_BACKWARD' });
+    },
+    async setColorMode(mode: ColorMode) {
+      dispatch({ type: 'SET_COLOR_MODE', mode });
+    },
+    async setScroll(val) {
       const isScrolling = val === 'scrolling';
-      await reader?.scroll(isScrolling);
       dispatch({ type: 'SET_SCROLL', isScrolling });
     },
-    [reader]
-  );
-
-  const increaseFontSize = React.useCallback(async () => {
-    if (!reader) return;
-    const newSize = fontSize + FONT_SIZE_STEP;
-    await reader.applyUserSettings({ fontSize: newSize });
-    dispatch({ type: 'SET_FONT_SIZE', size: newSize });
-  }, [reader, fontSize]);
-
-  const decreaseFontSize = React.useCallback(async () => {
-    if (!reader) return;
-    const newSize = fontSize - FONT_SIZE_STEP;
-    await reader.applyUserSettings({ fontSize: newSize });
-    dispatch({ type: 'SET_FONT_SIZE', size: newSize });
-  }, [reader, fontSize]);
-
-  const setFontFamily = React.useCallback(
-    async (family: FontFamily) => {
-      if (!reader) return;
-      const r2Family = familyToR2Family[family];
-      // the applyUserSettings type is incorrect. We are supposed to pass in a string.
-      await reader.applyUserSettings({ fontFamily: r2Family as any });
+    async increaseFontSize() {
+      dispatch({ type: 'INCREASE_FONT_SIZE' });
+    },
+    async decreaseFontSize() {
+      dispatch({ type: 'DECREASE_FONT_SIZE' });
+    },
+    async setFontFamily(family: FontFamily) {
       dispatch({ type: 'SET_FONT_FAMILY', family });
     },
-    [reader]
-  );
+  }).current;
 
-  const goToPage = React.useCallback(
-    (href) => {
-      if (!reader) return;
-      // Adding try/catch here because goTo throws a TypeError
-      // if the TOC link you clicked on was the current page..
-      try {
-        reader.goTo({ href } as Locator); // This needs to be fixed, locations should be optional.
-        dispatch({ type: 'SET_CURRENT_TOC_URL', currentTocUrl: href });
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    [reader]
-  );
-
-  const isLoading = !reader;
+  // doesn't belong in navigator as it's internal, but if this
+  // is recreated every time, we end up in an infinite loop.
+  const setIframe = React.useRef((el: HTMLIFrameElement) => {
+    dispatch({ type: 'SET_IFRAME', iframe: el });
+  }).current;
 
   // this format is inactive, return null
   if (!webpubManifestUrl || !manifest) return null;
 
-  // we are initializing the reader
-  if (isLoading) {
+  /**
+   * Note: It is possible we are still in an "Inactive" state while there
+   * are arguments to the hook, for exactly one render cycle. Thus if that's the
+   * case, we also render the loading screen.
+   */
+  if (state.state === 'FETCHING_RESOURCE' || state.state === 'INACTIVE') {
     return {
       type: null,
       isLoading: true,
-      content: (
-        <HtmlReaderContent
-          height={height}
-          isScrolling={state.isScrolling}
-          growsWhenScrolling={growWhenScrolling}
-        />
-      ),
+      content: <LoadingSkeleton height={height} />,
       navigator: null,
       manifest: null,
       state: null,
     };
   }
 
+  if (state.state === 'RESOURCE_FETCH_ERROR') throw state.resourceFetchError;
+
+  // determines if the reader should grow to fit content or stay the
+  // pre-determined height passed in
+  const shouldGrow = state.isScrolling && growWhenScrolling;
+
+  const englishTitle =
+    typeof manifest.metadata.title === 'string'
+      ? manifest.metadata.title
+      : manifest.metadata.title.en ?? 'Unknown Title';
+
+  const resourceIndex = manifest.readingOrder.findIndex((link) =>
+    isSameResource(link.href, state.location.href, webpubManifestUrl)
+  );
+  const numResources = manifest.readingOrder.length;
+
+  const isFirstResource = resourceIndex === 0;
+  const isLastResource = resourceIndex === numResources - 1;
+
+  const isStartOfResource = state.location.locations.position === 1;
+  const isEndOfResource = state.location.locations.remainingPositions === 0;
+
+  const atStart = isFirstResource && isStartOfResource;
+  const atEnd = isLastResource && isEndOfResource;
+
   // the reader is active
   return {
     type: 'HTML',
     isLoading: false,
     content: (
-      <HtmlReaderContent
-        height={height}
-        isScrolling={state.isScrolling}
-        growsWhenScrolling={growWhenScrolling}
-      />
+      <>
+        <iframe
+          id="html-reader-iframe"
+          onLoad={() => dispatch({ type: 'IFRAME_LOADED' })}
+          ref={setIframe}
+          // as="iframe"
+          style={{
+            /**
+             * This determines the height of the iframe.
+             *
+             * If we remove this, then in scrolling mode it simply grows to fit
+             * content. In paginated mode, however, we must have this set because
+             * we have to decide how big the content should be.
+             */
+            height: shouldGrow ? 'initial' : height,
+            /**
+             * We always want the height to be at least the defined height
+             */
+            minHeight: height,
+            overflow: 'hidden',
+          }}
+          title={englishTitle}
+          srcDoc={state.resource}
+          src={currentResourceUrl ?? undefined}
+        />
+      </>
     ),
-    state,
-    manifest,
-    navigator: {
-      goForward,
-      goBackward,
-      setColorMode,
-      setScroll,
-      increaseFontSize,
-      decreaseFontSize,
-      setFontFamily,
-      goToPage,
+    state: {
+      ...state,
+      atStart,
+      atEnd,
     },
+    manifest,
+    navigator,
   };
-}
-
-function getColorMode(d2Mode: string): ColorMode {
-  switch (d2Mode) {
-    case 'readium-default-on':
-      return 'day';
-    case 'readium-night-on':
-      return 'night';
-    case 'readium-sepia-on':
-      return 'sepia';
-    default:
-      console.error('COLOR MODE SLIPPED THROUG', d2Mode);
-      return 'day';
-  }
-}
-
-/**
- * We need to map from our family values to R2D2BC's family values.
- */
-const familyToR2Family: Record<FontFamily, string> = {
-  publisher: 'Original',
-  serif: 'serif',
-  'sans-serif': 'sans-serif',
-  'open-dyslexic': 'opendyslexic',
-};
-/**
- * And vice-versa
- */
-const r2FamilyToFamily: Record<string, FontFamily | undefined> = {
-  Original: 'publisher',
-  serif: 'serif',
-  'sans-serif': 'sans-serif',
-  opendyslexic: 'open-dyslexic',
-};
-
-async function setBookBoundary(
-  reader: D2Reader,
-  dispatch: React.Dispatch<HtmlAction>
-): Promise<void> {
-  const isFirstResource = (await reader.currentResource()) === 0;
-  const isResourceStart = (await reader.atStart()) && isFirstResource;
-
-  const isLastResource =
-    (await reader.currentResource()) === (await reader.totalResources()) - 1; // resource index starts with 0
-  const isResourceEnd = (await reader.atEnd()) && isLastResource;
-
-  dispatch({
-    type: 'BOOK_BOUNDARY_CHANGED',
-    atStart: isResourceStart,
-    atEnd: isResourceEnd,
-  });
-}
-
-function enableResizeEvent(
-  reader: D2Reader,
-  dispatch: React.Dispatch<HtmlAction>
-) {
-  const resizeHandler = () => {
-    setBookBoundary(reader, dispatch);
-  };
-
-  const debouncedResizeHandler = debounce(resizeHandler, 500);
-  window.addEventListener('resize', debouncedResizeHandler, { passive: true });
 }
