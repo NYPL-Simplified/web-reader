@@ -47,4 +47,5 @@ export { default as useWebReader } from './useWebReader';
 export { default as useHtmlReader } from './HtmlReader';
 export { default as usePdfReader } from './PdfReader';
 export { getTheme } from './ui/theme';
+export { default as useColorModeValue } from './ui/hooks/useColorModeValue';
 export * from './constants';
