@@ -546,7 +546,7 @@ const DEFAULT_SETTINGS: ReaderSettings = {
   colorMode: 'day',
   isScrolling: false,
   fontSize: 100,
-  fontFamily: 'sans-serif',
+  fontFamily: 'publisher',
 };
 
 export const inactiveState: InactiveState = {

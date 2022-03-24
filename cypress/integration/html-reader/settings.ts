@@ -12,8 +12,9 @@ describe('display settings', () => {
 
     cy.getIframeHtml()
       .should('have.css', '--USER__appearance', 'readium-default-on')
-      .should('have.css', '--USER__fontFamily', 'sans-serif')
-      .should('have.css', '--USER__scroll', 'readium-scroll-off');
+      .should('have.css', '--USER__fontFamily', 'Original')
+      .should('have.css', '--USER__scroll', 'readium-scroll-off')
+      .should('have.css', '--USER__fontSize', '100%');
   });
 
   it('should update the font family to serif, scroll mode, and on sepia theme', () => {
@@ -77,7 +78,7 @@ describe('display settings', () => {
   });
 });
 
-it.only('should save settings in local storage', () => {
+it('should maintain settings between page visits', () => {
   cy.visit('/html/moby-epub3', {
     onBeforeLoad: (win) => {
       win.localStorage.clear();
@@ -88,11 +89,42 @@ it.only('should save settings in local storage', () => {
   cy.getIframeHtml()
     .should('have.css', '--USER__appearance', 'readium-default-on')
     .should('have.css', '--USER__fontFamily', 'Original')
-    .should('have.css', '--USER__scroll', 'readium-scroll-off');
+    .should('have.css', '--USER__scroll', 'readium-scroll-off')
+    .should('have.css', '--USER__fontSize', '100%');
 
-  // cy.log('Settings overlay should show correct values');
-  // cy.findByRole('button', { name: 'Settings' }).click();
-  // cy.findByRole('radio', { name: 'Sans-Serif' }).should('be.checked');
-  // cy.findByRole('radio', { name: 'Day' }).should('be.checked');
-  // cy.findByRole('radio', { name: 'Scrolling' }).should('be.checked');
+  cy.log('Settings overlay should show correct values');
+  cy.findByRole('button', { name: 'Settings' }).click();
+  cy.wait(100);
+  cy.findByRole('radio', { name: 'Publisher' }).should('be.checked');
+  cy.findByRole('radio', { name: 'Day' }).should('be.checked');
+  cy.findByRole('radio', { name: 'Paginated' }).should('be.checked');
+
+  cy.log('Change settings');
+  cy.findByRole('radio', { name: 'Night' }).click({ force: true });
+  cy.findByRole('radio', { name: 'Serif' }).click({ force: true });
+  cy.findByRole('radio', { name: 'Scrolling' }).click({ force: true });
+  cy.findByRole('button', { name: 'Decrease font size' }).click({
+    force: true,
+  });
+
+  cy.wait(100);
+  cy.findByRole('button', { name: 'Settings' }).click();
+
+  cy.log('Should have updated settings');
+  cy.getIframeHtml()
+    .should('have.css', '--USER__appearance', 'readium-night-on')
+    .should('have.css', '--USER__fontFamily', 'serif')
+    .should('have.css', '--USER__scroll', 'readium-scroll-on')
+    .should('have.css', '--USER__fontSize', '96%');
+
+  cy.log('Visit another book and see that settings carry over');
+  cy.visit('/html/moby-epub2');
+
+  cy.wait(1000);
+
+  cy.getIframeHtml()
+    .should('have.css', '--USER__appearance', 'readium-night-on')
+    .should('have.css', '--USER__fontFamily', 'serif')
+    .should('have.css', '--USER__scroll', 'readium-scroll-on')
+    .should('have.css', '--USER__fontSize', '96%');
 });
