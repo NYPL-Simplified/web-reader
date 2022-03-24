@@ -7,7 +7,7 @@ it('should remember location between page visits', () => {
 
   // navigate to some page
   cy.findByRole('button', { name: 'Table of Contents' }).click();
-  cy.wait(100);
+  cy.wait(1000);
   cy.findByRole('menuitem', { name: 'Chapter 10. A Bosom Friend.' }).click();
   cy.wait(1000);
 
@@ -21,7 +21,7 @@ it('should remember location between page visits', () => {
   cy.findByRole('link', { name: 'Moby Dick' }).click();
   cy.wait(1000);
   cy.findByRole('button', { name: 'Table of Contents' }).click();
-  cy.wait(100);
+  cy.wait(1000);
   cy.findByRole('menuitem', { name: 'CHAPTER 5. Breakfast.' }).click();
   cy.getIframeBody()
     .find('h2')
