@@ -2,7 +2,7 @@ import {
   getLocalStorageLocation,
   getLocalStorageSettings,
 } from '../utils/localstorage';
-import { ReaderArguments, ReaderSettings } from '../types';
+import { ReaderArguments } from '../types';
 import {
   getCurrentIndex,
   linkToLocator,
@@ -23,6 +23,7 @@ import {
   InactiveState,
 } from './types';
 import { getLocationQuery } from './useLocationQuery';
+import { DEFAULT_SETTINGS } from '../constants';
 
 /**
  * A higher order function that makes it easy to access arguments in the reducer
@@ -541,13 +542,6 @@ function handleInvalidTransition(state: HtmlState, action: HtmlAction) {
   );
   return state;
 }
-
-const DEFAULT_SETTINGS: ReaderSettings = {
-  colorMode: 'day',
-  isScrolling: false,
-  fontSize: 100,
-  fontFamily: 'publisher',
-};
 
 export const inactiveState: InactiveState = {
   atStart: false,

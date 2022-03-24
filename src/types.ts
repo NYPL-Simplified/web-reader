@@ -39,6 +39,12 @@ export type ReaderSettings = {
   fontFamily: FontFamily;
 };
 
+/**
+ * This is the "public" state of the reader that
+ * is returned to consumers of useWebReader. Each
+ * reader (pdf/html) has its own internal state with
+ * more details necessary for rendering
+ */
 export type ReaderState = {
   atStart: boolean;
   atEnd: boolean;

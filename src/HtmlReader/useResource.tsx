@@ -27,6 +27,8 @@ export default function useResource(
     }
 
     async function fetchResource(url: string) {
+      // if there are no settings, the reader is inactive
+      if (!state.settings) return;
       try {
         const content = await getContent(url);
         const mimetype =
@@ -50,10 +52,10 @@ export default function useResource(
 
         // set the initial CSS state
         setCss(document.documentElement, {
-          colorMode: state.colorMode,
-          fontSize: state.fontSize,
-          fontFamily: state.fontFamily,
-          isScrolling: state.isScrolling,
+          colorMode: state.settings.colorMode,
+          fontSize: state.settings.fontSize,
+          fontFamily: state.settings.fontFamily,
+          isScrolling: state.settings.isScrolling,
         });
 
         const finalResource = new XMLSerializer().serializeToString(document);
