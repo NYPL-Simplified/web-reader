@@ -1,9 +1,7 @@
 /* Readium CSS 
    Config module
-
    A file allowing implementers to customize flags for reading modes,
    user settings, etc.
-
    Repo: https://github.com/readium/readium-css */
 
 /* Custom medias
@@ -39,11 +37,9 @@
 
 /* Direction i.e. ltr and rtl */
 
-/* Readium CSS 
-   Base module
-
-   A minimal stylesheet for all ebooks
-
+/* Readium CSS
+   Namespaces module
+   Namespaces to import in all 3 dist stylesheets
    Repo: https://github.com/readium/readium-css */
 
 @namespace url('http://www.w3.org/1999/xhtml');
@@ -53,6 +49,11 @@
 @namespace m url('http://www.w3.org/1998/Math/MathML/');
 
 @namespace svg url('http://www.w3.org/2000/svg');
+
+/* Readium CSS
+      Base module
+      A minimal stylesheet for all ebooks
+      Repo: https://github.com/readium/readium-css */
 
 /* Define viewport, HTML5-style */
 
@@ -126,7 +127,7 @@ math {
 }
 
 /* Language Overrides
-   That will only work if either html or body have a (xml:)lang attribute, not for inline overrides */
+      That will only work if either html or body have a (xml:)lang attribute, not for inline overrides */
 
 :lang(am) {
   --RS__baseFontFamily: Kefa, Nyala, Roboto, Noto, 'Noto Sans Ethiopic', serif;
@@ -310,12 +311,10 @@ math {
   --RS__lineHeightCompensation: 1.167;
 }
 
-/* Readium CSS 
-   Day/Default mode
-
-   A preset theme for day mode, which is the default
-
-   Repo: https://github.com/readium/readium-css */
+/* Readium CSS
+      Day/Default mode
+      A preset theme for day mode, which is the default
+      Repo: https://github.com/readium/readium-css */
 
 /* CONFIG */
 
@@ -345,12 +344,10 @@ math {
   background-color: var(--RS__selectionBackgroundColor);
 }
 
-/* Readium CSS 
-   Fonts module
-
-   A stylesheet for embedded fonts
-
-   Repo: https://github.com/readium/readium-css */
+/* Readium CSS
+      Fonts module
+      A stylesheet for embedded fonts
+      Repo: https://github.com/readium/readium-css */
 
 /* /!\ Mind the path (relative to the folders in which you have stylesheets and the fonts) */
 
@@ -358,29 +355,26 @@ math {
   font-family: AccessibleDfA;
   font-style: normal;
   font-weight: normal;
-  src: local("AccessibleDfA"),
-    url("fonts/AccessibleDfA.otf") format("opentype");
+  src: local('AccessibleDfA'), url('fonts/AccessibleDfA.otf') format('opentype');
 }
 
 @font-face {
-  font-family: "IA Writer Duospace";
+  font-family: 'IA Writer Duospace';
   font-style: normal;
   font-weight: normal;
-  src: local("iAWriterDuospace-Regular"),
-    url("fonts/iAWriterDuospace-Regular.ttf") format("truetype");
+  src: local('iAWriterDuospace-Regular'),
+    url('fonts/iAWriterDuospace-Regular.ttf') format('truetype');
 } */
 
-/* If you have different weights/styles, 
-   use `font-weight` and `font-style`, 
-   not prefixes in the font-family name, 
-   or else it will be a nightmare to manage in user settings. */
+/* If you have different weights/styles,
+      use `font-weight` and `font-style`,
+      not prefixes in the font-family name,
+      or else it will be a nightmare to manage in user settings. */
 
-/* Readium CSS 
-   HTML5 SR Patch stylesheet
-
-   A set of style to adjust HTML5 Suggested Rendering to paginated content
-
-   Repo: https://github.com/readium/readium-css */
+/* Readium CSS
+      HTML5 SR Patch stylesheet
+      A set of style to adjust HTML5 Suggested Rendering to paginated content
+      Repo: https://github.com/readium/readium-css */
 
 /* Fragmentation */
 
@@ -520,47 +514,41 @@ blockquote {
   margin: 1em 5%;
 }
 
-/* 
-
-:lang(ja) figure, :lang(ja) blockquote,
-:lang(zh-Hant) figure, :lang(zh-Hant) blockquote,
-:lang(zh-TW) figure, :lang(zh-TW) blockquote,
-:lang(mn) figure, :lang(mn) blockquote {
-  margin: 5% 1em;  
-}
-
-*/
+/*
+   :lang(ja) figure, :lang(ja) blockquote,
+   :lang(zh-Hant) figure, :lang(zh-Hant) blockquote,
+   :lang(zh-TW) figure, :lang(zh-TW) blockquote,
+   :lang(mn) figure, :lang(mn) blockquote {
+     margin: 5% 1em;
+   }
+   */
 
 ul,
 ol {
   padding-left: 5%;
 }
 
-/* 
-
-:lang(ja) ul, :lang(ja) ol,
-:lang(zh-Hant) ul, :lang(zh-Hant) ol,
-:lang(zh-TW) ul, :lang(zh-TW) ol,
-:lang(mn) ul, :lang(mn) ol   {
-  padding-top: 5%;  
-}
-
-*/
+/*
+   :lang(ja) ul, :lang(ja) ol,
+   :lang(zh-Hant) ul, :lang(zh-Hant) ol,
+   :lang(zh-TW) ul, :lang(zh-TW) ol,
+   :lang(mn) ul, :lang(mn) ol   {
+     padding-top: 5%;
+   }
+   */
 
 dd {
   margin-left: 5%;
 }
 
-/* 
-
-:lang(ja) dd,
-:lang(zh-Hant) dd,
-:lang(zh-TW) dd, 
-:lang(mn) dd {
-  margin-top: 5%;  
-}
-
-*/
+/*
+   :lang(ja) dd,
+   :lang(zh-Hant) dd,
+   :lang(zh-TW) dd,
+   :lang(mn) dd {
+     margin-top: 5%;
+   }
+   */
 
 pre {
   white-space: pre-wrap;
@@ -617,12 +605,10 @@ ruby > rp {
   text-decoration: none;
 }
 
-/* Readium CSS 
-   Safeguards module
-
-   A set of styles to prevent common issues in pagination
-
-   Repo: https://github.com/readium/readium-css */
+/* Readium CSS
+      Safeguards module
+      A set of styles to prevent common issues in pagination
+      Repo: https://github.com/readium/readium-css */
 
 /* Config */
 
@@ -632,8 +618,8 @@ ruby > rp {
   /* max-width for media, you can override that via JS if not compiled to static */
   --RS__maxMediaWidth: 100%;
 
-  /* max-height for media, you can override that via JS if not compiled to static 
-     Please consider figures might have a figcaption, which is why 95vh in the first place */
+  /* max-height for media, you can override that via JS if not compiled to static
+        Please consider figures might have a figcaption, which is why 95vh in the first place */
   --RS__maxMediaHeight: 95vh;
 
   /* value for medias’ box-sizing */
@@ -644,8 +630,8 @@ ruby > rp {
 }
 
 /* Sanitize line-heights in webkit e.g. raised cap without a declared line-height
-   See effect by checking this demo in Safari: https://codepen.io/JayPanoz/pen/gRmzrE
-   Note: glyphs has to be reset to inline for CJK */
+      See effect by checking this demo in Safari: https://codepen.io/JayPanoz/pen/gRmzrE
+      Note: glyphs has to be reset to inline for CJK */
 
 html {
   -webkit-line-box-contain: block glyphs replaced;
@@ -694,7 +680,7 @@ video {
   box-sizing: var(--RS__boxSizingMedia);
 
   /* For page-break, we must use those 3
-     We can’t use a variable there, webkit seems to no support them for those properties */
+        We can’t use a variable there, webkit seems to no support them for those properties */
   -webkit-column-break-inside: avoid;
   page-break-inside: avoid;
   break-inside: avoid;
@@ -706,3 +692,4 @@ table {
   max-width: var(--RS__maxMediaWidth);
   box-sizing: var(--RS__boxSizingTable);
 }
+/*# sourceMappingURL=ReadiumCSS-before.css.map */
