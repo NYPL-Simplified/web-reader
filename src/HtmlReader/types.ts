@@ -2,7 +2,6 @@ import { Locator } from '../Readium/Locator';
 import {
   ColorMode,
   FontFamily,
-  HtmlReaderState,
   ReaderArguments,
   ReaderSettings,
   ReaderState,
@@ -33,7 +32,7 @@ export type InactiveState = ReaderState & {
   resourceFetchError: undefined;
 };
 
-export type FetchingResourceState = HtmlReaderState & {
+export type FetchingResourceState = ReaderState & {
   state: 'FETCHING_RESOURCE';
   location: Locator;
   iframe: null;
@@ -42,7 +41,7 @@ export type FetchingResourceState = HtmlReaderState & {
   settings: ReaderSettings;
 };
 
-export type ResourceFetchErrorState = HtmlReaderState & {
+export type ResourceFetchErrorState = ReaderState & {
   state: 'RESOURCE_FETCH_ERROR';
   location: Locator;
   iframe: null;
@@ -51,7 +50,7 @@ export type ResourceFetchErrorState = HtmlReaderState & {
   settings: ReaderSettings;
 };
 
-export type RenderingIframeState = HtmlReaderState & {
+export type RenderingIframeState = ReaderState & {
   state: 'RENDERING_IFRAME';
   location: Locator;
   iframe: null;
@@ -60,7 +59,7 @@ export type RenderingIframeState = HtmlReaderState & {
   settings: ReaderSettings;
 };
 
-export type LoadingIframeState = HtmlReaderState & {
+export type LoadingIframeState = ReaderState & {
   state: 'LOADING_IFRAME';
   location: Locator;
   iframe: HTMLIFrameElement;
@@ -69,7 +68,7 @@ export type LoadingIframeState = HtmlReaderState & {
   settings: ReaderSettings;
 };
 
-export type NavigatingState = HtmlReaderState & {
+export type NavigatingState = ReaderState & {
   state: 'NAVIGATING';
   location: Locator;
   iframe: HTMLIFrameElement;
@@ -78,7 +77,7 @@ export type NavigatingState = HtmlReaderState & {
   settings: ReaderSettings;
 };
 
-export type ReadyState = HtmlReaderState & {
+export type ReadyState = ReaderState & {
   state: 'READY';
   location: Locator;
   iframe: HTMLIFrameElement;

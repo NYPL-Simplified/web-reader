@@ -46,12 +46,6 @@ export type ReaderState = {
   settings: ReaderSettings | undefined;
 };
 
-// PDF specific reader state
-export type PdfReaderState = ReaderState;
-
-// HTML specific reader state
-export type HtmlReaderState = ReaderState;
-
 export type InactiveReader = null;
 
 export type LoadingReader = {
@@ -70,13 +64,13 @@ type CommonReader = {
 };
 
 export type PDFActiveReader = CommonReader & {
-  state: PdfReaderState;
+  state: ReaderState;
   navigator: PdfNavigator;
   type: 'PDF';
 };
 
 export type HTMLActiveReader = CommonReader & {
-  state: HtmlReaderState;
+  state: ReaderState;
   navigator: HtmlNavigator;
   type: 'HTML';
 };
