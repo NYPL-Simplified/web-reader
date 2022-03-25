@@ -4,7 +4,6 @@ import {
   Navigator,
   HtmlNavigator,
   PdfNavigator,
-  ReaderState,
   WebpubManifest,
   FontFamily,
   ColorMode,
@@ -174,32 +173,32 @@ const MockPdfReaderState = {
   atEnd: false,
 };
 
-export const MockHtmlSettingsProps = {
+export const MockHtmlSettingsProps = ({
   navigator: MockHtmlNavigator,
   readerState: MockHtmlReaderState,
   paginationValue: 'paginated',
-} as HtmlSettingsProps;
+} as unknown) as HtmlSettingsProps;
 
-export const MockPdfSettingsProps = {
+export const MockPdfSettingsProps = ({
   navigator: MockPdfNavigator,
   readerState: MockPdfReaderState,
   paginationValue: 'paginated',
-} as PdfSettingsProps;
+} as unknown) as PdfSettingsProps;
 
-export const MockHtmlReaderProps = {
+export const MockHtmlReaderProps = ({
   type: 'HTML',
   isLoading: false,
   content: <MockComponent />,
   state: MockHtmlReaderState,
   manifest: MockWebpubManifest,
   navigator: MockHtmlNavigator,
-} as ActiveReader;
+} as unknown) as ActiveReader;
 
-export const MockPdfReaderProps = {
+export const MockPdfReaderProps = ({
   type: 'PDF',
   isLoading: false,
   content: <MockComponent />,
   state: MockPdfReaderState,
   manifest: MockWebpubManifest,
   navigator: MockPdfNavigator,
-} as ActiveReader;
+} as unknown) as ActiveReader;
