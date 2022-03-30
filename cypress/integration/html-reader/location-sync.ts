@@ -16,9 +16,8 @@ it('should remember location between page visits', () => {
     .contains('Chapter 10. A Bosom Friend.')
     .should('be.visible');
 
-  cy.log('Go back home and to another book and then back');
-  cy.visit('/');
-  cy.findByRole('link', { name: 'Moby Dick' }).click();
+  cy.log('Go to to another book');
+  cy.visit('/html/moby-epub2');
   cy.wait(1000);
   cy.findByRole('button', { name: 'Table of Contents' }).click();
   cy.wait(1000);
@@ -28,9 +27,8 @@ it('should remember location between page visits', () => {
     .contains('CHAPTER 5. Breakfast.')
     .should('be.visible');
 
-  cy.log('Go back home and to original Moby Epub 3 book');
-  cy.visit('/');
-  cy.findByRole('link', { name: 'Moby Dick (EPUB 3)' }).click();
+  cy.log('Go back to original Moby Epub 3 book');
+  cy.visit('/html/moby-epub3');
   cy.wait(1000);
   cy.log('Should be on Chapter 10');
   cy.getIframeBody()
