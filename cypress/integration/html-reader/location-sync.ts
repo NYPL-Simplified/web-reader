@@ -40,6 +40,7 @@ it('should remember location between page visits', () => {
 
   cy.log('Go back to Moby Dick EPUB 2');
   cy.visit('/html/moby-epub2');
+  cy.wait(1000);
 
   cy.log('Should be on Chapter 5');
   cy.getIframeBody()
