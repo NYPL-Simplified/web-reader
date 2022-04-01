@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ButtonGroup, Icon } from '@chakra-ui/react';
-import { PdfNavigator, PdfReaderState } from '../types';
+import { PdfNavigator, ReaderState } from '../types';
 import Button from './Button';
 import ToggleButton from './ToggleButton';
 import ToggleGroup from './ToggleGroup';
@@ -8,7 +8,7 @@ import { MdOutlineZoomIn, MdOutlineZoomOut } from 'react-icons/md';
 
 export type PdfSettingsProps = {
   navigator: PdfNavigator;
-  readerState: PdfReaderState;
+  readerState: ReaderState;
   paginationValue: string;
 };
 

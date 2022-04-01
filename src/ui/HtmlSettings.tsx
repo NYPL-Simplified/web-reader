@@ -1,21 +1,22 @@
 import * as React from 'react';
 import { ButtonGroup } from '@chakra-ui/react';
-import { HtmlNavigator, HtmlReaderState } from '../types';
+import { HtmlNavigator, ReaderState } from '../types';
 import Button from './Button';
 import ToggleButton from './ToggleButton';
 import ToggleGroup from './ToggleGroup';
 
 export type HtmlSettingsProps = {
   navigator: HtmlNavigator;
-  readerState: HtmlReaderState;
+  readerState: ReaderState;
   paginationValue: string;
 };
 
 export default function HtmlSettings(
   props: HtmlSettingsProps
-): React.ReactElement {
+): React.ReactElement | null {
   const { navigator, readerState, paginationValue } = props;
-  const { fontFamily, colorMode } = readerState;
+  if (!readerState.settings) return null;
+  const { fontFamily, colorMode } = readerState.settings;
   const {
     setFontFamily,
     decreaseFontSize,
