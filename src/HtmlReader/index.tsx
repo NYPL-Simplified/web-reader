@@ -26,6 +26,7 @@ import useWindowResize from './useWindowResize';
 import { useUpdateScroll } from './useUpdateScroll';
 import useUpdateCSS from './useUpdateCSS';
 import useIframeLinkClick from './useIframeLinkClick';
+import useUpdateLocalStorage from '../utils/localstorage';
 
 /**
  * @TODO :
@@ -42,7 +43,6 @@ import useIframeLinkClick from './useIframeLinkClick';
  *  - Add a way to call a callback when current reading position changes (so OE web can save current position).
  *  - Maybe use history.pushState when navigating via nextPage or previousPage or toc.
  */
-
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const {
     webpubManifestUrl,
@@ -69,6 +69,11 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
    * Dispatches an action to update scroll position when the user *stops* scrolling.
    */
   useUpdateScroll(state, dispatch);
+
+  /**
+   * Store settings and current location in localStorage.
+   */
+  useUpdateLocalStorage(webpubManifestUrl, state);
 
   /**
    * Update url query param when location changes.
@@ -124,24 +129,36 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
          * We first try a fragment, then a progression, then a position value.
          */
         if (typeof fragment === 'string') {
-          navigateToHash(fragment, state.iframe, state.isScrolling);
+          navigateToHash(fragment, state.iframe, state.settings.isScrolling);
         } else if (typeof progression === 'number') {
-          navigateToProgression(state.iframe, progression, state.isScrolling);
+          navigateToProgression(
+            state.iframe,
+            progression,
+            state.settings.isScrolling
+          );
         } else if (typeof position === 'number') {
           // get the progression value for that page
-          const { totalPages } = calcPosition(state.iframe, state.isScrolling);
+          const { totalPages } = calcPosition(
+            state.iframe,
+            state.settings.isScrolling
+          );
           const calculatedProgression = (position - 1) / totalPages;
           navigateToProgression(
             state.iframe,
             calculatedProgression,
-            state.isScrolling
+            state.settings.isScrolling
           );
         }
         // tell the reducer that we have now completed the navigation.
         dispatch({ type: 'NAV_COMPLETE' });
       }
     });
-  }, [state.state, state.iframe, state.isScrolling, state.location?.locations]);
+  }, [
+    state.state,
+    state.iframe,
+    state.settings?.isScrolling,
+    state.location?.locations,
+  ]);
 
   const navigator = React.useRef<HtmlNavigator>({
     goToPage(href) {
@@ -200,7 +217,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
 
   // determines if the reader should grow to fit content or stay the
   // pre-determined height passed in
-  const shouldGrow = state.isScrolling && growWhenScrolling;
+  const shouldGrow = state.settings.isScrolling && growWhenScrolling;
 
   const englishTitle =
     typeof manifest.metadata.title === 'string'

@@ -1,19 +1,25 @@
 import { Document, PageProps, pdfjs } from 'react-pdf';
 import * as React from 'react';
-import { ReaderArguments, ReaderReturn, PdfReaderState } from '../types';
+import {
+  ReaderArguments,
+  ReaderReturn,
+  ReaderSettings,
+  ReaderState,
+} from '../types';
 import { Flex } from '@chakra-ui/react';
 import useMeasure from './useMeasure';
 import ChakraPage from './ChakraPage';
 import ScrollPage from './ScrollPage';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
-import { HEADER_HEIGHT, FOOTER_HEIGHT } from '../constants';
+import { HEADER_HEIGHT, FOOTER_HEIGHT, DEFAULT_SETTINGS } from '../constants';
 import {
   DEFAULT_HEIGHT,
   DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
 } from '../constants';
+import LoadingSkeleton from '../ui/LoadingSkeleton';
 
-type PdfState = PdfReaderState & {
+type InternalState = {
   resourceIndex: number;
   resource: { data: Uint8Array } | null;
   // we only know the numPages once the resource has been parsed
@@ -28,7 +34,19 @@ type PdfState = PdfReaderState & {
   pageWidth: number | undefined;
 };
 
+type InactiveState = ReaderState &
+  InternalState & { state: 'INACTIVE'; settings: undefined };
+
+type ActiveState = ReaderState &
+  InternalState & { state: 'ACTIVE'; settings: ReaderSettings };
+
+type PdfState = InactiveState | ActiveState;
+
 type PdfReaderAction =
+  | {
+      type: 'ARGS_CHANGED';
+      args: ReaderArguments;
+    }
   | {
       type: 'SET_CURRENT_RESOURCE';
       index: number;
@@ -51,6 +69,23 @@ export const SCALE_STEP = 0.1;
 
 function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
   switch (action.type) {
+    case 'ARGS_CHANGED': {
+      return {
+        state: 'ACTIVE',
+        settings: DEFAULT_SETTINGS,
+        resourceIndex: 0,
+        resource: null,
+        pageNumber: 1,
+        numPages: null,
+        scale: 1,
+        pdfWidth: 0,
+        pdfHeight: 0,
+        pageHeight: undefined,
+        pageWidth: undefined,
+        atStart: true,
+        atEnd: false,
+      };
+    }
     /**
      * Cleares the current resource and sets the current index, which will cause
      * the useEffect hook to load a new resource.
@@ -90,9 +125,15 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
       };
 
     case 'SET_SCROLL':
+      if (state.state !== 'ACTIVE') {
+        return handleInvalidTransition(state, action);
+      }
       return {
         ...state,
-        isScrolling: action.isScrolling,
+        settings: {
+          ...state.settings,
+          isScrolling: action.isScrolling,
+        },
       };
 
     case 'SET_SCALE':
@@ -140,12 +181,14 @@ const getResourceUrl = (
 
 const loadResource = async (resourceUrl: string, proxyUrl?: string) => {
   // Generate the resource URL using the proxy
-  const resource: string = proxyUrl + encodeURI(resourceUrl);
-  const response = await fetch(resource, { mode: 'cors' });
+  const url: string = proxyUrl
+    ? `${proxyUrl}${encodeURIComponent(resourceUrl)}`
+    : resourceUrl;
+  const response = await fetch(url, { mode: 'cors' });
   const array = new Uint8Array(await response.arrayBuffer());
 
   if (!response.ok) {
-    throw new Error('Response not Ok for URL: ' + resource);
+    throw new Error('Response not Ok for URL: ' + url);
   }
   return array;
 };
@@ -169,20 +212,18 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     webpubManifestUrl,
     manifest,
     proxyUrl,
-    readerSettings,
+    getContent,
+    injectables,
+    injectablesFixed,
     height = DEFAULT_HEIGHT,
     growWhenScrolling = DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
   } = args ?? {};
   const [state, dispatch] = React.useReducer(pdfReducer, {
-    colorMode: 'day',
-    isScrolling: readerSettings?.isScrolling ?? false,
-    fontSize: 16,
-    fontFamily: 'sans-serif',
+    state: 'INACTIVE',
     resourceIndex: 0,
     resource: null,
     pageNumber: 1,
     numPages: null,
-    currentTocUrl: null,
     scale: 1,
     pdfWidth: 0,
     pdfHeight: 0,
@@ -190,6 +231,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     pageWidth: undefined,
     atStart: true,
     atEnd: false,
+    settings: undefined,
   });
 
   // state we can derive from the state above
@@ -197,6 +239,33 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   const isParsed = typeof state.numPages === 'number';
   const isSinglePDF = manifest && manifest?.readingOrder.length === 1;
   const [containerRef, containerSize] = useMeasure<HTMLDivElement>();
+
+  // dispatch action when arguments change
+  React.useEffect(() => {
+    if (!webpubManifestUrl || !manifest) {
+      return dispatch({ type: 'ARGS_CHANGED', args: undefined });
+    }
+    dispatch({
+      type: 'ARGS_CHANGED',
+      args: {
+        webpubManifestUrl,
+        manifest,
+        getContent,
+        injectables,
+        injectablesFixed,
+        height,
+        growWhenScrolling,
+      },
+    });
+  }, [
+    webpubManifestUrl,
+    manifest,
+    getContent,
+    injectables,
+    injectablesFixed,
+    height,
+    growWhenScrolling,
+  ]);
 
   /**
    * Load the current resource and set it in state,
@@ -260,10 +329,10 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
    * Hide Or Show Page Button
    */
   React.useEffect(() => {
-    if (!manifest) return;
+    if (!manifest || state.state !== 'ACTIVE') return;
 
     // Hide all buttons for single PDF on scroll mode
-    if (isSinglePDF && state.isScrolling) {
+    if (isSinglePDF && state.settings.isScrolling) {
       dispatch({
         type: 'BOOK_BOUNDARY_CHANGED',
         atStart: true,
@@ -278,7 +347,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       const isResourceEnd =
         (isLastResource && state.pageNumber === state.numPages) ||
         // On scroll mode, next page button takes you to the next resource. So we can just hide the next button on last resource.
-        (state.isScrolling && isLastResource);
+        (state.settings.isScrolling && isLastResource);
 
       dispatch({
         type: 'BOOK_BOUNDARY_CHANGED',
@@ -288,7 +357,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     }
   }, [
     manifest,
-    state.isScrolling,
+    state.state,
+    state.settings,
     state.numPages,
     state.pageNumber,
     state.resourceIndex,
@@ -299,8 +369,10 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   const goForward = React.useCallback(async () => {
     // do nothing if we haven't parsed the number of pages yet
     if (!state.numPages) return;
+    // do nothing if the reader is inactive
+    if (state.state !== 'ACTIVE') return;
 
-    if (state.pageNumber < state.numPages && !state.isScrolling) {
+    if (state.pageNumber < state.numPages && !state.settings.isScrolling) {
       dispatch({
         type: 'NAVIGATE_PAGE',
         pageNum: state.pageNumber + 1,
@@ -319,8 +391,9 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     }
     // Do nothing if it's at the last page of the last resource
   }, [
+    state.state,
     manifest,
-    state.isScrolling,
+    state.settings,
     state.numPages,
     state.pageNumber,
     state.resourceIndex,
@@ -329,8 +402,10 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   const goBackward = React.useCallback(async () => {
     // do nothing if we haven't parsed the PDF yet
     if (!isParsed) return;
+    // do nothing if the reader is inactive
+    if (state.state !== 'ACTIVE') return;
 
-    if (state.pageNumber > 1 && !state.isScrolling) {
+    if (state.pageNumber > 1 && !state.settings.isScrolling) {
       dispatch({
         type: 'NAVIGATE_PAGE',
         pageNum: state.pageNumber - 1,
@@ -340,13 +415,14 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       dispatch({
         type: 'SET_CURRENT_RESOURCE',
         index: nextIndex,
-        shouldNavigateToEnd: !state.isScrolling,
+        shouldNavigateToEnd: !state.settings.isScrolling,
       });
     }
   }, [
     manifest,
     isParsed,
-    state.isScrolling,
+    state.state,
+    state.settings,
     state.pageNumber,
     state.resourceIndex,
   ]);
@@ -400,37 +476,48 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   // this format is inactive, return null
   if (!webpubManifestUrl || !manifest) return null;
 
-  if (isFetching) {
-    // The Reader is fetching a PDF resource
+  if (state.state === 'INACTIVE' || isFetching) {
     return {
-      type: 'PDF',
-      isLoading: false,
-      content: (
-        <Flex
-          as="main"
-          tabIndex={-1}
-          id="iframe-wrapper"
-          zIndex="base"
-          alignItems="center"
-          justifyContent="center"
-          flex="1 0 auto"
-          height={height}
-        >
-          PDF is loading
-        </Flex>
-      ),
-      state,
-      manifest,
-      navigator: {
-        goForward,
-        goBackward,
-        zoomIn,
-        zoomOut,
-        setScroll,
-        goToPage,
-      },
+      type: null,
+      isLoading: true,
+      content: <LoadingSkeleton height={height} />,
+      navigator: null,
+      manifest: null,
+      state: null,
     };
   }
+
+  // if (isFetching) {
+  //   // The Reader is fetching a PDF resource
+  //   return {
+  //     type: 'PDF',
+  //     isLoading: false,
+  //     content: (
+  //       <Flex
+  //         as="main"
+  //         tabIndex={-1}
+  //         id="iframe-wrapper"
+  //         zIndex="base"
+  //         alignItems="center"
+  //         justifyContent="center"
+  //         flex="1 0 auto"
+  //         height={height}
+  //       >
+  //         PDF is loading
+  //       </Flex>
+  //     ),
+  //     state,
+  //     manifest,
+  //     navigator: {
+  //       goForward,
+  //       goBackward,
+  //       zoomIn,
+  //       zoomOut,
+  //       setScroll,
+  //       goToPage,
+  //     },
+  //   };
+  // }
 
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     dispatch({
@@ -458,7 +545,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     }
   }
 
-  const shouldGrow = state.isScrolling && growWhenScrolling;
+  const shouldGrow = state.settings?.isScrolling && growWhenScrolling;
   const finalHeight = shouldGrow ? 'initial' : height;
 
   // the reader is active but loading a page
@@ -490,7 +577,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         <Document file={state.resource} onLoadSuccess={onDocumentLoadSuccess}>
           {isParsed && state.numPages && (
             <>
-              {state.isScrolling &&
+              {state.settings.isScrolling &&
                 Array.from(new Array(state.numPages), (_, index) => (
                   <ScrollPage
                     key={`page_${index + 1}`}
@@ -503,7 +590,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
                     onLoadSuccess={onRenderSuccess}
                   />
                 ))}
-              {!state.isScrolling && (
+              {!state.settings.isScrolling && (
                 <ChakraPage
                   pageNumber={state.pageNumber}
                   onLoadSuccess={onRenderSuccess}
@@ -529,4 +616,11 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       goToPage,
     },
   };
+}
+
+function handleInvalidTransition(state: PdfState, action: PdfReaderAction) {
+  console.trace(
+    `Inavlid state transition attempted: ${state} with ${action.type}`
+  );
+  return state;
 }

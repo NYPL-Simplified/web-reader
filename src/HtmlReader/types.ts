@@ -2,8 +2,8 @@ import { Locator } from '../Readium/Locator';
 import {
   ColorMode,
   FontFamily,
-  HtmlReaderState,
   ReaderArguments,
+  ReaderSettings,
   ReaderState,
 } from '../types';
 
@@ -32,59 +32,59 @@ export type InactiveState = ReaderState & {
   resourceFetchError: undefined;
 };
 
-export type FetchingResourceState = HtmlReaderState & {
+export type FetchingResourceState = ReaderState & {
   state: 'FETCHING_RESOURCE';
   location: Locator;
   iframe: null;
   resource: undefined;
   resourceFetchError: undefined;
+  settings: ReaderSettings;
 };
 
-export type ResourceFetchErrorState = HtmlReaderState & {
+export type ResourceFetchErrorState = ReaderState & {
   state: 'RESOURCE_FETCH_ERROR';
   location: Locator;
   iframe: null;
   resource: undefined;
   resourceFetchError: Error;
+  settings: ReaderSettings;
 };
 
-export type RenderingIframeState = HtmlReaderState & {
+export type RenderingIframeState = ReaderState & {
   state: 'RENDERING_IFRAME';
   location: Locator;
   iframe: null;
   resource: string;
   resourceFetchError: undefined;
+  settings: ReaderSettings;
 };
 
-export type LoadingIframeState = HtmlReaderState & {
+export type LoadingIframeState = ReaderState & {
   state: 'LOADING_IFRAME';
   location: Locator;
   iframe: HTMLIFrameElement;
   resource: string;
   resourceFetchError: undefined;
+  settings: ReaderSettings;
 };
 
-export type NavigatingState = HtmlReaderState & {
+export type NavigatingState = ReaderState & {
   state: 'NAVIGATING';
   location: Locator;
   iframe: HTMLIFrameElement;
   resource: string;
   resourceFetchError: undefined;
+  settings: ReaderSettings;
 };
 
-export type ReadyState = HtmlReaderState & {
+export type ReadyState = ReaderState & {
   state: 'READY';
   location: Locator;
   iframe: HTMLIFrameElement;
   resource: string;
   resourceFetchError: undefined;
+  settings: ReaderSettings;
 };
-
-// state that affects the css variables
-export type CSSState = Pick<
-  HtmlState,
-  'isScrolling' | 'colorMode' | 'fontFamily' | 'fontSize'
->;
 
 export type HtmlAction =
   | { type: 'ARGS_CHANGED'; args: ReaderArguments }

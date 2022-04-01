@@ -15,7 +15,7 @@ import { getTheme } from './theme';
  */
 const ManagerUI: React.FC<ReaderReturn & ReaderManagerArguments> = (props) => {
   return (
-    <ThemeProvider theme={getTheme(props.state?.colorMode)}>
+    <ThemeProvider theme={getTheme(props.state?.settings?.colorMode)}>
       <WebReaderContent {...props} />
     </ThemeProvider>
   );

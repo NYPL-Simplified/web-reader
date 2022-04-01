@@ -32,27 +32,25 @@ export type HtmlNavigator = Navigator & {
   setColorMode: (mode: ColorMode) => Promise<void>;
 };
 
-// Optional settings to initialize the reader with
 export type ReaderSettings = {
-  isScrolling?: boolean;
-};
-
-export type ReaderState = {
   colorMode: ColorMode;
   isScrolling: boolean;
   fontSize: number;
   fontFamily: FontFamily;
-  currentTocUrl: string | null;
+};
+
+/**
+ * This is the "public" state of the reader that
+ * is returned to consumers of useWebReader. Each
+ * reader (pdf/html) has its own internal state with
+ * more details necessary for rendering
+ */
+export type ReaderState = {
   atStart: boolean;
   atEnd: boolean;
   location?: Locator;
+  settings: ReaderSettings | undefined;
 };
-
-// PDF specific reader state
-export type PdfReaderState = ReaderState;
-
-// HTML specific reader state
-export type HtmlReaderState = ReaderState;
 
 export type InactiveReader = null;
 
@@ -72,13 +70,13 @@ type CommonReader = {
 };
 
 export type PDFActiveReader = CommonReader & {
-  state: PdfReaderState;
+  state: ReaderState;
   navigator: PdfNavigator;
   type: 'PDF';
 };
 
 export type HTMLActiveReader = CommonReader & {
-  state: HtmlReaderState;
+  state: ReaderState;
   navigator: HtmlNavigator;
   type: 'HTML';
 };
@@ -121,7 +119,7 @@ export type UseWebReaderArguments = {
   /**
    * Initial user settings for the reader
    */
-  readerSettings?: ReaderSettings;
+  readerSettings?: Partial<ReaderSettings>;
 };
 
 export type ActiveReaderArguments = UseWebReaderArguments & {
