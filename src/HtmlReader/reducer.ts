@@ -114,7 +114,9 @@ export default function makeHtmlReducer(
             webpubManifestUrl
           );
 
-        const localStorageRecord = getLocalStorageLocation(webpubManifestUrl);
+        const localStorageRecord = getLocalStorageLocation(
+          manifest.metadata.identifier ?? webpubManifestUrl
+        );
         const isLocalStorageLocationValid =
           !!localStorageRecord &&
           !!getFromReadingOrder(

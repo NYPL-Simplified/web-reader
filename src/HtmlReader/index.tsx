@@ -72,8 +72,13 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
 
   /**
    * Store settings and current location in localStorage.
+   * Use the metadata.identifier if it exists, otherwise use
+   * the webpubManifestUrl as the key.
    */
-  useUpdateLocalStorage(webpubManifestUrl, state);
+  const identifier = manifest
+    ? manifest.metadata.identifier ?? webpubManifestUrl ?? null
+    : null;
+  useUpdateLocalStorage(identifier, state);
 
   /**
    * Update url query param when location changes.
