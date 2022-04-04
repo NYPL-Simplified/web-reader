@@ -13,8 +13,8 @@ import { ReaderSettings } from '../types';
  *  - how to handle non backwards compatible updates
  */
 
-const lsLocationKey = (webpubManifestUrl: string): string =>
-  `web-reader-location-${webpubManifestUrl}`;
+const lsLocationKey = (identifier: string): string =>
+  `web-reader-location-${identifier}`;
 
 export type LSLocationRecord = {
   location: Locator;
@@ -22,9 +22,9 @@ export type LSLocationRecord = {
 };
 
 export function getLocalStorageLocation(
-  webpubManifestUrl: string
+  identifier: string
 ): LSLocationRecord | undefined {
-  const locationKey = lsLocationKey(webpubManifestUrl);
+  const locationKey = lsLocationKey(identifier);
   const item = localStorage.getItem(locationKey);
   if (item) {
     const record: LSLocationRecord = JSON.parse(item);
@@ -44,15 +44,15 @@ export function getLocalStorageSettings(): ReaderSettings | undefined {
 }
 
 export default function useUpdateLocalStorage(
-  webpubManifestUrl: string | undefined,
+  identifier: string | null,
   state: HtmlState
 ): void {
   /**
    * Keep location up to date as the state changes
    */
   React.useEffect(() => {
-    if (!webpubManifestUrl) return;
-    const locationKey = lsLocationKey(webpubManifestUrl);
+    if (!identifier) return;
+    const locationKey = lsLocationKey(identifier);
     if (state.location) {
       const record: LSLocationRecord = {
         createdAt: Date.now(),
@@ -61,13 +61,13 @@ export default function useUpdateLocalStorage(
       const val = JSON.stringify(record);
       localStorage.setItem(locationKey, val);
     }
-  }, [state.location, webpubManifestUrl]);
+  }, [state.location, identifier]);
 
   /**
    * Keep settings up to date
    */
   React.useEffect(() => {
-    if (!webpubManifestUrl || !state.settings) return;
+    if (!identifier || !state.settings) return;
     const settings: ReaderSettings = {
       fontSize: state.settings.fontSize,
       fontFamily: state.settings.fontFamily,
@@ -76,5 +76,5 @@ export default function useUpdateLocalStorage(
     };
     const val = JSON.stringify(settings);
     localStorage.setItem(LOCAL_STORAGE_SETTINGS_KEY, val);
-  }, [state.settings, webpubManifestUrl]);
+  }, [state.settings, identifier]);
 }
