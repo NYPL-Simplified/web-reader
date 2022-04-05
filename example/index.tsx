@@ -24,7 +24,9 @@ import {
 import { getTheme } from '../src/ui/theme';
 import usePublicationSW from '../src/ServiceWorker/client';
 import AxisNowEncrypted from './axisnow-encrypted';
-import htmlStyles from 'url:../src/HtmlReader/injectable-styles.css';
+import readiumBefore from 'url:../src/HtmlReader/ReadiumCss/ReadiumCSS-before.css';
+import readiumDefault from 'url:../src/HtmlReader/ReadiumCss/ReadiumCSS-default.css';
+import readiumAfter from 'url:../src/HtmlReader/ReadiumCss/ReadiumCSS-after.css';
 import Tests from './Tests';
 import { Injectable } from '../src/Readium/Injectable';
 
@@ -32,17 +34,28 @@ const origin = window.location.origin;
 
 const pdfProxyUrl = process.env.CORS_PROXY_URL as string | undefined;
 
-const cssInjectable: Injectable = {
-  type: 'style',
-  url: htmlStyles,
-};
+const cssInjectable: Injectable[] = [
+  {
+    type: 'style',
+    url: readiumBefore,
+  },
+  {
+    type: 'style',
+    url: readiumDefault,
+  },
+  {
+    type: 'style',
+    url: readiumAfter,
+  },
+];
+
 const fontInjectable: Injectable = {
   type: 'style',
   url: `${origin}/fonts/opendyslexic/opendyslexic.css`,
   fontFamily: 'opendyslexic',
 };
 
-const htmlInjectables = [cssInjectable, fontInjectable];
+const htmlInjectables = [...cssInjectable, fontInjectable];
 
 const App = () => {
   /**
