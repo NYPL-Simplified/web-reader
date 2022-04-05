@@ -131,23 +131,35 @@ The HTML Reader has the ability to inject custom elements into the reader iframe
 
 In the below example, we show two different ways to do this.
 
-1. The `cssInjectableUrl` is loaded via webpack loaders. We export the Readium CSS stylesheets compiled under `@nypl/web-reader/dist/injectable-html-styles.css`. This can then be imported via webpack as a url to a static file that is copied to the dist folder. You can then use this url in your injectable config.
+1. We export the Readium CSS stylesheets compiled under `@nypl/web-reader/dist/injectable-html-styles/*.css`. These css files can then be imported via webpack as a url to a static file that is copied to the dist folder. You can then use this url in your injectable config.
 2. The `fontInjectable` uses a plain url to a css file that we host normally on our site. In this case you would be responsible for copying the css file into your source code and making sure it is hosted at some location.
 
 ```ts
-import cssInjectableUrl from '!file-loader!extract-loader!css-loader!@nypl/web-reader/dist/injectable-html-styles.css';
+import readiumBefore from '!file-loader!extract-loader!css-loader!@nypl/web-reader/dist/injectable-html-styles/ReadiumCSS-before.css';
+import readiumDefault from '!file-loader!extract-loader!css-loader!@nypl/web-reader/dist/injectable-html-styles/ReadiumCSS-default.css';
+import readiumAfter from '!file-loader!extract-loader!css-loader!@nypl/web-reader/dist/injectable-html-styles/ReadiumCSS-after.css';
 
-const cssInjectable: Injectable = {
-  type: 'style',
-  url: htmlStyles,
-};
+const cssInjectables: Injectable[] = [
+  {
+    type: 'style',
+    url: readiumBefore,
+  },
+  {
+    type: 'style',
+    url: readiumDefault,
+  },
+  {
+    type: 'style',
+    url: readiumAfter,
+  },
+];
 const fontInjectable: Injectable = {
   type: 'style',
   url: `${origin}/fonts/opendyslexic/opendyslexic.css`,
   fontFamily: 'opendyslexic',
 };
 
-const htmlInjectables = [cssInjectable, fontInjectable];
+const htmlInjectables = [...cssInjectables, fontInjectable];
 
 const Reader = () => {
   return (

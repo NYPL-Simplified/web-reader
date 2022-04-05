@@ -34,7 +34,7 @@ const origin = window.location.origin;
 
 const pdfProxyUrl = process.env.CORS_PROXY_URL as string | undefined;
 
-const cssInjectable: Injectable[] = [
+const cssInjectables: Injectable[] = [
   {
     type: 'style',
     url: readiumBefore,
@@ -55,7 +55,7 @@ const fontInjectable: Injectable = {
   fontFamily: 'opendyslexic',
 };
 
-const htmlInjectables = [...cssInjectable, fontInjectable];
+const htmlInjectables = [...cssInjectables, fontInjectable];
 
 const App = () => {
   /**
