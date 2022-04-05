@@ -122,14 +122,16 @@ async function buildAll() {
   // dist/ems/index.css and dist/cjs/index.css
   const p3 = buildTs(
     {
-      entryPoints: {
-        'injectable-html-styles': 'src/HtmlReader/injectable-styles.css',
-      },
-      outdir: 'dist',
+      entryPoints: [
+        'src/HtmlReader/ReadiumCss/ReadiumCSS-before.css',
+        'src/HtmlReader/ReadiumCss/ReadiumCSS-default.css',
+        'src/HtmlReader/ReadiumCss/ReadiumCSS-after.css',
+      ],
+      outdir: 'dist/injectable-html-styles',
       minify: isProduction,
     },
     'Compiled Injectable CSS',
-    'dist/*-styles.css'
+    'dist/injectable-html-styles/*.css'
   );
 
   // generate type declarations
