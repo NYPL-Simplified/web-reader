@@ -102,6 +102,7 @@ export default function useUpdateLocalStorage(
   }, [state.settings, identifier, args?.persistSettings]);
 }
 
-// export function clearLocalStorageLocations(){
-//   localStorage.
-// }
+export function clearWebReaderLocalStorage(): void {
+  localStorage.removeItem(LOCAL_STORAGE_LOCATIONS_KEY);
+  localStorage.removeItem(LOCAL_STORAGE_SETTINGS_KEY);
+}
