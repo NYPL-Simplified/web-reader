@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  LOCAL_STORAGE_LOCATION_KEY_PREFIX,
+  LOCAL_STORAGE_LOCATIONS_KEY,
   LOCAL_STORAGE_SETTINGS_KEY,
 } from '../constants';
 import { HtmlState } from '../HtmlReader/types';
@@ -17,24 +17,24 @@ import { ReaderArguments, ReaderSettings } from '../types';
  *  - how to handle non backwards compatible updates
  */
 
-const lsLocationKey = (identifier: string): string =>
-  `${LOCAL_STORAGE_LOCATION_KEY_PREFIX}${identifier}`;
-
-export type LSLocationRecord = {
+export type LSLocation = {
   location: Locator;
   createdAt: number;
 };
 
+// we store all locations for books in a single object.
+export type LSLocationsRecord = Record<string, LSLocation>;
+
 export function getLocalStorageLocation(
   identifier: string,
   args: ReaderArguments
-): LSLocationRecord | undefined {
+): LSLocation | undefined {
   if (!args?.persistLastLocation) return undefined;
-  const locationKey = lsLocationKey(identifier);
-  const item = localStorage.getItem(locationKey);
+  const item = localStorage.getItem(LOCAL_STORAGE_LOCATIONS_KEY);
   if (item) {
-    const record: LSLocationRecord = JSON.parse(item);
-    return record;
+    const record: LSLocationsRecord = JSON.parse(item);
+    const location = record[identifier];
+    return location;
   }
   return undefined;
 }
@@ -61,14 +61,28 @@ export default function useUpdateLocalStorage(
    */
   React.useEffect(() => {
     if (!identifier || !args?.persistLastLocation) return;
-    const locationKey = lsLocationKey(identifier);
     if (state.location) {
-      const record: LSLocationRecord = {
+      const record: LSLocation = {
         createdAt: Date.now(),
         location: state.location,
       };
-      const val = JSON.stringify(record);
-      localStorage.setItem(locationKey, val);
+      const existing = localStorage.getItem(LOCAL_STORAGE_LOCATIONS_KEY);
+      if (existing) {
+        const locationsRecord: LSLocationsRecord = JSON.parse(existing);
+        locationsRecord[identifier] = record;
+        localStorage.setItem(
+          LOCAL_STORAGE_LOCATIONS_KEY,
+          JSON.stringify(locationsRecord)
+        );
+      } else {
+        const locationsRecord: LSLocationsRecord = {
+          [identifier]: record,
+        };
+        localStorage.setItem(
+          LOCAL_STORAGE_LOCATIONS_KEY,
+          JSON.stringify(locationsRecord)
+        );
+      }
     }
   }, [state.location, identifier, args?.persistLastLocation]);
 
@@ -87,3 +101,7 @@ export default function useUpdateLocalStorage(
     localStorage.setItem(LOCAL_STORAGE_SETTINGS_KEY, val);
   }, [state.settings, identifier, args?.persistSettings]);
 }
+
+// export function clearLocalStorageLocations(){
+//   localStorage.
+// }
