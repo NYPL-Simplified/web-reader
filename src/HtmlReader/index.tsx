@@ -52,6 +52,8 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     injectablesFixed = defaultInjectablesFixed,
     height = DEFAULT_HEIGHT,
     growWhenScrolling = DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
+    persistLastLocation = true,
+    persistSettings = true,
   } = args ?? {};
 
   const [state, dispatch] = React.useReducer(
@@ -78,7 +80,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const identifier = manifest
     ? manifest.metadata.identifier ?? webpubManifestUrl ?? null
     : null;
-  useUpdateLocalStorage(identifier, state);
+  useUpdateLocalStorage(identifier, state, args);
 
   /**
    * Update url query param when location changes.
@@ -109,6 +111,8 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
         injectablesFixed,
         height,
         growWhenScrolling,
+        persistLastLocation,
+        persistSettings,
       },
     });
   }, [
@@ -119,6 +123,8 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     injectablesFixed,
     height,
     growWhenScrolling,
+    persistLastLocation,
+    persistSettings,
   ]);
 
   /**

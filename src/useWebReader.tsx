@@ -53,6 +53,8 @@ export default function useWebReader(
     injectablesFixed,
     height = DEFAULT_HEIGHT,
     growWhenScrolling = DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
+    persistLastLocation = true,
+    persistSettings = true,
   } = args;
   const [manifest, setManifest] = React.useState<WebpubManifest | null>(null);
   const [error, setError] = React.useState<Error | null>(null);
@@ -81,6 +83,8 @@ export default function useWebReader(
           injectablesFixed,
           height,
           growWhenScrolling,
+          persistLastLocation,
+          persistSettings,
         }
       : undefined
   );
@@ -94,6 +98,8 @@ export default function useWebReader(
           pdfWorkerSrc,
           height,
           growWhenScrolling,
+          persistLastLocation,
+          persistSettings,
         }
       : undefined
   );

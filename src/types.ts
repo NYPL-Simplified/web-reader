@@ -120,6 +120,20 @@ export type UseWebReaderArguments = {
    * Initial user settings for the reader
    */
   readerSettings?: Partial<ReaderSettings>;
+  /**
+   * If enabled, reading location will be persisted to local storage and recalled from
+   * there upon initial load.
+   *
+   * Default: `true`
+   */
+  persistLastLocation?: boolean;
+  /**
+   * If enabled, reader settings will be persisted to local storage and recalled
+   * from there upon initial load.
+   *
+   * Default: `true`
+   */
+  persistSettings?: boolean;
 };
 
 export type ActiveReaderArguments = UseWebReaderArguments & {

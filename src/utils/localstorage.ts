@@ -1,7 +1,11 @@
 import React from 'react';
+import {
+  LOCAL_STORAGE_LOCATION_KEY_PREFIX,
+  LOCAL_STORAGE_SETTINGS_KEY,
+} from '../constants';
 import { HtmlState } from '../HtmlReader/types';
 import { Locator } from '../Readium/Locator';
-import { ReaderSettings } from '../types';
+import { ReaderArguments, ReaderSettings } from '../types';
 
 /**
  * Use getLocalStorageLocation to get the location when
@@ -14,7 +18,7 @@ import { ReaderSettings } from '../types';
  */
 
 const lsLocationKey = (identifier: string): string =>
-  `web-reader-location-${identifier}`;
+  `${LOCAL_STORAGE_LOCATION_KEY_PREFIX}${identifier}`;
 
 export type LSLocationRecord = {
   location: Locator;
@@ -22,8 +26,10 @@ export type LSLocationRecord = {
 };
 
 export function getLocalStorageLocation(
-  identifier: string
+  identifier: string,
+  args: ReaderArguments
 ): LSLocationRecord | undefined {
+  if (!args?.persistLastLocation) return undefined;
   const locationKey = lsLocationKey(identifier);
   const item = localStorage.getItem(locationKey);
   if (item) {
@@ -33,8 +39,10 @@ export function getLocalStorageLocation(
   return undefined;
 }
 
-const LOCAL_STORAGE_SETTINGS_KEY = 'web-reader-settings';
-export function getLocalStorageSettings(): ReaderSettings | undefined {
+export function getLocalStorageSettings(
+  args: ReaderArguments
+): ReaderSettings | undefined {
+  if (!args?.persistSettings) return undefined;
   const item = localStorage.getItem(LOCAL_STORAGE_SETTINGS_KEY);
   if (item) {
     const settings: ReaderSettings = JSON.parse(item);
@@ -45,13 +53,14 @@ export function getLocalStorageSettings(): ReaderSettings | undefined {
 
 export default function useUpdateLocalStorage(
   identifier: string | null,
-  state: HtmlState
+  state: HtmlState,
+  args: ReaderArguments
 ): void {
   /**
    * Keep location up to date as the state changes
    */
   React.useEffect(() => {
-    if (!identifier) return;
+    if (!identifier || !args?.persistLastLocation) return;
     const locationKey = lsLocationKey(identifier);
     if (state.location) {
       const record: LSLocationRecord = {
@@ -61,13 +70,13 @@ export default function useUpdateLocalStorage(
       const val = JSON.stringify(record);
       localStorage.setItem(locationKey, val);
     }
-  }, [state.location, identifier]);
+  }, [state.location, identifier, args?.persistLastLocation]);
 
   /**
    * Keep settings up to date
    */
   React.useEffect(() => {
-    if (!identifier || !state.settings) return;
+    if (!identifier || !state.settings || !args?.persistSettings) return;
     const settings: ReaderSettings = {
       fontSize: state.settings.fontSize,
       fontFamily: state.settings.fontFamily,
@@ -76,5 +85,5 @@ export default function useUpdateLocalStorage(
     };
     const val = JSON.stringify(settings);
     localStorage.setItem(LOCAL_STORAGE_SETTINGS_KEY, val);
-  }, [state.settings, identifier]);
+  }, [state.settings, identifier, args?.persistSettings]);
 }

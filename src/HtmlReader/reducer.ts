@@ -115,7 +115,8 @@ export default function makeHtmlReducer(
           );
 
         const localStorageRecord = getLocalStorageLocation(
-          manifest.metadata.identifier ?? webpubManifestUrl
+          manifest.metadata.identifier ?? webpubManifestUrl,
+          action.args
         );
         const isLocalStorageLocationValid =
           !!localStorageRecord &&
@@ -132,7 +133,8 @@ export default function makeHtmlReducer(
           : defaultStartLocation;
 
         // get initial settings from local storage, if they exist
-        const settings = getLocalStorageSettings() ?? DEFAULT_SETTINGS;
+        const settings =
+          getLocalStorageSettings(action.args) ?? DEFAULT_SETTINGS;
 
         const fetchingResource: FetchingResourceState = {
           ...state,

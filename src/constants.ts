@@ -18,3 +18,7 @@ export const DEFAULT_SETTINGS: ReaderSettings = {
   fontSize: 100,
   fontFamily: 'publisher',
 };
+
+// local storage keys
+export const LOCAL_STORAGE_SETTINGS_KEY = 'web-reader-settings';
+export const LOCAL_STORAGE_LOCATION_KEY_PREFIX = 'web-reader-location-';
