@@ -128,3 +128,33 @@ it('should maintain settings between page visits', () => {
     .should('have.css', '--USER__scroll', 'readium-scroll-on')
     .should('have.css', '--USER__fontSize', '96%');
 });
+
+it('should not maintain settings if `persistSettings` is `false`', () => {
+  cy.log('visit settings-remembering-reading');
+  cy.visit('/html/moby-epub3', {
+    onBeforeLoad: (win) => {
+      win.localStorage.clear();
+    },
+  });
+
+  cy.log('Change settings');
+  cy.wait(1000);
+  cy.findByRole('button', { name: 'Settings' }).click();
+  cy.wait(1000);
+  cy.findByRole('radio', { name: 'Night' }).click({ force: true });
+  cy.findByRole('radio', { name: 'Serif' }).click({ force: true });
+  cy.findByRole('radio', { name: 'Scrolling' }).click({ force: true });
+  cy.findByRole('button', { name: 'Decrease font size' }).click({
+    force: true,
+  });
+
+  cy.log('visit reader that does not remember settings');
+  cy.visit('/html/moby-epub3-no-local-storage');
+
+  cy.log('Page should be loaded with default settings');
+  cy.getIframeHtml()
+    .should('have.css', '--USER__appearance', 'readium-default-on')
+    .should('have.css', '--USER__fontFamily', 'Original')
+    .should('have.css', '--USER__scroll', 'readium-scroll-off')
+    .should('have.css', '--USER__fontSize', '100%');
+});

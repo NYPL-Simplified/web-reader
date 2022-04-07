@@ -1,7 +1,11 @@
 import React from 'react';
+import {
+  LOCAL_STORAGE_LOCATIONS_KEY,
+  LOCAL_STORAGE_SETTINGS_KEY,
+} from '../constants';
 import { HtmlState } from '../HtmlReader/types';
 import { Locator } from '../Readium/Locator';
-import { ReaderSettings } from '../types';
+import { ReaderArguments, ReaderSettings } from '../types';
 
 /**
  * Use getLocalStorageLocation to get the location when
@@ -13,28 +17,32 @@ import { ReaderSettings } from '../types';
  *  - how to handle non backwards compatible updates
  */
 
-const lsLocationKey = (identifier: string): string =>
-  `web-reader-location-${identifier}`;
-
-export type LSLocationRecord = {
+export type LSLocation = {
   location: Locator;
   createdAt: number;
 };
 
+// we store all locations for books in a single object.
+export type LSLocationsRecord = Record<string, LSLocation>;
+
 export function getLocalStorageLocation(
-  identifier: string
-): LSLocationRecord | undefined {
-  const locationKey = lsLocationKey(identifier);
-  const item = localStorage.getItem(locationKey);
+  identifier: string,
+  args: ReaderArguments
+): LSLocation | undefined {
+  if (!args?.persistLastLocation) return undefined;
+  const item = localStorage.getItem(LOCAL_STORAGE_LOCATIONS_KEY);
   if (item) {
-    const record: LSLocationRecord = JSON.parse(item);
-    return record;
+    const record: LSLocationsRecord = JSON.parse(item);
+    const location = record[identifier];
+    return location;
   }
   return undefined;
 }
 
-const LOCAL_STORAGE_SETTINGS_KEY = 'web-reader-settings';
-export function getLocalStorageSettings(): ReaderSettings | undefined {
+export function getLocalStorageSettings(
+  args: ReaderArguments
+): ReaderSettings | undefined {
+  if (!args?.persistSettings) return undefined;
   const item = localStorage.getItem(LOCAL_STORAGE_SETTINGS_KEY);
   if (item) {
     const settings: ReaderSettings = JSON.parse(item);
@@ -45,29 +53,44 @@ export function getLocalStorageSettings(): ReaderSettings | undefined {
 
 export default function useUpdateLocalStorage(
   identifier: string | null,
-  state: HtmlState
+  state: HtmlState,
+  args: ReaderArguments
 ): void {
   /**
    * Keep location up to date as the state changes
    */
   React.useEffect(() => {
-    if (!identifier) return;
-    const locationKey = lsLocationKey(identifier);
+    if (!identifier || !args?.persistLastLocation) return;
     if (state.location) {
-      const record: LSLocationRecord = {
+      const record: LSLocation = {
         createdAt: Date.now(),
         location: state.location,
       };
-      const val = JSON.stringify(record);
-      localStorage.setItem(locationKey, val);
+      const existing = localStorage.getItem(LOCAL_STORAGE_LOCATIONS_KEY);
+      if (existing) {
+        const locationsRecord: LSLocationsRecord = JSON.parse(existing);
+        locationsRecord[identifier] = record;
+        localStorage.setItem(
+          LOCAL_STORAGE_LOCATIONS_KEY,
+          JSON.stringify(locationsRecord)
+        );
+      } else {
+        const locationsRecord: LSLocationsRecord = {
+          [identifier]: record,
+        };
+        localStorage.setItem(
+          LOCAL_STORAGE_LOCATIONS_KEY,
+          JSON.stringify(locationsRecord)
+        );
+      }
     }
-  }, [state.location, identifier]);
+  }, [state.location, identifier, args?.persistLastLocation]);
 
   /**
    * Keep settings up to date
    */
   React.useEffect(() => {
-    if (!identifier || !state.settings) return;
+    if (!identifier || !state.settings || !args?.persistSettings) return;
     const settings: ReaderSettings = {
       fontSize: state.settings.fontSize,
       fontFamily: state.settings.fontFamily,
@@ -76,5 +99,10 @@ export default function useUpdateLocalStorage(
     };
     const val = JSON.stringify(settings);
     localStorage.setItem(LOCAL_STORAGE_SETTINGS_KEY, val);
-  }, [state.settings, identifier]);
+  }, [state.settings, identifier, args?.persistSettings]);
+}
+
+export function clearWebReaderLocalStorage(): void {
+  localStorage.removeItem(LOCAL_STORAGE_LOCATIONS_KEY);
+  localStorage.removeItem(LOCAL_STORAGE_SETTINGS_KEY);
 }

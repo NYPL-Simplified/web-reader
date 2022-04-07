@@ -4,11 +4,11 @@ describe('navigating an EPUB page using internal link', () => {
     cy.on('uncaught:exception', (err, runnable) => {
       return false;
     });
-
-    cy.loadPage('/html/moby-epub2');
   });
 
   it('Paginated mode & internal links should navigates users', () => {
+    cy.visit('/html/moby-epub2');
+    cy.wait(1000);
     cy.log('Go to a page with TOC');
 
     cy.findByRole('button', { name: 'Table of Contents' }).click();
@@ -30,6 +30,7 @@ describe('navigating an EPUB page using internal link', () => {
   });
 
   it('Scrolling mode & internal links should navigates users', () => {
+    cy.visit('/html/moby-epub2');
     cy.log('Go to a page with TOC');
 
     cy.findByRole('button', { name: 'Table of Contents' }).click();

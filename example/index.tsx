@@ -197,6 +197,14 @@ const HtmlReaders = () => {
           webpubManifestUrl={`${origin}/samples/moby-epub3-exploded/manifest.json`}
         />
       </Route>
+      <Route path={`/html/moby-epub3-no-local-storage`}>
+        <WebReader
+          injectables={htmlInjectables}
+          persistLastLocation={false}
+          persistSettings={false}
+          webpubManifestUrl={`${origin}/samples/moby-epub3-exploded/manifest.json`}
+        />
+      </Route>
       <Route path={`/html/fixed-layout`}>
         <WebReader
           injectables={htmlInjectables}
@@ -290,6 +298,12 @@ const HomePage = () => {
           <UnorderedList>
             <ListItem>
               <Link to="/html/moby-epub3">Moby Dick (EPUB 3)</Link>
+            </ListItem>
+            <ListItem>
+              <Link to="/html/moby-epub3-no-local-storage">
+                Moby Dick (EPUB 3)
+              </Link>{' '}
+              - does not persist location or settings to local storage
             </ListItem>
             <ListItem>
               <Link to="/html/readium-css-docs">
