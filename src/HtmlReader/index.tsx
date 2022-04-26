@@ -33,9 +33,7 @@ import useUpdateLocalStorage from '../utils/localstorage';
  *
  * Future:
  *  - provide default injectables (Readium CSS)
- *  - Don't use ReadiumCSS for fixed layout
  *  - Make fixed layout work
- *  - Update to latest Readium CSS
  *  - Find some way to organize effects and actions together so you can navigate, wait for iframe to load,
  *    then run some other effect.
  *  - goForward and goBackward should return a promise that resolves once isNavigated flips to true.
@@ -48,7 +46,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     webpubManifestUrl,
     manifest,
     getContent = fetchAsTxt,
-    injectables = defaultInjectables,
+    injectablesReflowable = defaultInjectables,
     injectablesFixed = defaultInjectablesFixed,
     height = DEFAULT_HEIGHT,
     growWhenScrolling = DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
@@ -63,8 +61,16 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
 
   /**
    * Fetches the resource and keeps it in the reducer state.
+   *
+   * Load the fixed injectables if it's a fixed layout.
    */
   const currentResourceUrl = state.location?.href ?? null;
+  const injectables =
+    manifest?.metadata?.presentation?.layout === 'fixed'
+      ? injectablesFixed
+      : injectablesReflowable;
+  console.log(injectables, injectablesReflowable);
+
   useResource(state, getContent, injectables, dispatch);
 
   /**
@@ -107,7 +113,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
         webpubManifestUrl,
         manifest,
         getContent,
-        injectables,
+        injectablesReflowable,
         injectablesFixed,
         height,
         growWhenScrolling,
@@ -119,7 +125,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     webpubManifestUrl,
     manifest,
     getContent,
-    injectables,
+    injectablesReflowable,
     injectablesFixed,
     height,
     growWhenScrolling,

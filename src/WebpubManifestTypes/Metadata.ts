@@ -1,9 +1,10 @@
 import { ConformsTo } from './ConformsTo';
 import { Contributor } from './Contributor';
+import { EPUBExtensionMetadata } from './EpubExtension';
 import { LanguageMap } from './LanguageMap';
 import { Subject } from './Subject';
 
-export interface Metadata extends Contributors {
+export interface Metadata extends Contributors, EPUBExtensionMetadata {
   identifier?: string;
   '@type'?: string;
   conformsTo?: ConformsTo;

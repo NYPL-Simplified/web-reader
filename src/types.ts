@@ -97,7 +97,7 @@ export type UseWebReaderArguments = {
   proxyUrl?: string;
   getContent?: GetContent;
   pdfWorkerSrc?: string;
-  injectables?: Injectable[];
+  injectablesReflowable?: Injectable[];
   injectablesFixed?: Injectable[];
   /**
    * CSS string to set the height of the reader in paginated mode, and also
