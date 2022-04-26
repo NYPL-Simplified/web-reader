@@ -55,7 +55,7 @@ const fontInjectable: Injectable = {
   fontFamily: 'opendyslexic',
 };
 
-const htmlInjectables = [...cssInjectables, fontInjectable];
+const htmlInjectablesReflowable = [...cssInjectables, fontInjectable];
 
 const App = () => {
   /**
@@ -177,29 +177,29 @@ const HtmlReaders = () => {
   return (
     <Switch>
       <Route path={`/html/axisnow-encrypted`}>
-        <AxisNowEncrypted injectables={htmlInjectables} />
+        <AxisNowEncrypted injectables={htmlInjectablesReflowable} />
       </Route>
       <Route path={`/html/axisnow-decrypted`}>
         <WebReader
-          injectables={htmlInjectables}
+          injectablesReflowable={htmlInjectablesReflowable}
           webpubManifestUrl={`${origin}/samples/dickens-axisnow/decrypted/manifest.json`}
         />
       </Route>
       <Route path={`/html/moby-epub2`}>
         <WebReader
-          injectables={htmlInjectables}
+          injectablesReflowable={htmlInjectablesReflowable}
           webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
         />
       </Route>
       <Route path={`/html/moby-epub3`}>
         <WebReader
-          injectables={htmlInjectables}
+          injectablesReflowable={htmlInjectablesReflowable}
           webpubManifestUrl={`${origin}/samples/moby-epub3-exploded/manifest.json`}
         />
       </Route>
       <Route path={`/html/moby-epub3-no-local-storage`}>
         <WebReader
-          injectables={htmlInjectables}
+          injectablesReflowable={htmlInjectablesReflowable}
           persistLastLocation={false}
           persistSettings={false}
           webpubManifestUrl={`${origin}/samples/moby-epub3-exploded/manifest.json`}
@@ -207,13 +207,13 @@ const HtmlReaders = () => {
       </Route>
       <Route path={`/html/fixed-layout`}>
         <WebReader
-          injectables={htmlInjectables}
+          injectablesReflowable={htmlInjectablesReflowable}
           webpubManifestUrl={`${origin}/samples/fixed-layout/manifest.json`}
         />
       </Route>
       <Route path={`/html/fxl-poems`}>
         <WebReader
-          injectables={htmlInjectables}
+          injectablesReflowable={htmlInjectablesReflowable}
           webpubManifestUrl={`${origin}/samples/fxl-poems/manifest.json`}
         />
       </Route>
@@ -226,7 +226,7 @@ const HtmlReaders = () => {
             means it will not grow to fit content in scrolling mode..
           </Text>
           <WebReader
-            injectables={htmlInjectables}
+            injectablesReflowable={htmlInjectablesReflowable}
             webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
             growWhenScrolling={false}
             height="70vh"
@@ -245,7 +245,7 @@ const HtmlReaders = () => {
             however, it will use the value of the `height` prop.
           </Text>
           <WebReader
-            injectables={htmlInjectables}
+            injectablesReflowable={htmlInjectablesReflowable}
             webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
           />
           <Heading>The page continues...</Heading>
@@ -254,13 +254,13 @@ const HtmlReaders = () => {
       </Route>
       <Route path={`/html/streamed-alice-epub`}>
         <WebReader
-          injectables={htmlInjectables}
+          injectablesReflowable={htmlInjectablesReflowable}
           webpubManifestUrl="https://alice.dita.digital/manifest.json"
         />
       </Route>
       <Route path={`/html/readium-css-docs`}>
         <WebReader
-          injectables={htmlInjectables}
+          injectablesReflowable={htmlInjectablesReflowable}
           webpubManifestUrl={`${origin}/samples/ReadiumCSS-docs/manifest.json`}
         />
       </Route>
@@ -434,7 +434,10 @@ const DynamicReader: React.FC = () => {
   const { manifestUrl } = useParams<{ manifestUrl: string }>();
   const decoded = decodeURIComponent(manifestUrl);
   return (
-    <WebReader injectables={htmlInjectables} webpubManifestUrl={decoded} />
+    <WebReader
+      injectablesReflowable={htmlInjectablesReflowable}
+      webpubManifestUrl={decoded}
+    />
   );
 };
 
