@@ -137,7 +137,7 @@ export function setFXLCss(
   setCSSProperty(
     iframeDocument.documentElement,
     'transform-origin',
-    'top left'
+    'top center'
   );
 }
 
