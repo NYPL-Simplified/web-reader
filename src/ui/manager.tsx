@@ -42,6 +42,7 @@ const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
       )}
 
       <Flex
+        as="main"
         ref={containerRef}
         position="relative"
         bg={bgColor}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Injectable } from '../Readium/Injectable';
-import { setCss } from './effects';
+import { WebpubManifest } from '../types';
+import { setFXLCss, setCss } from './effects';
 import { makeInjectableElement } from './lib';
 import { HtmlState, HtmlAction } from './types';
 
@@ -14,6 +15,7 @@ import { HtmlState, HtmlAction } from './types';
  * css variables and injectables.
  */
 export default function useResource(
+  manifest: WebpubManifest | undefined,
   state: HtmlState,
   getContent: (url: string) => Promise<string>,
   injectables: Injectable[],
@@ -36,6 +38,7 @@ export default function useResource(
             ? 'text/html'
             : 'application/xhtml+xml';
         const document = new DOMParser().parseFromString(content, mimetype);
+
         // add base so relative URLs work.
         const base = document?.createElement('base');
         if (base && url) {
@@ -47,6 +50,15 @@ export default function useResource(
           const element = makeInjectableElement(document, injectable);
           if (element) document?.head.appendChild(element);
         }
+
+        const iframeContainer = window.document.querySelector(
+          'main [role="progressbar"]'
+        ) as HTMLElement;
+        setFXLCss(
+          manifest?.metadata?.presentation?.layout,
+          document,
+          iframeContainer
+        );
 
         injectJS(document.body);
 

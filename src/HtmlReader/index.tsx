@@ -28,6 +28,8 @@ import useUpdateCSS from './useUpdateCSS';
 import useIframeLinkClick from './useIframeLinkClick';
 import useUpdateLocalStorage from '../utils/localstorage';
 
+export const IFRAME_ID_SELECTOR = 'html-reader-iframe';
+
 /**
  * @TODO :
  *
@@ -69,9 +71,8 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     manifest?.metadata?.presentation?.layout === 'fixed'
       ? injectablesFixed
       : injectablesReflowable;
-  console.log(injectables, injectablesReflowable);
 
-  useResource(state, getContent, injectables, dispatch);
+  useResource(manifest, state, getContent, injectables, dispatch);
 
   /**
    * Dispatches an action to update scroll position when the user *stops* scrolling.
@@ -94,7 +95,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   useLocationQuery(state);
 
   // dispatch action when window is resized
-  useWindowResize(dispatch);
+  useWindowResize(manifest, state, dispatch);
 
   // update iframe css variables when css state changes
   useUpdateCSS(state, manifest);
@@ -166,6 +167,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
             state.settings.isScrolling
           );
         }
+
         // tell the reducer that we have now completed the navigation.
         dispatch({ type: 'NAV_COMPLETE' });
       }
@@ -262,7 +264,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     content: (
       <>
         <iframe
-          id="html-reader-iframe"
+          id={IFRAME_ID_SELECTOR}
           onLoad={() => dispatch({ type: 'IFRAME_LOADED' })}
           ref={setIframe}
           // as="iframe"
