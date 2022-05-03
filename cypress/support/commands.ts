@@ -166,7 +166,7 @@ Cypress.Commands.add(
         win.sessionStorage.clear(); // clear storage so that we are always on page one
       },
     });
-    cy.wait('@pdf', { timeout: 30000 });
+    cy.wait('@pdf', { timeout: 50000 });
     cy.get('#iframe-wrapper')
       .find('div[class="react-pdf__Page__textContent"]', { timeout: 10000 })
       .should('have.attr', 'style');
