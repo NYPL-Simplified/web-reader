@@ -10,7 +10,7 @@ import {
   WebpubManifest,
 } from './types';
 import {
-  AxisNowEpubConformsTo,
+  EpubConformsTo,
   WebpubPdfConformsTo,
   ConformsTo,
 } from './WebpubManifestTypes/ConformsTo';
@@ -22,7 +22,7 @@ import LoadingSkeleton from './ui/LoadingSkeleton';
 
 function getReaderType(conformsTo: ConformsTo | null | undefined) {
   switch (conformsTo) {
-    case AxisNowEpubConformsTo:
+    case EpubConformsTo:
       return 'HTML';
     case WebpubPdfConformsTo:
       return 'PDF';
