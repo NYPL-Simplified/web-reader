@@ -1,7 +1,7 @@
 import React from 'react';
 import { Injectable } from '../Readium/Injectable';
 import { WebpubManifest } from '../types';
-import { setFXLCss, setCss } from './effects';
+import { setCss } from './effects';
 import { makeInjectableElement } from './lib';
 import { HtmlState, HtmlAction } from './types';
 
@@ -51,24 +51,21 @@ export default function useResource(
           if (element) document?.head.appendChild(element);
         }
 
-        const iframeContainer = window.document.querySelector(
-          'main [role="progressbar"]'
-        ) as HTMLElement;
-        setFXLCss(
-          manifest?.metadata?.presentation?.layout,
-          document,
-          iframeContainer
-        );
-
         injectJS(document.body);
 
-        // set the initial CSS state
-        setCss(document.documentElement, {
+        // While fetching, the page renders a progressbar with skeleton
+        const iframeContainer: HTMLElement | null = window.document.querySelector(
+          'main [role="progressbar"]'
+        );
+
+        const readerSettings = {
           colorMode: state.settings.colorMode,
           fontSize: state.settings.fontSize,
           fontFamily: state.settings.fontFamily,
           isScrolling: state.settings.isScrolling,
-        });
+        };
+        // set the initial CSS state
+        setCss(document, readerSettings, iframeContainer, manifest);
 
         const finalResource = new XMLSerializer().serializeToString(document);
         dispatch({ type: 'RESOURCE_FETCH_SUCCESS', resource: finalResource });

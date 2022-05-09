@@ -186,6 +186,7 @@ const loadResource = async (resourceUrl: string, proxyUrl?: string) => {
     : resourceUrl;
   const response = await fetch(url, { mode: 'cors' });
   const array = new Uint8Array(await response.arrayBuffer());
+  console.log('proxied', url, response);
 
   if (!response.ok) {
     throw new Error('Response not Ok for URL: ' + url);

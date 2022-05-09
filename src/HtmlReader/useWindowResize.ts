@@ -1,7 +1,7 @@
 import debounce from 'debounce';
 import React from 'react';
 import { WebpubManifest } from '../types';
-import { setFXLCss } from './effects';
+import { setFixedCss } from './effects';
 import { HtmlAction, HtmlState } from './types';
 
 /**
@@ -13,8 +13,10 @@ export default function useWindowResize(
   dispatch: React.Dispatch<HtmlAction>
 ): void {
   React.useEffect(() => {
-    if (!manifest) return;
     if (state.state !== 'NAVIGATING' && state.state !== 'READY') return;
+    if (!manifest) return;
+    const isFixedLayout = manifest.metadata.presentation?.layout === 'fixed';
+    if (!isFixedLayout) return;
 
     function handleResize() {
       const iframeDocument = state.iframe?.contentDocument as Document;
@@ -22,11 +24,7 @@ export default function useWindowResize(
         'main'
       ) as HTMLElement;
 
-      setFXLCss(
-        manifest?.metadata?.presentation?.layout,
-        iframeDocument,
-        iframeContainer
-      );
+      setFixedCss(iframeDocument, iframeContainer);
 
       dispatch({
         type: 'WINDOW_RESIZED',

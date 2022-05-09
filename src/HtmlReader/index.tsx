@@ -35,7 +35,6 @@ export const IFRAME_ID_SELECTOR = 'html-reader-iframe';
  *
  * Future:
  *  - provide default injectables (Readium CSS)
- *  - Make fixed layout work
  *  - Find some way to organize effects and actions together so you can navigate, wait for iframe to load,
  *    then run some other effect.
  *  - goForward and goBackward should return a promise that resolves once isNavigated flips to true.

@@ -1,4 +1,4 @@
-import { ReaderSettings } from '../types';
+import { ReaderSettings, WebpubManifest } from '../types';
 import {
   calcPosition,
   familyToReadiumFamily,
@@ -75,41 +75,65 @@ export function navigateToHash(
  * Takes the HTML element and sets CSS variables on it based on the
  * reader's state
  */
-export function setCss(html: HTMLElement, settings: ReaderSettings): void {
-  setCSSProperty(html, '--USER__scroll', getPagination(settings.isScrolling));
+export function setCss(
+  iframeHtml: Document,
+  settings: ReaderSettings,
+  iframeContainer: HTMLElement | null,
+  manifest: WebpubManifest | undefined
+): void {
+  const isFixedLayout = manifest?.metadata.presentation?.layout === 'fixed';
+  if (isFixedLayout) {
+    setFixedCss(iframeHtml, iframeContainer);
+  } else {
+    setReflowableCss(iframeHtml.documentElement, settings);
+  }
+
+  // GLOBAL
   setCSSProperty(
-    html,
+    iframeHtml.documentElement,
+    'overflow',
+    settings.isScrolling ? 'scroll' : 'hidden'
+  );
+}
+
+export function setReflowableCss(
+  iframeHtml: HTMLElement,
+  settings: ReaderSettings
+): void {
+  setCSSProperty(
+    iframeHtml,
+    '--USER__scroll',
+    getPagination(settings.isScrolling)
+  );
+  setCSSProperty(
+    iframeHtml,
     '--USER__appearance',
     getColorModeValue(settings.colorMode)
   );
-  setCSSProperty(html, '--USER__advancedSettings', 'readium-advanced-on');
+  setCSSProperty(iframeHtml, '--USER__advancedSettings', 'readium-advanced-on');
   setCSSProperty(
-    html,
+    iframeHtml,
     '--USER__fontOverride',
     getFontOverride(settings.fontFamily)
   );
   setCSSProperty(
-    html,
+    iframeHtml,
     '--USER__fontFamily',
     familyToReadiumFamily[settings.fontFamily]
   );
-  setCSSProperty(html, '--USER__fontSize', `${settings.fontSize}%`);
-
-  // GLOBAL
-  setCSSProperty(html, 'overflow', settings.isScrolling ? 'scroll' : 'hidden');
+  setCSSProperty(iframeHtml, '--USER__fontSize', `${settings.fontSize}%`);
   // set the number of columns to only ever have 1.
-  setCSSProperty(html, '--USER__colCount', '1');
+  setCSSProperty(iframeHtml, '--USER__colCount', '1');
 }
 
 /**
  * Apply the transform property to the iframe document to fit the current screen viewport.
  */
-export function setFXLCss(
-  layout: 'fixed' | 'reflowable' | undefined,
+export function setFixedCss(
   iframeDocument: Document,
-  iframeContainer: HTMLElement
+  iframeContainer: HTMLElement | null
 ): void {
-  if (layout !== 'fixed') return;
+  if (!iframeContainer) return;
 
   let { contentWidth, contentHeight } = extractContentViewportSize(
     iframeDocument

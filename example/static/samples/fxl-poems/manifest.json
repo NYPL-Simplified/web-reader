@@ -3,7 +3,10 @@
   "metadata": {
     "title": "The War Poems Of Siegfried Sassoon",
     "language": "en",
-    "author": "Siegfreid Sassoon"
+    "author": "Siegfreid Sassoon",
+    "presentation": {
+      "layout": "fixed"
+    }
   },
   "resources": [
     {

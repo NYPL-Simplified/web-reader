@@ -1,6 +1,6 @@
 import React from 'react';
 import { WebpubManifest } from '../types';
-import { setCss } from './effects';
+import { setReflowableCss } from './effects';
 import { getMaybeIframeHtml } from './lib';
 import { HtmlState } from './types';
 
@@ -15,8 +15,11 @@ export default function useUpdateCSS(
   React.useEffect(() => {
     if (!manifest) return;
     if (state.state !== 'NAVIGATING' && state.state !== 'READY') return;
+    // Fixed layout CSS does not get triggered by state settings
+    const isFixedLayout = manifest.metadata.presentation?.layout === 'fixed';
+    if (isFixedLayout) return;
     const html = getMaybeIframeHtml(state.iframe);
     if (!html) return;
-    setCss(html, state.settings);
-  }, [state, manifest]);
+    setReflowableCss(html, state.settings);
+  }, [state.state, state.iframe, state.settings, manifest]);
 }
