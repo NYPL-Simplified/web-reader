@@ -87,13 +87,6 @@ export function setCss(
   } else {
     setReflowableCss(iframeHtml.documentElement, settings);
   }
-
-  // GLOBAL
-  setCSSProperty(
-    iframeHtml.documentElement,
-    'overflow',
-    settings.isScrolling ? 'scroll' : 'hidden'
-  );
 }
 
 export function setReflowableCss(
@@ -124,6 +117,12 @@ export function setReflowableCss(
   setCSSProperty(iframeHtml, '--USER__fontSize', `${settings.fontSize}%`);
   // set the number of columns to only ever have 1.
   setCSSProperty(iframeHtml, '--USER__colCount', '1');
+
+  setCSSProperty(
+    iframeHtml,
+    'overflow',
+    settings.isScrolling ? 'scroll' : 'hidden'
+  );
 }
 
 /**
@@ -163,6 +162,7 @@ export function setFixedCss(
     'transform-origin',
     'top center'
   );
+  setCSSProperty(iframeDocument.documentElement, 'overflow', 'hidden');
 }
 
 /**

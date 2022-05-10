@@ -15,9 +15,6 @@ export default function useUpdateCSS(
   React.useEffect(() => {
     if (!manifest) return;
     if (state.state !== 'NAVIGATING' && state.state !== 'READY') return;
-    // Fixed layout CSS does not get triggered by state settings
-    const isFixedLayout = manifest.metadata.presentation?.layout === 'fixed';
-    if (isFixedLayout) return;
     const html = getMaybeIframeHtml(state.iframe);
     if (!html) return;
     setReflowableCss(html, state.settings);
