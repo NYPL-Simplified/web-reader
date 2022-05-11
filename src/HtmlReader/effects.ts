@@ -149,7 +149,8 @@ export function setFixedCss(
   // https://css-tricks.com/scaled-proportional-blocks-with-css-and-javascript/
   const scale = Math.min(
     containerWidth / contentWidth,
-    containerHeight / contentHeight
+    containerHeight / contentHeight,
+    1
   );
 
   setCSSProperty(
