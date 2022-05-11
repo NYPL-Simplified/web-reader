@@ -10,7 +10,7 @@ import {
   WebpubManifest,
 } from './types';
 import {
-  AxisNowEpubConformsTo,
+  EpubConformsTo,
   WebpubPdfConformsTo,
   ConformsTo,
 } from './WebpubManifestTypes/ConformsTo';
@@ -22,7 +22,7 @@ import LoadingSkeleton from './ui/LoadingSkeleton';
 
 function getReaderType(conformsTo: ConformsTo | null | undefined) {
   switch (conformsTo) {
-    case AxisNowEpubConformsTo:
+    case EpubConformsTo:
       return 'HTML';
     case WebpubPdfConformsTo:
       return 'PDF';
@@ -49,7 +49,7 @@ export default function useWebReader(
     getContent,
     proxyUrl,
     pdfWorkerSrc,
-    injectables,
+    injectablesReflowable,
     injectablesFixed,
     height = DEFAULT_HEIGHT,
     growWhenScrolling = DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
@@ -79,7 +79,7 @@ export default function useWebReader(
           webpubManifestUrl,
           manifest,
           getContent,
-          injectables,
+          injectablesReflowable,
           injectablesFixed,
           height,
           growWhenScrolling,

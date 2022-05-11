@@ -28,14 +28,13 @@ import useUpdateCSS from './useUpdateCSS';
 import useIframeLinkClick from './useIframeLinkClick';
 import useUpdateLocalStorage from '../utils/localstorage';
 
+export const IFRAME_ID_SELECTOR = 'html-reader-iframe';
+
 /**
  * @TODO :
  *
  * Future:
  *  - provide default injectables (Readium CSS)
- *  - Don't use ReadiumCSS for fixed layout
- *  - Make fixed layout work
- *  - Update to latest Readium CSS
  *  - Find some way to organize effects and actions together so you can navigate, wait for iframe to load,
  *    then run some other effect.
  *  - goForward and goBackward should return a promise that resolves once isNavigated flips to true.
@@ -48,7 +47,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     webpubManifestUrl,
     manifest,
     getContent = fetchAsTxt,
-    injectables = defaultInjectables,
+    injectablesReflowable = defaultInjectables,
     injectablesFixed = defaultInjectablesFixed,
     height = DEFAULT_HEIGHT,
     growWhenScrolling = DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
@@ -63,9 +62,16 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
 
   /**
    * Fetches the resource and keeps it in the reducer state.
+   *
+   * Load the fixed injectables if it's a fixed layout.
    */
   const currentResourceUrl = state.location?.href ?? null;
-  useResource(state, getContent, injectables, dispatch);
+  const injectables =
+    manifest?.metadata?.presentation?.layout === 'fixed'
+      ? injectablesFixed
+      : injectablesReflowable;
+
+  useResource(manifest, state, getContent, injectables, dispatch);
 
   /**
    * Dispatches an action to update scroll position when the user *stops* scrolling.
@@ -88,7 +94,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   useLocationQuery(state);
 
   // dispatch action when window is resized
-  useWindowResize(dispatch);
+  useWindowResize(manifest, state, dispatch);
 
   // update iframe css variables when css state changes
   useUpdateCSS(state, manifest);
@@ -107,7 +113,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
         webpubManifestUrl,
         manifest,
         getContent,
-        injectables,
+        injectablesReflowable,
         injectablesFixed,
         height,
         growWhenScrolling,
@@ -119,7 +125,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     webpubManifestUrl,
     manifest,
     getContent,
-    injectables,
+    injectablesReflowable,
     injectablesFixed,
     height,
     growWhenScrolling,
@@ -160,6 +166,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
             state.settings.isScrolling
           );
         }
+
         // tell the reducer that we have now completed the navigation.
         dispatch({ type: 'NAV_COMPLETE' });
       }
@@ -256,7 +263,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     content: (
       <>
         <iframe
-          id="html-reader-iframe"
+          id={IFRAME_ID_SELECTOR}
           onLoad={() => dispatch({ type: 'IFRAME_LOADED' })}
           ref={setIframe}
           // as="iframe"

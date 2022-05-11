@@ -1,4 +1,4 @@
-import { ReaderSettings } from '../types';
+import { ReaderSettings, WebpubManifest } from '../types';
 import {
   calcPosition,
   familyToReadiumFamily,
@@ -75,26 +75,122 @@ export function navigateToHash(
  * Takes the HTML element and sets CSS variables on it based on the
  * reader's state
  */
-export function setCss(html: HTMLElement, settings: ReaderSettings): void {
-  setCSSProperty(html, '--USER__scroll', getPagination(settings.isScrolling));
+export function setCss(
+  iframeHtml: Document,
+  settings: ReaderSettings,
+  iframeContainer: HTMLElement | null,
+  manifest: WebpubManifest | undefined
+): void {
+  const isFixedLayout = manifest?.metadata.presentation?.layout === 'fixed';
+  if (isFixedLayout) {
+    setFixedCss(iframeHtml, iframeContainer);
+  } else {
+    setReflowableCss(iframeHtml.documentElement, settings);
+  }
+}
+
+export function setReflowableCss(
+  iframeHtml: HTMLElement,
+  settings: ReaderSettings
+): void {
   setCSSProperty(
-    html,
+    iframeHtml,
+    '--USER__scroll',
+    getPagination(settings.isScrolling)
+  );
+  setCSSProperty(
+    iframeHtml,
     '--USER__appearance',
     getColorModeValue(settings.colorMode)
   );
-  setCSSProperty(html, '--USER__advancedSettings', 'readium-advanced-on');
+  setCSSProperty(iframeHtml, '--USER__advancedSettings', 'readium-advanced-on');
   setCSSProperty(
-    html,
+    iframeHtml,
     '--USER__fontOverride',
     getFontOverride(settings.fontFamily)
   );
   setCSSProperty(
-    html,
+    iframeHtml,
     '--USER__fontFamily',
     familyToReadiumFamily[settings.fontFamily]
   );
-  setCSSProperty(html, '--USER__fontSize', `${settings.fontSize}%`);
-  setCSSProperty(html, 'overflow', settings.isScrolling ? 'scroll' : 'hidden');
+  setCSSProperty(iframeHtml, '--USER__fontSize', `${settings.fontSize}%`);
   // set the number of columns to only ever have 1.
-  setCSSProperty(html, '--USER__colCount', '1');
+  setCSSProperty(iframeHtml, '--USER__colCount', '1');
+
+  setCSSProperty(
+    iframeHtml,
+    'overflow',
+    settings.isScrolling ? 'scroll' : 'hidden'
+  );
+}
+
+/**
+ * Apply the transform property to the iframe document to fit the current screen viewport.
+ */
+export function setFixedCss(
+  iframeDocument: Document,
+  iframeContainer: HTMLElement | null
+): void {
+  if (!iframeContainer) return;
+
+  let { contentWidth, contentHeight } = extractContentViewportSize(
+    iframeDocument
+  );
+
+  const { containerWidth, containerHeight } = extractContentContainerSize(
+    iframeContainer
+  );
+
+  // Make it default scale of 1 in case we don't have the content width/height
+  contentWidth = contentWidth ?? containerWidth;
+  contentHeight = contentHeight ?? containerHeight;
+
+  // https://css-tricks.com/scaled-proportional-blocks-with-css-and-javascript/
+  const scale = Math.min(
+    containerWidth / contentWidth,
+    containerHeight / contentHeight
+  );
+
+  setCSSProperty(
+    iframeDocument.documentElement,
+    'transform',
+    `scale(${scale})`
+  );
+  setCSSProperty(
+    iframeDocument.documentElement,
+    'transform-origin',
+    'top center'
+  );
+  setCSSProperty(iframeDocument.documentElement, 'overflow', 'hidden');
+}
+
+/**
+ * Extract the publication's width and height from the iframe viewport meta tag.
+ */
+function extractContentViewportSize(
+  iframeDocument: Document
+): { contentWidth: number | undefined; contentHeight: number | undefined } {
+  const viewport = iframeDocument?.querySelector('meta[name="viewport"]');
+  const content = viewport?.getAttribute('content');
+
+  const width = content?.match(/width=(\d+)/);
+  const height = content?.match(/height=(\d+)/);
+
+  const contentWidth = width ? Number(width[1]) : undefined;
+  const contentHeight = height ? Number(height[1]) : undefined;
+
+  return { contentWidth, contentHeight };
+}
+
+/**
+ * Extract the width and height of the main container where iframe resides.
+ */
+function extractContentContainerSize(
+  container: HTMLElement
+): { containerWidth: number; containerHeight: number } {
+  return {
+    containerWidth: container.clientWidth,
+    containerHeight: container.clientHeight,
+  };
 }

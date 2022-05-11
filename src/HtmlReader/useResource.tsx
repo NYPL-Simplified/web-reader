@@ -1,5 +1,6 @@
 import React from 'react';
 import { Injectable } from '../Readium/Injectable';
+import { WebpubManifest } from '../types';
 import { setCss } from './effects';
 import { makeInjectableElement } from './lib';
 import { HtmlState, HtmlAction } from './types';
@@ -14,6 +15,7 @@ import { HtmlState, HtmlAction } from './types';
  * css variables and injectables.
  */
 export default function useResource(
+  manifest: WebpubManifest | undefined,
   state: HtmlState,
   getContent: (url: string) => Promise<string>,
   injectables: Injectable[],
@@ -36,6 +38,7 @@ export default function useResource(
             ? 'text/html'
             : 'application/xhtml+xml';
         const document = new DOMParser().parseFromString(content, mimetype);
+
         // add base so relative URLs work.
         const base = document?.createElement('base');
         if (base && url) {
@@ -50,13 +53,19 @@ export default function useResource(
 
         injectJS(document.body);
 
-        // set the initial CSS state
-        setCss(document.documentElement, {
+        // While fetching, the page renders a progressbar with skeleton
+        const iframeContainer: HTMLElement | null = window.document.querySelector(
+          'main [role="progressbar"]'
+        );
+
+        const readerSettings = {
           colorMode: state.settings.colorMode,
           fontSize: state.settings.fontSize,
           fontFamily: state.settings.fontFamily,
           isScrolling: state.settings.isScrolling,
-        });
+        };
+        // set the initial CSS state
+        setCss(document, readerSettings, iframeContainer, manifest);
 
         const finalResource = new XMLSerializer().serializeToString(document);
         dispatch({ type: 'RESOURCE_FETCH_SUCCESS', resource: finalResource });

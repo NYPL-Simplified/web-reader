@@ -14,7 +14,8 @@ declare global {
           | '/html/axisnow-encrypted'
           | '/html/axisnow-decrypted'
           | '/html/test/no-injectables'
-          | '/html/test/with-injectables'
+          | '/html/test/with-reflowable-layout'
+          | '/html/test/with-fixed-layout'
           | '/html/test/get-content'
           | '/html/streamed-alice-epub'
           | '/html/test/unparsable-manifest'
@@ -34,7 +35,7 @@ declare global {
 
 const pagesUsingAliceInWonderlandExample: string[] = [
   '/html/streamed-alice-epub',
-  '/html/test/with-injectables',
+  '/html/test/with-reflowable-layout',
   '/html/test/no-injectables',
 ];
 
@@ -165,7 +166,7 @@ Cypress.Commands.add(
         win.sessionStorage.clear(); // clear storage so that we are always on page one
       },
     });
-    cy.wait('@pdf', { timeout: 30000 });
+    cy.wait('@pdf', { timeout: 50000 });
     cy.get('#iframe-wrapper')
       .find('div[class="react-pdf__Page__textContent"]', { timeout: 10000 })
       .should('have.attr', 'style');

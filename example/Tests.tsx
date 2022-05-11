@@ -26,10 +26,10 @@ export default function Tests(): JSX.Element {
           webpubManifestUrl={'https://alice.dita.digital/manifest.json'}
         />
       </Route>
-      <Route path={`${path}/with-injectables`}>
+      <Route path={`${path}/with-reflowable-layout`}>
         <WebReader
           webpubManifestUrl={'https://alice.dita.digital/manifest.json'}
-          injectables={[
+          injectablesReflowable={[
             {
               type: 'style',
               url: `${origin}/fonts/opensyslexic/opendyslexic.css`,
@@ -40,6 +40,24 @@ export default function Tests(): JSX.Element {
               url: `${origin}/css/sample.css`,
             },
           ]}
+          injectablesFixed={[]}
+        />
+      </Route>
+      <Route path={`${path}/with-fixed-layout`}>
+        <WebReader
+          webpubManifestUrl={`${origin}/samples/fixed-layout/manifest.json`}
+          injectablesReflowable={[
+            {
+              type: 'style',
+              url: `${origin}/fonts/opensyslexic/opendyslexic.css`,
+              fontFamily: 'opendyslexic',
+            },
+            {
+              type: 'style',
+              url: `${origin}/css/sample.css`,
+            },
+          ]}
+          injectablesFixed={[]}
         />
       </Route>
       <Route path={`${path}/unparsable-manifest`}>
@@ -55,7 +73,7 @@ export default function Tests(): JSX.Element {
       <Route path={`${path}/missing-injectable`}>
         <WebReader
           webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
-          injectables={[
+          injectablesReflowable={[
             { type: 'style', url: `http://example.com/doesnt-exist.css` },
           ]}
         />

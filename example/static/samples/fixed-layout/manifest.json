@@ -3,7 +3,10 @@
   "metadata": {
     "title": "Page Blanche",
     "language": "fr",
-    "author": ["Boulet", "Bagieu Pénélope"]
+    "author": ["Boulet", "Bagieu Pénélope"],
+    "presentation": {
+      "layout": "fixed"
+    }
   },
   "resources": [
     { "href": "EPUB/Style/style.css", "type": "text/css", "id": "css" },

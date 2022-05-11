@@ -186,6 +186,7 @@ const loadResource = async (resourceUrl: string, proxyUrl?: string) => {
     : resourceUrl;
   const response = await fetch(url, { mode: 'cors' });
   const array = new Uint8Array(await response.arrayBuffer());
+  console.log('proxied', url, response);
 
   if (!response.ok) {
     throw new Error('Response not Ok for URL: ' + url);
@@ -213,7 +214,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     manifest,
     proxyUrl,
     getContent,
-    injectables,
+    injectablesReflowable,
     injectablesFixed,
     height = DEFAULT_HEIGHT,
     growWhenScrolling = DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
@@ -251,7 +252,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         webpubManifestUrl,
         manifest,
         getContent,
-        injectables,
+        injectablesReflowable,
         injectablesFixed,
         height,
         growWhenScrolling,
@@ -261,7 +262,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     webpubManifestUrl,
     manifest,
     getContent,
-    injectables,
+    injectablesReflowable,
     injectablesFixed,
     height,
     growWhenScrolling,
