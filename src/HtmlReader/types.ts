@@ -30,6 +30,7 @@ export type InactiveState = ReaderState & {
   iframe: null;
   resource: undefined;
   resourceFetchError: undefined;
+  viewport?: ViewPort;
 };
 
 export type FetchingResourceState = ReaderState & {
@@ -39,6 +40,7 @@ export type FetchingResourceState = ReaderState & {
   resource: undefined;
   resourceFetchError: undefined;
   settings: ReaderSettings;
+  viewport?: ViewPort;
 };
 
 export type ResourceFetchErrorState = ReaderState & {
@@ -57,6 +59,7 @@ export type RenderingIframeState = ReaderState & {
   resource: string;
   resourceFetchError: undefined;
   settings: ReaderSettings;
+  viewport?: ViewPort;
 };
 
 export type LoadingIframeState = ReaderState & {
@@ -66,6 +69,7 @@ export type LoadingIframeState = ReaderState & {
   resource: string;
   resourceFetchError: undefined;
   settings: ReaderSettings;
+  viewport?: ViewPort;
 };
 
 export type NavigatingState = ReaderState & {
@@ -75,6 +79,7 @@ export type NavigatingState = ReaderState & {
   resource: string;
   resourceFetchError: undefined;
   settings: ReaderSettings;
+  viewport?: ViewPort;
 };
 
 export type ReadyState = ReaderState & {
@@ -84,6 +89,7 @@ export type ReadyState = ReaderState & {
   resource: string;
   resourceFetchError: undefined;
   settings: ReaderSettings;
+  viewport?: ViewPort;
 };
 
 export type HtmlAction =
@@ -105,5 +111,10 @@ export type HtmlAction =
   | { type: 'SET_FONT_FAMILY'; family: FontFamily }
   | { type: 'USER_SCROLLED' }
   | { type: 'SET_IFRAME'; iframe: HTMLIFrameElement | null }
-  | { type: 'RESOURCE_FETCH_SUCCESS'; resource: string }
+  | { type: 'RESOURCE_FETCH_SUCCESS'; resource: string; viewport?: ViewPort }
   | { type: 'RESOURCE_FETCH_ERROR'; error: Error };
+
+export type ViewPort = {
+  width: number;
+  height: number;
+};

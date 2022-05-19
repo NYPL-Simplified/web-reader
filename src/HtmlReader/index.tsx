@@ -19,7 +19,11 @@ import {
   isSameResource,
 } from './lib';
 import makeHtmlReducer, { inactiveState } from './reducer';
-import { navigateToHash, navigateToProgression } from './effects';
+import {
+  extractContentContainerSize,
+  navigateToHash,
+  navigateToProgression,
+} from './effects';
 import useResource from './useResource';
 import useLocationQuery from './useLocationQuery';
 import useWindowResize from './useWindowResize';
@@ -27,6 +31,7 @@ import { useUpdateScroll } from './useUpdateScroll';
 import useUpdateCSS from './useUpdateCSS';
 import useIframeLinkClick from './useIframeLinkClick';
 import useUpdateLocalStorage from '../utils/localstorage';
+import { ViewPort } from './types';
 
 export const IFRAME_ID_SELECTOR = 'html-reader-iframe';
 
@@ -255,6 +260,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
 
   const atStart = isFirstResource && isStartOfResource;
   const atEnd = isLastResource && isEndOfResource;
+  const fxlStyles = state.viewport ? makeFxlStyles(state.viewport) : {};
 
   // the reader is active
   return {
@@ -281,6 +287,8 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
              */
             minHeight: height,
             overflow: 'hidden',
+            border: 0,
+            ...fxlStyles,
           }}
           title={englishTitle}
           srcDoc={state.resource}
@@ -296,4 +304,35 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     manifest,
     navigator,
   };
+}
+
+// TODO: Move this elsewhere
+function makeFxlStyles(viewport: ViewPort) {
+  const container: HTMLElement | null =
+    window.document.querySelector('main [role="progressbar"]') ||
+    window.document.querySelector('main');
+  if (!container) return {};
+
+  const { containerWidth, containerHeight } = extractContentContainerSize(
+    container
+  );
+  const viewportWidth = viewport.width;
+  const viewportHeight = viewport.height;
+
+  // https://css-tricks.com/scaled-proportional-blocks-with-css-and-javascript/
+  const scale = Math.min(
+    containerWidth / viewportWidth,
+    containerHeight / viewportHeight
+  );
+  console.log(containerWidth, viewportWidth, containerHeight, viewportHeight);
+
+  return {
+    width: `${viewportWidth}px`,
+    height: `${viewportHeight}px`,
+    transform: `scale(${scale})`,
+    transformOrigin: 'center',
+    position: 'absolute',
+    inset: '0',
+    margin: 'auto',
+  } as const;
 }

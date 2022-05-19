@@ -1,7 +1,7 @@
 import { ThemeProvider, Flex, Icon } from '@chakra-ui/react';
 import * as React from 'react';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
-import { FOOTER_HEIGHT } from '../constants';
+import { DEFAULT_HEIGHT, FOOTER_HEIGHT } from '../constants';
 import { ReaderManagerArguments, ReaderReturn } from '../types';
 import Header from './Header';
 import useColorModeValue from './hooks/useColorModeValue';
@@ -47,8 +47,8 @@ const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
         position="relative"
         bg={bgColor}
         flexDir="column"
-        alignItems="stretch"
         flex="1 1 auto"
+        height={`${DEFAULT_HEIGHT}`}
       >
         {children}
       </Flex>

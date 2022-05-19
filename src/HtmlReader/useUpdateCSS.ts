@@ -1,6 +1,6 @@
 import React from 'react';
 import { WebpubManifest } from '../types';
-import { setReflowableCss } from './effects';
+import { setCss } from './effects';
 import { getMaybeIframeHtml } from './lib';
 import { HtmlState } from './types';
 
@@ -17,6 +17,6 @@ export default function useUpdateCSS(
     if (state.state !== 'NAVIGATING' && state.state !== 'READY') return;
     const html = getMaybeIframeHtml(state.iframe);
     if (!html) return;
-    setReflowableCss(html, state.settings);
+    setCss(html, state.settings);
   }, [state.state, state.iframe, state.settings, manifest]);
 }
