@@ -185,6 +185,12 @@ const HtmlReaders = () => {
           webpubManifestUrl={`${origin}/samples/dickens-axisnow/decrypted/manifest.json`}
         />
       </Route>
+      <Route path={`/html/axisnow-speak-decrypted`}>
+        <WebReader
+          injectablesReflowable={htmlInjectablesReflowable}
+          webpubManifestUrl={`${origin}/samples/speak/decrypted/manifest.json`}
+        />
+      </Route>
       <Route path={`/html/moby-epub2`}>
         <WebReader
           injectablesReflowable={htmlInjectablesReflowable}
@@ -415,6 +421,11 @@ const HomePage = () => {
         </ListItem>
         <ListItem>
           <Link to="/html/axisnow-decrypted">Decrypted AxisNow EPUB</Link>
+          <ListItem>
+            <Link to="/html/axisnow-speak-decrypted">
+              Decrypted AxisNow Speak EPUB
+            </Link>
+          </ListItem>
           <UnorderedList>
             <ListItem>
               <Text fontSize="sm" as="i">
