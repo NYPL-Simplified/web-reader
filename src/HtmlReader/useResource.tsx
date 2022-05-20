@@ -1,7 +1,7 @@
 import React from 'react';
 import { Injectable } from '../Readium/Injectable';
 import { WebpubManifest } from '../types';
-import { extractContentViewportSize, setCss } from './effects';
+import { setCss } from './effects';
 import { makeInjectableElement } from './lib';
 import { HtmlState, HtmlAction } from './types';
 
@@ -53,6 +53,11 @@ export default function useResource(
 
         injectJS(document.body);
 
+        // While fetching, the page renders a progressbar with skeleton
+        const iframeContainer: HTMLElement | null = window.document.querySelector(
+          'main [role="progressbar"]'
+        );
+
         const readerSettings = {
           colorMode: state.settings.colorMode,
           fontSize: state.settings.fontSize,
@@ -60,16 +65,10 @@ export default function useResource(
           isScrolling: state.settings.isScrolling,
         };
         // set the initial CSS state
-        setCss(document.documentElement, readerSettings);
-
-        const viewport = extractContentViewportSize(manifest, document);
+        setCss(document, readerSettings, iframeContainer, manifest);
 
         const finalResource = new XMLSerializer().serializeToString(document);
-        dispatch({
-          type: 'RESOURCE_FETCH_SUCCESS',
-          resource: finalResource,
-          ...(viewport && { viewport }),
-        });
+        dispatch({ type: 'RESOURCE_FETCH_SUCCESS', resource: finalResource });
       } catch (e) {
         if (e instanceof Error) {
           dispatch({ type: 'RESOURCE_FETCH_ERROR', error: e });

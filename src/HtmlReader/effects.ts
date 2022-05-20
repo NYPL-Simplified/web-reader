@@ -71,7 +71,25 @@ export function navigateToHash(
   }
 }
 
+/**
+ * Takes the HTML element and sets CSS variables on it based on the
+ * reader's state
+ */
 export function setCss(
+  iframeHtml: Document,
+  settings: ReaderSettings,
+  iframeContainer: HTMLElement | null,
+  manifest: WebpubManifest | undefined
+): void {
+  const isFixedLayout = manifest?.metadata.presentation?.layout === 'fixed';
+  if (isFixedLayout) {
+    setFixedCss(iframeHtml, iframeContainer);
+  } else {
+    setReflowableCss(iframeHtml.documentElement, settings);
+  }
+}
+
+export function setReflowableCss(
   iframeHtml: HTMLElement,
   settings: ReaderSettings
 ): void {
@@ -108,15 +126,79 @@ export function setCss(
 }
 
 /**
+ * Apply the transform property to the iframe document to fit the current screen viewport.
+ */
+export function setFixedCss(
+  iframeDocument: Document,
+  iframeContainer: HTMLElement | null
+): void {
+  if (!iframeContainer) return;
+
+  let { contentWidth, contentHeight } = extractContentViewportSize(
+    iframeDocument
+  );
+
+  const { containerWidth, containerHeight } = extractContentContainerSize(
+    iframeContainer
+  );
+
+  // Make it default scale of 1 in case we don't have the content width/height
+  contentWidth = contentWidth ?? containerWidth;
+  contentHeight = contentHeight ?? containerHeight;
+
+  // https://css-tricks.com/scaled-proportional-blocks-with-css-and-javascript/
+  const scale = Math.min(
+    containerWidth / contentWidth,
+    containerHeight / contentHeight,
+    1
+  );
+
+  setCSSProperty(
+    iframeDocument.documentElement,
+    'transform',
+    `scale(${scale})`
+  );
+
+  const scaledContentWidth = contentWidth * scale;
+  const xOrigin = Math.min(
+    containerWidth - scaledContentWidth,
+    scaledContentWidth
+  );
+
+  setCSSProperty(iframeDocument.documentElement, 'width', `100vw`);
+  setCSSProperty(iframeDocument.documentElement, 'height', `100vh`);
+  setCSSProperty(iframeDocument.documentElement, 'display', `flex`);
+  setCSSProperty(iframeDocument.documentElement, 'justify-content', `center`);
+
+  setCSSProperty(iframeDocument.documentElement, 'align-items', `flex-start`);
+  setCSSProperty(iframeDocument.documentElement, 'transform-origin', `top`);
+  // setCSSProperty(
+  //   iframeDocument.documentElement,
+  //   'transform-origin',
+  //   `${xOrigin}px top`
+  // );
+
+  // setCSSProperty(
+  //   iframeDocument.documentElement,
+  //   'max-width',
+  //   `${contentWidth}px`
+  // );
+  // setCSSProperty(
+  //   iframeDocument.documentElement,
+  //   'max-height',
+  //   `${contentHeight}px`
+  // );
+  // setCSSProperty(iframeDocument.documentElement, 'height', `auto`);
+  // setCSSProperty(iframeDocument.documentElement, 'margin', `auto`);
+  setCSSProperty(iframeDocument.documentElement, 'overflow', 'hidden');
+}
+
+/**
  * Extract the publication's width and height from the iframe viewport meta tag.
  */
-export function extractContentViewportSize(
-  manifest: WebpubManifest | undefined,
+function extractContentViewportSize(
   iframeDocument: Document
-): { width: number; height: number } | undefined {
-  const isFixedLayout = manifest?.metadata.presentation?.layout === 'fixed';
-  if (!isFixedLayout) return undefined;
-
+): { contentWidth: number | undefined; contentHeight: number | undefined } {
   const viewport = iframeDocument?.querySelector('meta[name="viewport"]');
   const content = viewport?.getAttribute('content');
 
@@ -126,15 +208,13 @@ export function extractContentViewportSize(
   const contentWidth = width ? Number(width[1]) : undefined;
   const contentHeight = height ? Number(height[1]) : undefined;
 
-  return contentWidth && contentHeight
-    ? { width: contentWidth, height: contentHeight }
-    : undefined;
+  return { contentWidth, contentHeight };
 }
 
 /**
  * Extract the width and height of the main container where iframe resides.
  */
-export function extractContentContainerSize(
+function extractContentContainerSize(
   container: HTMLElement
 ): { containerWidth: number; containerHeight: number } {
   return {

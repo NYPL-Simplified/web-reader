@@ -151,14 +151,12 @@ export default function makeHtmlReducer(
         if (state.state === 'INACTIVE') {
           return handleInvalidTransition(state, action);
         }
-
         const newState: RenderingIframeState = {
           ...state,
           state: 'RENDERING_IFRAME',
           resource: action.resource,
           resourceFetchError: undefined,
           iframe: null,
-          viewport: action.viewport,
         };
         return newState;
       }
