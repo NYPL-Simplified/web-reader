@@ -66,6 +66,8 @@ type PdfReaderAction =
   | { type: 'BOOK_BOUNDARY_CHANGED'; atStart: boolean; atEnd: boolean };
 const IFRAME_WRAPPER_ID = 'iframe-wrapper';
 export const SCALE_STEP = 0.1;
+const BASE_MUSE_URL = 'https://muse.jhu.edu/';
+const START_QUERY = 'start';
 
 function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
   switch (action.type) {
@@ -192,6 +194,16 @@ const loadResource = async (resourceUrl: string, proxyUrl?: string) => {
     throw new Error('Response not Ok for URL: ' + url);
   }
   return array;
+};
+
+const getStartPage = (resourceUrl: string) => {
+  const params = new URL(resourceUrl).searchParams;
+  const startPage = params.get(START_QUERY);
+  return startPage ? parseInt(startPage) : 1;
+};
+
+const isMuseResource = (resourceUrl: string) => {
+  return resourceUrl.includes(BASE_MUSE_URL);
 };
 
 /**
@@ -389,6 +401,16 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         index: nextIndex,
         shouldNavigateToEnd: false,
       });
+      if (
+        isMuseResource(manifest?.readingOrder[nextIndex].href) &&
+        manifest?.readingOrder[nextIndex]
+      ) {
+        const pageNum = getStartPage(manifest?.readingOrder[nextIndex].href);
+        dispatch({
+          type: 'NAVIGATE_PAGE',
+          pageNum: pageNum,
+        });
+      }
     }
     // Do nothing if it's at the last page of the last resource
   }, [
@@ -406,7 +428,18 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     // do nothing if the reader is inactive
     if (state.state !== 'ACTIVE') return;
 
-    if (state.pageNumber > 1 && !state.settings.isScrolling) {
+    let startPage = 1;
+    if (
+      manifest?.readingOrder &&
+      manifest?.readingOrder[state.resourceIndex] &&
+      isMuseResource(manifest?.readingOrder[state.resourceIndex].href)
+    ) {
+      startPage = getStartPage(
+        manifest?.readingOrder[state.resourceIndex].href
+      );
+    }
+
+    if (state.pageNumber > startPage && !state.settings.isScrolling) {
       dispatch({
         type: 'NAVIGATE_PAGE',
         pageNum: state.pageNumber - 1,
@@ -465,11 +498,26 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         return index;
       };
 
+      const resourceIndex = getIndexFromHref(href);
       dispatch({
         type: 'SET_CURRENT_RESOURCE',
-        index: getIndexFromHref(href),
+        index: resourceIndex,
         shouldNavigateToEnd: false,
       });
+
+      if (
+        manifest?.readingOrder &&
+        manifest?.readingOrder[resourceIndex] &&
+        isMuseResource(manifest?.readingOrder[resourceIndex].href)
+      ) {
+        const startPage = getStartPage(
+          manifest?.readingOrder[resourceIndex].href
+        );
+        dispatch({
+          type: 'NAVIGATE_PAGE',
+          pageNum: startPage,
+        });
+      }
     },
     [manifest?.readingOrder]
   );
