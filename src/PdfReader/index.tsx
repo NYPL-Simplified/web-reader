@@ -66,7 +66,6 @@ type PdfReaderAction =
   | { type: 'BOOK_BOUNDARY_CHANGED'; atStart: boolean; atEnd: boolean };
 const IFRAME_WRAPPER_ID = 'iframe-wrapper';
 export const SCALE_STEP = 0.1;
-const BASE_MUSE_URL = 'https://muse.jhu.edu/';
 const START_QUERY = 'start';
 
 function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
@@ -200,10 +199,6 @@ const getStartPage = (resourceUrl: string) => {
   const params = new URL(resourceUrl).searchParams;
   const startPage = params.get(START_QUERY);
   return startPage ? parseInt(startPage) : 1;
-};
-
-const isMuseResource = (resourceUrl: string) => {
-  return resourceUrl.includes(BASE_MUSE_URL);
 };
 
 /**
@@ -401,10 +396,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         index: nextIndex,
         shouldNavigateToEnd: false,
       });
-      if (
-        isMuseResource(manifest?.readingOrder[nextIndex].href) &&
-        manifest?.readingOrder[nextIndex]
-      ) {
+      if (manifest?.readingOrder[nextIndex]) {
         const pageNum = getStartPage(manifest?.readingOrder[nextIndex].href);
         dispatch({
           type: 'NAVIGATE_PAGE',
@@ -429,11 +421,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     if (state.state !== 'ACTIVE') return;
 
     let startPage = 1;
-    if (
-      manifest?.readingOrder &&
-      manifest?.readingOrder[state.resourceIndex] &&
-      isMuseResource(manifest?.readingOrder[state.resourceIndex].href)
-    ) {
+    if (manifest?.readingOrder && manifest?.readingOrder[state.resourceIndex]) {
       startPage = getStartPage(
         manifest?.readingOrder[state.resourceIndex].href
       );
@@ -505,11 +493,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         shouldNavigateToEnd: false,
       });
 
-      if (
-        manifest?.readingOrder &&
-        manifest?.readingOrder[resourceIndex] &&
-        isMuseResource(manifest?.readingOrder[resourceIndex].href)
-      ) {
+      if (manifest?.readingOrder && manifest?.readingOrder[resourceIndex]) {
         const startPage = getStartPage(
           manifest?.readingOrder[resourceIndex].href
         );
