@@ -9,12 +9,13 @@ describe('Multi PDF navigation', () => {
     cy.findByRole('button', { name: 'Table of Contents' }).click();
     cy.findByRole('menuitem', { name: 'Foreword' }).click();
     cy.wait(5000);
-    cy.findByText('Anthropology without Informants', { timeout: 10000 }).should(
-      'be.visible'
-    );
-    cy.findByRole('button', { name: 'Next Page' }).click();
     cy.findByText(
       /This volume encapsulates some of the most significant published work of Leslie/,
+      { timeout: 10000 }
+    ).should('be.visible');
+    cy.findByRole('button', { name: 'Next Page' }).click();
+    cy.findByText(
+      /All subfields of anthropology had contributions to make to this endeavor/,
       { timeout: 10000 }
     ).should('be.visible');
   });
