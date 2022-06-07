@@ -420,12 +420,10 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     // do nothing if the reader is inactive
     if (state.state !== 'ACTIVE') return;
 
-    let startPage = 1;
-    if (manifest?.readingOrder && manifest?.readingOrder[state.resourceIndex]) {
-      startPage = getStartPage(
-        manifest?.readingOrder[state.resourceIndex].href
-      );
-    }
+    const startPage =
+      manifest?.readingOrder && manifest?.readingOrder[state.resourceIndex]
+        ? getStartPage(manifest?.readingOrder[state.resourceIndex].href)
+        : 1;
 
     if (state.pageNumber > startPage && !state.settings.isScrolling) {
       dispatch({
@@ -479,8 +477,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       const getIndexFromHref = (href: string): number => {
         const index = manifest?.readingOrder?.findIndex((link) => {
           return link.href === href;
-        });
-        if (index === undefined || index === -1) {
+        }) as number;
+        if (index < 0) {
           throw new Error('Cannot find resource in readingOrder');
         }
         return index;
