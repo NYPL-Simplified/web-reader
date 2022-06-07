@@ -480,7 +480,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         const index = manifest?.readingOrder?.findIndex((link) => {
           return link.href === href;
         });
-        if (!index) {
+        if (index === undefined || index === -1) {
           throw new Error('Cannot find resource in readingOrder');
         }
         return index;
