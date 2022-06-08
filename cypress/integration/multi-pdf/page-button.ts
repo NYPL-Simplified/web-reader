@@ -37,8 +37,8 @@ describe('Page button on Multiple PDF page', () => {
     cy.wait('@pdf');
     cy.wait(1000);
 
-    // FIXME: Find a smaller PDF or a better way to simulate 10 clicks
-    let clicks = 10;
+    // FIXME: Find a smaller PDF or a better way to simulate 9 clicks
+    let clicks = 9;
     while (clicks-- > 0) {
       cy.findByRole('button', { name: 'Next Page' }).click();
     }
