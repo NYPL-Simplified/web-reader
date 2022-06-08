@@ -436,8 +436,6 @@ const DynamicReader: React.FC = () => {
   return (
     <WebReader
       injectablesReflowable={htmlInjectablesReflowable}
-      proxyUrl={pdfProxyUrl}
-      pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
       webpubManifestUrl={decoded}
     />
   );
