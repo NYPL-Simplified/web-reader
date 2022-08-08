@@ -77,9 +77,10 @@ jobs:
         with:
           install: false
           browser: chrome
+          headed: true
           record: true
           parallel: true
-          group: 'UI - Chrome'
+          group: "UI - Chrome"
 
       - name: Upload failure screenshots
         uses: actions/upload-artifact@v2
