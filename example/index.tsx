@@ -49,13 +49,26 @@ const cssInjectables: Injectable[] = [
   },
 ];
 
-const fontInjectable: Injectable = {
-  type: 'style',
-  url: `${origin}/fonts/opendyslexic/opendyslexic.css`,
-  fontFamily: 'opendyslexic',
-};
+const fontInjectable: Injectable[] = [
+  {
+    type: 'style',
+    url: `${origin}/fonts/opendyslexic/opendyslexic.css`,
+    fontFamily: 'opendyslexic',
+  },
+];
 
-const htmlInjectablesReflowable = [...cssInjectables, fontInjectable];
+const scriptInjectable: Injectable[] = [
+  {
+    type: 'script',
+    url: `${origin}/js/sample.js`,
+  },
+];
+
+const htmlInjectablesReflowable = [
+  ...cssInjectables,
+  ...fontInjectable,
+  ...scriptInjectable,
+];
 
 const App = () => {
   /**
