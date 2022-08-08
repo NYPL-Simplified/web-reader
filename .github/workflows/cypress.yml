@@ -67,7 +67,7 @@ jobs:
         run: npm i --omit=optional
 
       - name: Run Chrome
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v4.0.1
         env:
           CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
