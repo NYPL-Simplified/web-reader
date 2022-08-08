@@ -26,6 +26,18 @@ export default function Tests(): JSX.Element {
           webpubManifestUrl={'https://alice.dita.digital/manifest.json'}
         />
       </Route>
+      <Route path={`${path}/with-script-injectable`}>
+        <WebReader
+          webpubManifestUrl={'https://alice.dita.digital/manifest.json'}
+          injectablesReflowable={[
+            {
+              type: 'script',
+              url: `${origin}/js/sample.js`,
+            },
+          ]}
+          injectablesFixed={[]}
+        />
+      </Route>
       <Route path={`${path}/with-reflowable-layout`}>
         <WebReader
           webpubManifestUrl={'https://alice.dita.digital/manifest.json'}
