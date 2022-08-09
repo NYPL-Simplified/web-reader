@@ -36,8 +36,19 @@ export function makeInjectableElement(
       return el;
     }
 
+    case 'script': {
+      const el = document.createElement('script');
+      el.setAttribute('type', 'text/javascript');
+      if (injectable.url) {
+        el.setAttribute('src', injectable.url);
+      } else {
+        console.warn('Injectable missing url', injectable);
+      }
+      return el;
+    }
+
     default:
-      return;
+      return undefined;
   }
 }
 

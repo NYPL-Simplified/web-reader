@@ -15,6 +15,7 @@ declare global {
           | '/html/axisnow-decrypted'
           | '/html/test/no-injectables'
           | '/html/test/with-reflowable-layout'
+          | '/html/test/with-script-injectable'
           | '/html/test/with-fixed-layout'
           | '/html/test/get-content'
           | '/html/streamed-alice-epub'
@@ -36,6 +37,7 @@ declare global {
 const pagesUsingAliceInWonderlandExample: string[] = [
   '/html/streamed-alice-epub',
   '/html/test/with-reflowable-layout',
+  '/html/test/with-script-injectable',
   '/html/test/no-injectables',
 ];
 

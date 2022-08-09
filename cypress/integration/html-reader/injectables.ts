@@ -9,6 +9,15 @@ describe('useHtmlReader configuration settings', () => {
       .should('not.exist');
   });
 
+  it('should render injectables script when provided', () => {
+    cy.log('Reflowable Book with both fixed and reflowable CSS injected');
+    cy.loadPage('/html/test/with-script-injectable');
+
+    cy.getIframeHead()
+      .find(`script[src$="/js/sample.js"]`, { timeout: 50000 })
+      .should('exist');
+  });
+
   it('should render reflowable injectables CSS when provided for reflowable books', () => {
     cy.log('Reflowable Book with both fixed and reflowable CSS injected');
     cy.loadPage('/html/test/with-reflowable-layout');
