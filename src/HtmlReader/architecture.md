@@ -67,7 +67,7 @@ Note on CFIs: In the future, we would like to support CFIs. These are strings re
 1. `useUpdateScroll`: When the user scrolls freely, we wait for them to stop scrolling and then update dispatch an action to update the `state.location.locations.progression`, keeping the location up to date.
 1. `useLocationQuery`: We now keep a copy of `state.location` sync'd to the `?location` query param in the URL. This allws users to share or save links to specific locations. So we use an effect to update the query whenever `state.location` changes.
 1. `useWindowResize`: When the window resizes, we need to re-scroll the user to the location they are meant to be on. Thus we need to move backwards to the `NavigatingState`.
-1. `useIframeLinkClick`: Uses `React.useEffect` to add a event listener for a "message" event, which is sent from the iframe upon internal link clicks. We then dispatch a `GO_TO_HREF` with the clicked value.
+1. `useIframeLinkClick`: Uses `React.useEffect` to add a event listener for a "message" event, which is sent from the iframe upon internal link clicks. We then dispatch a `GO_TO_HREF` with the clicked value if it's a linkable resource from the webpub manifest. If it's not, we just open the link as a reguar link click on a new tab.
 
 ## Decisions
 

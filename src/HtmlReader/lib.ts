@@ -98,11 +98,17 @@ export function isSameResource(
   href2: string,
   baseUrl: string
 ): boolean {
-  const url1 = new URL(href1, baseUrl);
-  const url2 = new URL(href2, baseUrl);
-  const doMatch =
-    url1.origin === url2.origin && url1.pathname === url2.pathname;
-  return doMatch;
+  try {
+    const url1 = new URL(href1, baseUrl);
+    const url2 = new URL(href2, baseUrl);
+    const doMatch =
+      url1.origin === url2.origin && url1.pathname === url2.pathname;
+    return doMatch;
+  } catch (e) {
+    console.error(e);
+  }
+
+  return false;
 }
 
 /**
