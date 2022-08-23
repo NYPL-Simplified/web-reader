@@ -1,11 +1,9 @@
-import { ThemeProvider, Flex, Icon } from '@chakra-ui/react';
+import { ThemeProvider, Flex } from '@chakra-ui/react';
 import * as React from 'react';
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
-import { FOOTER_HEIGHT } from '../constants';
 import { ReaderManagerArguments, ReaderReturn } from '../types';
+import Footer from './Footer';
 import Header from './Header';
 import useColorModeValue from './hooks/useColorModeValue';
-import PageButton from './PageButton';
 import { getTheme } from './theme';
 
 /**
@@ -28,8 +26,6 @@ const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
 }) => {
   const bgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
   const containerRef = React.useRef<HTMLDivElement>(null);
-  const isAtStart = props.state?.atStart;
-  const isAtEnd = props.state?.atEnd;
 
   return (
     <Flex flexDir="column" w="100%" position="relative">
@@ -53,34 +49,7 @@ const WebReaderContent: React.FC<ReaderReturn & ReaderManagerArguments> = ({
         {children}
       </Flex>
 
-      <Flex
-        as="footer"
-        position="sticky"
-        height={`${FOOTER_HEIGHT}px`}
-        zIndex="docked"
-        bottom="0"
-        justifyContent="space-between"
-        w="100%"
-        bg={bgColor}
-        borderTop="1px solid"
-        borderColor="gray.100"
-      >
-        <PageButton
-          onClick={props.navigator?.goBackward}
-          aria-label="Previous Page"
-          disabled={isAtStart}
-        >
-          <Icon as={MdKeyboardArrowLeft} w={6} h={6} />
-          Previous
-        </PageButton>
-        <PageButton
-          onClick={props.navigator?.goForward}
-          aria-label="Next Page"
-          disabled={isAtEnd}
-        >
-          Next <Icon as={MdKeyboardArrowRight} w={6} h={6} />
-        </PageButton>
-      </Flex>
+      <Footer state={props.state} navigator={props.navigator} />
     </Flex>
   );
 };

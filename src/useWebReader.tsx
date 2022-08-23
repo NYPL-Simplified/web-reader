@@ -115,7 +115,7 @@ export default function useWebReader(
   if (manifest === null) {
     return {
       isLoading: true,
-      content: <LoadingSkeleton height={height} />,
+      content: <LoadingSkeleton height={height} state={htmlReader?.state} />,
       manifest: null,
       navigator: null,
       state: null,

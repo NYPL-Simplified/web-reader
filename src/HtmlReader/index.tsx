@@ -224,7 +224,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     return {
       type: null,
       isLoading: true,
-      content: <LoadingSkeleton height={height} />,
+      content: <LoadingSkeleton height={height} state={state} />,
       navigator: null,
       manifest: null,
       state: null,
