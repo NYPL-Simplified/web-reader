@@ -100,7 +100,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   useUpdateCSS(state, manifest);
 
   // listen for internal link clicks
-  useIframeLinkClick(dispatch);
+  useIframeLinkClick(webpubManifestUrl, manifest, dispatch);
 
   // dispatch action when arguments change
   React.useEffect(() => {

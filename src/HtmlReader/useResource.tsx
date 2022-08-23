@@ -108,8 +108,11 @@ function injectJS(body: HTMLElement) {
       function handleLinkClick(evt) {
         // don't navigate
         evt.preventDefault();
-        // send message to parent
-        window.parent.postMessage( { type: 'LINK_CLICKED', href: evt.target.href } );
+        const  href = evt.currentTarget.href;
+        if(href) {
+          // send message to parent
+          window.parent.postMessage( { type: 'LINK_CLICKED', href  } );
+        }
       };
       for ( var i = 0; i < links.length; i ++ ) {
         links[i].addEventListener('click', handleLinkClick);
