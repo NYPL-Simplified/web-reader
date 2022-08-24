@@ -32,7 +32,6 @@ const handleIframeLink = (
   baseUrl: string,
   dispatch: React.Dispatch<HtmlAction>
 ) => {
-  console.log(isExternalLink(href, manifest, baseUrl));
   if (isExternalLink(href, manifest, baseUrl)) {
     window.open(href, '_blank');
   } else {
