@@ -10,14 +10,19 @@ export default function useIframeLinkClick(
 ): void {
   React.useEffect(() => {
     if (!baseUrl || !manifest) return;
-    window.addEventListener('message', ({ data }) => {
+
+    const messageHandler = ({ data }: { data: MessageEvent['data'] }) => {
       if (typeof data === 'object' && data !== null && 'type' in data) {
         switch (data.type) {
           case 'LINK_CLICKED':
             handleIframeLink(data.href, manifest, baseUrl, dispatch);
         }
       }
-    });
+    };
+
+    window.addEventListener('message', messageHandler);
+
+    return () => window.removeEventListener('message', messageHandler);
   }, [dispatch, baseUrl, manifest]);
 }
 
@@ -27,6 +32,7 @@ const handleIframeLink = (
   baseUrl: string,
   dispatch: React.Dispatch<HtmlAction>
 ) => {
+  console.log(isExternalLink(href, manifest, baseUrl));
   if (isExternalLink(href, manifest, baseUrl)) {
     window.open(href, '_blank');
   } else {
