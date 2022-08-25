@@ -10,14 +10,19 @@ export default function useIframeLinkClick(
 ): void {
   React.useEffect(() => {
     if (!baseUrl || !manifest) return;
-    window.addEventListener('message', ({ data }) => {
+
+    const messageHandler = ({ data }: { data: MessageEvent['data'] }) => {
       if (typeof data === 'object' && data !== null && 'type' in data) {
         switch (data.type) {
           case 'LINK_CLICKED':
             handleIframeLink(data.href, manifest, baseUrl, dispatch);
         }
       }
-    });
+    };
+
+    window.addEventListener('message', messageHandler);
+
+    return () => window.removeEventListener('message', messageHandler);
   }, [dispatch, baseUrl, manifest]);
 }
 
