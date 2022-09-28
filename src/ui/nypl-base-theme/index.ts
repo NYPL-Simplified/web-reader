@@ -12,12 +12,13 @@ import FormLabel from './components/form-label';
 import Form from './components/form';
 import FormError from './components/form-error';
 import Textarea from './components/text-area';
+import { Dict } from './types';
 
 /**
  * See Chakra default theme for shape of theme object:
  * https://github.com/chakra-ui/chakra-ui/tree/main/packages/theme
  */
-const theme = extendTheme({
+const theme: Dict<any> = extendTheme({
   styles: { global },
   breakpoints,
   radii,
