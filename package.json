@@ -1,6 +1,6 @@
 {
   "name": "@nypl/web-reader",
-  "version": "3.2.3",
+  "version": "3.3.0",
   "license": "MIT",
   "repository": "https://github.com/NYPL-Simplified/web-reader",
   "homepage": "https://github.com/NYPL-Simplified/web-reader",
@@ -49,11 +49,11 @@
     "release:alpha": "release-it --verbose --preRelease=alpha"
   },
   "peerDependencies": {
-    "react": "^16.8.0 || 17.x || 18.x",
-    "react-dom": "^16.8.0 || 17.x || 18.x",
     "@chakra-ui/react": "^1.8.7 || 2.x",
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
+    "react": "^16.8.0 || 17.x || 18.x",
+    "react-dom": "^16.8.0 || 17.x || 18.x",
     "swr": "^1.0.1"
   },
   "prettier": {
@@ -84,6 +84,7 @@
     "@babel/core": "^7.12.10",
     "@emotion/jest": "^11.8.0",
     "@parcel/transformer-typescript-tsc": "^2.4.1",
+    "@parcel/transformer-typescript-types": "^2.4.1",
     "@storybook/addon-actions": "^6.3.1",
     "@storybook/addon-essentials": "^6.3.1",
     "@storybook/addon-info": "^5.3.21",
@@ -154,14 +155,10 @@
     "react-icons": "^4.3.1",
     "react-intersection-observer": "^8.32.2",
     "react-pdf": "^5.3.2",
-    "react-resize-observer": "^1.1.1",
-    "workbox-expiration": "^6.2.4",
-    "workbox-precaching": "^6.2.4",
-    "workbox-routing": "^6.3.0",
-    "workbox-strategies": "^6.3.0"
+    "react-resize-observer": "^1.1.1"
   },
   "optionalDependencies": {
-    "@nypl-simplified-packages/axisnow-access-control-web": "^1.4.0"
+    "@nypl-simplified-packages/axisnow-access-control-web": "^1.4.2"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": "eslint --cache --fix",
