@@ -158,11 +158,15 @@ export function setFixedCss(
     'transform',
     `scale(${scale})`
   );
+
+  // Transfrom from the center if the screen is large enough to render the book.
+  const transformOrigin = contentWidth < containerWidth ? 'top center' : '0 0';
   setCSSProperty(
     iframeDocument.documentElement,
     'transform-origin',
-    'top center'
+    transformOrigin
   );
+
   setCSSProperty(iframeDocument.documentElement, 'overflow', 'hidden');
 }
 
