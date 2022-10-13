@@ -190,7 +190,7 @@ const HtmlReaders = () => {
   return (
     <Switch>
       <Route path={`/html/axisnow-encrypted`}>
-        <AxisNowEncrypted injectables={htmlInjectablesReflowable} />
+        <AxisNowEncrypted injectablesReflowable={htmlInjectablesReflowable} />
       </Route>
       <Route path={`/html/axisnow-decrypted`}>
         <WebReader
