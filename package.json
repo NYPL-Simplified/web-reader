@@ -161,7 +161,7 @@
     "workbox-strategies": "^6.3.0"
   },
   "optionalDependencies": {
-    "@nypl-simplified-packages/axisnow-access-control-web": "^1.4.2"
+    "@nypl-simplified-packages/axisnow-access-control-web": "^1.4.0"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": "eslint --cache --fix",
