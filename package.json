@@ -1,6 +1,6 @@
 {
   "name": "@nypl/web-reader",
-  "version": "3.2.3",
+  "version": "3.2.4",
   "license": "MIT",
   "repository": "https://github.com/NYPL-Simplified/web-reader",
   "homepage": "https://github.com/NYPL-Simplified/web-reader",
@@ -49,11 +49,11 @@
     "release:alpha": "release-it --verbose --preRelease=alpha"
   },
   "peerDependencies": {
-    "react": "^16.8.0 || 17.x || 18.x",
-    "react-dom": "^16.8.0 || 17.x || 18.x",
     "@chakra-ui/react": "^1.8.7 || 2.x",
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
+    "react": "^16.8.0 || 17.x || 18.x",
+    "react-dom": "^16.8.0 || 17.x || 18.x",
     "swr": "^1.0.1"
   },
   "prettier": {
@@ -161,7 +161,7 @@
     "workbox-strategies": "^6.3.0"
   },
   "optionalDependencies": {
-    "@nypl-simplified-packages/axisnow-access-control-web": "^1.4.0"
+    "@nypl-simplified-packages/axisnow-access-control-web": "^1.4.2"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": "eslint --cache --fix",

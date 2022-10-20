@@ -7,7 +7,7 @@ import { Heading, Box, Text } from '@chakra-ui/react';
 import { Injectable } from '../src/Readium/Injectable';
 
 type AxisNowEncryptedProps = {
-  injectables: Injectable[];
+  injectablesReflowable: Injectable[];
 };
 
 const webpubManifestUrl = `${origin}/samples/dickens-axisnow/encrypted/manifest.json`;
@@ -73,7 +73,7 @@ const AxisNowEncrypted: React.FC<AxisNowEncryptedProps> = (props) => {
 
   return (
     <WebReader
-      injectables={props.injectables}
+      injectablesReflowable={props.injectablesReflowable}
       webpubManifestUrl={webpubManifestUrl}
       getContent={getContent}
     />
