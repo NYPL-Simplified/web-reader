@@ -13,6 +13,7 @@ declare global {
           | '/html/moby-epub3'
           | '/html/axisnow-encrypted'
           | '/html/axisnow-decrypted'
+          | '/html/fxl-poems'
           | '/html/test/no-injectables'
           | '/html/test/with-reflowable-layout'
           | '/html/test/with-script-injectable'
