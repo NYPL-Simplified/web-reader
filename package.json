@@ -1,6 +1,6 @@
 {
   "name": "@nypl/web-reader",
-  "version": "4.0.0",
+  "version": "3.2.4",
   "license": "MIT",
   "repository": "https://github.com/NYPL-Simplified/web-reader",
   "homepage": "https://github.com/NYPL-Simplified/web-reader",
@@ -25,7 +25,6 @@
     "example:build": "parcel build",
     "example:nocache": "parcel --no-cache",
     "example": "parcel",
-    "p": "parcel -V",
     "example:https": "parcel --cert localhost.pem --key localhost-key.pem",
     "example:sw": "ENABLE_SW=true npm run example:https",
     "start": "ts-node -T build.ts -w",
