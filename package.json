@@ -163,6 +163,9 @@
     "*.{ts,tsx,js,jsx}": "eslint --cache --fix",
     "*.{ts,tsx,js,json,css,md}": "prettier --write --ignore-path .eslintignore"
   },
+  "overrides": {
+    "lmdb": "2.5.3"
+  },
   "release-it": {
     "github": {
       "release": true
