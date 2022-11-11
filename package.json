@@ -126,7 +126,6 @@
     "jest-axe": "^6.0.0",
     "jest-watch-typeahead": "^1.0.0",
     "lint-staged": "^11.1.2",
-    "lmdb": "^2.6.9",
     "parcel": "^2.6.1",
     "parcel-config-precache-manifest": "^0.0.4",
     "parcel-plugin-static-files-copy": "^1.2.4",
