@@ -22,6 +22,7 @@ type SettingsCardProps =
 export default function SettingsCard(
   props: SettingsCardProps
 ): React.ReactElement {
+  console.log('props -->', props);
   const [isOpen, setIsOpen] = React.useState(false);
   const open = () => setIsOpen(true);
   const close = () => setIsOpen(false);

@@ -63,6 +63,7 @@ export default function HtmlSettings(
     readerState,
     paginationValue,
   } = props;
+
   if (!readerState.settings) return null;
   const { colorMode, fontFamily, fontSize, isScrolling } = readerState.settings;
 

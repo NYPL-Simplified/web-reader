@@ -17,6 +17,7 @@ const setColorModeFn = jest.fn();
 const setScrollFn = jest.fn();
 const increaseFontSizeFn = jest.fn();
 const decreaseFontSizeFn = jest.fn();
+const resetFontSizeFn = jest.fn();
 const zoomInFn = jest.fn();
 const zoomOutFn = jest.fn();
 const setFontFamilyFn = jest.fn();
@@ -40,6 +41,7 @@ export const MockHtmlNavigator = {
   setScroll: setScrollFn,
   increaseFontSize: increaseFontSizeFn,
   decreaseFontSize: decreaseFontSizeFn,
+  resetFontSize: resetFontSizeFn,
   setFontFamily: setFontFamilyFn,
   goToPage: goToPageFn,
 } as HtmlNavigator;
@@ -149,21 +151,25 @@ export const MockWebpubManifest = {
 const MockComponent = (): React.ReactElement => <>Hello, world.</>;
 
 export const MockHtmlReaderState = {
-  colorMode: 'day' as ColorMode,
-  isScrolling: false,
-  fontSize: 16,
-  fontFamily: 'sans-serif' as FontFamily,
-  reader: undefined,
-  currentTocUrl: null,
+  settings: {
+    colorMode: 'day' as ColorMode,
+    isScrolling: false,
+    fontSize: 16,
+    fontFamily: 'sans-serif' as FontFamily,
+    reader: undefined,
+    currentTocUrl: null,
+  },
   atStart: true,
   atEnd: false,
 };
 
 const MockPdfReaderState = {
-  colorMode: 'day' as ColorMode,
-  isScrolling: false,
-  fontSize: 16,
-  fontFamily: 'sans-serif' as FontFamily,
+  settings: {
+    colorMode: 'day' as ColorMode,
+    isScrolling: false,
+    fontSize: 16,
+    fontFamily: 'sans-serif' as FontFamily,
+  },
   resourceIndex: 0,
   file: null,
   pageNumber: 1,
