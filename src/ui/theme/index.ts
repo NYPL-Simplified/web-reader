@@ -1,6 +1,7 @@
 import { extendTheme } from '@chakra-ui/react';
 import Text from './components/text';
 import colors from './foundations/colors';
+import breakpoints from '../nypl-base-theme/foundations/breakpoints';
 import nyplTheme from '../nypl-base-theme';
 import { ColorMode } from '../../types';
 import { getColor } from '../../utils/getColor';
@@ -20,6 +21,7 @@ import { Dict } from './types';
 export function getTheme(colorMode: ColorMode = 'day'): Dict<unknown> {
   return extendTheme(
     {
+      breakpoints,
       colors,
       /**
        * Chakra documentation on component styles:

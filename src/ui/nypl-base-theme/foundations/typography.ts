@@ -13,6 +13,10 @@ const typography: Typography = {
     body: '-apple-system, BlinkMacSystemFont, system-ui, sans-serif',
     heading: '-apple-system, BlinkMacSystemFont, system-ui, sans-seri',
     mono: `Courier,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace`,
+    georgia: `'Georgia', serif`,
+    helvetica: `'Helvetica', 'Arial', serif`,
+    opendyslexic: `'OpenDyslexic', sans-serif`,
+    roboto: `'Roboto', sans-serif`,
   },
   fontSizes: {
     '-2': '0.75rem',

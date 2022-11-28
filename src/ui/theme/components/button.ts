@@ -13,7 +13,7 @@ const getButtonStyle = (getColor: GetColor) =>
     // styles for different visual variants ("outline", "solid")
     variants: {
       solid: variantSolid(getColor),
-      toggle: variantToggle(getColor),
+      settings: variantSettings(getColor),
     },
     // default values for `size`, `variant`, `colorScheme`
     defaultProps: {
@@ -30,25 +30,36 @@ const getButtonStyle = (getColor: GetColor) =>
  ** Disabled
  ** Hovered
  */
+
 const variantSolid = (getColor: GetColor) => (
   props: React.ComponentProps<typeof Button>
 ) => {
-  const bgColor = getColor('ui.white', 'ui.black', 'ui.sepia');
+  const { isMenuButton, isSettingsButton } = props;
+  const bgColor = getColor(
+    isSettingsButton ? 'ui.white' : 'ui.gray.light-warm',
+    'ui.black',
+    'ui.sepia'
+  );
+  const bgColorFocus = getColor(
+    'ui.gray.active',
+    'ui.gray.x-dark',
+    'ui.gray.active'
+  );
   const color = getColor('gray.800', 'ui.white', 'gray.800');
 
-  const _focus = { bgColor, color };
+  const _focus = { bgColor: bgColorFocus, color };
   const _hover = { bgColor, color, _disabled: { bgColor } };
   const _active = { bgColor, color };
   const _checked = { bgColor, color };
   const _disabled = { bgColor };
 
   return {
-    border: '1px solid',
+    border: isMenuButton ? 'none' : '1px solid',
     borderColor: 'gray.100',
+    height: '48px',
     transition: 'none',
     fontSize: 0,
     letterSpacing: 1,
-    textTransform: 'uppercase',
     maxWidth: '100%',
     cursor: 'pointer',
     bgColor,
@@ -61,18 +72,48 @@ const variantSolid = (getColor: GetColor) => (
   };
 };
 
-const variantToggle = (getColor: GetColor) => (
+const variantSettings = (getColor: GetColor) => (
   props: React.ComponentProps<typeof Button>
 ) => {
-  const bgColor = getColor('ui.white', 'gray.800', 'ui.white');
-  const color = getColor('gray.800', 'ui.white', 'gray.800');
+  const {
+    permanentBgColor,
+    permanentTextColor,
+    font,
+    fontSize,
+    fontWeight,
+    value,
+  } = props;
+  const bgColor = permanentBgColor
+    ? permanentBgColor
+    : getColor('ui.white', 'ui.black', 'ui.sepia');
+
+  const color = permanentTextColor
+    ? permanentTextColor
+    : getColor('ui.black', 'ui.white', 'ui.black');
+
+  const checkedBgColor = getColor(
+    'ui.gray.light-warm',
+    'ui.gray.x-dark',
+    'ui.sepiaChecked'
+  );
+
   return {
     ...variantSolid(getColor)(props),
     bgColor,
+    borderBottom: (value === 'paginated' || value === 'scrolling') && 'none',
+    borderRadius:
+      value === 'paginated'
+        ? '0 0 0 20px'
+        : value === 'scrolling'
+        ? '0 0 20px 0'
+        : null,
     color,
-    px: 8,
-    fontWeight: 'medium',
-    fontSize: -2,
+    px: [2, 2, 8],
+    py: 6,
+    width: ['90px', '90px', '143px'],
+    fontFamily: font,
+    fontSize: fontSize,
+    fontWeight: fontWeight,
     _focus: {
       bgColor,
     },
@@ -83,8 +124,12 @@ const variantToggle = (getColor: GetColor) => (
       bgColor,
     },
     _checked: {
-      color: 'ui.white',
-      bgColor: 'green.700',
+      color,
+      bgColor: permanentBgColor ? permanentBgColor : checkedBgColor,
+      borderBottom: 'none',
+      p: {
+        textDecoration: 'underline',
+      },
     },
   };
 };
