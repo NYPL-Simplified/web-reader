@@ -35,7 +35,6 @@ export default function TableOfContent({
         <>
           <MenuButton
             as={Button}
-            isMenuButton
             border="none"
             aria-label="Table of Contents"
             leftIcon={<Icon as={TableOfContents} w={6} h={6} fill={iconFill} />}

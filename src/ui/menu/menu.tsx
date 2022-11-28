@@ -70,9 +70,7 @@ if (__DEV__) {
   Menu.displayName = 'Menu';
 }
 
-export interface MenuButtonProps extends HTMLChakraProps<'button'> {
-  isMenuButton: boolean;
-}
+export interface MenuButtonProps extends HTMLChakraProps<'button'> {}
 
 const StyledMenuButton = forwardRef<MenuButtonProps, 'button'>((props, ref) => {
   const styles = useStyles();

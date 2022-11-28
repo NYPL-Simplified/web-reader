@@ -30,7 +30,7 @@ describe('Header rendering', () => {
     ).toBeInTheDocument();
 
     expect(
-      screen.getByRole('button', { name: 'Toggle Fullscreen' })
+      screen.getByRole('button', { name: 'Full screen' })
     ).toBeInTheDocument();
   });
 

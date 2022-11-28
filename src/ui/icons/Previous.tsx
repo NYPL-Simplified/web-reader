@@ -8,7 +8,14 @@ const Previous = (props: React.ComponentProps<typeof Icon>): ReactElement => (
     viewBox="0 0 48 48"
     {...props}
   >
-    <mask id="a" width="48" height="48" x="0" y="0" maskUnits="userSpaceOnUse">
+    <mask
+      id="previous"
+      width="48"
+      height="48"
+      x="0"
+      y="0"
+      maskUnits="userSpaceOnUse"
+    >
       <path fill="#D9D9D9" d="M0 0h48v48H0z" />
     </mask>
     <g mask="url(#a)">

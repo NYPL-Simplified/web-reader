@@ -10,7 +10,14 @@ const ToggleFullScreenExit = (
     viewBox="0 0 51 51"
     {...props}
   >
-    <mask id="a" width="51" height="51" x="0" y="0" maskUnits="userSpaceOnUse">
+    <mask
+      id="toggleFullScreenExit"
+      width="51"
+      height="51"
+      x="0"
+      y="0"
+      maskUnits="userSpaceOnUse"
+    >
       <path fill="#D9D9D9" d="M0 0h51v51H0z" />
     </mask>
     <g mask="url(#a)">

@@ -58,7 +58,6 @@ export default function SettingsCard(
             border="none"
             aria-label="Settings"
             leftIcon={<Icon as={ReaderSettings} w={6} h={6} fill={iconFill} />}
-            isMenuButton
           >
             <Text variant="headerNav">Settings</Text>
           </Button>

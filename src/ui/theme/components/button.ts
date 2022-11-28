@@ -34,7 +34,7 @@ const getButtonStyle = (getColor: GetColor) =>
 const variantSolid = (getColor: GetColor) => (
   props: React.ComponentProps<typeof Button>
 ) => {
-  const { isMenuButton, isSettingsButton } = props;
+  const { isSettingsButton } = props;
   const bgColor = getColor(
     isSettingsButton ? 'ui.white' : 'ui.gray.light-warm',
     'ui.black',
@@ -54,7 +54,7 @@ const variantSolid = (getColor: GetColor) => (
   const _disabled = { bgColor };
 
   return {
-    border: isMenuButton ? 'none' : '1px solid',
+    border: 'none',
     borderColor: 'gray.100',
     height: '48px',
     transition: 'none',
@@ -100,6 +100,7 @@ const variantSettings = (getColor: GetColor) => (
   return {
     ...variantSolid(getColor)(props),
     bgColor,
+    border: '1px solid',
     borderBottom: (value === 'paginated' || value === 'scrolling') && 'none',
     borderRadius:
       value === 'paginated'

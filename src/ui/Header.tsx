@@ -80,7 +80,6 @@ export default function Header(
         <SettingsCard {...props} />
         <Button
           border="none"
-          isMenuButton
           onClick={toggleFullScreen}
           leftIcon={
             <Icon

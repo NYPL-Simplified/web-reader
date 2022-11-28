@@ -8,7 +8,14 @@ const ReduceFont = (props: React.ComponentProps<typeof Icon>): ReactElement => (
     viewBox="0 0 46 46"
     {...props}
   >
-    <mask id="a" width="46" height="46" x="0" y="0" maskUnits="userSpaceOnUse">
+    <mask
+      id="reduceFont"
+      width="46"
+      height="46"
+      x="0"
+      y="0"
+      maskUnits="userSpaceOnUse"
+    >
       <path fill="#D9D9D9" d="M0 0h45.639v45.639H0z" />
     </mask>
     <g mask="url(#a)">

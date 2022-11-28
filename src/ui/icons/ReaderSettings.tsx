@@ -10,7 +10,14 @@ const ReaderSettings = (
     viewBox="0 0 49 49"
     {...props}
   >
-    <mask id="a" width="49" height="49" x="0" y="0" maskUnits="userSpaceOnUse">
+    <mask
+      id="readerSettings"
+      width="49"
+      height="49"
+      x="0"
+      y="0"
+      maskUnits="userSpaceOnUse"
+    >
       <path fill="#D9D9D9" d="M0 0h49v49H0z" />
     </mask>
     <g mask="url(#a)">

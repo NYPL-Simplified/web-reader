@@ -10,7 +10,14 @@ const TableOfContents = (
     viewBox="0 0 50 50"
     {...props}
   >
-    <mask id="a" width="50" height="50" x="0" y="0" maskUnits="userSpaceOnUse">
+    <mask
+      id="tableOfContents"
+      width="50"
+      height="50"
+      x="0"
+      y="0"
+      maskUnits="userSpaceOnUse"
+    >
       <path fill="#D9D9D9" d="M0 0h49.264v49.264H0z" />
     </mask>
     <g mask="url(#a)">

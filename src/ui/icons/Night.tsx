@@ -8,7 +8,14 @@ const Night = (props: React.ComponentProps<typeof Icon>): ReactElement => (
     fill="none"
     {...props}
   >
-    <mask id="a" width="45" height="45" x="0" y="0" maskUnits="userSpaceOnUse">
+    <mask
+      id="night"
+      width="45"
+      height="45"
+      x="0"
+      y="0"
+      maskUnits="userSpaceOnUse"
+    >
       <path fill="#D9D9D9" d="M0 0h45v45H0z" />
     </mask>
     <g mask="url(#a)">
