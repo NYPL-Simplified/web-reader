@@ -57,6 +57,7 @@ export default function SettingsCard(
             onClick={open}
             border="none"
             aria-label="Settings"
+            label="Settings"
             leftIcon={<Icon as={ReaderSettings} w={6} h={6} fill={iconFill} />}
           >
             <Text variant="headerNav">Settings</Text>
