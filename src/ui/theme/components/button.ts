@@ -111,7 +111,7 @@ const variantSettings = (getColor: GetColor) => (
     color,
     px: [2, 2, 8],
     py: 6,
-    width: ['90px', '90px', '143px'],
+    width: ['24px', '32px', '96px', '144px'],
     fontFamily: font,
     fontSize: fontSize,
     fontWeight: fontWeight,
