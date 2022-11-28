@@ -95,7 +95,7 @@ it('should maintain settings between page visits', () => {
   cy.log('Settings overlay should show correct values');
   cy.findByRole('button', { name: 'Settings' }).click();
   cy.wait(100);
-  cy.findByRole('radio', { name: 'Publisher' }).should('be.checked');
+  cy.findByRole('radio', { name: 'Default' }).should('be.checked');
   cy.findByRole('radio', { name: 'Day' }).should('be.checked');
   cy.findByRole('radio', { name: 'Paginated' }).should('be.checked');
 

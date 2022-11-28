@@ -32,6 +32,7 @@ const colors: Colors = {
     test: '#FF6347',
     gray: {
       active: '#D9D9D9',
+      disabled: '#979797',
       icon: '#1C1B1F',
       medium: '#BDBDBD',
       dark: '#616161',

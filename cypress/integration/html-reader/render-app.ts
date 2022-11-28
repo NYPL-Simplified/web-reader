@@ -8,7 +8,7 @@ describe('render page content', () => {
     cy.findByRole('link', { name: 'Return to Homepage' }).should('exist');
     cy.findByRole('button', { name: 'Table of Contents' }).should('exist');
     cy.findByRole('button', { name: 'Settings' }).should('exist');
-    cy.findByRole('button', { name: 'Toggle Fullscreen' }).should('exist');
+    cy.findByRole('button', { name: 'Full screen' }).should('exist');
     cy.findByRole('button', { name: 'Next Page' }).should('not.be.disabled');
     // On initial load, previous button is hidden
     cy.findByRole('button', { name: 'Previous Page' }).should('be.disabled');

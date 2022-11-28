@@ -185,14 +185,14 @@ export default function HtmlSettings(
       <ButtonGroup d="flex" spacing={0}>
         <Button
           flexGrow={1}
-          aria-label="Decrease font size"
+          aria-label="Reset settings"
           onClick={resetSettings}
           variant="settings"
         >
           <Reset
             w={12}
             h={12}
-            fill={settingsHaveChanged ? iconFill : '#979797'}
+            fill={settingsHaveChanged ? iconFill : 'ui.gray.disabled'}
           />
         </Button>
         <Button
