@@ -201,6 +201,9 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     async decreaseFontSize() {
       dispatch({ type: 'DECREASE_FONT_SIZE' });
     },
+    async resetFontSize() {
+      dispatch({ type: 'RESET_FONT_SIZE' });
+    },
     async setFontFamily(family: FontFamily) {
       dispatch({ type: 'SET_FONT_FAMILY', family });
     },

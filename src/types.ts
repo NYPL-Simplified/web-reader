@@ -28,6 +28,7 @@ export type PdfNavigator = Navigator & {
 export type HtmlNavigator = Navigator & {
   increaseFontSize: () => Promise<void>;
   decreaseFontSize: () => Promise<void>;
+  resetFontSize: () => Promise<void>;
   setFontFamily: (family: FontFamily) => Promise<void>;
   setColorMode: (mode: ColorMode) => Promise<void>;
 };

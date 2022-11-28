@@ -482,6 +482,18 @@ export default function makeHtmlReducer(
         };
       }
 
+      case 'RESET_FONT_SIZE':
+        if (state.state === 'INACTIVE') {
+          return handleInvalidTransition(state, action);
+        }
+        return {
+          ...state,
+          settings: {
+            ...state.settings,
+            fontSize: 100,
+          },
+        };
+
       case 'SET_FONT_FAMILY':
         if (state.state === 'INACTIVE') {
           return handleInvalidTransition(state, action);
