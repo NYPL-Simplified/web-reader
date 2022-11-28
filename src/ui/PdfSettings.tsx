@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { ButtonGroup, Icon } from '@chakra-ui/react';
+import { ButtonGroup, Icon, Text } from '@chakra-ui/react';
 import { PdfNavigator, ReaderState } from '../types';
 import Button from './Button';
+import { Continuous, Paginated } from './icons';
 import ToggleButton from './ToggleButton';
 import ToggleGroup from './ToggleGroup';
 import { MdOutlineZoomIn, MdOutlineZoomOut } from 'react-icons/md';
@@ -18,6 +19,8 @@ export default function PdfSettings(
   const { navigator, paginationValue } = props;
   const { zoomOut, zoomIn, setScroll } = navigator;
 
+  const iconFill = 'ui.gray.icon';
+
   return (
     <>
       <ButtonGroup d="flex" spacing={0}>
@@ -27,8 +30,8 @@ export default function PdfSettings(
           onClick={zoomOut}
           variant="settings"
         >
-          Zoom Out
           <Icon as={MdOutlineZoomOut} w={7} h={7} pl={1} />
+          Zoom Out
         </Button>
         <Button
           flexGrow={1}
@@ -36,8 +39,8 @@ export default function PdfSettings(
           onClick={zoomIn}
           variant="settings"
         >
-          Zoom In
           <Icon as={MdOutlineZoomIn} w={7} h={7} pl={1} />
+          Zoom In
         </Button>
       </ButtonGroup>
       <ToggleGroup
@@ -45,11 +48,21 @@ export default function PdfSettings(
         value={paginationValue}
         label="pagination options"
       >
-        <ToggleButton value="paginated" label="Paginated">
-          Paginated
+        <ToggleButton
+          value="paginated"
+          label="Paginated"
+          icon={Paginated}
+          iconFill={iconFill}
+        >
+          <Text>Paginated</Text>
         </ToggleButton>
-        <ToggleButton value="scrolling" label="Scrolling">
-          Scrolling
+        <ToggleButton
+          value="scrolling"
+          label="Scrolling"
+          icon={Continuous}
+          iconFill={iconFill}
+        >
+          <Text>Scrolling</Text>
         </ToggleButton>
       </ToggleGroup>
     </>
