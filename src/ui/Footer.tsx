@@ -16,7 +16,11 @@ const Footer: React.FC<FooterProps> = ({
   navigator,
   ...rest
 }): JSX.Element => {
-  const bgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
+  const bgColor = useColorModeValue(
+    'ui.gray.light-warm',
+    'ui.black',
+    'ui.sepia'
+  );
   const isAtStart = state?.atStart;
   const isAtEnd = state?.atEnd;
   return (
