@@ -22,7 +22,7 @@ const ToggleGroup: React.FC<ToggleGroupProps> = ({
   const group = getRootProps();
 
   return (
-    <Flex {...group} aria-label={label} flex="1 0 auto" flexWrap="wrap" my={2}>
+    <Flex {...group} aria-label={label} flex="1 0 auto" flexWrap="nowrap">
       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
       {React.Children.map(children, (element: any) => {
         try {

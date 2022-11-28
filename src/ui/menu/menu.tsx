@@ -70,7 +70,9 @@ if (__DEV__) {
   Menu.displayName = 'Menu';
 }
 
-export interface MenuButtonProps extends HTMLChakraProps<'button'> {}
+export interface MenuButtonProps extends HTMLChakraProps<'button'> {
+  isMenuButton: boolean;
+}
 
 const StyledMenuButton = forwardRef<MenuButtonProps, 'button'>((props, ref) => {
   const styles = useStyles();
@@ -106,7 +108,11 @@ export const MenuButton = forwardRef<MenuButtonProps, 'button'>(
         className={cx('chakra-menu__menu-button', props.className)}
       >
         <chakra.span
-          __css={{ pointerEvents: 'none', flex: '1 1 auto', minW: 0 }}
+          __css={{
+            pointerEvents: 'none',
+            flex: '1 1 auto',
+            minW: 0,
+          }}
         >
           {props.children}
         </chakra.span>

@@ -25,7 +25,7 @@ export default function PdfSettings(
           flexGrow={1}
           aria-label="Zoom Out"
           onClick={zoomOut}
-          variant="toggle"
+          variant="settings"
         >
           Zoom Out
           <Icon as={MdOutlineZoomOut} w={7} h={7} pl={1} />
@@ -34,7 +34,7 @@ export default function PdfSettings(
           flexGrow={1}
           aria-label="Zoom In"
           onClick={zoomIn}
-          variant="toggle"
+          variant="settings"
         >
           Zoom In
           <Icon as={MdOutlineZoomIn} w={7} h={7} pl={1} />

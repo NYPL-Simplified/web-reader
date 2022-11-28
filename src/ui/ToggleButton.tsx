@@ -1,19 +1,26 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {
   Box as ChakraBox,
   ThemeProvider,
   useRadio,
   useTheme,
   Icon,
+  useStyleConfig,
 } from '@chakra-ui/react';
 
 import Button from './Button';
+import Fonts from './theme/foundations/fonts';
 import { getTheme } from './theme';
 import { ColorMode } from '../types';
-import { MdOutlineCheckCircle } from 'react-icons/md';
 
 export interface ToggleButtonProps
   extends React.ComponentPropsWithoutRef<typeof ChakraBox> {
+  bgColor?: string;
+  font?: string;
+  fontSize?: number;
+  fontWeight?: string;
+  icon?: ReactElement;
+  iconFill?: string;
   isChecked?: false;
   colorMode?: ColorMode;
   label?: string;
@@ -23,33 +30,53 @@ export interface ToggleButtonProps
 function ToggleButton(
   props: React.PropsWithoutRef<ToggleButtonProps>
 ): React.ReactElement {
-  const { isChecked, children, colorMode, label, ...rest } = props;
+  const {
+    bgColor,
+    font,
+    fontSize,
+    fontWeight,
+    icon,
+    iconFill,
+    children,
+    colorMode,
+    label,
+    textColor,
+    value,
+    ...rest
+  } = props;
   const { getInputProps, getCheckboxProps } = useRadio(props);
 
   const input = getInputProps();
   const checkbox = getCheckboxProps();
   const theme = useTheme();
+  const buttonStyles = useStyleConfig('Button', {
+    variant: 'settings',
+    font: font || 'roboto',
+    fontSize: fontSize ?? [0, 0, 2],
+    fontWeight: fontWeight || 'light',
+    permanentBgColor: bgColor || undefined,
+    permanentTextColor: textColor || undefined,
+    value,
+  });
 
   return (
     // This will override the default theme if we specify the colorMode to the toggle button.
     <ThemeProvider theme={getTheme(colorMode ?? theme.currentColorMode)}>
+      <Fonts />
       <ChakraBox as="label" d="flex" flexGrow={1} aria-label={label}>
         <input {...input} />
-        <Button as="div" {...checkbox} variant="toggle" {...rest} flexGrow={1}>
-          {children}
-          {isChecked && (
+        <Button as="div" {...checkbox} sx={buttonStyles} {...rest} flexGrow={1}>
+          {icon && (
             <Icon
-              as={MdOutlineCheckCircle}
-              position="absolute"
+              as={icon}
               verticalAlign="middle"
-              right={2}
-              top="50%"
-              transform="translateY(-50%)"
-              alignItems="baseline"
-              w={5}
-              h={5}
+              mr="6px"
+              w={6}
+              h={6}
+              fill={iconFill && iconFill}
             />
           )}
+          {children}
         </Button>
       </ChakraBox>
     </ThemeProvider>

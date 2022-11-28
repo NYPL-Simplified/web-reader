@@ -8,12 +8,12 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import { PDFActiveReader, HTMLActiveReader } from '../types';
-import { MdOutlineSettings, MdOutlineCancel } from 'react-icons/md';
 
 import Button from './Button';
 import useColorModeValue from './hooks/useColorModeValue';
 import PdfSettings from './PdfSettings';
 import HtmlSettings from './HtmlSettings';
+import { ReaderSettings } from './icons';
 
 type SettingsCardProps =
   | Pick<PDFActiveReader, 'navigator' | 'state' | 'type'>
@@ -26,14 +26,26 @@ export default function SettingsCard(
   const open = () => setIsOpen(true);
   const close = () => setIsOpen(false);
 
+  const buttonTextColor = useColorModeValue('ui.black', 'ui.white', 'ui.black');
+  const checkedButtonBgColor = useColorModeValue(
+    'ui.gray.light-warm',
+    'ui.gray.x-dark',
+    'ui.sepiaChecked'
+  );
+  const contentBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.white');
+  const iconFill = useColorModeValue(
+    'ui.gray.icon',
+    'ui.white',
+    'ui.gray.icon'
+  );
   const paginationValue = props.state?.settings?.isScrolling
     ? 'scrolling'
     : 'paginated';
-  const contentBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.white');
 
   return (
     <>
       <Popover
+        gutter={0}
         placement="bottom"
         isOpen={isOpen}
         onOpen={open}
@@ -45,23 +57,19 @@ export default function SettingsCard(
             onClick={open}
             border="none"
             aria-label="Settings"
-            leftIcon={
-              <Icon
-                as={isOpen ? MdOutlineCancel : MdOutlineSettings}
-                w={6}
-                h={6}
-              />
-            }
+            leftIcon={<Icon as={ReaderSettings} w={6} h={6} fill={iconFill} />}
+            isMenuButton
           >
             <Text variant="headerNav">Settings</Text>
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          borderColor="gray.100"
-          width="fit-content"
+          borderRadius="0 0 20px 20px"
+          boxShadow="0 4px 4px -2px #424242"
+          minWidth="fit-content"
           bgColor={contentBgColor}
         >
-          <PopoverBody p={0} maxWidth="95vw">
+          <PopoverBody p={0} maxWidth="100vw">
             {props.type === 'PDF' && (
               <PdfSettings
                 // Destructuring props before type check causes Typescript warning.
@@ -72,7 +80,10 @@ export default function SettingsCard(
             )}
             {props.type === 'HTML' && (
               <HtmlSettings
+                buttonTextColor={buttonTextColor}
+                checkedButtonBgColor={checkedButtonBgColor}
                 navigator={props.navigator}
+                iconFill={iconFill}
                 readerState={props.state}
                 paginationValue={paginationValue}
               />
