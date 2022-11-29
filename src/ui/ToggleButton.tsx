@@ -21,7 +21,6 @@ export interface ToggleButtonProps
   fontWeight?: string;
   icon?: ReactElement;
   iconFill?: string;
-  isChecked?: false;
   colorMode?: ColorMode;
   label?: string;
   value: string;
