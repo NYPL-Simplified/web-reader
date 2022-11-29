@@ -34,22 +34,26 @@ const getButtonStyle = (getColor: GetColor) =>
 const variantSolid = (getColor: GetColor) => (
   props: React.ComponentProps<typeof Button>
 ) => {
-  const { isSettingsButton } = props;
+  const { 'aria-expanded': expanded, isSettingsButton } = props;
   const bgColor = getColor(
     isSettingsButton ? 'ui.white' : 'ui.gray.light-warm',
     'ui.black',
     'ui.sepia'
   );
-  const bgColorFocus = getColor(
+  const bgColorActive = getColor(
     'ui.gray.active',
     'ui.gray.x-dark',
     'ui.gray.active'
   );
   const color = getColor('gray.800', 'ui.white', 'gray.800');
 
-  const _focus = { bgColor: bgColorFocus, color };
-  const _hover = { bgColor, color, _disabled: { bgColor } };
-  const _active = { bgColor, color };
+  const _focus = { bgColor: bgColorActive, color };
+  const _hover = {
+    bgColor: bgColorActive,
+    color,
+    _disabled: { bgColor },
+  };
+  const _active = { bgColor: bgColorActive, color };
   const _checked = { bgColor, color };
   const _disabled = { bgColor };
 
@@ -62,7 +66,7 @@ const variantSolid = (getColor: GetColor) => (
     letterSpacing: 1,
     maxWidth: '100%',
     cursor: 'pointer',
-    bgColor,
+    bgColor: expanded ? bgColorActive : bgColor,
     color,
     _focus,
     _hover,

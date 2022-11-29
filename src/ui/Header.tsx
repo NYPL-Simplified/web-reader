@@ -35,6 +35,7 @@ export const DefaultHeaderLeft = (): React.ReactElement => {
       height="100%"
       alignItems="center"
       _hover={{
+        bgColor: bgColorFocus,
         textDecoration: 'none',
       }}
       _focus={{
@@ -42,9 +43,7 @@ export const DefaultHeaderLeft = (): React.ReactElement => {
       }}
     >
       <Icon as={Previous} fill={iconFill} w={6} h={6} />
-      <Text paddingLeft={2} variant="headerNav">
-        Back
-      </Text>
+      <Text variant="headerNav">Back</Text>
     </Link>
   );
 };
@@ -79,6 +78,8 @@ export default function Header(
         />
         <SettingsCard {...props} />
         <Button
+          aria-expanded={isFullscreen}
+          aria-label="Toggle full screen"
           border="none"
           onClick={toggleFullScreen}
           leftIcon={

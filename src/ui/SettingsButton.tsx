@@ -63,10 +63,11 @@ export default function SettingsCard(
           </Button>
         </PopoverTrigger>
         <PopoverContent
+          bgColor={contentBgColor}
           borderRadius="0 0 20px 20px"
           boxShadow="0 4px 4px -2px #424242"
           minWidth="fit-content"
-          bgColor={contentBgColor}
+          mr={[0, 1]}
         >
           <PopoverBody p={0} maxWidth="100vw">
             {props.type === 'PDF' && (

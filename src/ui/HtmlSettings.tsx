@@ -190,8 +190,8 @@ export default function HtmlSettings(
           variant="settings"
         >
           <Reset
-            w={12}
-            h={12}
+            w="45px"
+            h="45px"
             fill={settingsHaveChanged ? iconFill : 'ui.gray.disabled'}
           />
         </Button>
@@ -201,7 +201,7 @@ export default function HtmlSettings(
           onClick={decreaseFontSize}
           variant="settings"
         >
-          <ReduceFont w={12} h={12} fill={iconFill} />
+          <ReduceFont w="45px" h="45px" fill={iconFill} />
         </Button>
         <Button
           flexGrow={1}
@@ -209,7 +209,7 @@ export default function HtmlSettings(
           onClick={increaseFontSize}
           variant="settings"
         >
-          <EnlargeFont w={12} h={12} fill={iconFill} />
+          <EnlargeFont w="45px" h="45px" fill={iconFill} />
         </Button>
       </ButtonGroup>
       <ToggleGroup
