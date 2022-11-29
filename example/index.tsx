@@ -22,7 +22,6 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import { getTheme } from '../src/ui/theme';
-import usePublicationSW from '../src/ServiceWorker/client';
 import AxisNowEncrypted from './axisnow-encrypted';
 import readiumBefore from 'url:../src/HtmlReader/ReadiumCss/ReadiumCSS-before.css';
 import readiumDefault from 'url:../src/HtmlReader/ReadiumCss/ReadiumCSS-default.css';
@@ -71,32 +70,6 @@ const htmlInjectablesReflowable = [
 ];
 
 const App = () => {
-  /**
-   * For the example app we will only cache one publication by default.
-   * Uncomment to cache others if desired. Note that the SW is disabled
-   * by default also, so even though they are cached, they will not be
-   * served from the cache. Disabling them just limits the number of network
-   * requests we make in dev. To enable the service worker in development,
-   * run `npm run example:sw`.
-   */
-  usePublicationSW([
-    {
-      manifestUrl: `${origin}/samples/moby-epub2-exploded/manifest.json`,
-    },
-    // {
-    //   manifestUrl: `${origin}/samples/pdf/degruyter.json`,
-    //   proxyUrl: pdfProxyUrl,
-    // },
-    // {
-    //   manifestUrl: `${origin}/samples/pdf/muse1007.json`,
-    //   proxyUrl: pdfProxyUrl,
-    // },
-    // { manifestUrl: 'https://alice.dita.digital/manifest.json' },
-    // {
-    //   manifestUrl: `${origin}/samples/axisnow/decrypted/manifest.json`,
-    // },
-  ]);
-
   return (
     <ChakraProvider theme={getTheme('day')}>
       <BrowserRouter>

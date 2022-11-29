@@ -89,7 +89,7 @@ async function buildAll() {
   await fs.mkdir('dist');
   console.log('🧹 Cleaned output folder -', chalk.blue('dist/'));
 
-  const entryPoints = ['src/index.tsx', 'src/ServiceWorker/sw.ts'];
+  const entryPoints = ['src/index.tsx'];
 
   // build the main entrypoint as a CommonJS module
   const p1 = buildTs(
@@ -180,7 +180,7 @@ async function startWatcher() {
 /**
  * Some logging utils
  */
-const log = (msg: string, file?: string) => console.log(msg, chalk.blue(file));
+const log = (msg: string, file: string) => console.log(msg, chalk.blue(file));
 const err = (title: string, e: string) =>
   console.error(chalk.red(`❌ ${title}:`), e);
 const logBundled = (msg: string, file: string) => log(`📦 ${msg} -`, file);
