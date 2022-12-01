@@ -14,6 +14,7 @@ import useColorModeValue from './hooks/useColorModeValue';
 import PdfSettings from './PdfSettings';
 import HtmlSettings from './HtmlSettings';
 import { ReaderSettings } from './icons';
+import Header from './Header';
 
 type SettingsCardProps =
   | Pick<PDFActiveReader, 'navigator' | 'state' | 'type'>
@@ -46,7 +47,7 @@ export default function SettingsCard(
     <>
       <Popover
         gutter={0}
-        placement="bottom"
+        placement="bottom-end"
         isOpen={isOpen}
         onOpen={open}
         onClose={close}
@@ -67,7 +68,6 @@ export default function SettingsCard(
           borderRadius="0 0 20px 20px"
           boxShadow="0 4px 4px -2px #424242"
           minWidth="fit-content"
-          mr={[0, 1]}
         >
           <PopoverBody p={0} maxWidth="100vw">
             {props.type === 'PDF' && (
