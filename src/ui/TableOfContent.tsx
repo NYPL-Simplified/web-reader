@@ -19,7 +19,6 @@ export default function TableOfContent({
   const tocLinkHandler = (href: string) => {
     navigator.goToPage(href);
   };
-
   const tocBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
 
   const getLinkHref = (link: ReadiumLink): string => {
