@@ -169,7 +169,7 @@ describe('PageButton visibility on useHtmlReader', () => {
       cy.findByRole('button', { name: 'Previous Page' }).should('be.disabled');
     });
 
-    it.only('Paginated mode & at the end of the book the next page button should be disabled', () => {
+    it('Paginated mode & at the end of the book the next page button should be disabled', () => {
       cy.findByRole('button', { name: 'Settings' }).click();
       cy.findByText('Paginated').click();
 

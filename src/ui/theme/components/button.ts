@@ -127,6 +127,7 @@ const variantSettings = (getColor: GetColor) => (
     whiteSpace: ['normal', 'normal', 'nowrap'],
     _focus: {
       bgColor,
+      zIndex: 1000,
     },
     _hover: {
       bgColor,

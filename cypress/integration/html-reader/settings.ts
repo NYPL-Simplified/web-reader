@@ -48,7 +48,7 @@ describe('display settings', () => {
     cy.getIframeHtml().should('have.css', '--USER__fontSize', '96%'); // 4% per step?
   });
 
-  it.only('should reset settings to default', () => {
+  it('should reset settings to default', () => {
     cy.log('open the settings menu');
     cy.findByRole('button', { name: 'Settings' }).click();
 
