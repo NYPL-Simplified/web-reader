@@ -17,7 +17,7 @@ const setColorModeFn = jest.fn();
 const setScrollFn = jest.fn();
 const increaseFontSizeFn = jest.fn();
 const decreaseFontSizeFn = jest.fn();
-const resetFontSizeFn = jest.fn();
+const resetSettingsFn = jest.fn();
 const zoomInFn = jest.fn();
 const zoomOutFn = jest.fn();
 const setFontFamilyFn = jest.fn();
@@ -41,7 +41,7 @@ export const MockHtmlNavigator = {
   setScroll: setScrollFn,
   increaseFontSize: increaseFontSizeFn,
   decreaseFontSize: decreaseFontSizeFn,
-  resetFontSize: resetFontSizeFn,
+  resetSettings: resetSettingsFn,
   setFontFamily: setFontFamilyFn,
   goToPage: goToPageFn,
 } as HtmlNavigator;

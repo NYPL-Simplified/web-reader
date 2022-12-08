@@ -2,8 +2,6 @@ import * as React from 'react';
 import { ButtonGroup, Heading, Stack, Text } from '@chakra-ui/react';
 import { HtmlNavigator, ReaderState } from '../types';
 import Button from './Button';
-import ToggleButton from './ToggleButton';
-import ToggleGroup from './ToggleGroup';
 import {
   Continuous,
   Day,
@@ -14,6 +12,9 @@ import {
   Reset,
   Sepia,
 } from './icons';
+import { FONT_DETAILS } from '../constants';
+import ToggleButton from './ToggleButton';
+import ToggleGroup from './ToggleGroup';
 
 export type HtmlSettingsProps = {
   buttonTextColor: string;
@@ -22,34 +23,6 @@ export type HtmlSettingsProps = {
   iconFill: string;
   readerState: ReaderState;
   paginationValue: string;
-};
-
-const fontInfo = {
-  publisher: {
-    heading: "Publisher's default font",
-    body:
-      "Show the publisher's-specified fonts and layout choices in this ebook",
-    token: 'roboto',
-    fontWeight: 'light',
-  },
-  serif: {
-    heading: 'Serif font',
-    body: 'Georgia',
-    token: 'georgia',
-    fontWeight: 'regular',
-  },
-  'sans-serif': {
-    heading: 'Sans-serif font',
-    body: 'Hevetica',
-    token: 'helvetica',
-    fontWeight: 'regular',
-  },
-  'open-dyslexic': {
-    heading: 'Dyslexic friendly font',
-    body: 'OpenDyslexic',
-    token: 'opendyslexic',
-    fontWeight: 'regular',
-  },
 };
 
 export default function HtmlSettings(
@@ -71,7 +44,7 @@ export default function HtmlSettings(
     setFontFamily,
     decreaseFontSize,
     increaseFontSize,
-    resetFontSize,
+    resetSettings,
     setColorMode,
     setScroll,
   } = navigator;
@@ -82,13 +55,6 @@ export default function HtmlSettings(
     fontFamily !== 'publisher' ||
     isScrolling;
 
-  const resetSettings = () => {
-    setColorMode('day');
-    setFontFamily('publisher');
-    setScroll('paginated');
-    resetFontSize();
-  };
-
   return (
     <>
       <ToggleGroup
@@ -96,36 +62,32 @@ export default function HtmlSettings(
         label="text font options"
         onChange={setFontFamily}
       >
-        <ToggleButton value="publisher" label="Default" fontSize={[-1, -1, 0]}>
-          <Text>Default</Text>
-        </ToggleButton>
+        <ToggleButton
+          value="publisher"
+          label="Default"
+          fontSize={[-1, -1, 0]}
+        />
         <ToggleButton
           value="serif"
           label="Serif"
           font="georgia"
           fontSize={[-1, -1, 0]}
           fontWeight="regular"
-        >
-          <Text>Serif</Text>
-        </ToggleButton>
+        />
         <ToggleButton
           value="sans-serif"
           label="Sans-Serif"
           font="helvetica"
           fontSize={[-1, -1, 0]}
           fontWeight="regular"
-        >
-          <Text>Sans-Serif</Text>
-        </ToggleButton>
+        />
         <ToggleButton
           value="open-dyslexic"
           label="Dyslexia"
           font="opendyslexic"
           fontSize={[-1, -1, 0]}
           fontWeight="regular"
-        >
-          <Text>Dyslexia</Text>
-        </ToggleButton>
+        />
       </ToggleGroup>
       <Stack bgColor={checkedButtonBgColor} px={7} py={5}>
         <Heading
@@ -135,15 +97,15 @@ export default function HtmlSettings(
           fontSize={2}
           fontWeight="light"
         >
-          {fontInfo[fontFamily].heading}
+          {FONT_DETAILS[fontFamily].heading}
         </Heading>
         <Text
           color={buttonTextColor}
-          fontFamily={fontInfo[fontFamily].token}
+          fontFamily={FONT_DETAILS[fontFamily].token}
           fontSize={-1}
-          fontWeight={fontInfo[fontFamily].fontWeight}
+          fontWeight={FONT_DETAILS[fontFamily].fontWeight}
         >
-          {fontInfo[fontFamily].body}
+          {FONT_DETAILS[fontFamily].body}
         </Text>
       </Stack>
       <ToggleGroup
@@ -158,9 +120,7 @@ export default function HtmlSettings(
           label="Day"
           bgColor="ui.white"
           textColor="ui.black"
-        >
-          <Text>Day</Text>
-        </ToggleButton>
+        />
         <ToggleButton
           colorMode="sepia"
           icon={Sepia}
@@ -168,9 +128,7 @@ export default function HtmlSettings(
           label="Sepia"
           bgColor="ui.sepia"
           textColor="ui.black"
-        >
-          <Text>Sepia</Text>
-        </ToggleButton>
+        />
         <ToggleButton
           colorMode="night"
           icon={Night}
@@ -178,9 +136,7 @@ export default function HtmlSettings(
           label="Night"
           bgColor="ui.black"
           textColor="ui.white"
-        >
-          <Text>Night</Text>
-        </ToggleButton>
+        />
       </ToggleGroup>
       <ButtonGroup d="flex" spacing={0}>
         <Button
@@ -222,17 +178,13 @@ export default function HtmlSettings(
           label="Paginated"
           icon={Paginated}
           iconFill={iconFill}
-        >
-          <Text>Paginated</Text>
-        </ToggleButton>
+        />
         <ToggleButton
           value="scrolling"
           label="Scrolling"
           icon={Continuous}
           iconFill={iconFill}
-        >
-          <Text>Scrolling</Text>
-        </ToggleButton>
+        />
       </ToggleGroup>
     </>
   );

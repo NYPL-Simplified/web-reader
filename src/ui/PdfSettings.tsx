@@ -53,17 +53,13 @@ export default function PdfSettings(
           label="Paginated"
           icon={Paginated}
           iconFill={iconFill}
-        >
-          <Text>Paginated</Text>
-        </ToggleButton>
+        />
         <ToggleButton
           value="scrolling"
           label="Scrolling"
           icon={Continuous}
           iconFill={iconFill}
-        >
-          <Text>Scrolling</Text>
-        </ToggleButton>
+        />
       </ToggleGroup>
     </>
   );

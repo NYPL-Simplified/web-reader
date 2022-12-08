@@ -102,7 +102,7 @@ export type HtmlAction =
   | { type: 'SET_SCROLL'; isScrolling: boolean }
   | { type: 'INCREASE_FONT_SIZE' }
   | { type: 'DECREASE_FONT_SIZE' }
-  | { type: 'RESET_FONT_SIZE' }
+  | { type: 'RESET_SETTINGS' }
   | { type: 'SET_FONT_FAMILY'; family: FontFamily }
   | { type: 'USER_SCROLLED' }
   | { type: 'SET_IFRAME'; iframe: HTMLIFrameElement | null }

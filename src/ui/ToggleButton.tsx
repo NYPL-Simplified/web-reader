@@ -5,6 +5,7 @@ import {
   useRadio,
   useTheme,
   Icon,
+  Text,
   useStyleConfig,
 } from '@chakra-ui/react';
 
@@ -75,7 +76,7 @@ function ToggleButton(
               fill={iconFill && iconFill}
             />
           )}
-          {children}
+          {label && <Text>{label}</Text>}
         </Button>
       </ChakraBox>
     </ThemeProvider>

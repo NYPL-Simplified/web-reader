@@ -14,7 +14,6 @@ import useColorModeValue from './hooks/useColorModeValue';
 import PdfSettings from './PdfSettings';
 import HtmlSettings from './HtmlSettings';
 import { ReaderSettings } from './icons';
-import Header from './Header';
 
 type SettingsCardProps =
   | Pick<PDFActiveReader, 'navigator' | 'state' | 'type'>
@@ -51,6 +50,7 @@ export default function SettingsCard(
         isOpen={isOpen}
         onOpen={open}
         onClose={close}
+        offset={[-200, 0]}
         autoFocus={true}
       >
         <PopoverTrigger>
@@ -65,7 +65,7 @@ export default function SettingsCard(
         </PopoverTrigger>
         <PopoverContent
           bgColor={contentBgColor}
-          borderRadius="0 0 20px 20px"
+          borderRadius="0 0 4px 4px"
           boxShadow="0 4px 4px -2px #424242"
           minWidth="fit-content"
         >

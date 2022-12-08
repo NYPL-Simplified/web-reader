@@ -43,7 +43,7 @@ const variantSolid = (getColor: GetColor) => (
   const bgColorActive = getColor(
     'ui.gray.active',
     'ui.gray.x-dark',
-    'ui.gray.active'
+    'ui.sepiaChecked'
   );
   const color = getColor('gray.800', 'ui.white', 'gray.800');
 
@@ -101,6 +101,12 @@ const variantSettings = (getColor: GetColor) => (
     'ui.sepiaChecked'
   );
 
+  const isFontToggle =
+    value === 'publisher' ||
+    value === 'serif' ||
+    value === 'sans-serif' ||
+    value === 'open-dyslexic';
+
   return {
     ...variantSolid(getColor)(props),
     bgColor,
@@ -108,17 +114,17 @@ const variantSettings = (getColor: GetColor) => (
     borderBottom: (value === 'paginated' || value === 'scrolling') && 'none',
     borderRadius:
       value === 'paginated'
-        ? '0 0 0 20px'
+        ? '0 0 0 4px'
         : value === 'scrolling'
-        ? '0 0 20px 0'
+        ? '0 0 4px 0'
         : null,
     color,
-    px: [2, 2, 7],
-    py: 6,
-    width: [8, 16, 24, 28],
+    py: isFontToggle ? 6 : 8,
+    width: [8, 16, 36],
     fontFamily: font,
     fontSize: fontSize,
     fontWeight: fontWeight,
+    whiteSpace: ['normal', 'normal', 'nowrap'],
     _focus: {
       bgColor,
     },
@@ -131,7 +137,7 @@ const variantSettings = (getColor: GetColor) => (
     _checked: {
       color,
       bgColor: permanentBgColor ? permanentBgColor : checkedBgColor,
-      borderBottom: 'none',
+      borderBottomColor: permanentBgColor ? permanentBgColor : checkedBgColor,
       p: {
         textDecoration: 'underline',
       },
