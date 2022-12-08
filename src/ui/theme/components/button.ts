@@ -107,6 +107,9 @@ const variantSettings = (getColor: GetColor) => (
     value === 'sans-serif' ||
     value === 'open-dyslexic';
 
+  const isFontSizeButton =
+    value === 'increase font size' || value === 'decrease font size';
+
   return {
     ...variantSolid(getColor)(props),
     bgColor,
@@ -133,7 +136,7 @@ const variantSettings = (getColor: GetColor) => (
       bgColor,
     },
     _active: {
-      bgColor,
+      bgColor: isFontSizeButton ? checkedBgColor : bgColor,
     },
     _checked: {
       color,

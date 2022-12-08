@@ -155,6 +155,7 @@ export default function HtmlSettings(
           flexGrow={1}
           aria-label="Decrease font size"
           onClick={decreaseFontSize}
+          value="decrease font size"
           variant="settings"
         >
           <ReduceFont w="45px" h="45px" fill={iconFill} />
@@ -163,6 +164,7 @@ export default function HtmlSettings(
           flexGrow={1}
           aria-label="Increase font size"
           onClick={increaseFontSize}
+          value="increase font size"
           variant="settings"
         >
           <EnlargeFont w="45px" h="45px" fill={iconFill} />
