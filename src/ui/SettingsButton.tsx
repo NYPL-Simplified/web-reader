@@ -6,6 +6,8 @@ import {
   PopoverBody,
   Text,
   Icon,
+  Portal,
+  Box,
 } from '@chakra-ui/react';
 import { PDFActiveReader, HTMLActiveReader } from '../types';
 
@@ -46,12 +48,14 @@ export default function SettingsCard(
     <>
       <Popover
         gutter={0}
-        placement="bottom-end"
+        placement="bottom-start"
         isOpen={isOpen}
         onOpen={open}
         onClose={close}
-        offset={[-200, 0]}
+        // offset={[-200, 0]}
         autoFocus={true}
+        preventOverflow
+        strategy="fixed"
       >
         <PopoverTrigger>
           <Button
@@ -64,12 +68,14 @@ export default function SettingsCard(
           </Button>
         </PopoverTrigger>
         <PopoverContent
+          overflow="hidden"
           bgColor={contentBgColor}
           borderRadius="0 0 4px 4px"
           boxShadow="0 4px 4px -2px #424242"
-          minWidth="fit-content"
+          width="inherit"
+          maxWidth="100vw"
         >
-          <PopoverBody p={0} maxWidth="100vw">
+          <PopoverBody p={0}>
             {props.type === 'PDF' && (
               <PdfSettings
                 // Destructuring props before type check causes Typescript warning.
