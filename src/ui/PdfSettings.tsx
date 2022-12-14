@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ButtonGroup, Icon, Text } from '@chakra-ui/react';
+import { ButtonGroup, Icon } from '@chakra-ui/react';
 import { PdfNavigator, ReaderState } from '../types';
 import Button from './Button';
 import { Continuous, Paginated } from './icons';

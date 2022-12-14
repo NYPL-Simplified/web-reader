@@ -28,7 +28,9 @@ const ToggleGroup: React.FC<ToggleGroupProps> = ({
         try {
           const value = element.props.value;
           const radio = getRadioProps({ value });
-          return React.cloneElement(element, radio);
+          return React.cloneElement(element, {
+            ...radio,
+          });
         } catch (e) {
           throw new Error(
             'ToggleGroup expects ToggleButton children with `value` props.'

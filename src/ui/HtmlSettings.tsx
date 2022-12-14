@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ButtonGroup, Heading, Stack, Text } from '@chakra-ui/react';
-import { HtmlNavigator, ReaderState } from '../types';
+import { HtmlNavigator, ReaderSettings, ReaderState } from '../types';
 import Button from './Button';
 import {
   Continuous,
@@ -12,13 +12,12 @@ import {
   Reset,
   Sepia,
 } from './icons';
-import { FONT_DETAILS } from '../constants';
+import { DEFAULT_SETTINGS, FONT_DETAILS } from '../constants';
 import ToggleButton from './ToggleButton';
 import ToggleGroup from './ToggleGroup';
+import useColorModeValue from './hooks/useColorModeValue';
 
 export type HtmlSettingsProps = {
-  buttonTextColor: string;
-  checkedButtonBgColor: string;
   navigator: HtmlNavigator;
   iconFill: string;
   readerState: ReaderState;
@@ -28,17 +27,17 @@ export type HtmlSettingsProps = {
 export default function HtmlSettings(
   props: HtmlSettingsProps
 ): React.ReactElement | null {
-  const {
-    buttonTextColor,
-    checkedButtonBgColor,
-    navigator,
-    iconFill,
-    readerState,
-    paginationValue,
-  } = props;
+  const { navigator, iconFill, readerState, paginationValue } = props;
+
+  const buttonTextColor = useColorModeValue('ui.black', 'ui.white', 'ui.black');
+  const checkedButtonBgColor = useColorModeValue(
+    'ui.gray.light-warm',
+    'ui.gray.x-dark',
+    'ui.sepiaChecked'
+  );
 
   if (!readerState.settings) return null;
-  const { colorMode, fontFamily, fontSize, isScrolling } = readerState.settings;
+  const { colorMode, fontFamily } = readerState.settings;
 
   const {
     setFontFamily,
@@ -48,12 +47,6 @@ export default function HtmlSettings(
     setColorMode,
     setScroll,
   } = navigator;
-
-  const settingsHaveChanged =
-    colorMode !== 'day' ||
-    fontSize !== 100 ||
-    fontFamily !== 'publisher' ||
-    isScrolling;
 
   return (
     <>
@@ -66,20 +59,23 @@ export default function HtmlSettings(
           value="publisher"
           label="Default"
           fontSize={[-1, -1, 0]}
+          py={6}
         />
         <ToggleButton
           value="serif"
           label="Serif"
-          font="georgia"
+          font="serif"
           fontSize={[-1, -1, 0]}
           fontWeight="regular"
+          py={6}
         />
         <ToggleButton
           value="sans-serif"
           label="Sans-Serif"
-          font="helvetica"
+          font="sansSerif"
           fontSize={[-1, -1, 0]}
           fontWeight="regular"
+          py={6}
         />
         <ToggleButton
           value="open-dyslexic"
@@ -87,6 +83,7 @@ export default function HtmlSettings(
           font="opendyslexic"
           fontSize={[-1, -1, 0]}
           fontWeight="regular"
+          py={6}
         />
       </ToggleGroup>
       <Stack bgColor={checkedButtonBgColor} px={7} py={5}>
@@ -148,12 +145,17 @@ export default function HtmlSettings(
           <Reset
             w="45px"
             h="45px"
-            fill={settingsHaveChanged ? iconFill : 'ui.gray.disabled'}
+            fill={
+              areSettingsDefault(readerState.settings)
+                ? 'ui.gray.disabled'
+                : iconFill
+            }
           />
         </Button>
         <Button
-          flexGrow={1}
           aria-label="Decrease font size"
+          flexGrow={1}
+          isFontSizeButton
           onClick={decreaseFontSize}
           value="decrease font size"
           variant="settings"
@@ -161,8 +163,9 @@ export default function HtmlSettings(
           <ReduceFont w="45px" h="45px" fill={iconFill} />
         </Button>
         <Button
-          flexGrow={1}
           aria-label="Increase font size"
+          flexGrow={1}
+          isFontSizeButton
           onClick={increaseFontSize}
           value="increase font size"
           variant="settings"
@@ -191,3 +194,19 @@ export default function HtmlSettings(
     </>
   );
 }
+
+// Returns true if the reader's settings match the default settings
+const areSettingsDefault = (readerSettings: ReaderSettings) => {
+  if (!readerSettings) {
+    return false;
+  }
+
+  let setting: keyof ReaderSettings;
+
+  for (setting in DEFAULT_SETTINGS) {
+    if (readerSettings[setting] !== DEFAULT_SETTINGS[setting]) {
+      return false;
+    }
+  }
+  return true;
+};

@@ -6,8 +6,6 @@ import {
   PopoverBody,
   Text,
   Icon,
-  Portal,
-  Box,
 } from '@chakra-ui/react';
 import { PDFActiveReader, HTMLActiveReader } from '../types';
 
@@ -28,12 +26,6 @@ export default function SettingsCard(
   const open = () => setIsOpen(true);
   const close = () => setIsOpen(false);
 
-  const buttonTextColor = useColorModeValue('ui.black', 'ui.white', 'ui.black');
-  const checkedButtonBgColor = useColorModeValue(
-    'ui.gray.light-warm',
-    'ui.gray.x-dark',
-    'ui.sepiaChecked'
-  );
   const contentBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.white');
   const iconFill = useColorModeValue(
     'ui.gray.icon',
@@ -52,7 +44,6 @@ export default function SettingsCard(
         isOpen={isOpen}
         onOpen={open}
         onClose={close}
-        // offset={[-200, 0]}
         autoFocus={true}
         preventOverflow
         strategy="fixed"
@@ -86,8 +77,6 @@ export default function SettingsCard(
             )}
             {props.type === 'HTML' && (
               <HtmlSettings
-                buttonTextColor={buttonTextColor}
-                checkedButtonBgColor={checkedButtonBgColor}
                 navigator={props.navigator}
                 iconFill={iconFill}
                 readerState={props.state}

@@ -34,12 +34,10 @@ const getButtonStyle = (getColor: GetColor) =>
 const variantSolid = (getColor: GetColor) => (
   props: React.ComponentProps<typeof Button>
 ) => {
-  const { 'aria-expanded': expanded, isSettingsButton } = props;
-  const bgColor = getColor(
-    isSettingsButton ? 'ui.white' : 'ui.gray.light-warm',
-    'ui.black',
-    'ui.sepia'
-  );
+  const { 'aria-expanded': expanded } = props;
+
+  const bgColor = getColor('ui.gray.light-warm', 'ui.black', 'ui.sepia');
+
   const bgColorActive = getColor(
     'ui.gray.active',
     'ui.gray.x-dark',
@@ -80,19 +78,18 @@ const variantSettings = (getColor: GetColor) => (
   props: React.ComponentProps<typeof Button>
 ) => {
   const {
-    permanentBgColor,
-    permanentTextColor,
+    bgColor,
     font,
     fontSize,
     fontWeight,
+    isFontSizeButton,
+    py,
+    textColor,
     value,
   } = props;
-  const bgColor = permanentBgColor
-    ? permanentBgColor
-    : getColor('ui.white', 'ui.black', 'ui.sepia');
 
-  const color = permanentTextColor
-    ? permanentTextColor
+  const color = textColor
+    ? textColor
     : getColor('ui.black', 'ui.white', 'ui.black');
 
   const checkedBgColor = getColor(
@@ -101,18 +98,9 @@ const variantSettings = (getColor: GetColor) => (
     'ui.sepiaChecked'
   );
 
-  const isFontToggle =
-    value === 'publisher' ||
-    value === 'serif' ||
-    value === 'sans-serif' ||
-    value === 'open-dyslexic';
-
-  const isFontSizeButton =
-    value === 'increase font size' || value === 'decrease font size';
-
   return {
     ...variantSolid(getColor)(props),
-    bgColor,
+    bgColor: bgColor || getColor('ui.white', 'ui.black', 'ui.sepia'),
     border: '1px solid',
     borderBottom: (value === 'paginated' || value === 'scrolling') && 'none',
     borderRadius:
@@ -122,7 +110,7 @@ const variantSettings = (getColor: GetColor) => (
         ? '0 0 4px 0'
         : null,
     color,
-    py: isFontToggle ? 6 : 8,
+    py: py || 8,
     width: [8, 16, 36],
     fontFamily: font,
     fontSize: fontSize,
@@ -140,8 +128,8 @@ const variantSettings = (getColor: GetColor) => (
     },
     _checked: {
       color,
-      bgColor: permanentBgColor ? permanentBgColor : checkedBgColor,
-      borderBottomColor: permanentBgColor ? permanentBgColor : checkedBgColor,
+      bgColor: bgColor || checkedBgColor,
+      borderBottomColor: bgColor || checkedBgColor,
       p: {
         textDecoration: 'underline',
       },

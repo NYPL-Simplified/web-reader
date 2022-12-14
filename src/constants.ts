@@ -24,19 +24,19 @@ export const FONT_DETAILS = {
     heading: "Publisher's default font",
     body:
       "Show the publisher's-specified fonts and layout choices in this ebook",
-    token: 'roboto',
+    token: 'body',
     fontWeight: 'light',
   },
   serif: {
     heading: 'Serif font',
     body: 'Georgia',
-    token: 'georgia',
+    token: 'serif',
     fontWeight: 'regular',
   },
   'sans-serif': {
     heading: 'Sans-serif font',
-    body: 'Hevetica',
-    token: 'helvetica',
+    body: 'Helvetica',
+    token: 'sansSerif',
     fontWeight: 'regular',
   },
   'open-dyslexic': {

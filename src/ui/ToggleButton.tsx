@@ -32,14 +32,15 @@ function ToggleButton(
 ): React.ReactElement {
   const {
     bgColor,
+    children,
+    colorMode,
     font,
     fontSize,
     fontWeight,
     icon,
     iconFill,
-    children,
-    colorMode,
     label,
+    py,
     textColor,
     value,
     ...rest
@@ -51,11 +52,12 @@ function ToggleButton(
   const theme = useTheme();
   const buttonStyles = useStyleConfig('Button', {
     variant: 'settings',
-    font: font || 'roboto',
+    bgColor: bgColor || undefined,
+    font: font || 'body',
     fontSize: fontSize ?? [0, 0, 2],
     fontWeight: fontWeight || 'light',
-    permanentBgColor: bgColor || undefined,
-    permanentTextColor: textColor || undefined,
+    py: py ?? undefined,
+    textColor: textColor || undefined,
     value,
   });
 
@@ -70,7 +72,7 @@ function ToggleButton(
             <Icon
               as={icon}
               verticalAlign="middle"
-              mr="6px"
+              mr={1.5}
               w={6}
               h={6}
               fill={iconFill && iconFill}

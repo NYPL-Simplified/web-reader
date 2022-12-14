@@ -1,0 +1,11 @@
+@font-face {
+  font-family: 'Helvetica';
+  src: url('Helvetica.eot');
+  src: local('Helvetica'),
+    url('Helvetica.eot?#iefix') format('embedded-opentype'),
+    url('Helvetica.woff2') format('woff2'), url('Helvetica.woff') format('woff'),
+    url('Helvetica.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

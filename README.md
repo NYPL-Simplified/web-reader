@@ -125,7 +125,7 @@ Most styling is included in the basic UI, but we also ship a few css files that 
 1. Both the HTML and the PDF side have css that is necessary to be included for the dependencies we use to render correctly. This is built automatically into `@nypl/web-reader/dist/esm/index.css` and `@nypl/web-reader/dist/cjs/index.css`. Depending which package you are using, you should include one of those files in your bundle.
 1. The HTML Reader can inject `<style>` tags (and other tags) into the reader iframe itself, called an "injectable". This is used to add styles to the html content of the publication. More on this is below.
 
-In order for the OpenDyslexic font to be displyed in the Settings panel as intended, you must include the `fonts/opendyslexic` folder and its contents in your entry directory (in a Next.js app, this would be in your `/public` folder). You can find this folder in `@nypl/web-reader/static`.
+In order for the Settings panel to be displayed as intended, the fonts Roboto, Georgia, Helvetica, and OpenDyslexic must be available to your application. Georgia is web safe, meaning it is installed by default on most devices, but the others are not. To include them, copy the `fonts` folder and its contents from `@nypl/web-reader/example/static` into your entry directory (in a Next.js app, this would be in your `/public` folder).
 
 ## Injectables
 
