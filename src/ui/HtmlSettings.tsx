@@ -13,7 +13,10 @@ import {
   Sepia,
 } from './icons';
 import { DEFAULT_SETTINGS, FONT_DETAILS } from '../constants';
-import ToggleButton from './ToggleButton';
+import ToggleButton, {
+  ColorModeToggleButton,
+  FontToggleButton,
+} from './ToggleButton';
 import ToggleGroup from './ToggleGroup';
 import useColorModeValue from './hooks/useColorModeValue';
 
@@ -55,35 +58,24 @@ export default function HtmlSettings(
         label="text font options"
         onChange={setFontFamily}
       >
-        <ToggleButton
-          value="publisher"
-          label="Default"
-          fontSize={[-1, -1, 0]}
-          py={6}
-        />
-        <ToggleButton
+        <FontToggleButton value="publisher" label="Default" />
+        <FontToggleButton
           value="serif"
           label="Serif"
-          font="serif"
-          fontSize={[-1, -1, 0]}
+          fontFamily="serif"
           fontWeight="regular"
-          py={6}
         />
-        <ToggleButton
+        <FontToggleButton
           value="sans-serif"
           label="Sans-Serif"
-          font="sansSerif"
-          fontSize={[-1, -1, 0]}
+          fontFamily="sansSerif"
           fontWeight="regular"
-          py={6}
         />
-        <ToggleButton
+        <FontToggleButton
           value="open-dyslexic"
           label="Dyslexia"
-          font="opendyslexic"
-          fontSize={[-1, -1, 0]}
+          fontFamily="opendyslexic"
           fontWeight="regular"
-          py={6}
         />
       </ToggleGroup>
       <Stack bgColor={checkedButtonBgColor} px={7} py={5}>
@@ -110,7 +102,7 @@ export default function HtmlSettings(
         label="reading theme options"
         onChange={setColorMode}
       >
-        <ToggleButton
+        <ColorModeToggleButton
           colorMode="day"
           icon={Day}
           value="day"
@@ -118,7 +110,7 @@ export default function HtmlSettings(
           bgColor="ui.white"
           textColor="ui.black"
         />
-        <ToggleButton
+        <ColorModeToggleButton
           colorMode="sepia"
           icon={Sepia}
           value="sepia"
@@ -126,7 +118,7 @@ export default function HtmlSettings(
           bgColor="ui.sepia"
           textColor="ui.black"
         />
-        <ToggleButton
+        <ColorModeToggleButton
           colorMode="night"
           icon={Night}
           value="night"
@@ -157,6 +149,11 @@ export default function HtmlSettings(
           flexGrow={1}
           isFontSizeButton
           onClick={decreaseFontSize}
+          sx={{
+            _active: {
+              bgColor: checkedButtonBgColor,
+            },
+          }}
           value="decrease font size"
           variant="settings"
         >
@@ -167,6 +164,11 @@ export default function HtmlSettings(
           flexGrow={1}
           isFontSizeButton
           onClick={increaseFontSize}
+          sx={{
+            _active: {
+              bgColor: checkedButtonBgColor,
+            },
+          }}
           value="increase font size"
           variant="settings"
         >

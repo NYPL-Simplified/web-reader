@@ -12,7 +12,7 @@ export const CHROME_HEIGHT = HEADER_HEIGHT + FOOTER_HEIGHT;
 export const DEFAULT_HEIGHT = `calc(100vh - ${CHROME_HEIGHT}px)`;
 export const DEFAULT_SHOULD_GROW_WHEN_SCROLLING = true;
 
-export const DEFAULT_SETTINGS: ReaderSettings = {
+export const DEFAULT_SETTINGS = {
   colorMode: 'day',
   isScrolling: false,
   fontSize: 100,

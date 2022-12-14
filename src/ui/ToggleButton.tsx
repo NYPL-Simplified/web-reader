@@ -6,7 +6,6 @@ import {
   useTheme,
   Icon,
   Text,
-  useStyleConfig,
 } from '@chakra-ui/react';
 
 import Button from './Button';
@@ -30,36 +29,12 @@ export interface ToggleButtonProps
 function ToggleButton(
   props: React.PropsWithoutRef<ToggleButtonProps>
 ): React.ReactElement {
-  const {
-    bgColor,
-    children,
-    colorMode,
-    font,
-    fontSize,
-    fontWeight,
-    icon,
-    iconFill,
-    label,
-    py,
-    textColor,
-    value,
-    ...rest
-  } = props;
+  const { children, colorMode, icon, iconFill, label, value, ...rest } = props;
   const { getInputProps, getCheckboxProps } = useRadio(props);
 
   const input = getInputProps();
   const checkbox = getCheckboxProps();
   const theme = useTheme();
-  const buttonStyles = useStyleConfig('Button', {
-    variant: 'settings',
-    bgColor: bgColor || undefined,
-    font: font || 'body',
-    fontSize: fontSize ?? [0, 0, 2],
-    fontWeight: fontWeight || 'light',
-    py: py ?? undefined,
-    textColor: textColor || undefined,
-    value,
-  });
 
   return (
     // This will override the default theme if we specify the colorMode to the toggle button.
@@ -67,7 +42,13 @@ function ToggleButton(
       <Fonts />
       <ChakraBox as="label" d="flex" flexGrow={1} aria-label={label}>
         <input {...input} />
-        <Button as="div" {...checkbox} sx={buttonStyles} {...rest} flexGrow={1}>
+        <Button
+          as="div"
+          variant="settings"
+          flexGrow={1}
+          {...checkbox}
+          {...rest}
+        >
           {icon && (
             <Icon
               as={icon}
@@ -84,5 +65,28 @@ function ToggleButton(
     </ThemeProvider>
   );
 }
+
+export const FontToggleButton: typeof ToggleButton = (props) => {
+  return <ToggleButton fontSize={[-1, -1, 0]} py={6} {...props} />;
+};
+
+export const ColorModeToggleButton: typeof ToggleButton = ({
+  bgColor,
+  ...rest
+}) => {
+  return (
+    <ToggleButton
+      sx={{
+        _checked: {
+          bgColor,
+          p: {
+            textDecoration: 'underline',
+          },
+        },
+      }}
+      {...rest}
+    />
+  );
+};
 
 export default ToggleButton;

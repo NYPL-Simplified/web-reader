@@ -77,20 +77,9 @@ const variantSolid = (getColor: GetColor) => (
 const variantSettings = (getColor: GetColor) => (
   props: React.ComponentProps<typeof Button>
 ) => {
-  const {
-    bgColor,
-    font,
-    fontSize,
-    fontWeight,
-    isFontSizeButton,
-    py,
-    textColor,
-    value,
-  } = props;
+  const { bgColor, value } = props;
 
-  const color = textColor
-    ? textColor
-    : getColor('ui.black', 'ui.white', 'ui.black');
+  const color = getColor('ui.black', 'ui.white', 'ui.black');
 
   const checkedBgColor = getColor(
     'ui.gray.light-warm',
@@ -100,7 +89,7 @@ const variantSettings = (getColor: GetColor) => (
 
   return {
     ...variantSolid(getColor)(props),
-    bgColor: bgColor || getColor('ui.white', 'ui.black', 'ui.sepia'),
+    bgColor: getColor('ui.white', 'ui.black', 'ui.sepia'),
     border: '1px solid',
     borderBottom: (value === 'paginated' || value === 'scrolling') && 'none',
     borderRadius:
@@ -110,29 +99,27 @@ const variantSettings = (getColor: GetColor) => (
         ? '0 0 4px 0'
         : null,
     color,
-    py: py || 8,
+    py: 8,
     width: [8, 16, 36],
-    fontFamily: font,
-    fontSize: fontSize,
-    fontWeight: fontWeight,
+    fontSize: [0, 0, 2],
     whiteSpace: ['normal', 'normal', 'nowrap'],
-    _focus: {
+    _active: {
       bgColor,
-      zIndex: 1000,
+    },
+    _checked: {
+      color,
+      bgColor: checkedBgColor,
+      borderBottomColor: checkedBgColor,
+      p: {
+        textDecoration: 'underline',
+      },
     },
     _hover: {
       bgColor,
     },
-    _active: {
-      bgColor: isFontSizeButton ? checkedBgColor : bgColor,
-    },
-    _checked: {
-      color,
-      bgColor: bgColor || checkedBgColor,
-      borderBottomColor: bgColor || checkedBgColor,
-      p: {
-        textDecoration: 'underline',
-      },
+    _focus: {
+      bgColor,
+      zIndex: 1000,
     },
   };
 };
