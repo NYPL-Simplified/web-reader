@@ -147,7 +147,6 @@ export default function HtmlSettings(
         <Button
           aria-label="Decrease font size"
           flexGrow={1}
-          isFontSizeButton
           onClick={decreaseFontSize}
           sx={{
             _active: {
@@ -162,7 +161,6 @@ export default function HtmlSettings(
         <Button
           aria-label="Increase font size"
           flexGrow={1}
-          isFontSizeButton
           onClick={increaseFontSize}
           sx={{
             _active: {

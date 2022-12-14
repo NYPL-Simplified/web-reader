@@ -27,25 +27,28 @@ const Fonts = () => (
             format('woff');
       }
       @font-face {
-        font-family: 'Roboto';
+        font-family: 'robotoregular';
         src: url('Roboto-Regular-webfont.eot');
         src: url('Roboto-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+             url('Roboto-Regular-webfont.woff2') format('woff2'),
              url('Roboto-Regular-webfont.woff') format('woff'),
              url('Roboto-Regular-webfont.ttf') format('truetype'),
-             url('Roboto-Regular-webfont.svg#RobotoRegular') format('svg');
+             url('Roboto-Regular-webfont.svg#robotoregular') format('svg');
         font-weight: normal;
         font-style: normal;
-      }
+    }
       @font-face {
-        font-family: 'Roboto';
+        font-family: 'robotolight';
         src: url('Roboto-Light-webfont.eot');
         src: url('Roboto-Light-webfont.eot?#iefix') format('embedded-opentype'),
+             url('Roboto-Light-webfont.woff2') format('woff2'),
              url('Roboto-Light-webfont.woff') format('woff'),
              url('Roboto-Light-webfont.ttf') format('truetype'),
-             url('Roboto-Light-webfont.svg#RobotoLight') format('svg');
-        font-weight: 100;
+             url('Roboto-Light-webfont.svg#robotolight') format('svg');
+        font-weight: normal;
         font-style: normal;
-      }
+    
+    }
     `}
   />
 );
