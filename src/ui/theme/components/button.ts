@@ -77,7 +77,7 @@ const variantSolid = (getColor: GetColor) => (
 const variantSettings = (getColor: GetColor) => (
   props: React.ComponentProps<typeof Button>
 ) => {
-  const { bgColor, value } = props;
+  const { bgColor } = props;
 
   const color = getColor('ui.black', 'ui.white', 'ui.black');
 
@@ -91,13 +91,6 @@ const variantSettings = (getColor: GetColor) => (
     ...variantSolid(getColor)(props),
     bgColor: getColor('ui.white', 'ui.black', 'ui.sepia'),
     border: '1px solid',
-    borderBottom: (value === 'paginated' || value === 'scrolling') && 'none',
-    borderRadius:
-      value === 'paginated'
-        ? '0 0 0 4px'
-        : value === 'scrolling'
-        ? '0 0 4px 0'
-        : null,
     color,
     py: 8,
     width: [8, 16, 36],
@@ -119,7 +112,6 @@ const variantSettings = (getColor: GetColor) => (
     },
     _focus: {
       bgColor,
-      zIndex: 1000,
     },
   };
 };

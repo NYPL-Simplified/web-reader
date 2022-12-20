@@ -15,13 +15,9 @@ import { ColorMode } from '../types';
 
 export interface ToggleButtonProps
   extends React.ComponentPropsWithoutRef<typeof ChakraBox> {
-  bgColor?: string;
-  font?: string;
-  fontSize?: number;
-  fontWeight?: string;
+  colorMode?: ColorMode;
   icon?: ReactElement;
   iconFill?: string;
-  colorMode?: ColorMode;
   label?: string;
   value: string;
 }

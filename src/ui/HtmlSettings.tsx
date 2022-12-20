@@ -180,12 +180,14 @@ export default function HtmlSettings(
       >
         <ToggleButton
           value="paginated"
+          borderRadius="0 0 0 4px"
           label="Paginated"
           icon={Paginated}
           iconFill={iconFill}
         />
         <ToggleButton
           value="scrolling"
+          borderRadius="0 0 4px 0"
           label="Scrolling"
           icon={Continuous}
           iconFill={iconFill}

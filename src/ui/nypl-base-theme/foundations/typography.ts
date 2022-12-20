@@ -4,16 +4,16 @@ type Typography = {
   letterSpacings: Dict;
   lineHeights: Dict;
   fontWeights: Dict;
-  // fonts: Dict;
+  fonts: Dict;
   fontSizes: Dict;
 };
 
 const typography: Typography = {
-  // fonts: {
-  //   body: '-apple-system, BlinkMacSystemFont, system-ui, sans-serif',
-  //   heading: '-apple-system, BlinkMacSystemFont, system-ui, sans-seri',
-  //   mono: `Courier,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace`,
-  // },
+  fonts: {
+    body: '-apple-system, BlinkMacSystemFont, system-ui, sans-serif',
+    heading: '-apple-system, BlinkMacSystemFont, system-ui, sans-seri',
+    mono: `Courier,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace`,
+  },
   fontSizes: {
     '-2': '0.75rem',
     '-1': '0.875rem',

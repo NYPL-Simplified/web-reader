@@ -22,7 +22,6 @@ import { Dict } from './types';
 export function getTheme(colorMode: ColorMode = 'day'): Dict<unknown> {
   return extendTheme(
     {
-      breakpoints,
       colors,
       ...typography,
       /**
