@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import TableOfContent from '../src/ui/TableOfContent';
+import TableOfContent from '../src/ui/toc/TableOfContent';
 import { MockNavigator, MockWebpubManifest } from './utils/MockData';
 
 import { axe } from 'jest-axe';

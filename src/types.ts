@@ -18,6 +18,7 @@ export type Navigator = {
   goBackward: () => void;
   setScroll: (val: 'scrolling' | 'paginated') => Promise<void>;
   goToPage: (href: string) => void;
+  goToPageNumber?: (pageNumber: number) => void;
 };
 
 export type PdfNavigator = Navigator & {
@@ -50,6 +51,7 @@ export type ReaderState = {
   atEnd: boolean;
   location?: Locator;
   settings: ReaderSettings | undefined;
+  singlePdfToc?: PdfTocItem[];
 };
 
 export type InactiveReader = null;
@@ -145,3 +147,9 @@ export type InactiveReaderArguments = undefined;
 export type ReaderArguments = ActiveReaderArguments | InactiveReaderArguments;
 
 export type GetColor = (light: string, dark: string, sepia: string) => string;
+
+export type PdfTocItem = {
+  title: string;
+  pageNumber: number;
+  children: PdfTocItem[];
+};

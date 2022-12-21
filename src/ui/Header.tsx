@@ -6,7 +6,8 @@ import useColorModeValue from '../ui/hooks/useColorModeValue';
 
 import SettingsCard from './SettingsButton';
 import Button from './Button';
-import TableOfContent from './TableOfContent';
+import TableOfContent from './toc/TableOfContent';
+import PdfTableOfContent from './toc/PdfTableOfContent';
 import { MdOutlineFullscreenExit, MdOutlineFullscreen } from 'react-icons/md';
 import useFullscreen from './hooks/useFullScreen';
 import { HEADER_HEIGHT } from '../constants';
@@ -44,18 +45,28 @@ export default function Header(
     }
 ): React.ReactElement {
   const [isFullscreen, toggleFullScreen] = useFullscreen();
-  const { headerLeft, navigator, manifest, containerRef } = props;
+  const { headerLeft, navigator, manifest, containerRef, state } = props;
   const mainBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
 
   return (
     <HeaderWrapper bg={mainBgColor}>
       {headerLeft ?? <DefaultHeaderLeft />}
       <HStack ml="auto" spacing={1}>
-        <TableOfContent
-          containerRef={containerRef}
-          navigator={navigator}
-          manifest={manifest}
-        />
+        {state.singlePdfToc && state.singlePdfToc.length > 0 && (
+          <PdfTableOfContent
+            containerRef={containerRef}
+            navigator={navigator}
+            tocItems={state.singlePdfToc}
+          />
+        )}
+        {!state.singlePdfToc ||
+          (state.singlePdfToc.length === 0 && (
+            <TableOfContent
+              containerRef={containerRef}
+              navigator={navigator}
+              manifest={manifest}
+            />
+          ))}
         <SettingsCard {...props} />
         <Button
           border="none"

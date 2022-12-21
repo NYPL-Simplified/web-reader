@@ -7,6 +7,7 @@ import { getColor } from '../../utils/getColor';
 import getButtonStyle from './components/button';
 import Alert from './components/alert';
 import { Dict } from './types';
+import TableOfContent from './components/toc';
 
 /**
  * See Chakra default theme for shape of theme object:
@@ -29,6 +30,7 @@ export function getTheme(colorMode: ColorMode = 'day'): Dict<unknown> {
         Button: getButtonStyle(getColor(colorMode)),
         Text,
         Alert,
+        TableOfContent,
       },
       currentColorMode: colorMode,
     },

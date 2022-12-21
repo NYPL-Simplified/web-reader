@@ -7,6 +7,7 @@ import {
   WebpubManifest,
   FontFamily,
   ColorMode,
+  PdfTocItem,
 } from '../../src/types';
 import { HtmlSettingsProps } from '../../src/ui/HtmlSettings';
 import { PdfSettingsProps } from '../../src/ui/PdfSettings';
@@ -21,6 +22,7 @@ const zoomInFn = jest.fn();
 const zoomOutFn = jest.fn();
 const setFontFamilyFn = jest.fn();
 const goToPageFn = jest.fn();
+const goToPageNumberFn = jest.fn();
 
 export const MockNavigator = {
   goForward: goForwardFn,
@@ -31,6 +33,7 @@ export const MockNavigator = {
   decreaseFontSize: decreaseFontSizeFn,
   setFontFamily: setFontFamilyFn,
   goToPage: goToPageFn,
+  goToPageNumber: goToPageNumberFn,
 } as Navigator;
 
 export const MockHtmlNavigator = {
@@ -145,6 +148,50 @@ export const MockWebpubManifest = {
     },
   ],
 } as WebpubManifest;
+
+export const MockSinglePdfTocItems = [
+  {
+    title: 'Chapter 1',
+    pageNumber: 9,
+    children: [],
+  },
+  {
+    title: 'Chapter 2',
+    pageNumber: 19,
+    children: [
+      {
+        title: 'Chapter 2 Section 1',
+        pageNumber: 20,
+        children: [],
+      },
+      {
+        title: 'Chapter 2 Section 2',
+        pageNumber: 26,
+        children: [],
+      },
+      {
+        title: 'Chapter 2 Section 3',
+        pageNumber: 30,
+        children: [],
+      },
+      {
+        title: 'Chapter 2 Section 4',
+        pageNumber: 36,
+        children: [],
+      },
+    ],
+  },
+  {
+    title: 'Chapter 3',
+    pageNumber: 42,
+    children: [],
+  },
+  {
+    title: 'Chapter 4',
+    pageNumber: 58,
+    children: [],
+  },
+] as PdfTocItem[];
 
 const MockComponent = (): React.ReactElement => <>Hello, world.</>;
 

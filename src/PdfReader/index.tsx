@@ -1,6 +1,7 @@
 import { Document, PageProps, pdfjs } from 'react-pdf';
 import * as React from 'react';
 import {
+  PdfTocItem,
   ReaderArguments,
   ReaderReturn,
   ReaderSettings,
@@ -18,6 +19,7 @@ import {
   DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
 } from '../constants';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
+import generateSinglePdfToc from './generateSinglePdfToc';
 
 type InternalState = {
   resourceIndex: number;
@@ -32,6 +34,7 @@ type InternalState = {
   pdfWidth: number;
   pageHeight: number | undefined;
   pageWidth: number | undefined;
+  singlePdfToc: PdfTocItem[] | undefined;
 };
 
 type InactiveState = ReaderState &
@@ -63,7 +66,8 @@ type PdfReaderAction =
       height: number | undefined;
       width: number | undefined;
     }
-  | { type: 'BOOK_BOUNDARY_CHANGED'; atStart: boolean; atEnd: boolean };
+  | { type: 'BOOK_BOUNDARY_CHANGED'; atStart: boolean; atEnd: boolean }
+  | { type: 'TOC_GENERATED'; singlePdfToc: PdfTocItem[] };
 const IFRAME_WRAPPER_ID = 'iframe-wrapper';
 export const SCALE_STEP = 0.1;
 const START_QUERY = 'start';
@@ -85,6 +89,7 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
         pageWidth: undefined,
         atStart: true,
         atEnd: false,
+        singlePdfToc: undefined,
       };
     }
     /**
@@ -165,6 +170,12 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
         atStart: action.atStart,
         atEnd: action.atEnd,
       };
+
+    case 'TOC_GENERATED':
+      return {
+        ...state,
+        singlePdfToc: action.singlePdfToc,
+      };
   }
 }
 
@@ -240,6 +251,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     atStart: true,
     atEnd: false,
     settings: undefined,
+    singlePdfToc: undefined,
   });
 
   // state we can derive from the state above
@@ -373,6 +385,34 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     isSinglePDF,
   ]);
 
+  React.useEffect(() => {
+    if (!manifest) return;
+    if (!manifest.readingOrder || !manifest.readingOrder.length) {
+      throw new Error('Manifest has no Reading Order');
+    }
+
+    const resourceUrl = getResourceUrl(
+      state.resourceIndex,
+      manifest.readingOrder
+    );
+
+    if (isSinglePDF && state.singlePdfToc === undefined) {
+      const proxiedUrl = `${proxyUrl}${encodeURIComponent(resourceUrl)}`;
+      generateSinglePdfToc(proxiedUrl).then((toc) => {
+        dispatch({
+          type: 'TOC_GENERATED',
+          singlePdfToc: toc,
+        });
+      });
+    }
+  }, [
+    isSinglePDF,
+    manifest,
+    proxyUrl,
+    state.resourceIndex,
+    state.singlePdfToc,
+  ]);
+
   // prev and next page functions
   const goForward = React.useCallback(async () => {
     // do nothing if we haven't parsed the number of pages yet
@@ -502,6 +542,18 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       }
     },
     [manifest?.readingOrder]
+  );
+
+  const goToPageNumber = React.useCallback(
+    async (pageNumber) => {
+      if (isSinglePDF && pageNumber > 0) {
+        dispatch({
+          type: 'NAVIGATE_PAGE',
+          pageNum: pageNumber,
+        });
+      }
+    },
+    [isSinglePDF]
   );
 
   // this format is inactive, return null
@@ -645,6 +697,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       zoomIn,
       zoomOut,
       goToPage,
+      goToPageNumber,
     },
   };
 }
