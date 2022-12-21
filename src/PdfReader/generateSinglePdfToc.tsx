@@ -14,8 +14,8 @@ export default async function generateSinglePdfToc(
     const outline = await pdf.getOutline(); // get the TOC outline
 
     if (outline) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const addTocItem = async (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         outline: any[],
         tocItems: PdfTocItem[]
       ): Promise<PdfTocItem[]> => {

@@ -59,14 +59,13 @@ export default function Header(
             tocItems={state.singlePdfToc}
           />
         )}
-        {!state.singlePdfToc ||
-          (state.singlePdfToc.length === 0 && (
-            <TableOfContent
-              containerRef={containerRef}
-              navigator={navigator}
-              manifest={manifest}
-            />
-          ))}
+        {(!state.singlePdfToc || state.singlePdfToc.length === 0) && (
+          <TableOfContent
+            containerRef={containerRef}
+            navigator={navigator}
+            manifest={manifest}
+          />
+        )}
         <SettingsCard {...props} />
         <Button
           border="none"
