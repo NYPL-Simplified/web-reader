@@ -112,6 +112,8 @@ const variantSettings = (getColor: GetColor) => (
     },
     _focus: {
       bgColor,
+      ring: '2px',
+      ringInset: 'inset',
     },
   };
 };

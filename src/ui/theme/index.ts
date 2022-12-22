@@ -2,7 +2,6 @@ import { extendTheme } from '@chakra-ui/react';
 import Alert from './components/alert';
 import Text from './components/text';
 import colors from './foundations/colors';
-import breakpoints from '../nypl-base-theme/foundations/breakpoints';
 import typography from './foundations/typography';
 import nyplTheme from '../nypl-base-theme';
 import { ColorMode } from '../../types';
