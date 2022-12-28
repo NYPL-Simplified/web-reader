@@ -1,21 +1,23 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {
   Box as ChakraBox,
   ThemeProvider,
   useRadio,
   useTheme,
   Icon,
+  Text,
 } from '@chakra-ui/react';
 
 import Button from './Button';
+import Fonts from './theme/foundations/fonts';
 import { getTheme } from './theme';
 import { ColorMode } from '../types';
-import { MdOutlineCheckCircle } from 'react-icons/md';
 
 export interface ToggleButtonProps
   extends React.ComponentPropsWithoutRef<typeof ChakraBox> {
-  isChecked?: false;
   colorMode?: ColorMode;
+  icon?: ReactElement;
+  iconFill?: string;
   label?: string;
   value: string;
 }
@@ -23,7 +25,7 @@ export interface ToggleButtonProps
 function ToggleButton(
   props: React.PropsWithoutRef<ToggleButtonProps>
 ): React.ReactElement {
-  const { isChecked, children, colorMode, label, ...rest } = props;
+  const { children, colorMode, icon, iconFill, label, value, ...rest } = props;
   const { getInputProps, getCheckboxProps } = useRadio(props);
 
   const input = getInputProps();
@@ -33,27 +35,54 @@ function ToggleButton(
   return (
     // This will override the default theme if we specify the colorMode to the toggle button.
     <ThemeProvider theme={getTheme(colorMode ?? theme.currentColorMode)}>
+      <Fonts />
       <ChakraBox as="label" d="flex" flexGrow={1} aria-label={label}>
         <input {...input} />
-        <Button as="div" {...checkbox} variant="toggle" {...rest} flexGrow={1}>
-          {children}
-          {isChecked && (
+        <Button
+          as="div"
+          variant="settings"
+          flexGrow={1}
+          {...checkbox}
+          {...rest}
+        >
+          {icon && (
             <Icon
-              as={MdOutlineCheckCircle}
-              position="absolute"
+              as={icon}
               verticalAlign="middle"
-              right={2}
-              top="50%"
-              transform="translateY(-50%)"
-              alignItems="baseline"
-              w={5}
-              h={5}
+              mr={1.5}
+              w={6}
+              h={6}
+              fill={iconFill && iconFill}
             />
           )}
+          {label && <Text>{label}</Text>}
         </Button>
       </ChakraBox>
     </ThemeProvider>
   );
 }
+
+export const FontToggleButton: typeof ToggleButton = (props) => {
+  return <ToggleButton fontSize={[-1, -1, 0]} py={6} {...props} />;
+};
+
+export const ColorModeToggleButton: typeof ToggleButton = ({
+  bgColor,
+  ...rest
+}) => {
+  return (
+    <ToggleButton
+      sx={{
+        _checked: {
+          bgColor,
+          p: {
+            textDecoration: 'underline',
+          },
+        },
+      }}
+      {...rest}
+    />
+  );
+};
 
 export default ToggleButton;

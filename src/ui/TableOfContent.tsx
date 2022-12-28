@@ -1,11 +1,11 @@
 import React from 'react';
 import { Portal, Text, Icon, Box } from '@chakra-ui/react';
-import { MdOutlineToc, MdOutlineCancel } from 'react-icons/md';
 import { Navigator, WebpubManifest } from '../types';
 import Button from './Button';
 import useColorModeValue from './hooks/useColorModeValue';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 import { Menu, MenuButton, MenuItem, MenuList } from './menu';
+import { TableOfContents } from './icons';
 
 export default function TableOfContent({
   navigator,
@@ -21,6 +21,7 @@ export default function TableOfContent({
   };
 
   const tocBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
+  const iconFill = useColorModeValue('ui.black', 'ui.white', 'ui.black');
 
   const getLinkHref = (link: ReadiumLink): string => {
     if (link.href) return link.href;
@@ -36,9 +37,7 @@ export default function TableOfContent({
             as={Button}
             border="none"
             aria-label="Table of Contents"
-            leftIcon={
-              <Icon as={isOpen ? MdOutlineCancel : MdOutlineToc} w={6} h={6} />
-            }
+            leftIcon={<Icon as={TableOfContents} w={6} h={6} fill={iconFill} />}
           >
             <Text variant="headerNav">Table of Contents</Text>
           </MenuButton>

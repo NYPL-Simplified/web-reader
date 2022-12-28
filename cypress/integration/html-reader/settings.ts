@@ -48,6 +48,28 @@ describe('display settings', () => {
     cy.getIframeHtml().should('have.css', '--USER__fontSize', '96%'); // 4% per step?
   });
 
+  it('should reset settings to default', () => {
+    cy.log('open the settings menu');
+    cy.findByRole('button', { name: 'Settings' }).click();
+
+    cy.findByText('Serif').click();
+    cy.findByText('Sepia').click();
+    cy.findByRole('button', { name: 'Decrease font size' }).click();
+
+    cy.getIframeHtml()
+      .should('have.css', '--USER__appearance', 'readium-sepia-on')
+      .should('have.css', '--USER__fontFamily', 'serif')
+      .should('have.css', '--USER__fontSize', '96%');
+
+    cy.findByRole('button', { name: 'Reset settings' }).click();
+
+    cy.getIframeHtml()
+      .should('have.css', '--USER__appearance', 'readium-default-on')
+      .should('have.css', '--USER__fontFamily', 'Original')
+      .should('have.css', '--USER__scroll', 'readium-scroll-off')
+      .should('have.css', '--USER__fontSize', '100%');
+  });
+
   it('should stay on the same page when switching between reading modes', () => {
     cy.log('Make sure we are on paginated mode');
     cy.findByRole('button', { name: 'Settings' }).click();
@@ -95,7 +117,7 @@ it('should maintain settings between page visits', () => {
   cy.log('Settings overlay should show correct values');
   cy.findByRole('button', { name: 'Settings' }).click();
   cy.wait(100);
-  cy.findByRole('radio', { name: 'Publisher' }).should('be.checked');
+  cy.findByRole('radio', { name: 'Default' }).should('be.checked');
   cy.findByRole('radio', { name: 'Day' }).should('be.checked');
   cy.findByRole('radio', { name: 'Paginated' }).should('be.checked');
 

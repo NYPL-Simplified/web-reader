@@ -32,19 +32,16 @@ export const Default = Template.bind({});
 
 Default.args = {
   children: 'Hello world',
-  isChecked: false,
 };
 
 export const Checked = Template.bind({});
 
 Checked.args = {
   ...Default.args,
-  isChecked: true,
 };
 
 export const CheckedSettingButton = Template.bind({});
 
 CheckedSettingButton.args = {
   ...Default.args,
-  isChecked: true,
 };

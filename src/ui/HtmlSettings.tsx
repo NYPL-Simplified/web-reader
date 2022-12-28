@@ -1,12 +1,28 @@
 import * as React from 'react';
-import { ButtonGroup } from '@chakra-ui/react';
-import { HtmlNavigator, ReaderState } from '../types';
+import { ButtonGroup, Heading, Stack, Text } from '@chakra-ui/react';
+import { HtmlNavigator, ReaderSettings, ReaderState } from '../types';
 import Button from './Button';
-import ToggleButton from './ToggleButton';
+import {
+  Continuous,
+  Day,
+  EnlargeFont,
+  Night,
+  Paginated,
+  ReduceFont,
+  Reset,
+  Sepia,
+} from './icons';
+import { DEFAULT_SETTINGS, FONT_DETAILS } from '../constants';
+import ToggleButton, {
+  ColorModeToggleButton,
+  FontToggleButton,
+} from './ToggleButton';
 import ToggleGroup from './ToggleGroup';
+import useColorModeValue from './hooks/useColorModeValue';
 
 export type HtmlSettingsProps = {
   navigator: HtmlNavigator;
+  iconFill: string;
   readerState: ReaderState;
   paginationValue: string;
 };
@@ -14,13 +30,23 @@ export type HtmlSettingsProps = {
 export default function HtmlSettings(
   props: HtmlSettingsProps
 ): React.ReactElement | null {
-  const { navigator, readerState, paginationValue } = props;
+  const { navigator, iconFill, readerState, paginationValue } = props;
+
+  const buttonTextColor = useColorModeValue('ui.black', 'ui.white', 'ui.black');
+  const checkedButtonBgColor = useColorModeValue(
+    'ui.gray.light-warm',
+    'ui.gray.x-dark',
+    'ui.sepiaChecked'
+  );
+
   if (!readerState.settings) return null;
-  const { fontFamily, colorMode } = readerState.settings;
+  const { colorMode, fontFamily } = readerState.settings;
+
   const {
     setFontFamily,
     decreaseFontSize,
     increaseFontSize,
+    resetSettings,
     setColorMode,
     setScroll,
   } = navigator;
@@ -32,82 +58,157 @@ export default function HtmlSettings(
         label="text font options"
         onChange={setFontFamily}
       >
-        <ToggleButton value="publisher" label="Publisher">
-          Publisher
-        </ToggleButton>
-        <ToggleButton value="serif" label="Serif">
-          Serif
-        </ToggleButton>
-        <ToggleButton value="sans-serif" label="Sans-Serif">
-          Sans-Serif
-        </ToggleButton>
-        <ToggleButton value="open-dyslexic" label="Dyslexia-Friendly">
-          Dyslexia-Friendly
-        </ToggleButton>
+        <FontToggleButton value="publisher" label="Default" />
+        <FontToggleButton
+          value="serif"
+          label="Serif"
+          fontFamily="serif"
+          fontWeight="regular"
+        />
+        <FontToggleButton
+          value="sans-serif"
+          label="Sans-Serif"
+          fontFamily="sansSerif"
+          fontWeight="regular"
+        />
+        <FontToggleButton
+          value="open-dyslexic"
+          label="Dyslexia"
+          fontFamily="opendyslexic"
+          fontWeight="regular"
+        />
       </ToggleGroup>
-      <ButtonGroup d="flex" spacing={0}>
-        <Button
-          flexGrow={1}
-          aria-label="Decrease font size"
-          onClick={decreaseFontSize}
-          variant="toggle"
+      <Stack bgColor={checkedButtonBgColor} px={7} py={5}>
+        <Heading
+          as="h3"
+          color={buttonTextColor}
+          pb="10px"
+          fontSize={2}
+          fontWeight="light"
         >
-          A-
-        </Button>
-        <Button
-          flexGrow={1}
-          aria-label="Increase font size"
-          onClick={increaseFontSize}
-          variant="toggle"
+          {FONT_DETAILS[fontFamily].heading}
+        </Heading>
+        <Text
+          color={buttonTextColor}
+          fontFamily={FONT_DETAILS[fontFamily].token}
+          fontSize={-1}
+          fontWeight={FONT_DETAILS[fontFamily].fontWeight}
         >
-          A+
-        </Button>
-      </ButtonGroup>
+          {FONT_DETAILS[fontFamily].body}
+        </Text>
+      </Stack>
       <ToggleGroup
         value={colorMode}
         label="reading theme options"
         onChange={setColorMode}
       >
-        <ToggleButton
+        <ColorModeToggleButton
           colorMode="day"
+          icon={Day}
           value="day"
           label="Day"
-          _checked={{ bg: 'ui.white' }} // default _checked color is green for toggles
-        >
-          Day
-        </ToggleButton>
-        <ToggleButton
+          bgColor="ui.white"
+          textColor="ui.black"
+        />
+        <ColorModeToggleButton
           colorMode="sepia"
+          icon={Sepia}
           value="sepia"
           label="Sepia"
-          bg="ui.sepia" // distinct case where default needs to be sepia
-          _active={{ bg: 'ui.sepia' }}
-          _hover={{ bg: 'ui.sepia' }}
-          _checked={{ bg: 'ui.sepia' }}
-        >
-          Sepia
-        </ToggleButton>
-        <ToggleButton
+          bgColor="ui.sepia"
+          textColor="ui.black"
+        />
+        <ColorModeToggleButton
           colorMode="night"
+          icon={Night}
           value="night"
           label="Night"
-          _checked={{ bg: 'ui.black' }}
-        >
-          Night
-        </ToggleButton>
+          bgColor="ui.black"
+          textColor="ui.white"
+        />
       </ToggleGroup>
+      <ButtonGroup d="flex" spacing={0}>
+        <Button
+          flexGrow={1}
+          aria-label="Reset settings"
+          onClick={resetSettings}
+          variant="settings"
+        >
+          <Reset
+            w="45px"
+            h="45px"
+            fill={
+              areSettingsDefault(readerState.settings)
+                ? 'ui.gray.disabled'
+                : iconFill
+            }
+          />
+        </Button>
+        <Button
+          aria-label="Decrease font size"
+          flexGrow={1}
+          onClick={decreaseFontSize}
+          sx={{
+            _active: {
+              bgColor: checkedButtonBgColor,
+            },
+          }}
+          value="decrease font size"
+          variant="settings"
+        >
+          <ReduceFont w="45px" h="45px" fill={iconFill} />
+        </Button>
+        <Button
+          aria-label="Increase font size"
+          flexGrow={1}
+          onClick={increaseFontSize}
+          sx={{
+            _active: {
+              bgColor: checkedButtonBgColor,
+            },
+          }}
+          value="increase font size"
+          variant="settings"
+        >
+          <EnlargeFont w="45px" h="45px" fill={iconFill} />
+        </Button>
+      </ButtonGroup>
       <ToggleGroup
         onChange={setScroll}
         value={paginationValue}
         label="pagination options"
       >
-        <ToggleButton value="paginated" label="Paginated">
-          Paginated
-        </ToggleButton>
-        <ToggleButton value="scrolling" label="Scrolling">
-          Scrolling
-        </ToggleButton>
+        <ToggleButton
+          value="paginated"
+          borderRadius="0 0 0 4px"
+          label="Paginated"
+          icon={Paginated}
+          iconFill={iconFill}
+        />
+        <ToggleButton
+          value="scrolling"
+          borderRadius="0 0 4px 0"
+          label="Scrolling"
+          icon={Continuous}
+          iconFill={iconFill}
+        />
       </ToggleGroup>
     </>
   );
 }
+
+// Returns true if the reader's settings match the default settings
+const areSettingsDefault = (readerSettings: ReaderSettings) => {
+  if (!readerSettings) {
+    return false;
+  }
+
+  let setting: keyof ReaderSettings;
+
+  for (setting in DEFAULT_SETTINGS) {
+    if (readerSettings[setting] !== DEFAULT_SETTINGS[setting]) {
+      return false;
+    }
+  }
+  return true;
+};

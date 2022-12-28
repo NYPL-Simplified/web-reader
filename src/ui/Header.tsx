@@ -1,38 +1,49 @@
 import React, { ComponentProps } from 'react';
 import { Flex, Link, HStack, Text, Icon } from '@chakra-ui/react';
-import { MdHome } from 'react-icons/md';
 import { ActiveReader, ReaderManagerArguments } from '../types';
-import useColorModeValue from '../ui/hooks/useColorModeValue';
-
-import SettingsCard from './SettingsButton';
 import Button from './Button';
-import TableOfContent from './TableOfContent';
-import { MdOutlineFullscreenExit, MdOutlineFullscreen } from 'react-icons/md';
-import useFullscreen from './hooks/useFullScreen';
 import { HEADER_HEIGHT } from '../constants';
+import { Previous, ToggleFullScreen, ToggleFullScreenExit } from './icons';
+import SettingsCard from './SettingsButton';
+import TableOfContent from './TableOfContent';
+import useColorModeValue from '../ui/hooks/useColorModeValue';
+import useFullscreen from './hooks/useFullScreen';
 
 export const DefaultHeaderLeft = (): React.ReactElement => {
   const linkColor = useColorModeValue('gray.700', 'gray.100', 'gray.700');
+  const iconFill = useColorModeValue(
+    'ui.gray.icon',
+    'ui.white',
+    'ui.gray.icon'
+  );
+  const bgColorFocus = useColorModeValue(
+    'ui.gray.active',
+    'ui.gray.x-dark',
+    'ui.gray.active'
+  );
+
   return (
     <Link
       href="/"
       aria-label="Return to Homepage"
       tabIndex={0}
       fontSize={0}
+      px={3}
       py={1}
-      textTransform="uppercase"
       d="flex"
       color={linkColor}
       height="100%"
       alignItems="center"
       _hover={{
+        bgColor: bgColorFocus,
         textDecoration: 'none',
       }}
+      _focus={{
+        bgColor: bgColorFocus,
+      }}
     >
-      <Icon as={MdHome} w={6} h={6} />
-      <Text paddingLeft={2} variant="headerNav">
-        Back to Homepage
-      </Text>
+      <Icon as={Previous} fill={iconFill} w={6} h={6} />
+      <Text variant="headerNav">Back</Text>
     </Link>
   );
 };
@@ -45,7 +56,16 @@ export default function Header(
 ): React.ReactElement {
   const [isFullscreen, toggleFullScreen] = useFullscreen();
   const { headerLeft, navigator, manifest, containerRef } = props;
-  const mainBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.sepia');
+  const iconFill = useColorModeValue(
+    'ui.gray.icon',
+    'ui.white',
+    'ui.gray.icon'
+  );
+  const mainBgColor = useColorModeValue(
+    'ui.gray.light-warm',
+    'ui.black',
+    'ui.sepia'
+  );
 
   return (
     <HeaderWrapper bg={mainBgColor}>
@@ -58,17 +78,22 @@ export default function Header(
         />
         <SettingsCard {...props} />
         <Button
+          aria-expanded={isFullscreen}
+          aria-label="Toggle full screen"
           border="none"
           onClick={toggleFullScreen}
           leftIcon={
             <Icon
-              as={isFullscreen ? MdOutlineFullscreenExit : MdOutlineFullscreen}
+              as={isFullscreen ? ToggleFullScreenExit : ToggleFullScreen}
+              fill={iconFill}
               w={6}
               h={6}
             />
           }
         >
-          <Text variant="headerNav">Toggle Fullscreen</Text>
+          <Text variant="headerNav">
+            {isFullscreen ? 'Full screen exit' : 'Full screen'}
+          </Text>
         </Button>
       </HStack>
     </HeaderWrapper>
