@@ -161,7 +161,6 @@ async function startWatcher() {
     'cypress',
     'coverage',
     '.husky',
-    '.storybook',
   ];
   const watchPaths = ['.'];
   console.log('👀 Watching for changes...');

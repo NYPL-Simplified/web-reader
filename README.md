@@ -2,14 +2,13 @@
 
 This project is a web reader built by NYPL for reading eBooks. It is built using the [Readium Architecture](https://github.com/readium/architecture), and specifically built for Webpubs. Webpub is a spec [defined by the Readium Foundation](https://github.com/readium/webpub-manifest) to provide a common abstraction between many types of web publications. Initially, this project will focus on HTML-based Webpubs and Webpubs that define PDF collections. An HTML-based Webpub can be generated from many types of eBooks, but most commonly ePubs.
 
-The project is built with [esbuild](https://esbuild.github.io/). It uses Typescript, React, Jest and Cypress, and features both a Storybook development environment and an example application under `/example`. The example is deployed here: https://nypl-web-reader.vercel.app.
+The project is built with [esbuild](https://esbuild.github.io/). It uses Typescript, React, Jest and Cypress, and features an example application under `/example`. The example is deployed here: https://nypl-web-reader.vercel.app.
 
 A big thanks to [R2D2BC](https://github.com/d-i-t-a/R2D2BC) for providing the underlying HTML navigator capabilities.
 
 ## Demo
 
 - [Example reader app](https://nypl-web-reader.vercel.app)
-- [Storybook deployment](https://web-reader-storybook.vercel.app)
 
 ## Features
 
@@ -236,8 +235,6 @@ This is the folder structure:
   useWebReader.tsx  # the React hook providing the main API into the reader
 /test
   blah.test.tsx     # tests will go in here
-/stories            # stories will go in here
-/.storybook         # storybook config
 ```
 
 ### Decryption
@@ -260,26 +257,6 @@ The `AxisNow Encrypted EPUB` example shows how this is done using the private NY
 ## Commands
 
 Before getting started, be sure to run `npm install`.
-
-The recommended workflow is to either run the storybook app, or the example app:
-
-### Storybook
-
-Run in `/web-reader`:
-
-```bash
-npm run start
-```
-
-Then in another terminal:
-
-```bash
-npm run storybook
-```
-
-This loads the stories from `./stories`.
-
-> NOTE: Stories should reference the components as if using the library. This means importing from the root project directory. This has been aliased in the tsconfig and the storybook webpack config as a helper.
 
 ### Example
 
