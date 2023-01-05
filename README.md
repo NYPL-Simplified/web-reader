@@ -38,7 +38,7 @@ This project features an example application under `/example`, which is deployed
 Basic usage within a React app, using the default UI:
 
 ```typescript
-import WebReader from 'nypl/web-reader';
+import WebReader from '@nypl/web-reader';
 
 const ReaderPage = ({ manifestUrl }) => {
   return (
@@ -50,68 +50,7 @@ const ReaderPage = ({ manifestUrl }) => {
 };
 ```
 
-Passing a content decryptor to the reader for use by the Client. This would be how we render AxisNow content for example:
-
-```typescript
-import WebReader from "nypl/web-reader"
-import AxisNowDecryptor from "nypl/axisnow-access-control-web"
-
-const ReaderPage = ({manifestUrl}) => {
-  const decryptor = new AxisNowDecryptor(...);
-  return (
-	  <WebReader
-      getContent={decryptor.getContent}
-      manifestUrl={manifestUrl}
-    />
-  )
-}
-```
-
-To support customization, you can piece together your own UI and call the `useWebReader` hook to get access to the reader API.
-
-```typescript
-import { useWebReader, ReaderNav, ReaderFooter } from 'nypl/web-reader';
-
-const CustomizedReaderPage = ({ webpubManifestUrl }) => {
-  // takes a manifest, instantiates a Navigator, and
-  // returns the Navigator, interaction handlers, and
-  // the current state of the reader as an object
-  const reader = useWebReader({
-    webpubManifestUrl,
-  });
-
-  return (
-    <div>
-      {/* eg. keep default header, but change its background */}
-      <ReaderNav {...reader} className="bg-blue" />
-
-      {/* we can add custom prev/next page buttons */}
-      <button onClick={reader.handleNextPage}>Next</button>
-      <button onClick={reader.handlePrevPage}>Prev</button>
-
-      {/* you will receive content from the reader to render wherever you want */}
-      {reader.content}
-
-      {/* use the default footer */}
-      <ReaderFooter {...reader} />
-    </div>
-  );
-};
-```
-
-If you know you are only going to be using one type of reader, you can also call the hook just for that reader:
-
-```typescript
-import { usePdfReader } from 'nypl/web-reader';
-
-const MyPdfReader = ({ webpubManifestUrl, manifest }) => {
-  const reader = usePdfReader({ manifest, webpubManifestUrl });
-
-  return <div>{reader.content}</div>;
-};
-```
-
-Finally, to use in a vanilla Javascript app:
+To use in a vanilla Javascript app:
 
 ```html
 <div id="web-reader" />
@@ -122,6 +61,13 @@ Finally, to use in a vanilla Javascript app:
   });
 </script>
 ```
+
+- [More React examples](/example/index.tsx) - Includes examples that render EPUB2 & EPUB3 based webpubs, remote hosted webpubs, and PDFs
+- [Encrypted example](/example/axisnow-encrypted.tsx) - How to pass an content decryptor to the web-reader to render encrypted content
+- [usePDFReader hook example](/example/use-pdf-reader.tsx) - Useful for instances when you know you're only going to be using the web-reader to open PDFs
+- [useHTMLReader hook example](/example/use-html-reader.tsx) - Useful for cases when you know you're only going to be using the web-reader to read EPUBs
+- [Real-world example: Open eBooks Web](https://github.com/NYPL/ereading-clients/blob/staging/apps/oew/src/components/theme-ui/WebReader.tsx) - NYPL application for children to read books on the web. This demonstrates how encrypted AxisNow content is passed to the web-reader.
+- [Real-world example: Digital Research Books (DRB)](https://github.com/NYPL/sfr-bookfinder-front-end/blob/development/src/components/ReaderLayout/ReaderLayout.tsx) - NYPL application that collects digital versions of research books into one convenient place to search. DRB currently only collects PDF resources and displays them with the web-reader.
 
 ## Styling
 
@@ -184,7 +130,7 @@ const Reader = () => {
 
 ## Errors
 
-We make every effort to throw useful errors. Your app should probably wrap the web reader component in a React `<ErrorBoundary>` to either display the thrown errors or a custom error state for your users in the case one is thrown. See the example app for an example using an Error Boundary.
+We make every effort to throw useful errors. Your app should probably wrap the web reader component in a React `<ErrorBoundary>` to either display the thrown errors or a custom error state for your users in the case one is thrown.
 
 ## Architecture
 
@@ -266,6 +212,8 @@ These instructions will get you a copy of the project up and running on your loc
 
 1. Before getting started, be sure to run `npm install`.
 
+If you are internal to NYPL you can be added to the private `@nypl-simplified-packages/axisnow-access-control-web` package, which is required in order to open the AxisNow Encrypted EPUB example. If you decide to install this package, you'll also need to generate a Personal Access Token in GitHub with `read` permissions and run `GH_PACKAGE_AUTH_TOKEN=<your-token-here> npm install`.
+
 2. In order to open any of the PDF examples in the Example App, you'll need to allow urls in a `WebpubManifest` to be proxied. This is done by passing a `proxyUrl` to the `<WebReader>` component. In order to do that, you must have a proxy running somewhere.
 
 We have set up a small express-based CORS proxy that can be run for local development.
@@ -274,7 +222,7 @@ We have set up a small express-based CORS proxy that can be run for local develo
 - Pass the proxy url to the example app by setting the following env var in a `.env` file at the root of the project: `CORS_PROXY_URL="http://localhost:3001/?requestUrl="`.
 - In a separate terminal session, start the example app: `npm run example`.
 
-3. In order to open the AxisNow Encrypted EPUB example (`/html/axisnow-encrypted`), you will need to have `process.env.VAULT_UUID` and `process.env.ISBN` set properly to read this book. Read [example/README.txt](/example/README.txt) for more info.
+3. In order to open the AxisNow Encrypted EPUB example (`/html/axisnow-encrypted`), you will need to have `process.env.VAULT_UUID` and `process.env.ISBN` set in your `.env` file. Read [example/README.txt](/example/README.txt) for more info.
 
 ### Running the Example App
 
@@ -363,6 +311,8 @@ There are three Github Actions Workflows:
 We use [SemVer](https://semver.org/) for versioning. For the versions available, see the [releases](https://github.com/NYPL-Simplified/web-reader/releases) on this repository.
 
 ## Publishing to NPM
+
+To publish the package to [NPM](https://www.npmjs.com/package/@nypl/web-reader), you must first be added to the `nypl` organization within NPM.
 
 Run `npm run release` from the main branch. Follow the prompts to add a new version, publish a release to github, and push to npm.
 
