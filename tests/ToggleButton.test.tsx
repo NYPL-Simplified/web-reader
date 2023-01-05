@@ -7,5 +7,4 @@ describe('ToggleButton', () => {
     render(<ToggleButton label="hello">hello</ToggleButton>);
     expect(screen.getByRole('radio', { name: 'hello' })).not.toBeChecked();
   });
-  //   test('Button shows checkmark if is isChecked=true', () => {});
 });
