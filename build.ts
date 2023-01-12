@@ -10,14 +10,6 @@ import child_process from 'child_process';
 const rimraf = util.promisify(origRimraf);
 const exec = util.promisify(child_process.exec);
 
-/**
- * @todo
- *
- * - Figure out how to export the fonts and include them with dynamic urls in the css?
- * - Possibly export a CJS or IIFE version?
- * - Possibly add postcss or something to support namespaces?
- */
-
 const isWatchEnabled = process.argv[2] === '-w';
 // for now we bundle for production whenever we aren't in watch mode
 const isProduction = !isWatchEnabled;
@@ -47,16 +39,7 @@ async function buildTs(
     bundle: true,
     // what browsers we want to support, this is basically all >1% usage
     target: ['es2016', 'chrome89', 'firefox88', 'safari14', 'edge90'],
-    external: [
-      'react-dom',
-      'react',
-      /**
-       * @todo - We currently ignore these fonts, but we need to figure out a better way
-       * to include them
-       */
-      'fonts/AccessibleDfA.otf',
-      'fonts/iAWriterDuospace-Regular.ttf',
-    ],
+    external: ['react-dom', 'react'],
     sourcemap: true,
     define: {
       // note these need to be double quoted if we want to define string constants

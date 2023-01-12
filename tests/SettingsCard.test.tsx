@@ -13,7 +13,7 @@ import { axe } from 'jest-axe';
 import SettingsCard from '../src/ui/SettingsButton';
 
 describe('SettingsCard Accessibility checker', () => {
-  test.only('SettingsCard should have no violation', async () => {
+  test('SettingsCard should have no violation', async () => {
     const { container } = render(
       <SettingsCard
         navigator={MockHtmlNavigator}
@@ -33,12 +33,10 @@ describe('Render settings for different media type', () => {
     );
 
     // default buttons
-    expect(getByRole('radio', { name: 'Publisher' })).toBeInTheDocument();
+    expect(getByRole('radio', { name: 'Default' })).toBeInTheDocument();
     expect(getByRole('radio', { name: 'Serif' })).toBeInTheDocument();
     expect(getByRole('radio', { name: 'Sans-Serif' })).toBeInTheDocument();
-    expect(
-      getByRole('radio', { name: 'Dyslexia-Friendly' })
-    ).toBeInTheDocument();
+    expect(getByRole('radio', { name: 'Dyslexia' })).toBeInTheDocument();
 
     expect(
       getByRole('button', { name: 'Decrease font size' })
@@ -59,16 +57,14 @@ describe('Render settings for different media type', () => {
     expect(getByRole('radio', { name: 'Day' })).toBeChecked();
     expect(getByRole('radio', { name: 'Paginated' })).toBeChecked();
 
-    // TODO: pdf specific tests, create tests for PDF specific settings and make sure they don't
-    // show up for the HTML reader. This should also apply to Cypress tests.
     expect(queryByLabelText('Zoom In')).toBeNull();
     expect(queryByLabelText('Zoom Out')).toBeNull();
   });
 
   test('PDF settings', () => {
-    const { getByRole } = render(<PdfSettings {...MockPdfSettingsProps} />);
-
-    // TODO: Need to figure out what settings to be shown by default
+    const { getByRole, queryByLabelText } = render(
+      <PdfSettings {...MockPdfSettingsProps} />
+    );
 
     expect(getByRole('radio', { name: 'Paginated' })).toBeInTheDocument();
     expect(getByRole('radio', { name: 'Scrolling' })).toBeInTheDocument();
@@ -79,6 +75,6 @@ describe('Render settings for different media type', () => {
     // default checked values
     expect(getByRole('radio', { name: 'Paginated' })).toBeChecked();
 
-    // TODO: HTML specific tests. Same as above, make sure HTML settings/buttons do not show up on the page when a PDF is being rendered.
+    expect(queryByLabelText('Increase font size')).toBeNull();
   });
 });

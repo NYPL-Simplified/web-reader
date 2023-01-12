@@ -328,7 +328,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     []
   );
 
-  //TODO: Somehow, this window size updates when height
   React.useEffect(() => {
     resizePage(state.pdfWidth, state.pdfHeight, containerSize);
   }, [containerSize, state.pdfWidth, state.pdfHeight, resizePage]);
@@ -455,9 +454,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     []
   );
 
-  /**
-   * TODO: Change this button into a different "scale" button
-   */
   const zoomIn = React.useCallback(async () => {
     dispatch({
       type: 'SET_SCALE',

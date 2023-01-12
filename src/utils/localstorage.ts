@@ -7,16 +7,6 @@ import { HtmlState } from '../HtmlReader/types';
 import { Locator } from '../Readium/Locator';
 import { ReaderArguments, ReaderSettings } from '../types';
 
-/**
- * Use getLocalStorageLocation to get the location when
- * initializing the reducer. useUpdateLocalStorage will set
- * values in local storage as they change.
- *
- * TODO:
- *  - PDF Sync
- *  - how to handle non backwards compatible updates
- */
-
 export type LSLocation = {
   location: Locator;
   createdAt: number;
@@ -25,6 +15,11 @@ export type LSLocation = {
 // we store all locations for books in a single object.
 export type LSLocationsRecord = Record<string, LSLocation>;
 
+/**
+ * Use getLocalStorageLocation to get the location when
+ * initializing the reducer. useUpdateLocalStorage will set
+ * values in local storage as they change.
+ */
 export function getLocalStorageLocation(
   identifier: string,
   args: ReaderArguments
