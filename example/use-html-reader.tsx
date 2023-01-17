@@ -5,7 +5,7 @@ import { WebpubManifest } from '../src/types';
 import Footer from '../src/ui/Footer';
 import Header from '../src/ui/Header';
 
-type CustomReaderProps = {
+type HTMLReaderProps = {
   injectablesReflowable: Injectable[];
   webpubManifestUrl: string;
   manifest: WebpubManifest;
@@ -16,7 +16,7 @@ type CustomReaderProps = {
  * to render EPUBs. Use it when you know you're _not_ going to be
  * opening PDFs.
  */
-const UseHtmlReader: React.FC<CustomReaderProps> = ({
+const UseHtmlReader: React.FC<HTMLReaderProps> = ({
   injectablesReflowable,
   webpubManifestUrl,
   manifest,

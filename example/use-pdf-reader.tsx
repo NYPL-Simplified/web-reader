@@ -4,7 +4,7 @@ import { WebpubManifest } from '../src/types';
 import Footer from '../src/ui/Footer';
 import Header from '../src/ui/Header';
 
-type CustomReaderProps = {
+type PDFReaderProps = {
   webpubManifestUrl: string;
   manifest: WebpubManifest;
   proxyUrl: string | undefined;
@@ -16,7 +16,7 @@ type CustomReaderProps = {
  * to render PDFs. Use it when you know you're _not_ going to be
  * opening EPUBs.
  */
-const UsePdfReader: React.FC<CustomReaderProps> = ({
+const UsePdfReader: React.FC<PDFReaderProps> = ({
   webpubManifestUrl,
   manifest,
   proxyUrl,
