@@ -11,6 +11,7 @@ import useMeasure from './useMeasure';
 import ChakraPage from './ChakraPage';
 import ScrollPage from './ScrollPage';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
+// Required CSS in order for links to be clickable in PDFs
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import { HEADER_HEIGHT, FOOTER_HEIGHT, DEFAULT_SETTINGS } from '../constants';
 import {

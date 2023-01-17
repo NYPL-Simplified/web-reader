@@ -14,7 +14,7 @@ This project features an example application under `/example`, which is deployed
 - [TypeScript](https://www.npmjs.com/package/typescript) - JavaScript with syntax for types
 - [React](https://www.npmjs.com/package/react) - For creating user interface components
 - [Jest](https://jestjs.io/) & [React Testing Library](https://testing-library.com/) - For writing unit tests
-- The Example App is packaged with [Parcel](https://parceljs.org/) & deployed with [Vercel](). Integration tests are run with [Cypress](https://www.cypress.io/).
+- The Example App is packaged with [Parcel](https://parceljs.org/) & deployed with [Vercel](https://vercel.com/). Integration tests are run with [Cypress](https://www.cypress.io/).
 
 ## Features
 
@@ -67,29 +67,27 @@ To use in a vanilla Javascript app:
 - [usePDFReader hook example](/example/use-pdf-reader.tsx) - Useful for instances when you know you're only going to be using the web-reader to open PDFs
 - [useHTMLReader hook example](/example/use-html-reader.tsx) - Useful for cases when you know you're only going to be using the web-reader to read EPUBs
 - [Real-world example: Open eBooks Web](https://github.com/NYPL/ereading-clients/blob/staging/apps/oew/src/components/theme-ui/WebReader.tsx) - NYPL application for children to read books on the web. This demonstrates how encrypted AxisNow content is passed to the web-reader.
-- [Real-world example: Digital Research Books (DRB)](https://github.com/NYPL/sfr-bookfinder-front-end/blob/development/src/components/ReaderLayout/ReaderLayout.tsx) - NYPL application that collects digital versions of research books into one convenient place to search. DRB currently only collects PDF resources and displays them with the web-reader.
+- [Real-world example: Digital Research Books (DRB)](https://github.com/NYPL/sfr-bookfinder-front-end/blob/development/src/components/ReaderLayout/ReaderLayout.tsx) - NYPL application that collects digital versions of research books into one convenient place to search.
 
-## Styling
-
-Most styling is included in the basic UI, but we also ship a few css files that must be included:
-
-1. Both the HTML and the PDF side have css that is necessary to be included for the dependencies we use to render correctly. This is built automatically into `@nypl/web-reader/dist/esm/index.css` and `@nypl/web-reader/dist/cjs/index.css`. Depending which package you are using, you should include one of those files in your bundle.
-1. The HTML Reader can inject `<style>` tags (and other tags) into the reader iframe itself, called an "injectable". This is used to add styles to the html content of the publication. More on this is below.
+## Required Fonts
 
 In order for the Settings panel to be displayed as intended, the fonts Roboto, Georgia, Helvetica, and OpenDyslexic must be available to your application. Georgia is web safe, meaning it is installed by default on most devices, but the others are not. One way to include them is to copy the `fonts` folder and its contents from `@nypl/web-reader/example/static` into your `/public` directory.
 
-We are using [Chakra](https://chakra-ui.com/) to style the default UI components. You can wrap our UI components in your own `<ThemeProvider>` to pass your own custom theme.
+## Required CSS Injectables for the HTML Reader (EPUBs)
 
-## Injectables
+**Note:** This section does not apply to PDFs
 
-The HTML Reader has the ability to inject custom elements into the reader iframe. This is most useful for passing stylesheets and fonts, but other elements can be injected too. It is recommended to pass the `opendyslexic` font and the default Readium stylesheets as injectables to the iframe.
+The HTML Reader can inject `<style>` tags (and other tags) into the reader iframe itself, called an "injectable". This is used to add styles to the html content of the publication.
 
-In the below example, we show two different ways to do this.
+In order for the web-reader to render EPUBs correctly and display the OpenDyslexic font, there are some files that you must import into your application and inject into the `<WebReader />`. Those files are as follows:
 
-1. We export the Readium CSS stylesheets compiled under `@nypl/web-reader/dist/injectable-html-styles/*.css`. These css files can then be imported via webpack as a url to a static file that is copied to the dist folder. You can then use this url in your injectable config.
-2. The `fontInjectable` uses a plain url to a css file that we host normally on our site. In this case you would be responsible for copying the css file into your source code and making sure it is hosted at some location.
+1. The `opendyslexic` font
+2. The three default Readium stylesheets
 
-**Note:** Injectables do not apply to PDFs
+We export the Readium CSS stylesheets compiled under `@nypl/web-reader/dist/injectable-html-styles/*.css`. These css files can then be imported via webpack as a url to a static file that is copied to the dist folder. You can then use this url in your injectable config.
+
+**Example:**
+You will need to install `file-loader`, `extract-loader`, and `css-loader` and import the files you need like this:
 
 ```ts
 import readiumBefore from '!file-loader!extract-loader!css-loader!@nypl/web-reader/dist/injectable-html-styles/ReadiumCSS-before.css';
@@ -110,6 +108,8 @@ const cssInjectables: Injectable[] = [
     url: readiumAfter,
   },
 ];
+
+// The `fontInjectable` uses a plain url to a css file that we host normally on our site. In this case you would be responsible for copying the css file into your source code and making sure it is hosted at some location.
 const fontInjectable: Injectable = {
   type: 'style',
   url: `${origin}/fonts/opendyslexic/opendyslexic.css`,
@@ -121,12 +121,33 @@ const htmlInjectables = [...cssInjectables, fontInjectable];
 const Reader = () => {
   return (
     <WebReader
-      injectables={htmlInjectables}
+      injectablesReflowable={htmlInjectables}
       webpubManifestUrl="example/manifest.json"
     />
   );
 };
 ```
+
+A real-world [example](https://github.com/NYPL/sfr-bookfinder-front-end/blob/development/src/components/ReaderLayout/ReaderLayout.tsx) can be seen in the Digital Research Books project.
+
+Alternatively, you can host those three Readium CSS files within your project and import them wherever you render the <WebReader />. This is what we are doing in [Open eBooks](https://github.com/NYPL/ereading-clients/tree/staging/apps/oew/public/css/readium), which enables us to support offline reading mode.
+
+### injectablesFixed vs. injectablesReflowable
+
+There are two different injectables props you can pass to the web reader.
+
+- `injectablesReflowable` is used by HTML-based text books, or any content that makes sense to be resized based on the screen size. For most cases, this is where you should add the Readium CSS files mentioned above.
+- `injectablesFixed` is being used in Open eBooks as a way to style picture books. It could also be used to style other formats like audio and video files.
+
+Your app can provide both props or only one. The reader will decide which one to load into the iframe based on the book format defined in the webpub manifest.
+
+## Other Injectables
+
+You can import and inject other files into the `<WebReader />` to customize behavior. For example, in Open eBooks, we import some [custom JavaScript](https://github.com/NYPL/ereading-clients/blob/staging/apps/oew/src/components/theme-ui/WebReader.tsx#L65) to disable right clicking & copying copywritten content.
+
+## Custom Styling
+
+Basic default styling is included in the basic UI. We are using [Chakra](https://chakra-ui.com/) to style the default UI components. You can wrap our UI components in your own `<ThemeProvider>` to pass your own custom theme.
 
 ## Errors
 
@@ -134,18 +155,19 @@ We make every effort to throw useful errors. Your app should probably wrap the w
 
 ## Architecture
 
-We always start with a Webpub Manifest, which gives us metadata and the structure of the publication with links to the content. Depending on the `metadata.conformsTo` field, we know which type of reader to use to render the publication. Each media type (HTML for EPUBS, PDF for PDF publications, etc) has its own `use_X_Reader` hook (`usePdfReader`, `useHtmlReader`, etc).
+One of the primary architectural goals of the web reader is to abstract away the particularities of the many individual publication formats by using a common manifest to describe all publication types. This is the [Readium Webpub Manifest](https://readium.org/webpub-manifest/profiles/epub.html). This allows the web-reader to consume Webpub Manifests, not manipulate or generate them.
+
+- ePubs are generally run through a Streamer, which fetches the full compressed ePub, generates a manifest for it, and then serves the individual pieces separately. Processing EPUBs into Webpub Manifests can be done with a Readium Streamer or some other way. [epub-to-webpub](https://github.com/NYPL/ePub-to-webpub) is used in the [Open eBooks](https://github.com/NYPL/ereading-clients/tree/staging/apps/oew) project and generates Webpub Manifests from EPUBs and the web-reader consumes them.
+- On the PDF side, we don't have a shared utility for generating manifests, but the Digital Research Books project does use a [Python script](https://github.com/NYPL/drb-etl-pipeline/blob/main/managers/webpubManifest.py) to pre-generate PDF manifests from web-scraped content before sending them to the web-reader. These manifests are then stored in an S3 bucket.
+
+A Webpub Manifest gives us metadata and the structure of the publication with links to the content. Depending on the `metadata.conformsTo` field, we know which type of reader to use to render the publication. Each media type (HTML for EPUBS, PDF for PDF publications, etc) has its own `use_X_Reader` hook (`usePdfReader`, `useHtmlReader`, etc).
 
 **Notes:**
 
 - There is one `use_X_Reader` per _media-type_ (PDF, HTML, Image, etc), not per _format_. As in, ePub and Mobi books are different formats that use the same media type (HTML). Audiobooks and PDF collections use different media types. We currently only have plans for HTML and PDF, but other hooks are welcome and should fit right in.
-- We always start from a Webpub Manifest. This means other formats (like ePub) need to be processed before they get to us. This can be done with a Readium Streamer, or some other way.
-  - For example, DRB is pre-generating PDF manifests from web-scraped content.
-  - There is [nypl/epub-to-webpub](https://github.com/NYPL/ePub-to-webpub) to generate Webpub Manifests from EPUBS.
-  - ePubs are generally run through a Streamer, which is a piece that fetches the full compressed ePub, generates a manifest for it, and then serves the individual pieces separately.
-  - AxisNow encrypted ePubs are served uncompressed. We will generate the manifest for them on the client before instantiating the reader.
+- AxisNow encrypted ePubs are served uncompressed. We will generate the manifest for them on the client before instantiating the reader.
 
-### Pieces of the Architecture:
+### Pieces of the Architecture
 
 1. **use_X_Reader Hook**
 
