@@ -17,13 +17,12 @@ describe('Header rendering', () => {
   test('render header bar', () => {
     render(<Header {...MockHtmlReaderProps} />);
 
-    expect(
-      screen.getByRole('link', { name: 'Return to Homepage' })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Back' })).toBeInTheDocument();
 
-    expect(
-      screen.getByRole('link', { name: 'Return to Homepage' })
-    ).toHaveAttribute('href', '/');
+    expect(screen.getByRole('link', { name: 'Back' })).toHaveAttribute(
+      'href',
+      '/'
+    );
 
     expect(
       screen.getByRole('button', { name: 'Settings' })

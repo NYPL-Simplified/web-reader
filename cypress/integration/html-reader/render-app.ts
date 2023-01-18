@@ -5,7 +5,7 @@ describe('render page content', () => {
 
   it('Renders content on the epub2 based webpub page', () => {
     cy.log('check that all the essential buttons are on the page');
-    cy.findByRole('link', { name: 'Return to Homepage' }).should('exist');
+    cy.findByRole('link', { name: 'Back' }).should('exist');
     cy.findByRole('button', { name: 'Table of Contents' }).should('exist');
     cy.findByRole('button', { name: 'Settings' }).should('exist');
     cy.findByRole('button', { name: 'Toggle full screen' }).should('exist');

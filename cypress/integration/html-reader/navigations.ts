@@ -4,7 +4,7 @@ describe('navigating an EPUB page', () => {
   });
 
   it('should contain a link to return to the homepage', () => {
-    cy.findByRole('link', { name: 'Return to Homepage' }).should(
+    cy.findByRole('link', { name: 'Back' }).should(
       'have.prop',
       'href',
       `${Cypress.config().baseUrl}/`
