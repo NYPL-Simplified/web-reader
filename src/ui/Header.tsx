@@ -70,7 +70,7 @@ export default function Header(
   return (
     <HeaderWrapper bg={mainBgColor}>
       {headerLeft ?? <DefaultHeaderLeft />}
-      <HStack ml="auto" spacing={1}>
+      <HStack ml="auto" spacing={0}>
         <TableOfContent
           containerRef={containerRef}
           navigator={navigator}
@@ -81,16 +81,18 @@ export default function Header(
           aria-expanded={isFullscreen}
           aria-label="Toggle full screen"
           border="none"
+          bgColor={mainBgColor}
+          gap={2}
           onClick={toggleFullScreen}
-          leftIcon={
-            <Icon
-              as={isFullscreen ? ToggleFullScreenExit : ToggleFullScreen}
-              fill={iconFill}
-              w={6}
-              h={6}
-            />
-          }
+          _active={{ bgColor: mainBgColor }}
+          _focus={{ bgColor: mainBgColor, ring: '2px', ringInset: 'inset' }}
         >
+          <Icon
+            as={isFullscreen ? ToggleFullScreenExit : ToggleFullScreen}
+            fill={iconFill}
+            w={6}
+            h={6}
+          />
           <Text variant="headerNav">
             {isFullscreen ? 'Full screen exit' : 'Full screen'}
           </Text>
@@ -116,7 +118,7 @@ export const HeaderWrapper = React.forwardRef<
       zIndex="sticky"
       alignContent="space-between"
       alignItems="center"
-      px={8}
+      px={[0, 0, 8]}
       borderBottom="1px solid"
       borderColor="gray.100"
       {...rest}

@@ -45,7 +45,12 @@ const variantSolid = (getColor: GetColor) => (
   );
   const color = getColor('gray.800', 'ui.white', 'gray.800');
 
-  const _focus = { bgColor: bgColorActive, color };
+  const _focus = {
+    bgColor: bgColorActive,
+    color,
+    ring: '2px',
+    ringInset: 'inset',
+  };
   const _hover = {
     bgColor: bgColorActive,
     color,
@@ -58,7 +63,7 @@ const variantSolid = (getColor: GetColor) => (
   return {
     border: 'none',
     borderColor: 'gray.100',
-    height: '48px',
+    height: '45px',
     transition: 'none',
     fontSize: 0,
     letterSpacing: 1,
