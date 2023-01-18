@@ -10,7 +10,7 @@ import HtmlSettings from '../src/ui/HtmlSettings';
 import PdfSettings from '../src/ui/PdfSettings';
 
 import { axe } from 'jest-axe';
-import SettingsCard from '../src/ui/SettingsButton';
+import SettingsCard from '../src/ui/SettingsCard';
 
 describe('SettingsCard Accessibility checker', () => {
   test.only('SettingsCard should have no violation', async () => {
