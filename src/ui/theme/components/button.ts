@@ -34,8 +34,6 @@ const getButtonStyle = (getColor: GetColor) =>
 const variantSolid = (getColor: GetColor) => (
   props: React.ComponentProps<typeof Button>
 ) => {
-  const { 'aria-expanded': expanded } = props;
-
   const bgColor = getColor('ui.gray.light-warm', 'ui.black', 'ui.sepia');
 
   const bgColorActive = getColor(
@@ -45,7 +43,12 @@ const variantSolid = (getColor: GetColor) => (
   );
   const color = getColor('gray.800', 'ui.white', 'gray.800');
 
-  const _focus = { bgColor: bgColorActive, color };
+  const _focus = {
+    bgColor: bgColorActive,
+    color,
+    ring: '2px',
+    ringInset: 'inset',
+  };
   const _hover = {
     bgColor: bgColorActive,
     color,
@@ -56,16 +59,15 @@ const variantSolid = (getColor: GetColor) => (
   const _disabled = { bgColor };
 
   return {
+    bgColor,
     border: 'none',
     borderColor: 'gray.100',
-    height: '48px',
-    transition: 'none',
-    fontSize: 0,
-    letterSpacing: 1,
-    maxWidth: '100%',
-    cursor: 'pointer',
-    bgColor: expanded ? bgColorActive : bgColor,
     color,
+    cursor: 'pointer',
+    fontSize: 0,
+    height: '48px',
+    letterSpacing: 1,
+    transition: 'none',
     _focus,
     _hover,
     _active,
@@ -92,10 +94,12 @@ const variantSettings = (getColor: GetColor) => (
     bgColor: getColor('ui.white', 'ui.black', 'ui.sepia'),
     border: '1px solid',
     color,
-    py: 8,
-    width: [8, 16, 36],
-    fontSize: [0, 0, 2],
-    whiteSpace: ['normal', 'normal', 'nowrap'],
+    py: [2, 2, 4, 8],
+    whiteSpace: 'normal',
+    width: 2,
+    p: {
+      textAlign: 'center',
+    },
     _active: {
       bgColor,
     },

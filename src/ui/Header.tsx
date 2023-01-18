@@ -1,49 +1,62 @@
 import React, { ComponentProps } from 'react';
-import { Flex, Link, HStack, Text, Icon } from '@chakra-ui/react';
+import {
+  Flex,
+  Link,
+  HStack,
+  Icon,
+  IconButton,
+  Text,
+  useBreakpointValue,
+  Spacer,
+} from '@chakra-ui/react';
+
 import { ActiveReader, ReaderManagerArguments } from '../types';
 import Button from './Button';
 import { HEADER_HEIGHT } from '../constants';
 import { Previous, ToggleFullScreen, ToggleFullScreenExit } from './icons';
-import SettingsCard from './SettingsButton';
+import SettingsCard from './SettingsCard';
 import TableOfContent from './TableOfContent';
 import useColorModeValue from '../ui/hooks/useColorModeValue';
 import useFullscreen from './hooks/useFullScreen';
 
 export const DefaultHeaderLeft = (): React.ReactElement => {
-  const linkColor = useColorModeValue('gray.700', 'gray.100', 'gray.700');
   const iconFill = useColorModeValue(
     'ui.gray.icon',
     'ui.white',
     'ui.gray.icon'
   );
-  const bgColorFocus = useColorModeValue(
-    'ui.gray.active',
-    'ui.gray.x-dark',
-    'ui.gray.active'
-  );
+
+  const breakpointIsSmOrMd = useBreakpointValue({
+    base: true,
+    sm: true,
+    md: true,
+    lg: false,
+  });
 
   return (
     <Link
       href="/"
-      aria-label="Return to Homepage"
       tabIndex={0}
-      fontSize={0}
-      px={3}
-      py={1}
-      d="flex"
-      color={linkColor}
-      height="100%"
-      alignItems="center"
       _hover={{
-        bgColor: bgColorFocus,
         textDecoration: 'none',
       }}
-      _focus={{
-        bgColor: bgColorFocus,
-      }}
     >
-      <Icon as={Previous} fill={iconFill} w={6} h={6} />
-      <Text variant="headerNav">Back</Text>
+      {breakpointIsSmOrMd ? (
+        <IconButton
+          aria-label="Go back"
+          icon={<Icon as={Previous} fill={iconFill} w={6} h={6} />}
+          paddingLeft="3"
+          paddingRight="3"
+        />
+      ) : (
+        <Button
+          aria-label="Go back"
+          border="none"
+          leftIcon={<Icon as={Previous} fill={iconFill} w={6} h={6} />}
+        >
+          <Text variant="headerNav">Back</Text>
+        </Button>
+      )}
     </Link>
   );
 };
@@ -56,45 +69,85 @@ export default function Header(
 ): React.ReactElement {
   const [isFullscreen, toggleFullScreen] = useFullscreen();
   const { headerLeft, navigator, manifest, containerRef } = props;
+
   const iconFill = useColorModeValue(
     'ui.gray.icon',
     'ui.white',
     'ui.gray.icon'
   );
+
   const mainBgColor = useColorModeValue(
     'ui.gray.light-warm',
     'ui.black',
     'ui.sepia'
   );
 
+  const breakpointIsSmOrMd = useBreakpointValue({
+    base: true,
+    sm: true,
+    md: true,
+    lg: false,
+  });
+
   return (
     <HeaderWrapper bg={mainBgColor}>
       {headerLeft ?? <DefaultHeaderLeft />}
-      <HStack ml="auto" spacing={1}>
+      <Spacer />
+      <HStack spacing={0}>
         <TableOfContent
           containerRef={containerRef}
           navigator={navigator}
           manifest={manifest}
         />
         <SettingsCard {...props} />
-        <Button
-          aria-expanded={isFullscreen}
-          aria-label="Toggle full screen"
-          border="none"
-          onClick={toggleFullScreen}
-          leftIcon={
-            <Icon
-              as={isFullscreen ? ToggleFullScreenExit : ToggleFullScreen}
-              fill={iconFill}
-              w={6}
-              h={6}
-            />
-          }
-        >
-          <Text variant="headerNav">
-            {isFullscreen ? 'Full screen exit' : 'Full screen'}
-          </Text>
-        </Button>
+        {breakpointIsSmOrMd ? (
+          <IconButton
+            aria-label="Toggle full screen"
+            icon={
+              <Icon
+                as={isFullscreen ? ToggleFullScreenExit : ToggleFullScreen}
+                fill={iconFill}
+                w={6}
+                h={6}
+              />
+            }
+            onClick={toggleFullScreen}
+            paddingLeft="3"
+            paddingRight="3"
+            sx={{
+              _active: {
+                bgColor: mainBgColor,
+              },
+              _hover: {
+                bgColor: mainBgColor,
+              },
+              _focus: {
+                bgColor: mainBgColor,
+                ring: '2px',
+                ringInset: 'inset',
+              },
+            }}
+          />
+        ) : (
+          <Button
+            aria-expanded={isFullscreen}
+            aria-label="Toggle full screen"
+            border="none"
+            onClick={toggleFullScreen}
+            leftIcon={
+              <Icon
+                as={isFullscreen ? ToggleFullScreenExit : ToggleFullScreen}
+                fill={iconFill}
+                w={6}
+                h={6}
+              />
+            }
+          >
+            <Text variant="headerNav">
+              {isFullscreen ? 'Full screen exit' : 'Full screen'}
+            </Text>
+          </Button>
+        )}
       </HStack>
     </HeaderWrapper>
   );
@@ -116,7 +169,6 @@ export const HeaderWrapper = React.forwardRef<
       zIndex="sticky"
       alignContent="space-between"
       alignItems="center"
-      px={8}
       borderBottom="1px solid"
       borderColor="gray.100"
       {...rest}

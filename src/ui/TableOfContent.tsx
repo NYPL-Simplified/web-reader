@@ -1,5 +1,12 @@
 import React from 'react';
-import { Portal, Text, Icon, Box } from '@chakra-ui/react';
+import {
+  Box,
+  Icon,
+  IconButton,
+  Portal,
+  Text,
+  useBreakpointValue,
+} from '@chakra-ui/react';
 import { Navigator, WebpubManifest } from '../types';
 import Button from './Button';
 import useColorModeValue from './hooks/useColorModeValue';
@@ -29,15 +36,33 @@ export default function TableOfContent({
     return getLinkHref(link.children[0]);
   };
 
+  const breakpointIsSmOrMd = useBreakpointValue({
+    base: true,
+    sm: true,
+    md: true,
+    lg: false,
+  });
+
   return (
     <Menu>
       {({ isOpen }) => (
         <>
           <MenuButton
-            as={Button}
+            as={breakpointIsSmOrMd ? IconButton : Button}
             border="none"
             aria-label="Table of Contents"
-            leftIcon={<Icon as={TableOfContents} w={6} h={6} fill={iconFill} />}
+            leftIcon={
+              !breakpointIsSmOrMd && (
+                <Icon as={TableOfContents} w={6} h={6} fill={iconFill} />
+              )
+            }
+            icon={
+              breakpointIsSmOrMd && (
+                <Icon as={TableOfContents} w={6} h={6} fill={iconFill} />
+              )
+            }
+            paddingLeft="3"
+            paddingRight="3"
           >
             <Text variant="headerNav">Table of Contents</Text>
           </MenuButton>

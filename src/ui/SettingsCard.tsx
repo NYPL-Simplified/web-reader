@@ -6,6 +6,8 @@ import {
   PopoverBody,
   Text,
   Icon,
+  IconButton,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 import { PDFActiveReader, HTMLActiveReader } from '../types';
 
@@ -36,11 +38,18 @@ export default function SettingsCard(
     ? 'scrolling'
     : 'paginated';
 
+  const breakpointIsSmOrMd = useBreakpointValue({
+    base: true,
+    sm: true,
+    md: true,
+    lg: false,
+  });
+
   return (
     <>
       <Popover
         gutter={0}
-        placement="bottom-start"
+        placement="auto-end"
         isOpen={isOpen}
         onOpen={open}
         onClose={close}
@@ -49,22 +58,34 @@ export default function SettingsCard(
         strategy="fixed"
       >
         <PopoverTrigger>
-          <Button
-            onClick={open}
-            border="none"
-            aria-label="Settings"
-            leftIcon={<Icon as={ReaderSettings} w={6} h={6} fill={iconFill} />}
-          >
-            <Text variant="headerNav">Settings</Text>
-          </Button>
+          {breakpointIsSmOrMd ? (
+            <IconButton
+              aria-label="Settings"
+              icon={<Icon as={ReaderSettings} w={6} h={6} fill={iconFill} />}
+              onClick={open}
+              paddingLeft="3"
+              paddingRight="3"
+            />
+          ) : (
+            <Button
+              onClick={open}
+              border="none"
+              aria-label="Settings"
+              leftIcon={
+                <Icon as={ReaderSettings} w={6} h={6} fill={iconFill} />
+              }
+            >
+              <Text variant="headerNav">Settings</Text>
+            </Button>
+          )}
         </PopoverTrigger>
         <PopoverContent
           overflow="hidden"
           bgColor={contentBgColor}
-          borderRadius="0 0 4px 4px"
-          boxShadow="0 4px 4px -2px #424242"
-          width="inherit"
-          maxWidth="100vw"
+          borderColor="ui.gray.disabled"
+          borderRadius="0 0 2px 2px"
+          filter="drop-shadow(0 1px 2px #00000040)"
+          maxWidth={['90vw', '90vw', '100vw']}
         >
           <PopoverBody p={0}>
             {props.type === 'PDF' && (
