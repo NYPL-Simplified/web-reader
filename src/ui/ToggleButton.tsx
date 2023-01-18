@@ -77,6 +77,7 @@ export const ColorModeToggleButton: typeof ToggleButton = ({
           bgColor,
           p: {
             textDecoration: 'underline',
+            textUnderlinePosition: 'under',
           },
         },
       }}

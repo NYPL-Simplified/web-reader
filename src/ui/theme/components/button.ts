@@ -110,6 +110,7 @@ const variantSettings = (getColor: GetColor) => (
       borderBottomColor: checkedBgColor,
       p: {
         textDecoration: 'underline',
+        textUnderlinePosition: 'under',
       },
     },
     _hover: {
