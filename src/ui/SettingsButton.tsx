@@ -52,6 +52,14 @@ export default function SettingsCard(
         <PopoverTrigger>
           <Button
             onClick={open}
+            /**
+             * preventDefault fixes a Chakra bug where in Safari,
+             * the PopoverTrigger will not close the Popover.
+             * The issue is described in
+             * https://github.com/chakra-ui/chakra-ui/issues/3461
+             * and the workaround can be found in
+             * https://github.com/chakra-ui/chakra-ui/issues/587.
+             * */
             onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) =>
               e.preventDefault()
             }
