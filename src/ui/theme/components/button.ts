@@ -101,6 +101,9 @@ const variantSettings = (getColor: GetColor) => (
     width: [8, 16, 36],
     fontSize: [0, 0, 2],
     whiteSpace: ['normal', 'normal', 'nowrap'],
+    p: {
+      textAlign: 'center',
+    },
     _active: {
       bgColor,
     },

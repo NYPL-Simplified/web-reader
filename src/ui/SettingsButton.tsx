@@ -49,8 +49,13 @@ export default function SettingsCard(
         strategy="fixed"
       >
         <PopoverTrigger>
-          <Button aria-label="Settings" onClick={open} border="none" gap={2}>
-            <Icon as={ReaderSettings} w={6} h={6} fill={iconFill} />
+          <Button
+            aria-label="Settings"
+            onClick={open}
+            border="none"
+            gap={[0, 0, 2]}
+          >
+            <Icon as={ReaderSettings} fill={iconFill} w={6} h={6} />
             <Text variant="headerNav">Settings</Text>
           </Button>
         </PopoverTrigger>

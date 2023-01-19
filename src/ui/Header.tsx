@@ -82,7 +82,7 @@ export default function Header(
           aria-label="Toggle full screen"
           border="none"
           bgColor={mainBgColor}
-          gap={2}
+          gap={[0, 0, 2]}
           onClick={toggleFullScreen}
           _active={{ bgColor: mainBgColor }}
           _focus={{ bgColor: mainBgColor, ring: '2px', ringInset: 'inset' }}
