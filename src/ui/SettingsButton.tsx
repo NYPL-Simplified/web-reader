@@ -78,6 +78,7 @@ export default function SettingsCard(
           borderRadius="0 0 2px 2px"
           filter="drop-shadow(0 1px 2px #00000040)"
           width={['90vw', '90vw', 'inherit']}
+          marginRight={[4, 4, 4, 0]}
           maxWidth="100vw"
         >
           <PopoverBody p={0}>
