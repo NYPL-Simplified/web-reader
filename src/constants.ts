@@ -35,8 +35,8 @@ export const FONT_DETAILS = {
   },
   'sans-serif': {
     heading: 'Sans-serif font',
-    body: 'Helvetica',
-    token: 'sansSerif',
+    body: 'Roboto',
+    token: 'body',
     fontWeight: 'regular',
   },
   'open-dyslexic': {
