@@ -51,6 +51,7 @@ export default function SettingsCard(
       >
         <PopoverTrigger>
           <Button
+            aria-label="Settings"
             onClick={open}
             /**
              * preventDefault fixes a Chakra bug where in Safari,
@@ -64,18 +65,20 @@ export default function SettingsCard(
               e.preventDefault()
             }
             border="none"
-            aria-label="Settings"
-            leftIcon={<Icon as={ReaderSettings} w={6} h={6} fill={iconFill} />}
+            gap={[0, 0, 2]}
           >
+            <Icon as={ReaderSettings} fill={iconFill} w={6} h={6} />
             <Text variant="headerNav">Settings</Text>
           </Button>
         </PopoverTrigger>
         <PopoverContent
           overflow="hidden"
           bgColor={contentBgColor}
-          borderRadius="0 0 4px 4px"
-          boxShadow="0 4px 4px -2px #424242"
-          width="inherit"
+          borderColor="ui.gray.disabled"
+          borderRadius="0 0 2px 2px"
+          filter="drop-shadow(0 1px 2px #00000040)"
+          width={['90vw', '90vw', 'inherit']}
+          marginRight={[4, 4, 4, 0]}
           maxWidth="100vw"
         >
           <PopoverBody p={0}>

@@ -63,7 +63,7 @@ function ToggleButton(
 }
 
 export const FontToggleButton: typeof ToggleButton = (props) => {
-  return <ToggleButton fontSize={[-1, -1, 0]} py={6} {...props} />;
+  return <ToggleButton fontSize={[-2, -2, -1, -1, 0]} py={6} {...props} />;
 };
 
 export const ColorModeToggleButton: typeof ToggleButton = ({
@@ -77,6 +77,7 @@ export const ColorModeToggleButton: typeof ToggleButton = ({
           bgColor,
           p: {
             textDecoration: 'underline',
+            textUnderlinePosition: 'under',
           },
         },
       }}
