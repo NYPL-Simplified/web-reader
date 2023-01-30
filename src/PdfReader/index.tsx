@@ -508,41 +508,66 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
    */
   const goToPage = React.useCallback(
     async (href) => {
-      const getIndexFromHref = (href: string): number => {
-        const index = manifest?.toc?.findIndex((link) => {
-          return link.href === href;
-        }) as number;
-        if (index < 0) {
-          throw new Error('Cannot find resource in readingOrder');
-        }
-        return index;
-      };
+      if (isSinglePDF) {
+        const getIndexFromHref = (href: string): number => {
+          const index = manifest?.toc?.findIndex((link) => {
+            return link.href === href;
+          }) as number;
+          if (index < 0) {
+            throw new Error('Cannot find resource in toc');
+          }
+          return index;
+        };
 
-      const resourceIndex = getIndexFromHref(href);
-      if (!isSinglePDF) {
+        const resourceIndex = getIndexFromHref(href);
+        if (manifest?.toc && manifest?.toc[resourceIndex]) {
+          const hashPage = getHashPage(manifest?.toc[resourceIndex].href);
+          dispatch({
+            type: 'NAVIGATE_PAGE',
+            pageNum: hashPage,
+          });
+
+          if (state.settings?.isScrolling && hashPage) {
+            document
+              .querySelector(`[data-page-number="${hashPage}"]`)
+              ?.scrollIntoView();
+          }
+        }
+      } else {
+        const getIndexFromHref = (href: string): number => {
+          const index = manifest?.readingOrder?.findIndex((link) => {
+            return link.href === href;
+          }) as number;
+          if (index < 0) {
+            throw new Error('Cannot find resource in readingOrder');
+          }
+          return index;
+        };
+
+        const resourceIndex = getIndexFromHref(href);
         dispatch({
           type: 'SET_CURRENT_RESOURCE',
           index: resourceIndex,
           shouldNavigateToEnd: false,
         });
-      }
 
-      if (manifest?.toc && manifest?.toc[resourceIndex]) {
-        const startPage = getStartPage(manifest?.toc[resourceIndex].href);
-        const hashPage = getHashPage(manifest?.toc[resourceIndex].href);
-        dispatch({
-          type: 'NAVIGATE_PAGE',
-          pageNum: isSinglePDF ? hashPage : startPage,
-        });
-
-        if (state.settings?.isScrolling && hashPage) {
-          document
-            .querySelector(`[data-page-number="${hashPage}"]`)
-            ?.scrollIntoView();
+        if (manifest?.readingOrder && manifest?.readingOrder[resourceIndex]) {
+          const startPage = getStartPage(
+            manifest?.readingOrder[resourceIndex].href
+          );
+          dispatch({
+            type: 'NAVIGATE_PAGE',
+            pageNum: startPage,
+          });
         }
       }
     },
-    [isSinglePDF, manifest?.toc, state.settings?.isScrolling]
+    [
+      isSinglePDF,
+      manifest?.readingOrder,
+      manifest?.toc,
+      state.settings?.isScrolling,
+    ]
   );
 
   // this format is inactive, return null
@@ -695,4 +720,7 @@ function handleInvalidTransition(state: PdfState, action: PdfReaderAction) {
     `Inavlid state transition attempted: ${state} with ${action.type}`
   );
   return state;
+}
+function href(href: any) {
+  throw new Error('Function not implemented.');
 }
