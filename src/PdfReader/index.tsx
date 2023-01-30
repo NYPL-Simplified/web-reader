@@ -18,6 +18,7 @@ import {
   DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
 } from '../constants';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
+import addTocToManifest from './addTocToManifest';
 
 type InternalState = {
   resourceIndex: number;
@@ -195,10 +196,25 @@ const loadResource = async (resourceUrl: string, proxyUrl?: string) => {
   return array;
 };
 
-const getStartPage = (resourceUrl: string) => {
+/**
+ * Helper method for skipping interstatial pages
+ * @param resourceUrl
+ * @returns
+ */
+const getStartPage = (resourceUrl: string): number => {
   const params = new URL(resourceUrl).searchParams;
   const startPage = params.get(START_QUERY);
   return startPage ? parseInt(startPage) : 1;
+};
+
+/**
+ * Helper method to get hash page
+ * @param resourceUrl
+ * @returns
+ */
+const getHashPage = (resourceUrl: string): number => {
+  const hash = new URL(resourceUrl).hash;
+  return hash ? parseInt(hash.split('=')[1]) : 1;
 };
 
 /**
@@ -373,6 +389,21 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     isSinglePDF,
   ]);
 
+  // add TOC object to manifest if single-resource pdf
+  React.useEffect(() => {
+    if (!manifest || !manifest.readingOrder || !manifest.readingOrder.length)
+      return;
+
+    if (isSinglePDF) {
+      const resourceUrl = getResourceUrl(
+        state.resourceIndex,
+        manifest.readingOrder
+      );
+      const proxiedUrl = `${proxyUrl}${encodeURIComponent(resourceUrl)}`;
+      addTocToManifest(manifest, proxiedUrl);
+    }
+  }, [isSinglePDF, manifest, proxyUrl, state.resourceIndex]);
+
   // prev and next page functions
   const goForward = React.useCallback(async () => {
     // do nothing if we haven't parsed the number of pages yet
@@ -472,10 +503,13 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     });
   }, [state.scale]);
 
+  /**
+   * TODO: Update to work with sub-chapter links
+   */
   const goToPage = React.useCallback(
     async (href) => {
       const getIndexFromHref = (href: string): number => {
-        const index = manifest?.readingOrder?.findIndex((link) => {
+        const index = manifest?.toc?.findIndex((link) => {
           return link.href === href;
         }) as number;
         if (index < 0) {
@@ -485,23 +519,30 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       };
 
       const resourceIndex = getIndexFromHref(href);
-      dispatch({
-        type: 'SET_CURRENT_RESOURCE',
-        index: resourceIndex,
-        shouldNavigateToEnd: false,
-      });
-
-      if (manifest?.readingOrder && manifest?.readingOrder[resourceIndex]) {
-        const startPage = getStartPage(
-          manifest?.readingOrder[resourceIndex].href
-        );
+      if (!isSinglePDF) {
         dispatch({
-          type: 'NAVIGATE_PAGE',
-          pageNum: startPage,
+          type: 'SET_CURRENT_RESOURCE',
+          index: resourceIndex,
+          shouldNavigateToEnd: false,
         });
       }
+
+      if (manifest?.toc && manifest?.toc[resourceIndex]) {
+        const startPage = getStartPage(manifest?.toc[resourceIndex].href);
+        const hashPage = getHashPage(manifest?.toc[resourceIndex].href);
+        dispatch({
+          type: 'NAVIGATE_PAGE',
+          pageNum: isSinglePDF ? hashPage : startPage,
+        });
+
+        if (state.settings?.isScrolling && hashPage) {
+          document
+            .querySelector(`[data-page-number="${hashPage}"]`)
+            ?.scrollIntoView();
+        }
+      }
     },
-    [manifest?.readingOrder]
+    [isSinglePDF, manifest?.toc, state.settings?.isScrolling]
   );
 
   // this format is inactive, return null
