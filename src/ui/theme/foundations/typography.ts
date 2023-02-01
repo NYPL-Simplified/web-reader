@@ -9,7 +9,6 @@ const typography: Fonts = {
     body: 'Roboto, -apple-system, BlinkMacSystemFont, system-ui, sans-serif',
     heading: 'Roboto, -apple-system, BlinkMacSystemFont, system-ui, sans-serif',
     serif: `'Georgia', serif`,
-    sansSerif: `'Helvetica', 'Arial', serif`,
     opendyslexic: `'OpenDyslexic', sans-serif`,
   },
 };

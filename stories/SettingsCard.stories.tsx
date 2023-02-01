@@ -32,7 +32,6 @@ export const SettingsCard = (): React.ReactElement => {
         <ToggleButton
           value="sans-serif"
           label="Sans-Serif"
-          font="helvetica"
           fontSize={[-1, -1, 0]}
           fontWeight="regular"
         >

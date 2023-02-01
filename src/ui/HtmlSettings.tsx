@@ -68,7 +68,7 @@ export default function HtmlSettings(
         <FontToggleButton
           value="sans-serif"
           label="Sans-Serif"
-          fontFamily="sansSerif"
+          fontFamily="body"
           fontWeight="regular"
         />
         <FontToggleButton
