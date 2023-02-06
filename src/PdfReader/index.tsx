@@ -334,30 +334,21 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   React.useEffect(() => {
     if (!manifest || state.state !== 'ACTIVE') return;
 
-    // Hide all buttons for single PDF on scroll mode
-    if (isSinglePDF && state.settings.isScrolling) {
-      dispatch({
-        type: 'BOOK_BOUNDARY_CHANGED',
-        atStart: true,
-        atEnd: true,
-      });
-    } else {
-      const isFirstResource = state.resourceIndex === 0;
-      const isResourceStart = isFirstResource && state.pageNumber === 1;
+    const isFirstResource = state.resourceIndex === 0;
+    const isResourceStart = isFirstResource && state.pageNumber === 1;
 
-      const isLastResource =
-        state.resourceIndex === manifest?.readingOrder?.length - 1;
-      const isResourceEnd =
-        (isLastResource && state.pageNumber === state.numPages) ||
-        // On scroll mode, next page button takes you to the next resource. So we can just hide the next button on last resource.
-        (state.settings.isScrolling && isLastResource);
+    const isLastResource =
+      state.resourceIndex === manifest?.readingOrder?.length - 1;
+    const isResourceEnd =
+      (isLastResource && state.pageNumber === state.numPages) ||
+      // On scroll mode, next page button takes you to the next resource. So we can just hide the next button on last resource.
+      (state.settings.isScrolling && isLastResource);
 
-      dispatch({
-        type: 'BOOK_BOUNDARY_CHANGED',
-        atStart: isResourceStart,
-        atEnd: isResourceEnd,
-      });
-    }
+    dispatch({
+      type: 'BOOK_BOUNDARY_CHANGED',
+      atStart: isResourceStart,
+      atEnd: isResourceEnd,
+    });
   }, [
     manifest,
     state.state,
