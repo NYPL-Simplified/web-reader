@@ -21,11 +21,14 @@ export default async function addTocToManifest(
       if (dest && dest.length > 0) {
         // get the page referance
         const ref = dest[0];
-        const pageIndex = await pdf.getPageIndex(ref);
+        // the return value is improperly typed in the pdfjs library, and so we have to cast it here.
+        const pageIndex = ((await pdf.getPageIndex(ref)) as unknown) as number;
+        // just in case the above cast is incorrect, we will check that pageIndex is a number
+        if (typeof pageIndex !== 'number') return undefined;
         if (pageIndex) {
           const link: ReadiumLink = {
             title: chapter.title,
-            href: `${pdfUrl}#page=${pageIndex.num + 1}`,
+            href: `${pdfUrl}#page=${pageIndex + 1}`,
             children: [],
           };
           return link;
