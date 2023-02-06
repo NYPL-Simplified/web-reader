@@ -1,202 +1,30 @@
 import { Document, PageProps, pdfjs } from 'react-pdf';
 import * as React from 'react';
-import {
-  ReaderArguments,
-  ReaderReturn,
-  ReaderSettings,
-  ReaderState,
-  WebpubManifest,
-} from '../types';
+import { ReaderArguments, ReaderReturn, WebpubManifest } from '../types';
 import { Flex } from '@chakra-ui/react';
 import useMeasure from './useMeasure';
 import ChakraPage from './ChakraPage';
 import ScrollPage from './ScrollPage';
-import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
-import { HEADER_HEIGHT, FOOTER_HEIGHT, DEFAULT_SETTINGS } from '../constants';
+import { HEADER_HEIGHT, FOOTER_HEIGHT } from '../constants';
 import {
   DEFAULT_HEIGHT,
   DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
 } from '../constants';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
 import addTocToManifest from './addTocToManifest';
-
-type InternalState = {
-  resourceIndex: number;
-  resource: { data: Uint8Array } | null;
-  // we only know the numPages once the resource has been parsed
-  numPages: number | null;
-  // if pageNumber is -1, we will navigate to the end of the
-  // resource once it is parsed
-  pageNumber: number;
-  scale: number;
-  pdfHeight: number;
-  pdfWidth: number;
-  pageHeight: number | undefined;
-  pageWidth: number | undefined;
-};
-
-type InactiveState = ReaderState &
-  InternalState & { state: 'INACTIVE'; settings: undefined };
-
-type ActiveState = ReaderState &
-  InternalState & { state: 'ACTIVE'; settings: ReaderSettings };
-
-type PdfState = InactiveState | ActiveState;
-
-type PdfReaderAction =
-  | {
-      type: 'ARGS_CHANGED';
-      args: ReaderArguments;
-    }
-  | {
-      type: 'SET_CURRENT_RESOURCE';
-      index: number;
-      shouldNavigateToEnd: boolean;
-    }
-  | { type: 'RESOURCE_FETCH_SUCCESS'; resource: { data: Uint8Array } }
-  | { type: 'PDF_PARSED'; numPages: number }
-  | { type: 'NAVIGATE_PAGE'; pageNum: number }
-  | { type: 'SET_SCALE'; scale: number }
-  | { type: 'SET_SCROLL'; isScrolling: boolean }
-  | { type: 'PAGE_LOAD_SUCCESS'; height: number; width: number }
-  | {
-      type: 'RESIZE_PAGE';
-      height: number | undefined;
-      width: number | undefined;
-    }
-  | { type: 'BOOK_BOUNDARY_CHANGED'; atStart: boolean; atEnd: boolean };
-const IFRAME_WRAPPER_ID = 'iframe-wrapper';
-export const SCALE_STEP = 0.1;
-const START_QUERY = 'start';
-
-function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
-  console.log('action', action);
-  switch (action.type) {
-    case 'ARGS_CHANGED': {
-      return {
-        state: 'ACTIVE',
-        settings: DEFAULT_SETTINGS,
-        resourceIndex: 0,
-        resource: null,
-        pageNumber: 1,
-        numPages: null,
-        scale: 1,
-        pdfWidth: 0,
-        pdfHeight: 0,
-        pageHeight: undefined,
-        pageWidth: undefined,
-        atStart: true,
-        atEnd: false,
-      };
-    }
-    /**
-     * Cleares the current resource and sets the current index, which will cause
-     * the useEffect hook to load a new resource.
-     */
-    case 'SET_CURRENT_RESOURCE':
-      if (state.resourceIndex === action.index) return state;
-      return {
-        ...state,
-        resource: null,
-        resourceIndex: action.index,
-        pageNumber: action.shouldNavigateToEnd ? -1 : 1,
-        numPages: null,
-      };
-
-    case 'RESOURCE_FETCH_SUCCESS':
-      return {
-        ...state,
-        resource: action.resource,
-      };
-
-    // called when the resource has been parsed by react-pdf
-    // and we know the number of pages
-    case 'PDF_PARSED':
-      return {
-        ...state,
-        numPages: action.numPages,
-        // if the state.pageNumber is -1, we know to navigate to the
-        // end of the PDF that was just parsed
-        pageNumber:
-          state.pageNumber === -1 ? action.numPages : state.pageNumber,
-      };
-
-    // Navigates to page in resource
-    case 'NAVIGATE_PAGE':
-      return {
-        ...state,
-        pageNumber: action.pageNum,
-      };
-
-    case 'SET_SCROLL':
-      if (state.state !== 'ACTIVE') {
-        return handleInvalidTransition(state, action);
-      }
-      return {
-        ...state,
-        settings: {
-          ...state.settings,
-          isScrolling: action.isScrolling,
-        },
-      };
-
-    case 'SET_SCALE':
-      return {
-        ...state,
-        scale: action.scale,
-      };
-
-    case 'PAGE_LOAD_SUCCESS':
-      return {
-        ...state,
-        pdfWidth: action.width,
-        pdfHeight: action.height,
-        pageWidth: action.width,
-        pageHeight: action.height,
-      };
-
-    case 'RESIZE_PAGE':
-      return {
-        ...state,
-        pageWidth: action.width,
-        pageHeight: action.height,
-      };
-
-    case 'BOOK_BOUNDARY_CHANGED':
-      return {
-        ...state,
-        atStart: action.atStart,
-        atEnd: action.atEnd,
-      };
-  }
-}
-
-const getResourceUrl = (
-  index: number,
-  readingOrder: ReadiumLink[] | undefined
-): string => {
-  if (!readingOrder || !readingOrder.length) {
-    throw new Error('A manifest has been returned, but has no reading order');
-  }
-
-  // If it has no children, return the link href
-  return readingOrder[index].href;
-};
-
-const loadResource = async (resourceUrl: string, proxyUrl?: string) => {
-  // Generate the resource URL using the proxy
-  const url: string = proxyUrl
-    ? `${proxyUrl}${encodeURIComponent(resourceUrl)}`
-    : resourceUrl;
-  const response = await fetch(url, { mode: 'cors' });
-  const array = new Uint8Array(await response.arrayBuffer());
-
-  if (!response.ok) {
-    throw new Error('Response not Ok for URL: ' + url);
-  }
-  return array;
-};
+import { PdfReaderAction, PdfState } from './types';
+import {
+  getIndexFromHref,
+  getPageNumberFromHref,
+  getResourceUrl,
+  getStartPageFromHref,
+  IFRAME_WRAPPER_ID,
+  loadResource,
+  SCALE_STEP,
+  START_QUERY,
+} from './lib';
+import { pdfReducer } from './reducer';
 
 /**
  * The PDF reader
@@ -691,65 +519,3 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     },
   };
 }
-
-function handleInvalidTransition(state: PdfState, action: PdfReaderAction) {
-  console.trace(
-    `Inavlid state transition attempted: ${state} with ${action.type}`
-  );
-  return state;
-}
-
-/**
- * Gets the index of the provided href in the readingOrder, or throws an error if one
- * is not found.
- */
-function getIndexFromHref(href: string, manifest: WebpubManifest): number {
-  const input = new URL(href);
-  const index = manifest?.readingOrder?.findIndex((link) => {
-    return doHrefsMatch(link.href, input);
-  });
-  if (index < 0) {
-    throw new Error(`Cannot find resource in readingOrder: ${href}`);
-  }
-  return index;
-}
-
-/**
- * Compares two hrefs without query params or hash
- */
-function doHrefsMatch(href1: string | URL, href2: string | URL) {
-  const input1 = new URL(href1);
-  const input2 = new URL(href2);
-  return (
-    input1.pathname === input2.pathname &&
-    input1.hostname === input2.hostname &&
-    input1.protocol === input2.protocol
-  );
-}
-
-/**
- * Extracts a start page from a href if it exists and is in the format
- * `?startPage=1`. Returns undefined if none found.
- */
-const getStartPageFromHref = (href: string): number | undefined => {
-  const params = new URL(href).searchParams;
-  const startPage = params.get(START_QUERY);
-  return startPage ? parseInt(startPage) : undefined;
-};
-
-/**
- * Extracts a page number from a href if it exists and is in
- * the format of `#page=1`
- */
-const getPageNumberFromHref = (href: string): number | undefined => {
-  const hash = new URL(href).hash;
-  try {
-    const strPageNumber = hash.replace('#page=', '');
-    if (!strPageNumber || strPageNumber === 'NaN') return undefined;
-    const pageNumber = parseInt(strPageNumber);
-    return pageNumber;
-  } catch (e) {
-    console.warn(`Failed to parse page number from hash ${hash}`);
-    return undefined;
-  }
-};
