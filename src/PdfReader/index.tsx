@@ -5,6 +5,7 @@ import {
   ReaderReturn,
   ReaderSettings,
   ReaderState,
+  WebpubManifest,
 } from '../types';
 import { Flex } from '@chakra-ui/react';
 import useMeasure from './useMeasure';
@@ -70,6 +71,7 @@ export const SCALE_STEP = 0.1;
 const START_QUERY = 'start';
 
 function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
+  console.log('action', action);
   switch (action.type) {
     case 'ARGS_CHANGED': {
       return {
@@ -93,6 +95,7 @@ function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
      * the useEffect hook to load a new resource.
      */
     case 'SET_CURRENT_RESOURCE':
+      if (state.resourceIndex === action.index) return state;
       return {
         ...state,
         resource: null,
@@ -188,33 +191,11 @@ const loadResource = async (resourceUrl: string, proxyUrl?: string) => {
     : resourceUrl;
   const response = await fetch(url, { mode: 'cors' });
   const array = new Uint8Array(await response.arrayBuffer());
-  console.log('proxied', url, response);
 
   if (!response.ok) {
     throw new Error('Response not Ok for URL: ' + url);
   }
   return array;
-};
-
-/**
- * Helper method for skipping interstatial pages
- * @param resourceUrl
- * @returns
- */
-const getStartPage = (resourceUrl: string): number => {
-  const params = new URL(resourceUrl).searchParams;
-  const startPage = params.get(START_QUERY);
-  return startPage ? parseInt(startPage) : 1;
-};
-
-/**
- * Helper method to get hash page
- * @param resourceUrl
- * @returns
- */
-const getHashPage = (resourceUrl: string): number => {
-  const hash = new URL(resourceUrl).hash;
-  return hash ? parseInt(hash.split('=')[1]) : 1;
 };
 
 /**
@@ -323,7 +304,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
    *  - if the page's aspect ratio is wider than the container's, we will constrain
    *    the page to the width of the container
    */
-
   const resizePage = React.useCallback(
     (
       pdfWidth: number,
@@ -344,7 +324,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     []
   );
 
-  //TODO: Somehow, this window size updates when height
   React.useEffect(() => {
     resizePage(state.pdfWidth, state.pdfHeight, containerSize);
   }, [containerSize, state.pdfWidth, state.pdfHeight, resizePage]);
@@ -428,7 +407,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         shouldNavigateToEnd: false,
       });
       if (manifest?.readingOrder[nextIndex]) {
-        const pageNum = getStartPage(manifest?.readingOrder[nextIndex].href);
+        const pageNum =
+          getStartPageFromHref(manifest?.readingOrder[nextIndex].href) ?? 1;
         dispatch({
           type: 'NAVIGATE_PAGE',
           pageNum: pageNum,
@@ -451,10 +431,10 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     // do nothing if the reader is inactive
     if (state.state !== 'ACTIVE') return;
 
-    const startPage =
-      manifest?.readingOrder && manifest?.readingOrder[state.resourceIndex]
-        ? getStartPage(manifest?.readingOrder[state.resourceIndex].href)
-        : 1;
+    const prevHref = manifest?.readingOrder[state.resourceIndex - 1]?.href;
+    if (!prevHref) return;
+
+    const startPage = getStartPageFromHref(prevHref) ?? 1;
 
     if (state.pageNumber > startPage && !state.settings.isScrolling) {
       dispatch({
@@ -507,67 +487,64 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
    * TODO: Update to work with sub-chapter links
    */
   const goToPage = React.useCallback(
-    async (href) => {
-      if (isSinglePDF) {
-        const getIndexFromHref = (href: string): number => {
-          const index = manifest?.toc?.findIndex((link) => {
-            return link.href === href;
-          }) as number;
-          if (index < 0) {
-            throw new Error('Cannot find resource in toc');
-          }
-          return index;
-        };
+    async (href: string) => {
+      if (!manifest) return;
+      // if (isSinglePDF) {
+      //   const getIndexFromHref = (href: string): number => {
+      //     const index = manifest?.toc?.findIndex((link) => {
+      //       return link.href === href;
+      //     }) as number;
+      //     if (index < 0) {
+      //       throw new Error('Cannot find resource in toc');
+      //     }
+      //     return index;
+      //   };
 
-        const resourceIndex = getIndexFromHref(href);
-        if (manifest?.toc && manifest?.toc[resourceIndex]) {
-          const hashPage = getHashPage(manifest?.toc[resourceIndex].href);
-          dispatch({
-            type: 'NAVIGATE_PAGE',
-            pageNum: hashPage,
-          });
+      //   const resourceIndex = getIndexFromHref(href);
+      //   if (manifest?.toc && manifest?.toc[resourceIndex]) {
+      //     const hashPage = getHashPage(manifest?.toc[resourceIndex].href);
+      //     dispatch({
+      //       type: 'NAVIGATE_PAGE',
+      //       pageNum: hashPage,
+      //     });
 
-          if (state.settings?.isScrolling && hashPage) {
-            document
-              .querySelector(`[data-page-number="${hashPage}"]`)
-              ?.scrollIntoView();
-          }
-        }
-      } else {
-        const getIndexFromHref = (href: string): number => {
-          const index = manifest?.readingOrder?.findIndex((link) => {
-            return link.href === href;
-          }) as number;
-          if (index < 0) {
-            throw new Error('Cannot find resource in readingOrder');
-          }
-          return index;
-        };
+      //     if (state.settings?.isScrolling && hashPage) {
+      //       document
+      //         .querySelector(`[data-page-number="${hashPage}"]`)
+      //         ?.scrollIntoView();
+      //     }
+      //   }
+      // } else {
+      const resourceIndex = getIndexFromHref(href, manifest);
+      const startPage = getStartPageFromHref(href);
+      const pageNumber = getPageNumberFromHref(href);
 
-        const resourceIndex = getIndexFromHref(href);
+      /**
+       * Set the current resource to the specified resource index
+       */
+      dispatch({
+        type: 'SET_CURRENT_RESOURCE',
+        index: resourceIndex,
+        shouldNavigateToEnd: false,
+      });
+
+      /**
+       * Navigate to the specified page number if it exists, or the start page if that
+       * exists.
+       */
+      if (pageNumber) {
         dispatch({
-          type: 'SET_CURRENT_RESOURCE',
-          index: resourceIndex,
-          shouldNavigateToEnd: false,
+          type: 'NAVIGATE_PAGE',
+          pageNum: pageNumber,
         });
-
-        if (manifest?.readingOrder && manifest?.readingOrder[resourceIndex]) {
-          const startPage = getStartPage(
-            manifest?.readingOrder[resourceIndex].href
-          );
-          dispatch({
-            type: 'NAVIGATE_PAGE',
-            pageNum: startPage,
-          });
-        }
+      } else if (startPage) {
+        dispatch({
+          type: 'NAVIGATE_PAGE',
+          pageNum: startPage,
+        });
       }
     },
-    [
-      isSinglePDF,
-      manifest?.readingOrder,
-      manifest?.toc,
-      state.settings?.isScrolling,
-    ]
+    [manifest]
   );
 
   // this format is inactive, return null
@@ -721,6 +698,58 @@ function handleInvalidTransition(state: PdfState, action: PdfReaderAction) {
   );
   return state;
 }
-function href(href: any) {
-  throw new Error('Function not implemented.');
+
+/**
+ * Gets the index of the provided href in the readingOrder, or throws an error if one
+ * is not found.
+ */
+function getIndexFromHref(href: string, manifest: WebpubManifest): number {
+  const input = new URL(href);
+  const index = manifest?.readingOrder?.findIndex((link) => {
+    return doHrefsMatch(link.href, input);
+  });
+  if (index < 0) {
+    throw new Error(`Cannot find resource in readingOrder: ${href}`);
+  }
+  return index;
 }
+
+/**
+ * Compares two hrefs without query params or hash
+ */
+function doHrefsMatch(href1: string | URL, href2: string | URL) {
+  const input1 = new URL(href1);
+  const input2 = new URL(href2);
+  return (
+    input1.pathname === input2.pathname &&
+    input1.hostname === input2.hostname &&
+    input1.protocol === input2.protocol
+  );
+}
+
+/**
+ * Extracts a start page from a href if it exists and is in the format
+ * `?startPage=1`. Returns undefined if none found.
+ */
+const getStartPageFromHref = (href: string): number | undefined => {
+  const params = new URL(href).searchParams;
+  const startPage = params.get(START_QUERY);
+  return startPage ? parseInt(startPage) : undefined;
+};
+
+/**
+ * Extracts a page number from a href if it exists and is in
+ * the format of `#page=1`
+ */
+const getPageNumberFromHref = (href: string): number | undefined => {
+  const hash = new URL(href).hash;
+  try {
+    const strPageNumber = hash.replace('#page=', '');
+    if (!strPageNumber || strPageNumber === 'NaN') return undefined;
+    const pageNumber = parseInt(strPageNumber);
+    return pageNumber;
+  } catch (e) {
+    console.warn(`Failed to parse page number from hash ${hash}`);
+    return undefined;
+  }
+};
