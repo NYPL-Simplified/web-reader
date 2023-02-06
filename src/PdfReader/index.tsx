@@ -374,7 +374,11 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     }
   }, [isSinglePDF, manifest, proxyUrl, state.resourceIndex]);
 
-  // prev and next page functions
+  /**
+   * Next page button. Has to handle:
+   *   - going to the next page in the current resource
+   *   - going to the next resource if at the end of current resource
+   */
   const goForward = React.useCallback(async () => {
     // do nothing if we haven't parsed the number of pages yet
     if (!state.numPages) return;
@@ -416,9 +420,14 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     state.resourceIndex,
   ]);
 
+  /**
+   * Prev page button. Has to handle:
+   *   - Go back one page in current resource
+   *   - Go to the last page of previous resource if at the beginning
+   */
   const goBackward = React.useCallback(async () => {
     // do nothing if we haven't parsed the PDF yet
-    if (!isParsed) return;
+    if (!isParsed || !state.numPages) return;
     // do nothing if the reader is inactive
     if (state.state !== 'ACTIVE') return;
 
