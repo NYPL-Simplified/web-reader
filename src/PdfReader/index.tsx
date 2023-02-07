@@ -24,7 +24,7 @@ import {
   SCALE_STEP,
   START_QUERY,
 } from './lib';
-import { pdfReducer } from './reducer';
+import { makePdfReducer } from './reducer';
 
 /**
  * The PDF reader
@@ -51,7 +51,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     height = DEFAULT_HEIGHT,
     growWhenScrolling = DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
   } = args ?? {};
-  const [state, dispatch] = React.useReducer(pdfReducer, {
+  const [state, dispatch] = React.useReducer(makePdfReducer(args), {
     state: 'INACTIVE',
     resourceIndex: 0,
     resource: null,
@@ -66,6 +66,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     atEnd: false,
     settings: undefined,
   });
+
+  console.log(state);
 
   // state we can derive from the state above
   const isFetching = !state.resource;
@@ -202,89 +204,13 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     }
   }, [isSinglePDF, manifest, proxyUrl, state.resourceIndex]);
 
-  /**
-   * Next page button. Has to handle:
-   *   - going to the next page in the current resource
-   *   - going to the next resource if at the end of current resource
-   */
   const goForward = React.useCallback(async () => {
-    // do nothing if we haven't parsed the number of pages yet
-    if (!state.numPages) return;
-    // do nothing if the reader is inactive
-    if (state.state !== 'ACTIVE') return;
+    dispatch({ type: 'GO_FORWARD' });
+  }, []);
 
-    if (state.pageNumber < state.numPages && !state.settings.isScrolling) {
-      dispatch({
-        type: 'NAVIGATE_PAGE',
-        pageNum: state.pageNumber + 1,
-      });
-    } else if (
-      manifest &&
-      manifest.readingOrder &&
-      state.resourceIndex < manifest?.readingOrder?.length - 1
-    ) {
-      const nextIndex = state.resourceIndex + 1;
-      dispatch({
-        type: 'SET_CURRENT_RESOURCE',
-        index: nextIndex,
-        shouldNavigateToEnd: false,
-      });
-      if (manifest?.readingOrder[nextIndex]) {
-        const pageNum =
-          getStartPageFromHref(manifest?.readingOrder[nextIndex].href) ?? 1;
-        dispatch({
-          type: 'NAVIGATE_PAGE',
-          pageNum: pageNum,
-        });
-      }
-    }
-    // Do nothing if it's at the last page of the last resource
-  }, [
-    state.state,
-    manifest,
-    state.settings,
-    state.numPages,
-    state.pageNumber,
-    state.resourceIndex,
-  ]);
-
-  /**
-   * Prev page button. Has to handle:
-   *   - Go back one page in current resource
-   *   - Go to the last page of previous resource if at the beginning
-   */
   const goBackward = React.useCallback(async () => {
-    // do nothing if we haven't parsed the PDF yet
-    if (!isParsed || !state.numPages) return;
-    // do nothing if the reader is inactive
-    if (state.state !== 'ACTIVE') return;
-
-    const prevHref = manifest?.readingOrder[state.resourceIndex - 1]?.href;
-    if (!prevHref) return;
-
-    const startPage = getStartPageFromHref(prevHref) ?? 1;
-
-    if (state.pageNumber > startPage && !state.settings.isScrolling) {
-      dispatch({
-        type: 'NAVIGATE_PAGE',
-        pageNum: state.pageNumber - 1,
-      });
-    } else if (manifest?.readingOrder && state.resourceIndex > 0) {
-      const nextIndex = state.resourceIndex - 1;
-      dispatch({
-        type: 'SET_CURRENT_RESOURCE',
-        index: nextIndex,
-        shouldNavigateToEnd: !state.settings.isScrolling,
-      });
-    }
-  }, [
-    manifest,
-    isParsed,
-    state.state,
-    state.settings,
-    state.pageNumber,
-    state.resourceIndex,
-  ]);
+    dispatch({ type: 'GO_BACKWARD' });
+  }, []);
 
   const setScroll = React.useCallback(
     async (val: 'scrolling' | 'paginated') => {
@@ -311,69 +237,9 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     });
   }, [state.scale]);
 
-  /**
-   * TODO: Update to work with sub-chapter links
-   */
-  const goToPage = React.useCallback(
-    async (href: string) => {
-      if (!manifest) return;
-      // if (isSinglePDF) {
-      //   const getIndexFromHref = (href: string): number => {
-      //     const index = manifest?.toc?.findIndex((link) => {
-      //       return link.href === href;
-      //     }) as number;
-      //     if (index < 0) {
-      //       throw new Error('Cannot find resource in toc');
-      //     }
-      //     return index;
-      //   };
-
-      //   const resourceIndex = getIndexFromHref(href);
-      //   if (manifest?.toc && manifest?.toc[resourceIndex]) {
-      //     const hashPage = getHashPage(manifest?.toc[resourceIndex].href);
-      //     dispatch({
-      //       type: 'NAVIGATE_PAGE',
-      //       pageNum: hashPage,
-      //     });
-
-      //     if (state.settings?.isScrolling && hashPage) {
-      //       document
-      //         .querySelector(`[data-page-number="${hashPage}"]`)
-      //         ?.scrollIntoView();
-      //     }
-      //   }
-      // } else {
-      const resourceIndex = getIndexFromHref(href, manifest);
-      const startPage = getStartPageFromHref(href);
-      const pageNumber = getPageNumberFromHref(href);
-
-      /**
-       * Set the current resource to the specified resource index
-       */
-      dispatch({
-        type: 'SET_CURRENT_RESOURCE',
-        index: resourceIndex,
-        shouldNavigateToEnd: false,
-      });
-
-      /**
-       * Navigate to the specified page number if it exists, or the start page if that
-       * exists.
-       */
-      if (pageNumber) {
-        dispatch({
-          type: 'NAVIGATE_PAGE',
-          pageNum: pageNumber,
-        });
-      } else if (startPage) {
-        dispatch({
-          type: 'NAVIGATE_PAGE',
-          pageNum: startPage,
-        });
-      }
-    },
-    [manifest]
-  );
+  const goToPage = React.useCallback(async (href: string) => {
+    dispatch({ type: 'GO_TO_HREF', href });
+  }, []);
 
   // this format is inactive, return null
   if (!webpubManifestUrl || !manifest) return null;
