@@ -5,16 +5,21 @@ import { WebpubManifest } from '../types';
 /**
  * Adds TOC data to Webpub Manifest from single-resource PDF using PDF.js
  * @param manifest
- * @param proxiedUrl
+ * @param getResource - a function to get the resource. This allows the caller
+ * to decide how to get the resource, for example through a proxy if necessary.
+ * @param pdfWorkerSrc - the path to the pdfjs worker file. Necessary to use pdfjs.
  * @returns {WebpubManifest} manifest object
  */
 export default async function addTocToManifest(
   manifest: WebpubManifest,
-  proxiedUrl: string
+  getResource: (url: string) => Promise<Uint8Array>,
+  pdfWorkerSrc: string
 ): Promise<WebpubManifest> {
   const pdfUrl = manifest.readingOrder[0].href;
+  const pdfData = await getResource(pdfUrl);
   try {
-    const pdf = await pdfjs.getDocument(proxiedUrl).promise;
+    pdfjs.GlobalWorkerOptions.workerSrc = pdfWorkerSrc;
+    const pdf = await pdfjs.getDocument(pdfData).promise;
     const outline = await pdf.getOutline(); // get the TOC outline
     const tocPromises = outline.map(async (chapter) => {
       const dest = chapter.dest;

@@ -1,6 +1,6 @@
 import { Document, PageProps, pdfjs } from 'react-pdf';
 import * as React from 'react';
-import { ReaderArguments, ReaderReturn, WebpubManifest } from '../types';
+import { ReaderArguments, ReaderReturn } from '../types';
 import { Flex } from '@chakra-ui/react';
 import useMeasure from './useMeasure';
 import ChakraPage from './ChakraPage';
@@ -12,17 +12,11 @@ import {
   DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
 } from '../constants';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
-import addTocToManifest from './addTocToManifest';
-import { PdfReaderAction, PdfState } from './types';
 import {
-  getIndexFromHref,
-  getPageNumberFromHref,
   getResourceUrl,
-  getStartPageFromHref,
   IFRAME_WRAPPER_ID,
   loadResource,
   SCALE_STEP,
-  START_QUERY,
 } from './lib';
 import { makePdfReducer } from './reducer';
 
@@ -51,6 +45,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     height = DEFAULT_HEIGHT,
     growWhenScrolling = DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
   } = args ?? {};
+
   const [state, dispatch] = React.useReducer(makePdfReducer(args), {
     state: 'INACTIVE',
     resourceIndex: 0,
@@ -70,7 +65,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   // state we can derive from the state above
   const isFetching = !state.resource;
   const isParsed = typeof state.numPages === 'number';
-  const isSinglePDF = manifest && manifest?.readingOrder.length === 1;
   const [containerRef, containerSize] = useMeasure<HTMLDivElement>();
 
   // dispatch action when arguments change
@@ -189,21 +183,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     state.settings?.isScrolling,
     state.numPages,
   ]);
-
-  // add TOC object to manifest if single-resource pdf
-  React.useEffect(() => {
-    if (!manifest || !manifest.readingOrder || !manifest.readingOrder.length)
-      return;
-
-    if (isSinglePDF) {
-      const resourceUrl = getResourceUrl(
-        state.resourceIndex,
-        manifest.readingOrder
-      );
-      const proxiedUrl = `${proxyUrl}${encodeURIComponent(resourceUrl)}`;
-      addTocToManifest(manifest, proxiedUrl);
-    }
-  }, [isSinglePDF, manifest, proxyUrl, state.resourceIndex]);
 
   /**
    * In scrolling mode, manually scroll the user when the page changes
