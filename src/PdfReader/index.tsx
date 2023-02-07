@@ -170,7 +170,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       isLastResource && state.pageNumber === state.numPages;
     const showNextButton = isScrolling ? !isLastResource : !isLastResourceEnd;
 
-    console.log('showNext', showNextButton, isScrolling, isLastResource);
     dispatch({
       type: 'BOOK_BOUNDARY_CHANGED',
       atStart: !showPrevButton,
