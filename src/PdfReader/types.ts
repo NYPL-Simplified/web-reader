@@ -28,17 +28,11 @@ export type PdfReaderAction =
       type: 'ARGS_CHANGED';
       args: ReaderArguments;
     }
-  | {
-      type: 'SET_CURRENT_RESOURCE';
-      index: number;
-      shouldNavigateToEnd: boolean;
-    }
   | { type: 'GO_FORWARD' }
   | { type: 'GO_BACKWARD' }
   | { type: 'GO_TO_HREF'; href: string }
   | { type: 'RESOURCE_FETCH_SUCCESS'; resource: { data: Uint8Array } }
   | { type: 'PDF_PARSED'; numPages: number }
-  | { type: 'NAVIGATE_PAGE'; pageNum: number }
   | { type: 'SET_SCALE'; scale: number }
   | { type: 'SET_SCROLL'; isScrolling: boolean }
   | { type: 'PAGE_LOAD_SUCCESS'; height: number; width: number }

@@ -29,6 +29,10 @@ export function makePdfReducer(
       return handleInvalidTransition(state, action);
     }
 
+    /**
+     * Utility function to generate state navigating us to a given resource and page.
+     * Used by multiple cases below.
+     */
     function goToLocation(index: number, page = 1): PdfState {
       // only set the resource to null if you're actually changing resources (not just
       // navigating to a different page in the same resource)
@@ -62,19 +66,6 @@ export function makePdfReducer(
           atEnd: false,
         };
       }
-      /**
-       * Cleares the current resource and sets the current index, which will cause
-       * the useEffect hook to load a new resource.
-       */
-      case 'SET_CURRENT_RESOURCE':
-        if (state.resourceIndex === action.index) return state;
-        return {
-          ...state,
-          resource: null,
-          resourceIndex: action.index,
-          pageNumber: action.shouldNavigateToEnd ? -1 : 1,
-          numPages: null,
-        };
 
       case 'GO_FORWARD': {
         /**
@@ -142,13 +133,6 @@ export function makePdfReducer(
           // end of the PDF that was just parsed
           pageNumber:
             state.pageNumber === -1 ? action.numPages : state.pageNumber,
-        };
-
-      // Navigates to page in resource
-      case 'NAVIGATE_PAGE':
-        return {
-          ...state,
-          pageNumber: action.pageNum,
         };
 
       case 'SET_SCROLL':
