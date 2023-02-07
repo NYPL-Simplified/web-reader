@@ -157,31 +157,37 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
   }, [containerSize, state.pdfWidth, state.pdfHeight, resizePage]);
 
   /**
-   * Hide Or Show Page Button
+   * Update the atStart/atEnd state to tell the UI whether to show the prev/next buttons
+   * Whether to have the next/prev buttons enabled. We disable them:
+   *   - In scroll mode when on the first or last resource
+   *   - In paginated mode when on the first or last page of the first or last resource
    */
   React.useEffect(() => {
-    if (!manifest || state.state !== 'ACTIVE') return;
-
+    const isScrolling = state.settings?.isScrolling;
     const isFirstResource = state.resourceIndex === 0;
-    const isResourceStart = isFirstResource && state.pageNumber === 1;
+    const isFirstResourceStart = isFirstResource && state.pageNumber === 1;
+    const showPrevButton = isScrolling
+      ? !isFirstResource
+      : !isFirstResourceStart;
 
     const isLastResource =
-      state.resourceIndex === manifest?.readingOrder?.length - 1;
-    const isResourceEnd = isLastResource && state.pageNumber === state.numPages;
+      state.resourceIndex === (manifest?.readingOrder?.length ?? 1) - 1;
+    const isLastResourceEnd =
+      isLastResource && state.pageNumber === state.numPages;
+    const showNextButton = isScrolling ? !isLastResource : !isLastResourceEnd;
 
+    console.log('showNext', showNextButton, isScrolling, isLastResource);
     dispatch({
       type: 'BOOK_BOUNDARY_CHANGED',
-      atStart: isResourceStart,
-      atEnd: isResourceEnd,
+      atStart: !showPrevButton,
+      atEnd: !showNextButton,
     });
   }, [
-    manifest,
-    state.state,
-    state.settings,
-    state.numPages,
+    manifest?.readingOrder?.length,
     state.pageNumber,
     state.resourceIndex,
-    isSinglePDF,
+    state.settings?.isScrolling,
+    state.numPages,
   ]);
 
   // add TOC object to manifest if single-resource pdf
