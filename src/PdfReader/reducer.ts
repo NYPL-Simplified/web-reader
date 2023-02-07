@@ -7,13 +7,6 @@ import {
 } from './lib';
 import { PdfState, PdfReaderAction } from './types';
 
-/**
- * TODO:
- *
- * - handle #startPage in goForward and goBackward
- * - handle #page in goForward and goBackward
- */
-
 export function makePdfReducer(
   args: ReaderArguments
 ): (state: PdfState, action: PdfReaderAction) => PdfState {
@@ -23,6 +16,7 @@ export function makePdfReducer(
    * to keep checking if args is defined.
    */
   if (!args) return (state: PdfState, _action: PdfReaderAction) => state;
+  const { manifest } = args;
 
   return function reducer(state: PdfState, action: PdfReaderAction): PdfState {
     if (state.state !== 'ACTIVE' && action.type !== 'ARGS_CHANGED') {
@@ -37,7 +31,22 @@ export function makePdfReducer(
       // only set the resource to null if you're actually changing resources (not just
       // navigating to a different page in the same resource)
       const shouldResetResource = state.resourceIndex !== index;
-      const newState = { ...state, resourceIndex: index, pageNumber: page };
+
+      // check if there is a #startPage in the href of the resource we are navigating to
+      const href = manifest.readingOrder[index].href;
+      const startPage = getStartPageFromHref(href);
+      // only go to the start page if we don't have another valid page we are navigating to
+      // instead.
+      const isNavigatingToEnd = page === -1;
+      const requestedPageIsBeforeStartPage = startPage && page < startPage;
+      const pageNumberToNavigateTo =
+        !isNavigatingToEnd && requestedPageIsBeforeStartPage ? startPage : page;
+
+      const newState = {
+        ...state,
+        resourceIndex: index,
+        pageNumber: pageNumberToNavigateTo,
+      };
       if (shouldResetResource) {
         return {
           ...newState,
