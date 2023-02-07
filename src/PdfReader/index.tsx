@@ -67,8 +67,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     settings: undefined,
   });
 
-  console.log(state);
-
   // state we can derive from the state above
   const isFetching = !state.resource;
   const isParsed = typeof state.numPages === 'number';
@@ -169,10 +167,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
 
     const isLastResource =
       state.resourceIndex === manifest?.readingOrder?.length - 1;
-    const isResourceEnd =
-      (isLastResource && state.pageNumber === state.numPages) ||
-      // On scroll mode, next page button takes you to the next resource. So we can just hide the next button on last resource.
-      (state.settings.isScrolling && isLastResource);
+    const isResourceEnd = isLastResource && state.pageNumber === state.numPages;
 
     dispatch({
       type: 'BOOK_BOUNDARY_CHANGED',
@@ -203,6 +198,18 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       addTocToManifest(manifest, proxiedUrl);
     }
   }, [isSinglePDF, manifest, proxyUrl, state.resourceIndex]);
+
+  /**
+   * In scrolling mode, manually scroll the user when the page changes
+   */
+  React.useEffect(() => {
+    if (!state.settings?.isScrolling) return;
+    const page = document.querySelector(
+      `[data-page-number="${state.pageNumber}"]`
+    );
+    if (!page) return;
+    page.scrollIntoView();
+  }, [state.pageNumber, state.settings?.isScrolling]);
 
   const goForward = React.useCallback(async () => {
     dispatch({ type: 'GO_FORWARD' });
