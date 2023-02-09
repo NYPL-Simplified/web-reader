@@ -60,6 +60,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     atStart: true,
     atEnd: false,
     settings: undefined,
+    rendered: false,
   });
 
   // state we can derive from the state above
@@ -188,12 +189,16 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
    */
   React.useEffect(() => {
     if (!state.settings?.isScrolling) return;
-    const page = document.querySelector(
-      `[data-page-number="${state.pageNumber}"]`
-    );
-    if (!page) return;
-    page.scrollIntoView();
-  }, [state.pageNumber, state.settings?.isScrolling]);
+    // if the resource is not yet loaded, don't do anything yet
+    if (!state.rendered) return;
+
+    process.nextTick(() => {
+      const page = document.querySelector(
+        `[data-page-number="${state.pageNumber}"]`
+      );
+      page?.scrollIntoView();
+    });
+  }, [state.pageNumber, state.settings?.isScrolling, state.rendered]);
 
   const goForward = React.useCallback(async () => {
     dispatch({ type: 'GO_FORWARD' });

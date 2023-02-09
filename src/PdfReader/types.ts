@@ -13,6 +13,7 @@ export type InternalState = {
   pdfWidth: number;
   pageHeight: number | undefined;
   pageWidth: number | undefined;
+  rendered: boolean;
 };
 
 export type InactiveState = ReaderState &
