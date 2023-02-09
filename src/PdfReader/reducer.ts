@@ -32,7 +32,7 @@ export function makePdfReducer(
       // navigating to a different page in the same resource)
       const shouldResetResource = state.resourceIndex !== index;
 
-      // check if there is a #startPage in the href of the resource we are navigating to
+      // check if there is a `?startPage` in the href of the resource we are navigating to
       const href = manifest.readingOrder[index].href;
       const startPage = getStartPageFromHref(href);
       // only go to the start page if we don't have another valid page we are navigating to
@@ -104,7 +104,11 @@ export function makePdfReducer(
          */
         // do nothing if we have not parsed the number of pages yet.
         if (!state.numPages) return state;
-        const atStartOfResource = state.pageNumber === 1;
+        const atStartOfResource = isStartOfResource(
+          state.pageNumber,
+          args.manifest.readingOrder[state.resourceIndex].href
+        );
+
         const atStartOfBook = state.resourceIndex === 0;
         if (atStartOfResource) {
           if (atStartOfBook) return state;
@@ -193,4 +197,13 @@ function handleInvalidTransition(state: PdfState, action: PdfReaderAction) {
     `Inavlid state transition attempted: ${state} with ${action.type}`
   );
   return state;
+}
+
+/**
+ * Checks if we are at the start of the resource, taking into account the `?startPage`
+ * query param.
+ */
+function isStartOfResource(pageNumber: number, resourceHref: string) {
+  const startPage = getStartPageFromHref(resourceHref);
+  return pageNumber === (startPage ?? 1);
 }

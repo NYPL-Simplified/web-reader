@@ -41,7 +41,7 @@ export default async function addTocToManifest(
       }
       return undefined;
     });
-    // await all the promises and filter any undefined values (tere was no chapter.dest or pageIndex)
+    // await all the promises and filter any undefined values (there was no chapter.dest or pageIndex)
     const toc = (await Promise.all(tocPromises)).filter(
       (item): item is ReadiumLink => !!item
     );
