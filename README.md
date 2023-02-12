@@ -162,6 +162,8 @@ One of the primary architectural goals of the web reader is to abstract away the
 
 A Webpub Manifest gives us metadata and the structure of the publication with links to the content. Depending on the `metadata.conformsTo` field, we know which type of reader to use to render the publication. Each media type (HTML for EPUBS, PDF for PDF publications, etc) has its own `use_X_Reader` hook (`usePdfReader`, `useHtmlReader`, etc).
 
+C4 Models have been created to demonstrate how the WebReader and other web reading utilities interact with the DRB & Open eBooks apps. View them here: https://structurizr.com/share/72104
+
 **Notes:**
 
 - There is one `use_X_Reader` per _media-type_ (PDF, HTML, Image, etc), not per _format_. As in, ePub and Mobi books are different formats that use the same media type (HTML). Audiobooks and PDF collections use different media types. We currently only have plans for HTML and PDF, but other hooks are welcome and should fit right in.
