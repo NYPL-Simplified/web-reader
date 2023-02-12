@@ -71,7 +71,7 @@ To use in a vanilla Javascript app:
 
 ## Required Fonts
 
-In order for the Settings panel to be displayed as intended, the fonts Roboto, Georgia, Helvetica, and OpenDyslexic must be available to your application. Georgia is web safe, meaning it is installed by default on most devices, but the others are not. One way to include them is to copy the `fonts` folder and its contents from `@nypl/web-reader/example/static` into your `/public` directory.
+In order for the Settings panel to be displayed as intended, the fonts Roboto, Georgia, and OpenDyslexic must be available to your application. Georgia is web safe, meaning it is installed by default on most devices, but the others are not. One way to include them is to copy them from the `fonts` folder in `@nypl/web-reader/example/static` into your `/public` directory. Alternatively, for Roboto, you can embed the Google Font into the <head> of your html (directions [here](https://fonts.google.com/specimen/Roboto)).
 
 ## Required CSS Injectables for the HTML Reader (EPUBs)
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ButtonGroup, Heading, Stack, Text } from '@chakra-ui/react';
+import { Box, ButtonGroup, Heading, Text } from '@chakra-ui/react';
 import { HtmlNavigator, ReaderSettings, ReaderState } from '../types';
 import Button from './Button';
 import {
@@ -68,7 +68,7 @@ export default function HtmlSettings(
         <FontToggleButton
           value="sans-serif"
           label="Sans-Serif"
-          fontFamily="sansSerif"
+          fontFamily="body"
           fontWeight="regular"
         />
         <FontToggleButton
@@ -78,11 +78,17 @@ export default function HtmlSettings(
           fontWeight="regular"
         />
       </ToggleGroup>
-      <Stack bgColor={checkedButtonBgColor} px={7} py={5}>
+      <Box
+        bgColor={checkedButtonBgColor}
+        display="flex"
+        flexDirection="column"
+        px={[3, 3, 7]}
+        py={[4, 4, 5]}
+      >
         <Heading
           as="h3"
           color={buttonTextColor}
-          pb="10px"
+          pb={[1.5, 1.5, 2.5]}
           fontSize={2}
           fontWeight="light"
         >
@@ -93,10 +99,11 @@ export default function HtmlSettings(
           fontFamily={FONT_DETAILS[fontFamily].token}
           fontSize={-1}
           fontWeight={FONT_DETAILS[fontFamily].fontWeight}
+          margin={0}
         >
           {FONT_DETAILS[fontFamily].body}
         </Text>
-      </Stack>
+      </Box>
       <ToggleGroup
         value={colorMode}
         label="reading theme options"
