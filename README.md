@@ -50,18 +50,6 @@ const ReaderPage = ({ manifestUrl }) => {
 };
 ```
 
-To use in a vanilla Javascript app:
-
-```html
-<div id="web-reader" />
-<script>
-  const readerDiv = document.getElementById('web-reader');
-  renderReader(readerDiv, {
-    manifestUrl: xxx,
-  });
-</script>
-```
-
 - [More React examples](/example/index.tsx) - Includes examples that render EPUB2 & EPUB3 based webpubs, remote hosted webpubs, and PDFs
 - [Encrypted example](/example/axisnow-encrypted.tsx) - How to pass an content decryptor to the web-reader to render encrypted content
 - [usePDFReader hook example](/example/use-pdf-reader.tsx) - Useful for instances when you know you're only going to be using the web-reader to open PDFs
