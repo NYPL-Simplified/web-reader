@@ -30,18 +30,6 @@ import useUpdateLocalStorage from '../utils/localstorage';
 
 export const IFRAME_ID_SELECTOR = 'html-reader-iframe';
 
-/**
- * @TODO :
- *
- * Future:
- *  - provide default injectables (Readium CSS)
- *  - Find some way to organize effects and actions together so you can navigate, wait for iframe to load,
- *    then run some other effect.
- *  - goForward and goBackward should return a promise that resolves once isNavigated flips to true.
- *  - Sync settings to localStorage or something similar.
- *  - Add a way to call a callback when current reading position changes (so OE web can save current position).
- *  - Maybe use history.pushState when navigating via nextPage or previousPage or toc.
- */
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const {
     webpubManifestUrl,

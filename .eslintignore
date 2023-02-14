@@ -7,7 +7,6 @@ dist
 .parcel-cache
 .cache
 
-storybook-static
 .vercel
 
 # env

@@ -28,6 +28,11 @@ import readiumDefault from 'url:../src/HtmlReader/ReadiumCss/ReadiumCSS-default.
 import readiumAfter from 'url:../src/HtmlReader/ReadiumCss/ReadiumCSS-after.css';
 import Tests from './Tests';
 import { Injectable } from '../src/Readium/Injectable';
+import UseHtmlReader from './use-html-reader';
+import mobyEpub2Manifest from './static/samples/moby-epub2-exploded/manifest.json';
+import pdfSingleResourceManifest from './static/samples/pdf/single-resource-short.json';
+import { WebpubManifest } from '../src/types';
+import UsePdfReader from './use-pdf-reader';
 
 const origin = window.location.origin;
 
@@ -101,6 +106,14 @@ const PdfReaders = () => {
       <Route path={`/pdf/single-resource-short`}>
         <WebReader
           webpubManifestUrl="/samples/pdf/single-resource-short.json"
+          proxyUrl={pdfProxyUrl}
+          pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
+        />
+      </Route>
+      <Route path={`/pdf/use-pdf-reader-hook`}>
+        <UsePdfReader
+          webpubManifestUrl="/samples/pdf/single-resource-short.json"
+          manifest={pdfSingleResourceManifest as WebpubManifest}
           proxyUrl={pdfProxyUrl}
           pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
         />
@@ -209,7 +222,7 @@ const HtmlReaders = () => {
           <Text as="p">
             This example shows how a web reader looks embedded within a page
             instead of taking over the full page. It is fixed height, which
-            means it will not grow to fit content in scrolling mode..
+            means it will not grow to fit content in scrolling mode.
           </Text>
           <WebReader
             injectablesReflowable={htmlInjectablesReflowable}
@@ -250,6 +263,13 @@ const HtmlReaders = () => {
           webpubManifestUrl={`${origin}/samples/ReadiumCSS-docs/manifest.json`}
         />
       </Route>
+      <Route path={`/html/use-html-reader-hook`}>
+        <UseHtmlReader
+          injectablesReflowable={htmlInjectablesReflowable}
+          webpubManifestUrl={`${origin}/samples/moby-epub2-exploded/manifest.json`}
+          manifest={mobyEpub2Manifest as WebpubManifest}
+        />
+      </Route>
       <Route path={`/html/url/:manifestUrl`}>
         <DynamicReader />
       </Route>
@@ -276,6 +296,9 @@ const HomePage = () => {
           <UnorderedList>
             <ListItem>
               <Link to="/html/moby-epub2">Moby Dick </Link>
+            </ListItem>
+            <ListItem>
+              <Link to="/html/use-html-reader-hook">useHtmlReader hook</Link>
             </ListItem>
           </UnorderedList>
         </ListItem>
@@ -337,6 +360,9 @@ const HomePage = () => {
           <UnorderedList>
             <ListItem>
               <Link to="/pdf/single-resource-short">Single-PDF Webpub</Link>
+            </ListItem>
+            <ListItem>
+              <Link to="/pdf/use-pdf-reader-hook">usePdfReader hook</Link>
             </ListItem>
             <ListItem>
               <Link to="/pdf/large">Single-PDF Webpub (large file)</Link>

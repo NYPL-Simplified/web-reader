@@ -11,6 +11,7 @@ import useMeasure from './useMeasure';
 import ChakraPage from './ChakraPage';
 import ScrollPage from './ScrollPage';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
+// Required CSS in order for links to be clickable in PDFs
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import { HEADER_HEIGHT, FOOTER_HEIGHT, DEFAULT_SETTINGS } from '../constants';
 import {
@@ -328,7 +329,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     []
   );
 
-  //TODO: Somehow, this window size updates when height
   React.useEffect(() => {
     resizePage(state.pdfWidth, state.pdfHeight, containerSize);
   }, [containerSize, state.pdfWidth, state.pdfHeight, resizePage]);
@@ -455,9 +455,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     []
   );
 
-  /**
-   * TODO: Change this button into a different "scale" button
-   */
   const zoomIn = React.useCallback(async () => {
     dispatch({
       type: 'SET_SCALE',

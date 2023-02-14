@@ -9,11 +9,6 @@ import { ActiveState } from './types';
  */
 export const FONT_SIZE_STEP = 4;
 
-/**
- * If we provide injectables that are not found, the app won't load at all.
- * Therefore we will not provide any default injectables.
- * @todo - this is not true in our custom renderer. We should provide default injectables.
- */
 export const defaultInjectables: Injectable[] = [];
 export const defaultInjectablesFixed: Injectable[] = [];
 
