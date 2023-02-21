@@ -1,221 +1,24 @@
 import { Document, PageProps, pdfjs } from 'react-pdf';
 import * as React from 'react';
-import {
-  ReaderArguments,
-  ReaderReturn,
-  ReaderSettings,
-  ReaderState,
-} from '../types';
+import { ReaderArguments, ReaderReturn } from '../types';
 import { Flex } from '@chakra-ui/react';
 import useMeasure from './useMeasure';
 import ChakraPage from './ChakraPage';
 import ScrollPage from './ScrollPage';
-import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
-import { HEADER_HEIGHT, FOOTER_HEIGHT, DEFAULT_SETTINGS } from '../constants';
+import { HEADER_HEIGHT, FOOTER_HEIGHT } from '../constants';
 import {
   DEFAULT_HEIGHT,
   DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
 } from '../constants';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
-import addTocToManifest from './addTocToManifest';
-
-type InternalState = {
-  resourceIndex: number;
-  resource: { data: Uint8Array } | null;
-  // we only know the numPages once the resource has been parsed
-  numPages: number | null;
-  // if pageNumber is -1, we will navigate to the end of the
-  // resource once it is parsed
-  pageNumber: number;
-  scale: number;
-  pdfHeight: number;
-  pdfWidth: number;
-  pageHeight: number | undefined;
-  pageWidth: number | undefined;
-};
-
-type InactiveState = ReaderState &
-  InternalState & { state: 'INACTIVE'; settings: undefined };
-
-type ActiveState = ReaderState &
-  InternalState & { state: 'ACTIVE'; settings: ReaderSettings };
-
-type PdfState = InactiveState | ActiveState;
-
-type PdfReaderAction =
-  | {
-      type: 'ARGS_CHANGED';
-      args: ReaderArguments;
-    }
-  | {
-      type: 'SET_CURRENT_RESOURCE';
-      index: number;
-      shouldNavigateToEnd: boolean;
-    }
-  | { type: 'RESOURCE_FETCH_SUCCESS'; resource: { data: Uint8Array } }
-  | { type: 'PDF_PARSED'; numPages: number }
-  | { type: 'NAVIGATE_PAGE'; pageNum: number }
-  | { type: 'SET_SCALE'; scale: number }
-  | { type: 'SET_SCROLL'; isScrolling: boolean }
-  | { type: 'PAGE_LOAD_SUCCESS'; height: number; width: number }
-  | {
-      type: 'RESIZE_PAGE';
-      height: number | undefined;
-      width: number | undefined;
-    }
-  | { type: 'BOOK_BOUNDARY_CHANGED'; atStart: boolean; atEnd: boolean };
-const IFRAME_WRAPPER_ID = 'iframe-wrapper';
-export const SCALE_STEP = 0.1;
-const START_QUERY = 'start';
-
-function pdfReducer(state: PdfState, action: PdfReaderAction): PdfState {
-  switch (action.type) {
-    case 'ARGS_CHANGED': {
-      return {
-        state: 'ACTIVE',
-        settings: DEFAULT_SETTINGS,
-        resourceIndex: 0,
-        resource: null,
-        pageNumber: 1,
-        numPages: null,
-        scale: 1,
-        pdfWidth: 0,
-        pdfHeight: 0,
-        pageHeight: undefined,
-        pageWidth: undefined,
-        atStart: true,
-        atEnd: false,
-      };
-    }
-    /**
-     * Cleares the current resource and sets the current index, which will cause
-     * the useEffect hook to load a new resource.
-     */
-    case 'SET_CURRENT_RESOURCE':
-      return {
-        ...state,
-        resource: null,
-        resourceIndex: action.index,
-        pageNumber: action.shouldNavigateToEnd ? -1 : 1,
-        numPages: null,
-      };
-
-    case 'RESOURCE_FETCH_SUCCESS':
-      return {
-        ...state,
-        resource: action.resource,
-      };
-
-    // called when the resource has been parsed by react-pdf
-    // and we know the number of pages
-    case 'PDF_PARSED':
-      return {
-        ...state,
-        numPages: action.numPages,
-        // if the state.pageNumber is -1, we know to navigate to the
-        // end of the PDF that was just parsed
-        pageNumber:
-          state.pageNumber === -1 ? action.numPages : state.pageNumber,
-      };
-
-    // Navigates to page in resource
-    case 'NAVIGATE_PAGE':
-      return {
-        ...state,
-        pageNumber: action.pageNum,
-      };
-
-    case 'SET_SCROLL':
-      if (state.state !== 'ACTIVE') {
-        return handleInvalidTransition(state, action);
-      }
-      return {
-        ...state,
-        settings: {
-          ...state.settings,
-          isScrolling: action.isScrolling,
-        },
-      };
-
-    case 'SET_SCALE':
-      return {
-        ...state,
-        scale: action.scale,
-      };
-
-    case 'PAGE_LOAD_SUCCESS':
-      return {
-        ...state,
-        pdfWidth: action.width,
-        pdfHeight: action.height,
-        pageWidth: action.width,
-        pageHeight: action.height,
-      };
-
-    case 'RESIZE_PAGE':
-      return {
-        ...state,
-        pageWidth: action.width,
-        pageHeight: action.height,
-      };
-
-    case 'BOOK_BOUNDARY_CHANGED':
-      return {
-        ...state,
-        atStart: action.atStart,
-        atEnd: action.atEnd,
-      };
-  }
-}
-
-const getResourceUrl = (
-  index: number,
-  readingOrder: ReadiumLink[] | undefined
-): string => {
-  if (!readingOrder || !readingOrder.length) {
-    throw new Error('A manifest has been returned, but has no reading order');
-  }
-
-  // If it has no children, return the link href
-  return readingOrder[index].href;
-};
-
-const loadResource = async (resourceUrl: string, proxyUrl?: string) => {
-  // Generate the resource URL using the proxy
-  const url: string = proxyUrl
-    ? `${proxyUrl}${encodeURIComponent(resourceUrl)}`
-    : resourceUrl;
-  const response = await fetch(url, { mode: 'cors' });
-  const array = new Uint8Array(await response.arrayBuffer());
-  console.log('proxied', url, response);
-
-  if (!response.ok) {
-    throw new Error('Response not Ok for URL: ' + url);
-  }
-  return array;
-};
-
-/**
- * Helper method for skipping interstatial pages
- * @param resourceUrl
- * @returns
- */
-const getStartPage = (resourceUrl: string): number => {
-  const params = new URL(resourceUrl).searchParams;
-  const startPage = params.get(START_QUERY);
-  return startPage ? parseInt(startPage) : 1;
-};
-
-/**
- * Helper method to get hash page
- * @param resourceUrl
- * @returns
- */
-const getHashPage = (resourceUrl: string): number => {
-  const hash = new URL(resourceUrl).hash;
-  return hash ? parseInt(hash.split('=')[1]) : 1;
-};
+import {
+  getResourceUrl,
+  IFRAME_WRAPPER_ID,
+  loadResource,
+  SCALE_STEP,
+} from './lib';
+import { makePdfReducer } from './reducer';
 
 /**
  * The PDF reader
@@ -242,7 +45,8 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     height = DEFAULT_HEIGHT,
     growWhenScrolling = DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
   } = args ?? {};
-  const [state, dispatch] = React.useReducer(pdfReducer, {
+
+  const [state, dispatch] = React.useReducer(makePdfReducer(args), {
     state: 'INACTIVE',
     resourceIndex: 0,
     resource: null,
@@ -256,12 +60,12 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     atStart: true,
     atEnd: false,
     settings: undefined,
+    rendered: false,
   });
 
   // state we can derive from the state above
   const isFetching = !state.resource;
   const isParsed = typeof state.numPages === 'number';
-  const isSinglePDF = manifest && manifest?.readingOrder.length === 1;
   const [containerRef, containerSize] = useMeasure<HTMLDivElement>();
 
   // dispatch action when arguments change
@@ -323,7 +127,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
    *  - if the page's aspect ratio is wider than the container's, we will constrain
    *    the page to the width of the container
    */
-
   const resizePage = React.useCallback(
     (
       pdfWidth: number,
@@ -344,139 +147,66 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     []
   );
 
-  //TODO: Somehow, this window size updates when height
   React.useEffect(() => {
     resizePage(state.pdfWidth, state.pdfHeight, containerSize);
   }, [containerSize, state.pdfWidth, state.pdfHeight, resizePage]);
 
   /**
-   * Hide Or Show Page Button
+   * Update the atStart/atEnd state to tell the UI whether to show the prev/next buttons
+   * Whether to have the next/prev buttons enabled. We disable them:
+   *   - In scroll mode when on the first or last resource
+   *   - In paginated mode when on the first or last page of the first or last resource
    */
   React.useEffect(() => {
-    if (!manifest || state.state !== 'ACTIVE') return;
+    const isScrolling = state.settings?.isScrolling;
+    const isFirstResource = state.resourceIndex === 0;
+    const isFirstResourceStart = isFirstResource && state.pageNumber === 1;
+    const showPrevButton = isScrolling
+      ? !isFirstResource
+      : !isFirstResourceStart;
 
-    // Hide all buttons for single PDF on scroll mode
-    if (isSinglePDF && state.settings.isScrolling) {
-      dispatch({
-        type: 'BOOK_BOUNDARY_CHANGED',
-        atStart: true,
-        atEnd: true,
-      });
-    } else {
-      const isFirstResource = state.resourceIndex === 0;
-      const isResourceStart = isFirstResource && state.pageNumber === 1;
+    const isLastResource =
+      state.resourceIndex === (manifest?.readingOrder?.length ?? 1) - 1;
+    const isLastResourceEnd =
+      isLastResource && state.pageNumber === state.numPages;
+    const showNextButton = isScrolling ? !isLastResource : !isLastResourceEnd;
 
-      const isLastResource =
-        state.resourceIndex === manifest?.readingOrder?.length - 1;
-      const isResourceEnd =
-        (isLastResource && state.pageNumber === state.numPages) ||
-        // On scroll mode, next page button takes you to the next resource. So we can just hide the next button on last resource.
-        (state.settings.isScrolling && isLastResource);
-
-      dispatch({
-        type: 'BOOK_BOUNDARY_CHANGED',
-        atStart: isResourceStart,
-        atEnd: isResourceEnd,
-      });
-    }
+    dispatch({
+      type: 'BOOK_BOUNDARY_CHANGED',
+      atStart: !showPrevButton,
+      atEnd: !showNextButton,
+    });
   }, [
-    manifest,
-    state.state,
-    state.settings,
-    state.numPages,
+    manifest?.readingOrder?.length,
     state.pageNumber,
     state.resourceIndex,
-    isSinglePDF,
+    state.settings?.isScrolling,
+    state.numPages,
   ]);
 
-  // add TOC object to manifest if single-resource pdf
+  /**
+   * In scrolling mode, manually scroll the user when the page changes
+   */
   React.useEffect(() => {
-    if (!manifest || !manifest.readingOrder || !manifest.readingOrder.length)
-      return;
+    if (!state.settings?.isScrolling) return;
+    // if the resource is not yet loaded, don't do anything yet
+    if (!state.rendered) return;
 
-    if (isSinglePDF) {
-      const resourceUrl = getResourceUrl(
-        state.resourceIndex,
-        manifest.readingOrder
+    process.nextTick(() => {
+      const page = document.querySelector(
+        `[data-page-number="${state.pageNumber}"]`
       );
-      const proxiedUrl = `${proxyUrl}${encodeURIComponent(resourceUrl)}`;
-      addTocToManifest(manifest, proxiedUrl);
-    }
-  }, [isSinglePDF, manifest, proxyUrl, state.resourceIndex]);
+      page?.scrollIntoView();
+    });
+  }, [state.pageNumber, state.settings?.isScrolling, state.rendered]);
 
-  // prev and next page functions
   const goForward = React.useCallback(async () => {
-    // do nothing if we haven't parsed the number of pages yet
-    if (!state.numPages) return;
-    // do nothing if the reader is inactive
-    if (state.state !== 'ACTIVE') return;
-
-    if (state.pageNumber < state.numPages && !state.settings.isScrolling) {
-      dispatch({
-        type: 'NAVIGATE_PAGE',
-        pageNum: state.pageNumber + 1,
-      });
-    } else if (
-      manifest &&
-      manifest.readingOrder &&
-      state.resourceIndex < manifest?.readingOrder?.length - 1
-    ) {
-      const nextIndex = state.resourceIndex + 1;
-      dispatch({
-        type: 'SET_CURRENT_RESOURCE',
-        index: nextIndex,
-        shouldNavigateToEnd: false,
-      });
-      if (manifest?.readingOrder[nextIndex]) {
-        const pageNum = getStartPage(manifest?.readingOrder[nextIndex].href);
-        dispatch({
-          type: 'NAVIGATE_PAGE',
-          pageNum: pageNum,
-        });
-      }
-    }
-    // Do nothing if it's at the last page of the last resource
-  }, [
-    state.state,
-    manifest,
-    state.settings,
-    state.numPages,
-    state.pageNumber,
-    state.resourceIndex,
-  ]);
+    dispatch({ type: 'GO_FORWARD' });
+  }, []);
 
   const goBackward = React.useCallback(async () => {
-    // do nothing if we haven't parsed the PDF yet
-    if (!isParsed) return;
-    // do nothing if the reader is inactive
-    if (state.state !== 'ACTIVE') return;
-
-    const startPage =
-      manifest?.readingOrder && manifest?.readingOrder[state.resourceIndex]
-        ? getStartPage(manifest?.readingOrder[state.resourceIndex].href)
-        : 1;
-
-    if (state.pageNumber > startPage && !state.settings.isScrolling) {
-      dispatch({
-        type: 'NAVIGATE_PAGE',
-        pageNum: state.pageNumber - 1,
-      });
-    } else if (manifest?.readingOrder && state.resourceIndex > 0) {
-      const nextIndex = state.resourceIndex - 1;
-      dispatch({
-        type: 'SET_CURRENT_RESOURCE',
-        index: nextIndex,
-        shouldNavigateToEnd: !state.settings.isScrolling,
-      });
-    }
-  }, [
-    manifest,
-    isParsed,
-    state.state,
-    state.settings,
-    state.pageNumber,
-    state.resourceIndex,
-  ]);
+    dispatch({ type: 'GO_BACKWARD' });
+  }, []);
 
   const setScroll = React.useCallback(
     async (val: 'scrolling' | 'paginated') => {
@@ -503,72 +233,9 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     });
   }, [state.scale]);
 
-  /**
-   * TODO: Update to work with sub-chapter links
-   */
-  const goToPage = React.useCallback(
-    async (href) => {
-      if (isSinglePDF) {
-        const getIndexFromHref = (href: string): number => {
-          const index = manifest?.toc?.findIndex((link) => {
-            return link.href === href;
-          }) as number;
-          if (index < 0) {
-            throw new Error('Cannot find resource in toc');
-          }
-          return index;
-        };
-
-        const resourceIndex = getIndexFromHref(href);
-        if (manifest?.toc && manifest?.toc[resourceIndex]) {
-          const hashPage = getHashPage(manifest?.toc[resourceIndex].href);
-          dispatch({
-            type: 'NAVIGATE_PAGE',
-            pageNum: hashPage,
-          });
-
-          if (state.settings?.isScrolling && hashPage) {
-            document
-              .querySelector(`[data-page-number="${hashPage}"]`)
-              ?.scrollIntoView();
-          }
-        }
-      } else {
-        const getIndexFromHref = (href: string): number => {
-          const index = manifest?.readingOrder?.findIndex((link) => {
-            return link.href === href;
-          }) as number;
-          if (index < 0) {
-            throw new Error('Cannot find resource in readingOrder');
-          }
-          return index;
-        };
-
-        const resourceIndex = getIndexFromHref(href);
-        dispatch({
-          type: 'SET_CURRENT_RESOURCE',
-          index: resourceIndex,
-          shouldNavigateToEnd: false,
-        });
-
-        if (manifest?.readingOrder && manifest?.readingOrder[resourceIndex]) {
-          const startPage = getStartPage(
-            manifest?.readingOrder[resourceIndex].href
-          );
-          dispatch({
-            type: 'NAVIGATE_PAGE',
-            pageNum: startPage,
-          });
-        }
-      }
-    },
-    [
-      isSinglePDF,
-      manifest?.readingOrder,
-      manifest?.toc,
-      state.settings?.isScrolling,
-    ]
-  );
+  const goToPage = React.useCallback(async (href: string) => {
+    dispatch({ type: 'GO_TO_HREF', href });
+  }, []);
 
   // this format is inactive, return null
   if (!webpubManifestUrl || !manifest) return null;
@@ -713,14 +380,4 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       goToPage,
     },
   };
-}
-
-function handleInvalidTransition(state: PdfState, action: PdfReaderAction) {
-  console.trace(
-    `Inavlid state transition attempted: ${state} with ${action.type}`
-  );
-  return state;
-}
-function href(href: any) {
-  throw new Error('Function not implemented.');
 }

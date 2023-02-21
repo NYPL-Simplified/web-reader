@@ -9,7 +9,7 @@ import {
   Link,
   useParams,
 } from 'react-router-dom';
-import WebReader from '../src';
+import WebReader, { addTocToManifest } from '../src';
 import {
   ChakraProvider,
   Heading,
@@ -28,10 +28,12 @@ import readiumDefault from 'url:../src/HtmlReader/ReadiumCss/ReadiumCSS-default.
 import readiumAfter from 'url:../src/HtmlReader/ReadiumCss/ReadiumCSS-after.css';
 import Tests from './Tests';
 import { Injectable } from '../src/Readium/Injectable';
+import useSWR, { Fetcher } from 'swr';
 
 const origin = window.location.origin;
 
 const pdfProxyUrl = process.env.CORS_PROXY_URL as string | undefined;
+const pdfWorkerSrc = `${origin}/pdf-worker/pdf.worker.min.js`;
 
 const cssInjectables: Injectable[] = [
   {
@@ -99,11 +101,7 @@ const PdfReaders = () => {
   return (
     <>
       <Route path={`/pdf/single-resource-short`}>
-        <WebReader
-          webpubManifestUrl="/samples/pdf/single-resource-short.json"
-          proxyUrl={pdfProxyUrl}
-          pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
-        />
+        <SingleResourcePdf />
       </Route>
       <Route path={`/pdf/large`}>
         <WebReader
@@ -156,6 +154,62 @@ const PdfReaders = () => {
         </Box>
       </Route>
     </>
+  );
+};
+
+/**
+ * This is a function we will use to get the resource through a given proxy url.
+ * It will eventually be passed to the web reader instead of passing a proxy url directly.
+ */
+const getProxiedResource = (proxyUrl?: string) => async (href: string) => {
+  // Generate the resource URL using the proxy
+  const url: string = proxyUrl
+    ? `${proxyUrl}${encodeURIComponent(href)}`
+    : href;
+  const response = await fetch(url, { mode: 'cors' });
+  const array = new Uint8Array(await response.arrayBuffer());
+
+  if (!response.ok) {
+    throw new Error('Response not Ok for URL: ' + url);
+  }
+  return array;
+};
+
+/**
+ * - Fetches manifest
+ * - Adds the TOC to the manifest
+ * - Generates a syncthetic url for the manifest to be passed to
+ * web reader.
+ * - Returns the synthetic url
+ */
+const fetchAndModifyManifest: Fetcher<string, string> = async (url) => {
+  const response = await fetch(url);
+  const manifest = await response.json();
+  const modifiedManifest = await addTocToManifest(
+    manifest,
+    getProxiedResource(pdfProxyUrl),
+    pdfWorkerSrc
+  );
+  const syntheticUrl = URL.createObjectURL(
+    new Blob([JSON.stringify(modifiedManifest)])
+  );
+  return syntheticUrl;
+};
+
+const SingleResourcePdf = () => {
+  const { data: modifiedManifestUrl, isLoading } = useSWR<string>(
+    '/samples/pdf/single-resource-short.json',
+    fetchAndModifyManifest
+  );
+
+  if (isLoading || !modifiedManifestUrl) return <div>Loading...</div>;
+
+  return (
+    <WebReader
+      webpubManifestUrl={modifiedManifestUrl}
+      proxyUrl={pdfProxyUrl}
+      pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
+    />
   );
 };
 
