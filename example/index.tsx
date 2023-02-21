@@ -199,7 +199,10 @@ const fetchAndModifyManifest: Fetcher<string, string> = async (url) => {
 const SingleResourcePdf = () => {
   const { data: modifiedManifestUrl, isLoading } = useSWR<string>(
     '/samples/pdf/single-resource-short.json',
-    fetchAndModifyManifest
+    fetchAndModifyManifest,
+    {
+      revalidateOnFocus: false,
+    }
   );
 
   if (isLoading || !modifiedManifestUrl) return <div>Loading...</div>;

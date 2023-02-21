@@ -179,7 +179,7 @@ We make every effort to throw useful errors. Your app should probably wrap the w
 
 ## Modifying PDF Manifests
 
-In some cases it may be desirable to modify the Webpub Manifest before passing it to the web reader. One example of this is with single-resource PDFs. These manifests sometimes arrive without a table of contents. The information for the TOC is embedded in the single PDF file itself. In this situation, we have set up a utility to extract the PDF TOC and add it to the manifest. There is an example of this working at []`/pdf/single-resource-short`](https://nypl-web-reader.vercel.app/pdf/single-resource-short).
+In some cases it may be desirable to modify the Webpub Manifest before passing it to the web reader. One example of this is with single-resource PDFs. These manifests sometimes arrive without a table of contents. The information for the TOC is embedded in the single PDF file itself. In this situation, we have set up a utility to extract the PDF TOC and add it to the manifest. There is an example of this working at [`/pdf/single-resource-short`](https://nypl-web-reader.vercel.app/pdf/single-resource-short).
 
 In order to make this work in your app, you will want to:
 

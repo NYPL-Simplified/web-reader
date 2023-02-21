@@ -49,7 +49,7 @@ export default async function addTocToManifest(
       manifest.toc = toc;
     }
   } catch (e) {
-    console.error(e); // todo: add error handling
+    console.error(e);
   }
 
   return manifest;
