@@ -139,7 +139,7 @@ Basic default styling is included in the basic UI. We are using [Chakra](https:/
 
 ## Errors
 
-We make every effort to throw useful errors. Your app should probably wrap the web reader component in a React `<ErrorBoundary>` to either display the thrown errors or a custom error state for your users in the case one is thrown. See the example app for an example using an Error Boundary.
+We make every effort to throw useful errors. Your app should probably wrap the web reader component in a React `<ErrorBoundary>` to either display the thrown errors or a custom error state for your users in the case one is thrown.
 
 ## Modifying PDF Manifests
 
