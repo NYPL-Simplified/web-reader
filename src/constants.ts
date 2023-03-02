@@ -19,6 +19,34 @@ export const DEFAULT_SETTINGS: ReaderSettings = {
   fontFamily: 'publisher',
 };
 
+export const FONT_DETAILS = {
+  publisher: {
+    heading: "Publisher's default font",
+    body:
+      "Show the publisher's-specified fonts and layout choices in this ebook",
+    token: 'body',
+    fontWeight: 'light',
+  },
+  serif: {
+    heading: 'Serif font',
+    body: 'Georgia',
+    token: 'serif',
+    fontWeight: 'regular',
+  },
+  'sans-serif': {
+    heading: 'Sans-serif font',
+    body: 'Roboto',
+    token: 'body',
+    fontWeight: 'regular',
+  },
+  'open-dyslexic': {
+    heading: 'Dyslexic friendly font',
+    body: 'OpenDyslexic',
+    token: 'opendyslexic',
+    fontWeight: 'regular',
+  },
+};
+
 // local storage keys
 export const LOCAL_STORAGE_SETTINGS_KEY = 'web-reader-settings';
 export const LOCAL_STORAGE_LOCATIONS_KEY = 'web-reader-locations';

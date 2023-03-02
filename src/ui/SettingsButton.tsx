@@ -8,12 +8,12 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import { PDFActiveReader, HTMLActiveReader } from '../types';
-import { MdOutlineSettings, MdOutlineCancel } from 'react-icons/md';
 
 import Button from './Button';
 import useColorModeValue from './hooks/useColorModeValue';
 import PdfSettings from './PdfSettings';
 import HtmlSettings from './HtmlSettings';
+import { ReaderSettings } from './icons';
 
 type SettingsCardProps =
   | Pick<PDFActiveReader, 'navigator' | 'state' | 'type'>
@@ -26,42 +26,62 @@ export default function SettingsCard(
   const open = () => setIsOpen(true);
   const close = () => setIsOpen(false);
 
+  const contentBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.white');
+  const iconFill = useColorModeValue(
+    'ui.gray.icon',
+    'ui.white',
+    'ui.gray.icon'
+  );
   const paginationValue = props.state?.settings?.isScrolling
     ? 'scrolling'
     : 'paginated';
-  const contentBgColor = useColorModeValue('ui.white', 'ui.black', 'ui.white');
 
   return (
     <>
       <Popover
-        placement="bottom"
+        gutter={0}
+        closeOnBlur
+        placement="bottom-start"
         isOpen={isOpen}
-        onOpen={open}
         onClose={close}
+        onOpen={open}
         autoFocus={true}
+        preventOverflow
+        strategy="fixed"
       >
         <PopoverTrigger>
           <Button
-            onClick={open}
-            border="none"
             aria-label="Settings"
-            leftIcon={
-              <Icon
-                as={isOpen ? MdOutlineCancel : MdOutlineSettings}
-                w={6}
-                h={6}
-              />
+            onClick={open}
+            /**
+             * preventDefault fixes a Chakra bug where in Safari,
+             * the PopoverTrigger will not close the Popover.
+             * The issue is described in
+             * https://github.com/chakra-ui/chakra-ui/issues/3461
+             * and the workaround can be found in
+             * https://github.com/chakra-ui/chakra-ui/issues/587.
+             * */
+            onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) =>
+              e.preventDefault()
             }
+            border="none"
+            gap={[0, 0, 2]}
           >
+            <Icon as={ReaderSettings} fill={iconFill} w={6} h={6} />
             <Text variant="headerNav">Settings</Text>
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          borderColor="gray.100"
-          width="fit-content"
+          overflow="hidden"
           bgColor={contentBgColor}
+          borderColor="ui.gray.disabled"
+          borderRadius="0 0 2px 2px"
+          filter="drop-shadow(0 1px 2px #00000040)"
+          width={['90vw', '90vw', 'inherit']}
+          marginRight={[4, 4, 4, 0]}
+          maxWidth="100vw"
         >
-          <PopoverBody p={0} maxWidth="95vw">
+          <PopoverBody p={0}>
             {props.type === 'PDF' && (
               <PdfSettings
                 // Destructuring props before type check causes Typescript warning.
@@ -73,6 +93,7 @@ export default function SettingsCard(
             {props.type === 'HTML' && (
               <HtmlSettings
                 navigator={props.navigator}
+                iconFill={iconFill}
                 readerState={props.state}
                 paginationValue={paginationValue}
               />

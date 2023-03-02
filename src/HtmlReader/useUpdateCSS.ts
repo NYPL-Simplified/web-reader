@@ -5,8 +5,7 @@ import { getMaybeIframeHtml } from './lib';
 import { HtmlState } from './types';
 
 /**
- * Set CSS variables when user state changes.
- * @todo - narrow down the dependencies so this doesn't run on _every_ state change.
+ * Set CSS variables when user state changes
  */
 export default function useUpdateCSS(
   state: HtmlState,

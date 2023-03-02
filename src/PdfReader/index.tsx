@@ -5,6 +5,7 @@ import { Flex } from '@chakra-ui/react';
 import useMeasure from './useMeasure';
 import ChakraPage from './ChakraPage';
 import ScrollPage from './ScrollPage';
+// Required CSS in order for links to be clickable in PDFs
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import { HEADER_HEIGHT, FOOTER_HEIGHT } from '../constants';
 import {
@@ -216,9 +217,6 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     []
   );
 
-  /**
-   * TODO: Change this button into a different "scale" button
-   */
   const zoomIn = React.useCallback(async () => {
     dispatch({
       type: 'SET_SCALE',

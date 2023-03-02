@@ -13,7 +13,7 @@ const getButtonStyle = (getColor: GetColor) =>
     // styles for different visual variants ("outline", "solid")
     variants: {
       solid: variantSolid(getColor),
-      toggle: variantToggle(getColor),
+      settings: variantSettings(getColor),
     },
     // default values for `size`, `variant`, `colorScheme`
     defaultProps: {
@@ -30,28 +30,46 @@ const getButtonStyle = (getColor: GetColor) =>
  ** Disabled
  ** Hovered
  */
+
 const variantSolid = (getColor: GetColor) => (
   props: React.ComponentProps<typeof Button>
 ) => {
-  const bgColor = getColor('ui.white', 'ui.black', 'ui.sepia');
+  const { 'aria-expanded': expanded } = props;
+
+  const bgColor = getColor('ui.gray.light-warm', 'ui.black', 'ui.sepia');
+
+  const bgColorActive = getColor(
+    'ui.gray.active',
+    'ui.gray.x-dark',
+    'ui.sepiaChecked'
+  );
   const color = getColor('gray.800', 'ui.white', 'gray.800');
 
-  const _focus = { bgColor, color };
-  const _hover = { bgColor, color, _disabled: { bgColor } };
-  const _active = { bgColor, color };
+  const _focus = {
+    bgColor: bgColorActive,
+    color,
+    ring: '2px',
+    ringInset: 'inset',
+  };
+  const _hover = {
+    bgColor: bgColorActive,
+    color,
+    _disabled: { bgColor },
+  };
+  const _active = { bgColor: bgColorActive, color };
   const _checked = { bgColor, color };
   const _disabled = { bgColor };
 
   return {
-    border: '1px solid',
+    border: 'none',
     borderColor: 'gray.100',
+    height: '45px',
     transition: 'none',
     fontSize: 0,
     letterSpacing: 1,
-    textTransform: 'uppercase',
     maxWidth: '100%',
     cursor: 'pointer',
-    bgColor,
+    bgColor: expanded ? bgColorActive : bgColor,
     color,
     _focus,
     _hover,
@@ -61,30 +79,50 @@ const variantSolid = (getColor: GetColor) => (
   };
 };
 
-const variantToggle = (getColor: GetColor) => (
+const variantSettings = (getColor: GetColor) => (
   props: React.ComponentProps<typeof Button>
 ) => {
-  const bgColor = getColor('ui.white', 'gray.800', 'ui.white');
-  const color = getColor('gray.800', 'ui.white', 'gray.800');
+  const { bgColor } = props;
+
+  const color = getColor('ui.black', 'ui.white', 'ui.black');
+
+  const checkedBgColor = getColor(
+    'ui.gray.light-warm',
+    'ui.gray.x-dark',
+    'ui.sepiaChecked'
+  );
+
   return {
     ...variantSolid(getColor)(props),
-    bgColor,
+    bgColor: getColor('ui.white', 'ui.black', 'ui.sepia'),
+    border: '1px solid',
     color,
-    px: 8,
-    fontWeight: 'medium',
-    fontSize: -2,
-    _focus: {
-      bgColor,
-    },
-    _hover: {
-      bgColor,
+    py: 8,
+    width: [8, 16, 36],
+    fontSize: [0, 0, 2],
+    whiteSpace: ['normal', 'normal', 'nowrap'],
+    p: {
+      textAlign: 'center',
     },
     _active: {
       bgColor,
     },
     _checked: {
-      color: 'ui.white',
-      bgColor: 'green.700',
+      color,
+      bgColor: checkedBgColor,
+      borderBottomColor: checkedBgColor,
+      p: {
+        textDecoration: 'underline',
+        textUnderlinePosition: 'under',
+      },
+    },
+    _hover: {
+      bgColor,
+    },
+    _focus: {
+      bgColor,
+      ring: '2px',
+      ringInset: 'inset',
     },
   };
 };
