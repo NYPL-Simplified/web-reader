@@ -141,6 +141,55 @@ Basic default styling is included in the basic UI. We are using [Chakra](https:/
 
 We make every effort to throw useful errors. Your app should probably wrap the web reader component in a React `<ErrorBoundary>` to either display the thrown errors or a custom error state for your users in the case one is thrown.
 
+## Modifying PDF Manifests
+
+In some cases it may be desirable to modify the Webpub Manifest before passing it to the web reader. One example of this is with single-resource PDFs. These manifests sometimes arrive without a table of contents. The information for the TOC is embedded in the single PDF file itself. In this situation, we have set up a utility to extract the PDF TOC and add it to the manifest. There is an example of this working at [`/pdf/single-resource-short`](https://nypl-web-reader.vercel.app/pdf/single-resource-short).
+
+In order to make this work in your app, you will want to:
+
+1. Fetch your manifest
+1. Use `addTocToManifest` to add the table of contents
+1. Generate a synthetic URL for the in-memory JSON object
+1. Pass this generated URL to the web reader.
+
+<details>
+<summary>See the example code</summary>
+
+```ts
+const fetchAndModifyManifest: Fetcher<string, string> = async (url) => {
+  const response = await fetch(url);
+  const manifest = await response.json();
+  const modifiedManifest = await addTocToManifest(
+    manifest,
+    getProxiedResource(pdfProxyUrl),
+    pdfWorkerSrc
+  );
+  const syntheticUrl = URL.createObjectURL(
+    new Blob([JSON.stringify(modifiedManifest)])
+  );
+  return syntheticUrl;
+};
+
+const SingleResourcePdf = () => {
+  const { data: modifiedManifestUrl, isLoading } = useSWR<string>(
+    '/samples/pdf/single-resource-short.json',
+    fetchAndModifyManifest
+  );
+
+  if (isLoading || !modifiedManifestUrl) return <div>Loading...</div>;
+
+  return (
+    <WebReader
+      webpubManifestUrl={modifiedManifestUrl}
+      proxyUrl={pdfProxyUrl}
+      pdfWorkerSrc={`${origin}/pdf-worker/pdf.worker.min.js`}
+    />
+  );
+};
+```
+
+</details>
+
 ## Architecture
 
 One of the primary architectural goals of the web reader is to abstract away the particularities of the many individual publication formats by using a common manifest to describe all publication types. This is the [Readium Webpub Manifest](https://readium.org/webpub-manifest/profiles/epub.html). This allows the web-reader to consume Webpub Manifests, not manipulate or generate them.

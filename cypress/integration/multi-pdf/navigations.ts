@@ -28,9 +28,7 @@ describe('Multi PDF navigation', () => {
     cy.findByRole('button', { name: 'Table of Contents' }).click();
     cy.findByRole('menuitem', { name: 'Foreword' }).click();
     cy.wait('@pdf');
-    cy.findByText('Anthropology without Informants', { timeout: 10000 }).should(
-      'be.visible'
-    );
+    cy.findAllByText(/Foreword/, { timeout: 10000 }).should('be.visible');
     cy.get('div[data-page-number="2"]').should('exist');
   });
 

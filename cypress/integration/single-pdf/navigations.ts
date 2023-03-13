@@ -23,4 +23,43 @@ describe('Single PDF navigation', () => {
       'Matteo Ferrazzi, Fotios Kalantzis and Sanne Zwart (European Investment Bank)'
     ).should('exist');
   });
+
+  it('Paginated mode & TOC: should update page content after clicking on TOC link', () => {
+    cy.findByRole('button', { name: 'Settings' }).click();
+    cy.findByRole('radio', { name: 'Paginated' }).should('be.checked');
+    cy.findByRole('radio', { name: 'Scrolling' }).should('not.be.checked');
+
+    cy.log('open TOC menu');
+    cy.wait(3000);
+    cy.findByRole('button', { name: 'Table of Contents' }).click();
+
+    cy.log('open chapter 2');
+    cy.findByRole('menuitem', {
+      name: '2 Climate risk at the country level',
+    }).click();
+
+    cy.findByText(
+      'Figure 1: Overview of risks stemming from climate change'
+    ).should('exist');
+  });
+
+  it('Scrolling mode & TOC: should update page content after clicking on TOC link', () => {
+    cy.findByRole('button', { name: 'Settings' }).click();
+    cy.findByText('Scrolling').click();
+    cy.findByRole('radio', { name: 'Paginated' }).should('not.be.checked');
+    cy.findByRole('radio', { name: 'Scrolling' }).should('be.checked');
+
+    cy.log('open TOC menu');
+    cy.wait(3000);
+    cy.findByRole('button', { name: 'Table of Contents' }).click();
+
+    cy.log('open chapter 2');
+    cy.findByRole('menuitem', {
+      name: '2 Climate risk at the country level',
+    }).click();
+
+    cy.findByText(
+      'Figure 1: Overview of risks stemming from climate change'
+    ).should('exist');
+  });
 });
