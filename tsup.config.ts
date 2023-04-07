@@ -9,7 +9,15 @@ import { defineConfig } from 'tsup';
  */
 
 export default defineConfig({
-  entry: ['src/index.tsx'],
+  entry: {
+    index: 'src/index.tsx',
+    'injectable-html-styles/ReadiumCSS-before':
+      'src/HtmlReader/ReadiumCss/ReadiumCSS-before.css',
+    'injectable-html-styles/ReadiumCSS-default':
+      'src/HtmlReader/ReadiumCss/ReadiumCSS-default.css',
+    'injectable-html-styles/ReadiumCSS-after':
+      'src/HtmlReader/ReadiumCss/ReadiumCSS-after.css',
+  },
   format: ['esm', 'cjs'],
   sourcemap: true,
   dts: true,
