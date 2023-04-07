@@ -125,6 +125,7 @@
   },
   "dependencies": {
     "comlink": "^4.3.1",
+    "debounce": "^1.2.1",
     "framer-motion": "^4.1.6",
     "node-fetch": "^2.6.1",
     "react-icons": "^4.3.1",
