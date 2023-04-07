@@ -173,8 +173,10 @@ const logBundled = (msg: string, file: string) => log(`📦 ${msg} -`, file);
 console.log(
   `🌪  Building @nypl/web-reader${isWatchEnabled ? ' in watch mode...' : '...'}`
 );
-buildAll().then(() => {
-  if (isWatchEnabled) {
-    startWatcher();
-  }
-});
+buildAll()
+  .then(() => {
+    if (isWatchEnabled) {
+      startWatcher();
+    }
+  })
+  .catch(console.error);
