@@ -15,68 +15,52 @@ export default function useFullscreen(): [boolean, () => void] {
   return [isFullscreen, toggleFullScreen];
 }
 
-// Methods for Firefox / Safari / Edge
-// We have to cast these types so typescript doesn't complain
-interface FullSpecDocument extends Document {
-  mozFullScreenElement: Element | null;
-  webkitFullscreenElement: Element | null;
-  msFullscreenElement: Element | null;
-  webkitFullscreenEnabled: boolean;
-  mozFullScreenEnabled: boolean;
-  msFullscreenEnabled: boolean;
-  mozCancelFullScreen: () => Promise<void>;
-  webkitExitFullscreen: () => Promise<void>;
-  msExitFullscreen: () => Promise<void>;
-}
-
-interface FullSpecElement extends HTMLElement {
-  mozRequestFullScreen: (options?: FullscreenOptions) => Promise<void>;
-  webkitRequestFullscreen: (options?: FullscreenOptions) => Promise<void>;
-  msRequestFullscreen: (options?: FullscreenOptions) => Promise<void>;
-}
-
-const doc = document as FullSpecDocument;
-const docElm = document.documentElement as FullSpecElement;
-
 // For Safari IOS: Only available on iPad, not on iPhone.
 // https://developer.mozilla.org/en-US/docs/Web/API/Document/fullscreenEnabled#browser_compatibility
 export const fullScreenEnabled =
-  doc.fullscreenEnabled ||
-  doc.webkitFullscreenEnabled ||
-  doc.mozFullScreenEnabled ||
-  doc.msFullscreenEnabled;
+  typeof document !== 'undefined' &&
+  !!(
+    document.fullscreenEnabled ||
+    document.webkitFullscreenEnabled ||
+    document.mozFullScreenEnabled ||
+    document.msFullscreenEnabled
+  );
 
 const enterFullScreen = () => {
+  if (typeof document === 'undefined') return;
+  const docElement = document.documentElement;
   const fullScreenFunc =
-    docElm.requestFullscreen ||
-    docElm.mozRequestFullScreen ||
-    docElm.webkitRequestFullscreen ||
-    docElm.msRequestFullscreen;
+    docElement.requestFullscreen ||
+    docElement.mozRequestFullScreen ||
+    docElement.webkitRequestFullscreen ||
+    docElement.msRequestFullscreen;
 
   if (typeof fullScreenFunc === 'function') {
-    fullScreenFunc.call(docElm);
+    fullScreenFunc.call(docElement);
   }
 };
 
 const exitFullScreen = () => {
+  if (typeof document === 'undefined') return;
   const exitFunc =
-    doc.exitFullscreen ||
-    doc.mozCancelFullScreen ||
-    doc.webkitExitFullscreen ||
-    doc.msExitFullscreen;
+    document.exitFullscreen ||
+    document.mozCancelFullScreen ||
+    document.webkitExitFullscreen ||
+    document.msExitFullscreen;
   if (typeof exitFunc === 'function') {
-    exitFunc.call(doc);
+    exitFunc.call(document);
   }
 };
 
-export const isOnFullscreen = (() => {
-  const doc = document as FullSpecDocument;
-  return () =>
-    doc.fullscreenElement ||
-    doc.mozFullScreenElement ||
-    doc.webkitFullscreenElement ||
-    doc.msFullscreenElement;
-})();
+export const isOnFullscreen = (): boolean => {
+  if (typeof document === 'undefined') return false;
+  return !!(
+    document.fullscreenElement ||
+    document.mozFullScreenElement ||
+    document.webkitFullscreenElement ||
+    document.msFullscreenElement
+  );
+};
 
 /**
  * Toggles fullscreen mode on the <html> element.
