@@ -7,26 +7,16 @@
   "files": [
     "dist"
   ],
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/types/index.d.ts",
-  "typings": "dist/types/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "dist/esm/*": [
-        "dist/types/*"
-      ],
-      "dist/cjs/*": [
-        "dist/types/*"
-      ]
-    }
-  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "example:build": "parcel build",
     "example:nocache": "parcel --no-cache",
     "example": "parcel",
-    "start": "ts-node -T build.ts -w",
-    "build": "ts-node -T build.ts",
+    "start": "tsup -w",
+    "build": "tsup",
     "test": "jest --watch",
     "test:ci": "jest --ci --silent --coverage --maxWorkers=2",
     "test:ci:integration": "start-server-and-test example http://localhost:1234 cypress:run",
@@ -98,8 +88,6 @@
     "babel-jest": "^27.5.1",
     "babel-loader": "^8.2.2",
     "cypress": "^9.5.1",
-    "debounce": "^1.2.1",
-    "esbuild": "^0.14.13",
     "esbuild-jest": "^0.5.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
@@ -128,16 +116,16 @@
     "react-router-dom": "^5.2.0",
     "release-it": "^15.5.0",
     "request": "^2.88.2",
-    "rimraf": "^3.0.2",
     "size-limit": "^4.9.1",
     "start-server-and-test": "^1.14.0",
     "ts-jest": "^27.1.4",
-    "ts-node": "^10.1.0",
     "tslib": "^2.3.1",
+    "tsup": "^6.7.0",
     "typescript": "4.4.3"
   },
   "dependencies": {
     "comlink": "^4.3.1",
+    "debounce": "^1.2.1",
     "framer-motion": "^4.1.6",
     "node-fetch": "^2.6.1",
     "react-icons": "^4.3.1",
