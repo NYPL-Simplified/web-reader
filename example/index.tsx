@@ -22,7 +22,6 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import { getTheme } from '../src/ui/theme';
-import AxisNowEncrypted from './axisnow-encrypted';
 import readiumBefore from 'url:../src/HtmlReader/ReadiumCss/ReadiumCSS-before.css';
 import readiumDefault from 'url:../src/HtmlReader/ReadiumCss/ReadiumCSS-default.css';
 import readiumAfter from 'url:../src/HtmlReader/ReadiumCss/ReadiumCSS-after.css';
@@ -232,15 +231,6 @@ const SingleResourcePdf = () => {
 const HtmlReaders = () => {
   return (
     <Switch>
-      <Route path={`/html/axisnow-encrypted`}>
-        <AxisNowEncrypted injectablesReflowable={htmlInjectablesReflowable} />
-      </Route>
-      <Route path={`/html/axisnow-decrypted`}>
-        <WebReader
-          injectablesReflowable={htmlInjectablesReflowable}
-          webpubManifestUrl={`${origin}/samples/dickens-axisnow/decrypted/manifest.json`}
-        />
-      </Route>
       <Route path={`/html/moby-epub2`}>
         <WebReader
           injectablesReflowable={htmlInjectablesReflowable}
@@ -456,43 +446,6 @@ const HomePage = () => {
               Go
             </Button>
           </Stack>
-        </ListItem>
-      </UnorderedList>
-      <Heading as="h2" fontSize={2} mt={3}>
-        AxisNow Examples
-      </Heading>
-      <Text fontSize="sm">
-        These examples are specific to NYPL, and may not work properly without
-        access to private packages.
-      </Text>
-      <UnorderedList p={4}>
-        <ListItem>
-          <Link to="/html/axisnow-encrypted">AxisNow Encrypted EPUB</Link>
-          <UnorderedList>
-            <ListItem>
-              <Text fontSize="sm" as="i">
-                This example uses a real book in the NYPL Open eBooks catalog.
-                You will need to have process.env.VAULT_UUID and
-                process.env.ISBN set properly to read this book. Read
-                example/README.txt for more info. If the example stops working,
-                your loan likely expired and you will need to run the commands
-                listed there with a proper username and password to check it out
-                again.
-              </Text>
-            </ListItem>
-          </UnorderedList>
-        </ListItem>
-        <ListItem>
-          <Link to="/html/axisnow-decrypted">Decrypted AxisNow EPUB</Link>
-          <UnorderedList>
-            <ListItem>
-              <Text fontSize="sm" as="i">
-                This sample is the same as the above, but manually decrypted on
-                the server and served statically in a decrypted form. The
-                encrypted example should match this one in the browser.
-              </Text>
-            </ListItem>
-          </UnorderedList>
         </ListItem>
       </UnorderedList>
     </Box>

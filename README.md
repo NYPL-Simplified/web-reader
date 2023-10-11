@@ -51,7 +51,6 @@ const ReaderPage = ({ manifestUrl }) => {
 ```
 
 - [More React examples](/example/index.tsx) - Includes examples that render EPUB2 & EPUB3 based webpubs, remote hosted webpubs, and PDFs
-- [Encrypted example](/example/axisnow-encrypted.tsx) - How to pass an content decryptor to the web-reader to render encrypted content
 - [usePDFReader hook example](/example/use-pdf-reader.tsx) - Useful for instances when you know you're only going to be using the web-reader to open PDFs
 - [useHTMLReader hook example](/example/use-html-reader.tsx) - Useful for cases when you know you're only going to be using the web-reader to read EPUBs
 - [Real-world example: Open eBooks Web](https://github.com/NYPL/ereading-clients/blob/staging/apps/oew/src/components/theme-ui/WebReader.tsx) - NYPL application for children to read books on the web. This demonstrates how encrypted AxisNow content is passed to the web-reader.
@@ -255,16 +254,6 @@ The web reader does support DRM via two possible routes:
 1. The default Readium suggested method is to have a server-side "streamer" between the content server and the application. This server would fetch the encrypted DRM content, decrypt it, and then serve the decrypted assets individually to the client alongside a webpub manifest pointing to these decrypted assets. One example of such a streamer is [readium/r2-streamer-js](https://github.com/readium/r2-streamer-js).
 1. If decryption cannot be performed in a streamer, the web-reader can support client-side decryption of licensed content. This is done by passing a `getContent` function to either the `<WebReader>` component or the `useWebReader` hook. It has the type signature `(resourceUrl: string) => Promise<string>`, and can thus be used to fetch and decrypt (or otherwise manipulate) content before it is passed to the iframe for rendering.
 
-The `AxisNow Encrypted EPUB` example shows how this is done using the private NYPL AxisNow decryptor. The AxisNow scheme is a specific DRM technique not publicly available and the repo and code for the decryptor cannot be shared. Thus this example will not work for the public, but you can read the example code to see how we use the private `Decryptor` package to:
-
-- Create a Web Worker using [Comlink](https://github.com/GoogleChromeLabs/comlink) that will perform the fetching and decryption. This should help keep the main thread free while those heavy tasks are performed.
-- Fetch content from the network
-- Decrypt the HTML content
-- Search for embedded CSS and image assets
-- Fetch those assets and decrypt them
-- Re-embed the decrypted CSS and image assets as Object URLs into the decrypted HTML document
-- Return the HTML string with fully decrypted reources for the web-reader to render in the iframe
-
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [Publishing to NPM](#publishing-to-npm) for notes on how to publish a new version to NPM.
@@ -273,8 +262,6 @@ These instructions will get you a copy of the project up and running on your loc
 
 1. Before getting started, be sure to run `npm install`.
 
-If you are internal to NYPL you can be added to the private `@nypl-simplified-packages/axisnow-access-control-web` package, which is required in order to open the AxisNow Encrypted EPUB example. If you decide to install this package, you'll also need to generate a Personal Access Token in GitHub with `read` permissions and run `GH_PACKAGE_AUTH_TOKEN=<your-token-here> npm install`.
-
 2. In order to open any of the PDF examples in the Example App, you'll need to allow urls in a `WebpubManifest` to be proxied. This is done by passing a `proxyUrl` to the `<WebReader>` component. In order to do that, you must have a proxy running somewhere.
 
 We have set up a small express-based CORS proxy that can be run for local development.
@@ -282,8 +269,6 @@ We have set up a small express-based CORS proxy that can be run for local develo
 - Run the proxy with `npm run cors-proxy`.
 - Pass the proxy url to the example app by setting the following env var in a `.env` file at the root of the project: `CORS_PROXY_URL="http://localhost:3001/?requestUrl="`.
 - In a separate terminal session, start the example app: `npm run example`.
-
-3. In order to open the AxisNow Encrypted EPUB example (`/html/axisnow-encrypted`), you will need to have `process.env.VAULT_UUID` and `process.env.ISBN` set in your `.env` file. Read [example/README.txt](/example/README.txt) for more info.
 
 ### Running the Example App
 
