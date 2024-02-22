@@ -170,7 +170,7 @@ Cypress.Commands.add(
       },
     });
     cy.wait('@pdf', { timeout: 50000 });
-    cy.get('#iframe-wrapper')
+    cy.get('#mainContent')
       .find('div[class="react-pdf__Page__textContent"]', { timeout: 10000 })
       .should('have.attr', 'style');
   }

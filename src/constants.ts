@@ -50,3 +50,5 @@ export const FONT_DETAILS = {
 // local storage keys
 export const LOCAL_STORAGE_SETTINGS_KEY = 'web-reader-settings';
 export const LOCAL_STORAGE_LOCATIONS_KEY = 'web-reader-locations';
+
+export const MAIN_CONTENT_ID = 'mainContent';

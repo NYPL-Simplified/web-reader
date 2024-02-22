@@ -7,18 +7,13 @@ import ChakraPage from './ChakraPage';
 import ScrollPage from './ScrollPage';
 // Required CSS in order for links to be clickable in PDFs
 import './pdf.css';
-import { HEADER_HEIGHT, FOOTER_HEIGHT } from '../constants';
+import { HEADER_HEIGHT, FOOTER_HEIGHT, MAIN_CONTENT_ID } from '../constants';
 import {
   DEFAULT_HEIGHT,
   DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
 } from '../constants';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
-import {
-  getResourceUrl,
-  IFRAME_WRAPPER_ID,
-  loadResource,
-  SCALE_STEP,
-} from './lib';
+import { getResourceUrl, loadResource, SCALE_STEP } from './lib';
 import { makePdfReducer } from './reducer';
 
 /**
@@ -322,7 +317,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
         justifyContent="center"
         alignItems="center"
         tabIndex={-1}
-        id={IFRAME_WRAPPER_ID}
+        id={MAIN_CONTENT_ID}
         ref={containerRef}
         height={finalHeight}
       >

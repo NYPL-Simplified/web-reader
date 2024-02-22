@@ -1,7 +1,6 @@
 import { WebpubManifest } from '../types';
 import { ReadiumLink } from '../WebpubManifestTypes/ReadiumLink';
 
-export const IFRAME_WRAPPER_ID = 'iframe-wrapper';
 export const SCALE_STEP = 0.1;
 export const START_QUERY = 'start';
 

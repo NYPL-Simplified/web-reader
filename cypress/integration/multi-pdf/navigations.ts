@@ -35,7 +35,7 @@ describe('Multi PDF navigation', () => {
   it('should navigate forward and backwards with page buttons', () => {
     cy.findByText('Anthropology without Informants').should('be.visible');
     cy.findByRole('button', { name: 'Next Page' }).click();
-    cy.get('#iframe-wrapper')
+    cy.get('#mainContent')
       .find('div[class="react-pdf__Page__textContent"]')
       .children()
       .should('have.length', 0);
