@@ -10,6 +10,7 @@ import LoadingSkeleton from '../ui/LoadingSkeleton';
 import {
   DEFAULT_HEIGHT,
   DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
+  MAIN_CONTENT_ID,
 } from '../constants';
 import {
   fetchAsTxt,
@@ -27,8 +28,6 @@ import { useUpdateScroll } from './useUpdateScroll';
 import useUpdateCSS from './useUpdateCSS';
 import useIframeLinkClick from './useIframeLinkClick';
 import useUpdateLocalStorage from '../utils/localstorage';
-
-export const IFRAME_ID_SELECTOR = 'html-reader-iframe';
 
 export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
   const {
@@ -254,7 +253,7 @@ export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
     content: (
       <>
         <iframe
-          id={IFRAME_ID_SELECTOR}
+          id={MAIN_CONTENT_ID}
           onLoad={() => dispatch({ type: 'IFRAME_LOADED' })}
           ref={setIframe}
           // as="iframe"

@@ -1,6 +1,7 @@
 import { extendTheme } from '@chakra-ui/react';
 import Alert from './components/alert';
 import Text from './components/text';
+import SkipNavigation from './components/skipNavigation';
 import colors from './foundations/colors';
 import typography from './foundations/typography';
 import nyplTheme from '../nypl-base-theme';
@@ -31,6 +32,7 @@ export function getTheme(colorMode: ColorMode = 'day'): Dict<unknown> {
         Button: getButtonStyle(getColor(colorMode)),
         Text,
         Alert,
+        SkipNavigation,
       },
       currentColorMode: colorMode,
     },

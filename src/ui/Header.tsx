@@ -8,6 +8,7 @@ import SettingsCard from './SettingsButton';
 import TableOfContent from './TableOfContent';
 import useColorModeValue from '../ui/hooks/useColorModeValue';
 import useFullscreen from './hooks/useFullScreen';
+import SkipNavigation from './SkipNavigation';
 
 export const DefaultHeaderLeft = (): React.ReactElement => {
   const linkColor = useColorModeValue('gray.700', 'gray.100', 'gray.700');
@@ -69,6 +70,7 @@ export default function Header(
 
   return (
     <HeaderWrapper bg={mainBgColor}>
+      <SkipNavigation />
       {headerLeft ?? <DefaultHeaderLeft />}
       <HStack ml="auto" spacing={0}>
         <TableOfContent
