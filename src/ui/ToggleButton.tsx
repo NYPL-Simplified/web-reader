@@ -13,28 +13,20 @@ import Fonts from './theme/foundations/fonts';
 import { getTheme } from './theme';
 import { ColorMode } from '../types';
 
-export interface ToggleButtonProps
-  extends React.ComponentPropsWithoutRef<typeof ChakraBox> {
+export type ToggleButtonProps = React.ComponentPropsWithoutRef<
+  typeof ChakraBox
+> & {
   colorMode?: ColorMode;
   icon?: ReactElement;
   iconFill?: string;
   label?: string;
   value: string;
-}
+};
 
 function ToggleButton(
   props: React.PropsWithoutRef<ToggleButtonProps>
 ): React.ReactElement {
-  const {
-    children,
-    colorMode,
-    icon,
-    iconFill,
-    label,
-    value,
-    isChecked,
-    ...rest
-  } = props;
+  const { children, colorMode, icon, iconFill, label, value, ...rest } = props;
   const { getInputProps, getCheckboxProps } = useRadio(props);
 
   const input = getInputProps();
@@ -45,7 +37,7 @@ function ToggleButton(
     // This will override the default theme if we specify the colorMode to the toggle button.
     <ThemeProvider theme={getTheme(colorMode ?? theme.currentColorMode)}>
       <Fonts />
-      <ChakraBox as="label" d="flex" flexGrow={1} aria-label={label}>
+      <ChakraBox as="label" display="flex" flexGrow={1} aria-label={label}>
         <input {...input} />
         <Button
           as="div"

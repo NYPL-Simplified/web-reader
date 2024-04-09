@@ -23,7 +23,7 @@ export default function PdfSettings(
 
   return (
     <>
-      <ButtonGroup d="flex" spacing={0}>
+      <ButtonGroup display="flex" spacing={0}>
         <Button
           flexGrow={1}
           aria-label="Zoom Out"

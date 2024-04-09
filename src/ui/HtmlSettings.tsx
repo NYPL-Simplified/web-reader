@@ -134,7 +134,7 @@ export default function HtmlSettings(
           textColor="ui.white"
         />
       </ToggleGroup>
-      <ButtonGroup d="flex" spacing={0}>
+      <ButtonGroup display="flex" spacing={0}>
         <Button
           flexGrow={1}
           aria-label="Reset settings"
