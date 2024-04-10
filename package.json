@@ -68,7 +68,7 @@
     "@types/debounce": "1.2.4",
     "@types/http-proxy": "1.17.14",
     "@types/jest-axe": "3.5.9",
-    "@types/node": "14.18.63",
+    "@types/node": "20.12.7",
     "@types/react": "17.0.80",
     "@types/react-dom": "18.2.05",
     "@types/react-router-dom": "5.3.3",
@@ -126,6 +126,9 @@
     "react-intersection-observer": "8.34.0",
     "react-pdf": "7.7.1",
     "react-resize-observer": "1.1.1"
+  },
+  "optionalDependencies": {
+    "@parcel/watcher-linux-x64-glibc": "2.4.1"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": "eslint --cache --fix",
