@@ -33,19 +33,27 @@ describe('Multi PDF navigation', () => {
   });
 
   it('should navigate forward and backwards with page buttons', () => {
-    cy.findByText('Anthropology without Informants').should('be.visible');
+    cy.findByText(
+      'Anthropology without Informants: Collected Works in Paleoanthropology by L.G. Freeman.'
+    ).should('be.visible');
     cy.findByRole('button', { name: 'Next Page' }).click();
     cy.get('#mainContent')
-      .find('div[class="react-pdf__Page__textContent"]')
+      .find('.react-pdf__Page__textContent')
       .children()
       .should('have.length', 0);
-    cy.findByText('Anthropology without Informants').should('not.exist');
+    cy.findByText(
+      'Anthropology without Informants: Collected Works in Paleoanthropology by L.G. Freeman.'
+    ).should('not.exist');
     cy.findByRole('button', { name: 'Previous Page' }).click();
-    cy.findByText('Anthropology without Informants').should('be.visible');
+    cy.findByText(
+      'Anthropology without Informants: Collected Works in Paleoanthropology by L.G. Freeman.'
+    ).should('be.visible');
   });
 
   it('should switch to scrolling mode', () => {
-    cy.findByText('Anthropology without Informants').should('be.visible');
+    cy.findByText(
+      'Anthropology without Informants: Collected Works in Paleoanthropology by L.G. Freeman.'
+    ).should('be.visible');
     cy.findByRole('button', { name: 'Settings' }).click();
     cy.findByText('Scrolling').click();
     cy.findByRole('button', { name: 'Next Page' }).click();
@@ -56,27 +64,36 @@ describe('Multi PDF navigation', () => {
   });
 
   it('should navigate between resources with page buttons on scrolling mode', () => {
-    cy.findByText('Anthropology without Informants').should('be.visible');
+    cy.findByText(
+      'Anthropology without Informants: Collected Works in Paleoanthropology by L.G. Freeman.'
+    ).should('be.visible');
     cy.findByText('Settings').click();
     cy.findByText('Scrolling').click();
     cy.findByRole('button', { name: 'Next Page' }).click();
-    cy.findByText('Anthropology without Informants').should('not.exist');
+    cy.findByText(
+      'Anthropology without Informants: Collected Works in Paleoanthropology by L.G. Freeman.'
+    ).should('not.exist');
 
     cy.log('switch from paginated to scrolling');
     cy.findByText('Settings').click();
     cy.findByText('Paginated').click();
     cy.findByRole('button', { name: 'Next Page' }).click();
 
-    cy.findByText('Anthropology without Informants').should('not.exist');
+    cy.findByText(
+      'Anthropology without Informants: Collected Works in Paleoanthropology by L.G. Freeman.'
+    ).should('not.exist');
 
     cy.findByText('Settings').click();
     cy.findByText('Scrolling').click();
     cy.findByRole('button', { name: 'Previous Page' }).click();
 
     cy.wait('@pdf');
+    cy.findByText('Settings').click();
+    cy.findByText('Zoom Out').click();
 
-    cy.findByText('Anthropology without Informants', { timeout: 10000 }).should(
-      'be.visible'
-    );
+    cy.findByText(
+      'Anthropology without Informants: Collected Works in Paleoanthropology by L.G. Freeman.',
+      { timeout: 10000 }
+    ).should('be.visible');
   });
 });

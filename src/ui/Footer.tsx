@@ -40,7 +40,7 @@ const Footer: React.FC<FooterProps> = ({
       <PageButton
         onClick={navigator?.goBackward}
         aria-label="Previous Page"
-        disabled={isAtStart}
+        isDisabled={isAtStart}
       >
         <Icon as={MdKeyboardArrowLeft} w={6} h={6} />
         Previous
@@ -48,7 +48,7 @@ const Footer: React.FC<FooterProps> = ({
       <PageButton
         onClick={navigator?.goForward}
         aria-label="Next Page"
-        disabled={isAtEnd}
+        isDisabled={isAtEnd}
       >
         Next <Icon as={MdKeyboardArrowRight} w={6} h={6} />
       </PageButton>
