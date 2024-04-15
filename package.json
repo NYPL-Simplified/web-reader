@@ -34,6 +34,14 @@
     "release": "release-it --verbose",
     "release:alpha": "release-it --verbose --preRelease=alpha"
   },
+  "peerDependencies": {
+    "@chakra-ui/react": "2.x",
+    "@emotion/react": ">=11.11.1",
+    "@emotion/styled": ">=11.11.0",
+    "react": "18.x",
+    "react-dom": "18.x",
+    "swr": "2.2.5"
+  },
   "prettier": {
     "printWidth": 80,
     "semi": true,
@@ -109,7 +117,6 @@
     "request": "2.88.2",
     "size-limit": "4.12.0",
     "start-server-and-test": "2.0.3",
-    "swr": "2.2.5",
     "ts-jest": "29.0.5",
     "ts-node": "10.9.2",
     "tslib": "2.6.2",
