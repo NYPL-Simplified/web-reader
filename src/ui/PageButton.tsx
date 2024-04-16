@@ -11,7 +11,11 @@ function PageButton(
 ): React.ReactElement {
   const { children, onClick, ...rest } = props;
   const circleColor = useColorModeValue('ui.black', 'ui.white', 'ui.black');
-  const circleBgColor = useColorModeValue('ui.white', 'gray.700', 'ui.white');
+  const circleBgColor = useColorModeValue(
+    'ui.gray.light-warm',
+    'ui.black',
+    'ui.sepia'
+  );
 
   return (
     <Button

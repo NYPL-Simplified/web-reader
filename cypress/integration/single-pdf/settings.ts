@@ -25,11 +25,11 @@ describe('Single PDF display settings', () => {
   });
 
   it('should zoom in and out', () => {
-    cy.get('div[class="react-pdf__Page__textContent"]')
+    cy.get('.react-pdf__Page__textContent')
       .find('span')
       .should(
         'have.text',
-        'ECONOMICS – WORKING PAPERS 2021/03Assessing climate change  risks at the country level: the EIB scoring model'
+        'ECONOMICS – WORKING PAPERS 2021/03Assessing climate changerisks at the country level:the EIB scoring model'
       );
 
     cy.get('.react-pdf__Page').then(($elm) => {

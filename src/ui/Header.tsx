@@ -31,7 +31,7 @@ export const DefaultHeaderLeft = (): React.ReactElement => {
       fontSize={0}
       px={3}
       py={1}
-      d="flex"
+      display="flex"
       color={linkColor}
       height="100%"
       alignItems="center"

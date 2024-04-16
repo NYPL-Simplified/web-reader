@@ -97,7 +97,7 @@ const MissingToc = ({
 }) => {
   return (
     <Box
-      d="flex"
+      display="flex"
       justifyContent="center"
       alignItems="center"
       height="100%"
@@ -134,7 +134,7 @@ const Item = React.forwardRef<
   return (
     <>
       <MenuItem
-        d="flex"
+        display="flex"
         flexDir="column"
         alignItems="stretch"
         listStyleType="none"
