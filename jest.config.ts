@@ -22,6 +22,7 @@ const config: Config.InitialOptions = {
   snapshotSerializers: ['@emotion/jest/serializer'],
   setupFilesAfterEnv: ['<rootDir>/tests/jest.setup.ts'],
   testEnvironment: 'jsdom',
+  testPathIgnorePatterns: ['<rootDir>/playwright'],
 };
 
 export default config;
