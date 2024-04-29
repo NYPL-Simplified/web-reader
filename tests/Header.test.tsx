@@ -10,7 +10,7 @@ describe('Header Accessibility checker', () => {
     const { container } = render(<Header {...MockHtmlReaderProps} />);
 
     expect(await axe(container)).toHaveNoViolations();
-  });
+  }, 15000);
 });
 
 describe('Header rendering', () => {

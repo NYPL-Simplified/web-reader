@@ -50,3 +50,5 @@ export { default as useColorModeValue } from './ui/hooks/useColorModeValue';
 export * from './constants';
 export { clearWebReaderLocalStorage } from './utils/localstorage';
 export { default as addTocToManifest } from './PdfReader/addTocToManifest';
+export type { ReadiumLink } from './WebpubManifestTypes/ReadiumLink';
+export type { WebpubManifest } from './WebpubManifestTypes/WebpubManifest';

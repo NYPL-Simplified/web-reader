@@ -21,16 +21,26 @@ export type ToggleButtonProps = React.ComponentPropsWithoutRef<
   iconFill?: string;
   label?: string;
   value: string;
+  isChecked: boolean;
 };
 
 function ToggleButton(
   props: React.PropsWithoutRef<ToggleButtonProps>
 ): React.ReactElement {
-  const { children, colorMode, icon, iconFill, label, value, ...rest } = props;
-  const { getInputProps, getCheckboxProps } = useRadio(props);
+  const {
+    children,
+    colorMode,
+    icon,
+    iconFill,
+    label,
+    value,
+    isChecked,
+    ...rest
+  } = props;
+  const { getInputProps, getRadioProps } = useRadio(props);
 
   const input = getInputProps();
-  const checkbox = getCheckboxProps();
+  const radio = getRadioProps();
   const theme = useTheme();
 
   return (
@@ -39,13 +49,7 @@ function ToggleButton(
       <Fonts />
       <ChakraBox as="label" display="flex" flexGrow={1} aria-label={label}>
         <input {...input} />
-        <Button
-          as="div"
-          variant="settings"
-          flexGrow={1}
-          {...checkbox}
-          {...rest}
-        >
+        <Button as="div" variant="settings" flexGrow={1} {...radio} {...rest}>
           {icon && (
             <Icon
               as={icon}

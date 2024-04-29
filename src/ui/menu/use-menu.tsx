@@ -758,7 +758,6 @@ export function useMenuOptionGroup(props: UseMenuOptionGroupProps = {}) {
       isChecked,
     });
   });
-
   return {
     ...htmlProps,
     children: clones,

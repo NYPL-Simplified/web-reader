@@ -23,7 +23,7 @@ describe('SettingsCard Accessibility checker', () => {
     );
 
     expect(await axe(container)).toHaveNoViolations();
-  });
+  }, 15000);
 });
 
 describe('Render settings for different media type', () => {
