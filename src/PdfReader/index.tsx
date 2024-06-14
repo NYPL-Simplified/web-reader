@@ -13,7 +13,7 @@ import {
   DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
 } from '../constants';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
-import { getResourceUrl, loadResource, SCALE_STEP } from './lib';
+import { fetchAsTxt, getResourceUrl, loadResource, SCALE_STEP } from './lib';
 import { makePdfReducer } from './reducer';
 
 /**
@@ -35,7 +35,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     webpubManifestUrl,
     manifest,
     proxyUrl,
-    getContent,
+    getContent = fetchAsTxt,
     injectablesReflowable,
     injectablesFixed,
     height = DEFAULT_HEIGHT,
@@ -104,17 +104,25 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       throw new Error('Manifest has no Reading Order');
     }
 
-    const resourceUrl = getResourceUrl(
+    const currentResource = getResourceUrl(
       state.resourceIndex,
       manifest.readingOrder
     );
-    loadResource(resourceUrl, proxyUrl).then((data) => {
-      dispatch({
-        type: 'RESOURCE_FETCH_SUCCESS',
-        resource: { data },
+
+    const fetchResource = async () => {
+      const resourceUrl = await getContent(currentResource);
+
+      loadResource(resourceUrl, proxyUrl).then((data) => {
+        dispatch({
+          type: 'RESOURCE_FETCH_SUCCESS',
+          resource: { data },
+        });
       });
-    });
-  }, [state.resourceIndex, manifest, proxyUrl]);
+    };
+    if (manifest.readingOrder && manifest.readingOrder.length) {
+      fetchResource();
+    }
+  }, [state.resourceIndex, manifest, proxyUrl, getContent]);
 
   /**
    * calculate the height or width of the pdf page in paginated mode.

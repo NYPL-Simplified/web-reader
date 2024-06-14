@@ -34,6 +34,13 @@ export const loadResource = async (
 };
 
 /**
+ * Fetches a resource url as text
+ */
+export async function fetchAsTxt(url: string): Promise<string> {
+  return url;
+}
+
+/**
  * Gets the index of the provided href in the readingOrder, or throws an error if one
  * is not found.
  */
