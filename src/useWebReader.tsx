@@ -94,6 +94,7 @@ export default function useWebReader(
       ? {
           webpubManifestUrl,
           manifest,
+          getContent,
           proxyUrl,
           pdfWorkerSrc,
           height,
