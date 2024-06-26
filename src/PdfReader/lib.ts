@@ -34,6 +34,16 @@ export const loadResource = async (
 };
 
 /**
+ * Fetches a resource url as text
+ */
+export async function getContentDefault(
+  resourceUrl: string,
+  proxyUrl?: string
+): Promise<Uint8Array> {
+  return loadResource(resourceUrl, proxyUrl);
+}
+
+/**
  * Gets the index of the provided href in the readingOrder, or throws an error if one
  * is not found.
  */

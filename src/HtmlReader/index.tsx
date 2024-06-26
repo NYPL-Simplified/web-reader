@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  ColorMode,
-  ReaderReturn,
-  ReaderArguments,
-  FontFamily,
-  HtmlNavigator,
-} from '../types';
+import { ColorMode, ReaderReturn, FontFamily, HtmlNavigator } from '../types';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
 import {
   DEFAULT_HEIGHT,
@@ -28,8 +22,9 @@ import { useUpdateScroll } from './useUpdateScroll';
 import useUpdateCSS from './useUpdateCSS';
 import useIframeLinkClick from './useIframeLinkClick';
 import useUpdateLocalStorage from '../utils/localstorage';
+import { HtmlReaderArguments } from './types';
 
-export default function useHtmlReader(args: ReaderArguments): ReaderReturn {
+export default function useHtmlReader(args: HtmlReaderArguments): ReaderReturn {
   const {
     webpubManifestUrl,
     manifest,

@@ -2,7 +2,6 @@ import {
   getLocalStorageLocation,
   getLocalStorageSettings,
 } from '../utils/localstorage';
-import { ReaderArguments } from '../types';
 import {
   getCurrentIndex,
   linkToLocator,
@@ -21,6 +20,7 @@ import {
   RenderingIframeState,
   ResourceFetchErrorState,
   InactiveState,
+  HtmlReaderArguments,
 } from './types';
 import { getLocationQuery } from './useLocationQuery';
 import { DEFAULT_SETTINGS } from '../constants';
@@ -30,7 +30,7 @@ import { DEFAULT_SETTINGS } from '../constants';
  * without passing them in to every `dispatch` call.
  */
 export default function makeHtmlReducer(
-  args: ReaderArguments
+  args: HtmlReaderArguments
 ): (state: HtmlState, action: HtmlAction) => HtmlState {
   /**
    * If there are no args, it's an inactive hook, or you are pre-first render.

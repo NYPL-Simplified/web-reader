@@ -87,16 +87,19 @@ export type ActiveReader = PDFActiveReader | HTMLActiveReader;
 export type ReaderReturn = InactiveReader | LoadingReader | ActiveReader;
 
 // should fetch and decrypt a resource
-export type GetContent = (href: string) => Promise<string>;
+export type GetContent<T extends string | Uint8Array> = (
+  href: string,
+  proxyUrl?: string
+) => Promise<T>;
 
 export type ReaderManagerArguments = {
   headerLeft?: JSX.Element; // Top-left header section
 };
 
-export type UseWebReaderArguments = {
+export type UseWebReaderArguments<T extends string | Uint8Array> = {
   webpubManifestUrl: string;
   proxyUrl?: string;
-  getContent?: GetContent;
+  getContent?: GetContent<T>;
   pdfWorkerSrc?: string;
   injectablesReflowable?: Injectable[];
   injectablesFixed?: Injectable[];
@@ -137,12 +140,12 @@ export type UseWebReaderArguments = {
   persistSettings?: boolean;
 };
 
-export type ActiveReaderArguments = UseWebReaderArguments & {
+export type ActiveReaderArguments<
+  T extends string | Uint8Array
+> = UseWebReaderArguments<T> & {
   manifest: WebpubManifest;
 };
 
 export type InactiveReaderArguments = undefined;
-
-export type ReaderArguments = ActiveReaderArguments | InactiveReaderArguments;
 
 export type GetColor = (light: string, dark: string, sepia: string) => string;

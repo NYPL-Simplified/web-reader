@@ -1,14 +1,13 @@
 import { DEFAULT_SETTINGS } from '../constants';
-import { ReaderArguments } from '../types';
 import {
   getIndexFromHref,
   getStartPageFromHref,
   getPageNumberFromHref,
 } from './lib';
-import { PdfState, PdfReaderAction } from './types';
+import { PdfState, PdfReaderAction, PdfReaderArguments } from './types';
 
 export function makePdfReducer(
-  args: ReaderArguments
+  args: PdfReaderArguments
 ): (state: PdfState, action: PdfReaderAction) => PdfState {
   /**
    * If there are no args, it's an inactive hook, or you are pre-first render.

@@ -8,7 +8,8 @@ import useWebReader from './useWebReader';
  * The main React component export.
  */
 
-export type WebReaderProps = UseWebReaderArguments & ReaderManagerArguments;
+export type WebReaderProps = UseWebReaderArguments<string | Uint8Array> &
+  ReaderManagerArguments;
 
 export const WebReaderWithoutBoundary: FC<WebReaderProps> = ({
   webpubManifestUrl,
