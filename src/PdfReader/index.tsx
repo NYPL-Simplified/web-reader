@@ -1,6 +1,6 @@
 import { Document, PageProps, pdfjs } from 'react-pdf';
 import * as React from 'react';
-import { ReaderArguments, ReaderReturn } from '../types';
+import { ReaderReturn } from '../types';
 import { Flex } from '@chakra-ui/react';
 import useMeasure from './useMeasure';
 import ChakraPage from './ChakraPage';
@@ -13,13 +13,9 @@ import {
   DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
 } from '../constants';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
-import {
-  getContentDefault,
-  getResourceUrl,
-  loadResource,
-  SCALE_STEP,
-} from './lib';
+import { getContentDefault, getResourceUrl, SCALE_STEP } from './lib';
 import { makePdfReducer } from './reducer';
+import { PdfReaderArguments } from './types';
 
 /**
  * The PDF reader
@@ -30,7 +26,7 @@ import { makePdfReducer } from './reducer';
  * @param args T
  * @returns
  */
-export default function usePdfReader(args: ReaderArguments): ReaderReturn {
+export default function usePdfReader(args: PdfReaderArguments): ReaderReturn {
   // use a passed in src for the pdf worker
   if (args?.pdfWorkerSrc) {
     pdfjs.GlobalWorkerOptions.workerSrc = args.pdfWorkerSrc;
@@ -115,9 +111,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     );
 
     const fetchResource = async () => {
-      const resourceUrl = await getContent(currentResource);
-
-      loadResource(resourceUrl, proxyUrl).then((data) => {
+      getContent(currentResource, proxyUrl).then((data) => {
         dispatch({
           type: 'RESOURCE_FETCH_SUCCESS',
           resource: { data },

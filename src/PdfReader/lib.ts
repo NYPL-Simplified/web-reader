@@ -36,8 +36,11 @@ export const loadResource = async (
 /**
  * Fetches a resource url as text
  */
-export async function getContentDefault(url: string): Promise<string> {
-  return url;
+export async function getContentDefault(
+  resourceUrl: string,
+  proxyUrl?: string
+): Promise<Uint8Array> {
+  return loadResource(resourceUrl, proxyUrl);
 }
 
 /**

@@ -3,9 +3,9 @@ import {
   LOCAL_STORAGE_LOCATIONS_KEY,
   LOCAL_STORAGE_SETTINGS_KEY,
 } from '../constants';
-import { HtmlState } from '../HtmlReader/types';
+import { HtmlReaderArguments, HtmlState } from '../HtmlReader/types';
 import { Locator } from '../Readium/Locator';
-import { ReaderArguments, ReaderSettings } from '../types';
+import { ReaderSettings } from '../types';
 
 export type LSLocation = {
   location: Locator;
@@ -22,7 +22,7 @@ export type LSLocationsRecord = Record<string, LSLocation>;
  */
 export function getLocalStorageLocation(
   identifier: string,
-  args: ReaderArguments
+  args: HtmlReaderArguments
 ): LSLocation | undefined {
   if (!args?.persistLastLocation) return undefined;
   const item = localStorage.getItem(LOCAL_STORAGE_LOCATIONS_KEY);
@@ -35,7 +35,7 @@ export function getLocalStorageLocation(
 }
 
 export function getLocalStorageSettings(
-  args: ReaderArguments
+  args: HtmlReaderArguments
 ): ReaderSettings | undefined {
   if (!args?.persistSettings) return undefined;
   const item = localStorage.getItem(LOCAL_STORAGE_SETTINGS_KEY);
@@ -49,7 +49,7 @@ export function getLocalStorageSettings(
 export default function useUpdateLocalStorage(
   identifier: string | null,
   state: HtmlState,
-  args: ReaderArguments
+  args: HtmlReaderArguments
 ): void {
   /**
    * Keep location up to date as the state changes

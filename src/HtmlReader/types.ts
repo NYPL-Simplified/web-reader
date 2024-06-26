@@ -1,8 +1,9 @@
 import { Locator } from '../Readium/Locator';
 import {
+  ActiveReaderArguments,
   ColorMode,
   FontFamily,
-  ReaderArguments,
+  InactiveReaderArguments,
   ReaderSettings,
   ReaderState,
 } from '../types';
@@ -86,8 +87,12 @@ export type ReadyState = ReaderState & {
   settings: ReaderSettings;
 };
 
+export type HtmlReaderArguments =
+  | ActiveReaderArguments<string>
+  | InactiveReaderArguments;
+
 export type HtmlAction =
-  | { type: 'ARGS_CHANGED'; args: ReaderArguments }
+  | { type: 'ARGS_CHANGED'; args: HtmlReaderArguments }
   | { type: 'IFRAME_LOADED' }
   | { type: 'NAV_PREVIOUS_RESOURCE' }
   | { type: 'NAV_NEXT_RESOURCE' }

@@ -1,4 +1,9 @@
-import { ReaderArguments, ReaderSettings, ReaderState } from '../types';
+import {
+  ActiveReaderArguments,
+  InactiveReaderArguments,
+  ReaderSettings,
+  ReaderState,
+} from '../types';
 
 export type InternalState = {
   resourceIndex: number;
@@ -24,10 +29,14 @@ export type ActiveState = ReaderState &
 
 export type PdfState = InactiveState | ActiveState;
 
+export type PdfReaderArguments =
+  | ActiveReaderArguments<Uint8Array>
+  | InactiveReaderArguments;
+
 export type PdfReaderAction =
   | {
       type: 'ARGS_CHANGED';
-      args: ReaderArguments;
+      args: PdfReaderArguments;
     }
   | { type: 'GO_FORWARD' }
   | { type: 'GO_BACKWARD' }
