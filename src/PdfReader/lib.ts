@@ -36,7 +36,7 @@ export const loadResource = async (
 /**
  * Fetches a resource url as text
  */
-export async function fetchAsTxt(url: string): Promise<string> {
+export async function getContentDefault(url: string): Promise<string> {
   return url;
 }
 
