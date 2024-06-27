@@ -25,7 +25,7 @@ export type ActiveState = ReaderState &
 export type ErrorState = ReaderState &
   InternalState & {
     state: 'ERROR';
-    loadError: Error;
+    error: Error;
     settings: ReaderSettings;
   };
 

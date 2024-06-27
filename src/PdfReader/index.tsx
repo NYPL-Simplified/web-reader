@@ -244,7 +244,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     };
   }
 
-  if (state.state === 'ERROR') throw state.loadError;
+  if (state.state === 'ERROR') throw state.error;
 
   // if (isFetching) {
   //   // The Reader is fetching a PDF resource

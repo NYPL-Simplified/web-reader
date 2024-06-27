@@ -175,7 +175,7 @@ export function makePdfReducer(
         return {
           ...state,
           state: 'ERROR',
-          loadError: action.error,
+          error: action.error,
           settings: DEFAULT_SETTINGS,
         };
 
