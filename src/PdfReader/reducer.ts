@@ -171,6 +171,14 @@ export function makePdfReducer(
             state.pageNumber === -1 ? action.numPages : state.pageNumber,
         };
 
+      case 'PDF_LOAD_ERROR':
+        return {
+          ...state,
+          state: 'ERROR',
+          error: action.error,
+          settings: DEFAULT_SETTINGS,
+        };
+
       case 'SET_SCROLL':
         if (state.state !== 'ACTIVE') {
           return handleInvalidTransition(state, action);
