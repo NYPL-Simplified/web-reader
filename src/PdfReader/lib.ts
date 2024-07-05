@@ -16,7 +16,7 @@ export const getResourceUrl = (
   return readingOrder[index].href;
 };
 
-export const loadResource = async (
+export const fetchAsUint8Array = async (
   resourceUrl: string,
   proxyUrl?: string
 ): Promise<Uint8Array> => {

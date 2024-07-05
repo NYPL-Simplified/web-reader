@@ -8,6 +8,7 @@ import {
   LoadingReader,
   PDFActiveReader,
   WebpubManifest,
+  GetContent,
 } from './types';
 import {
   EpubConformsTo,
@@ -42,7 +43,7 @@ function getReaderType(conformsTo: ConformsTo | null | undefined) {
  * for that type.
  */
 export default function useWebReader(
-  args: UseWebReaderArguments
+  args: UseWebReaderArguments<string | Uint8Array>
 ): HTMLActiveReader | PDFActiveReader | LoadingReader {
   const {
     webpubManifestUrl,
@@ -67,6 +68,8 @@ export default function useWebReader(
   const readerType = getReaderType(
     manifest ? manifest.metadata.conformsTo : null
   );
+  const getContentHtml = getContent as GetContent<string> | undefined;
+  const getContentPdf = getContent as GetContent<Uint8Array> | undefined;
   /**
    * Our HTML reader and PDf Reader. Note that we cannot conditionally
    * call a React hook, so we must _always_ call the hook, but allow for the
@@ -78,7 +81,7 @@ export default function useWebReader(
       ? {
           webpubManifestUrl,
           manifest,
-          getContent,
+          getContent: getContentHtml,
           injectablesReflowable,
           injectablesFixed,
           height,
@@ -94,6 +97,7 @@ export default function useWebReader(
       ? {
           webpubManifestUrl,
           manifest,
+          getContent: getContentPdf,
           proxyUrl,
           pdfWorkerSrc,
           height,

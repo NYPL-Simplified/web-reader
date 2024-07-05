@@ -1,6 +1,6 @@
 import { Document, PageProps, pdfjs } from 'react-pdf';
 import * as React from 'react';
-import { ReaderArguments, ReaderReturn } from '../types';
+import { ReaderReturn } from '../types';
 import { Flex } from '@chakra-ui/react';
 import useMeasure from './useMeasure';
 import ChakraPage from './ChakraPage';
@@ -13,8 +13,9 @@ import {
   DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
 } from '../constants';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
-import { getResourceUrl, loadResource, SCALE_STEP } from './lib';
+import { fetchAsUint8Array, getResourceUrl, SCALE_STEP } from './lib';
 import { makePdfReducer } from './reducer';
+import { PdfReaderArguments } from './types';
 
 /**
  * The PDF reader
@@ -25,7 +26,7 @@ import { makePdfReducer } from './reducer';
  * @param args T
  * @returns
  */
-export default function usePdfReader(args: ReaderArguments): ReaderReturn {
+export default function usePdfReader(args: PdfReaderArguments): ReaderReturn {
   // use a passed in src for the pdf worker
   if (args?.pdfWorkerSrc) {
     pdfjs.GlobalWorkerOptions.workerSrc = args.pdfWorkerSrc;
@@ -35,7 +36,7 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
     webpubManifestUrl,
     manifest,
     proxyUrl,
-    getContent,
+    getContent = fetchAsUint8Array,
     injectablesReflowable,
     injectablesFixed,
     height = DEFAULT_HEIGHT,
@@ -104,17 +105,23 @@ export default function usePdfReader(args: ReaderArguments): ReaderReturn {
       throw new Error('Manifest has no Reading Order');
     }
 
-    const resourceUrl = getResourceUrl(
+    const currentResource = getResourceUrl(
       state.resourceIndex,
       manifest.readingOrder
     );
-    loadResource(resourceUrl, proxyUrl).then((data) => {
-      dispatch({
-        type: 'RESOURCE_FETCH_SUCCESS',
-        resource: { data },
+
+    const fetchResource = async () => {
+      getContent(currentResource, proxyUrl).then((data) => {
+        dispatch({
+          type: 'RESOURCE_FETCH_SUCCESS',
+          resource: { data },
+        });
       });
-    });
-  }, [state.resourceIndex, manifest, proxyUrl]);
+    };
+    if (manifest.readingOrder && manifest.readingOrder.length) {
+      fetchResource();
+    }
+  }, [state.resourceIndex, manifest, proxyUrl, getContent]);
 
   /**
    * calculate the height or width of the pdf page in paginated mode.
