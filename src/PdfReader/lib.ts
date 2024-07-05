@@ -16,7 +16,7 @@ export const getResourceUrl = (
   return readingOrder[index].href;
 };
 
-export const loadResource = async (
+export const fetchAsUint8Array = async (
   resourceUrl: string,
   proxyUrl?: string
 ): Promise<Uint8Array> => {
@@ -32,16 +32,6 @@ export const loadResource = async (
   }
   return array;
 };
-
-/**
- * Fetches a resource url as text
- */
-export async function getContentDefault(
-  resourceUrl: string,
-  proxyUrl?: string
-): Promise<Uint8Array> {
-  return loadResource(resourceUrl, proxyUrl);
-}
 
 /**
  * Gets the index of the provided href in the readingOrder, or throws an error if one

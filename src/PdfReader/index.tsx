@@ -13,7 +13,7 @@ import {
   DEFAULT_SHOULD_GROW_WHEN_SCROLLING,
 } from '../constants';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
-import { getContentDefault, getResourceUrl, SCALE_STEP } from './lib';
+import { fetchAsUint8Array, getResourceUrl, SCALE_STEP } from './lib';
 import { makePdfReducer } from './reducer';
 import { PdfReaderArguments } from './types';
 
@@ -36,7 +36,7 @@ export default function usePdfReader(args: PdfReaderArguments): ReaderReturn {
     webpubManifestUrl,
     manifest,
     proxyUrl,
-    getContent = getContentDefault,
+    getContent = fetchAsUint8Array,
     injectablesReflowable,
     injectablesFixed,
     height = DEFAULT_HEIGHT,
