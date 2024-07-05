@@ -27,7 +27,14 @@ export type InactiveState = ReaderState &
 export type ActiveState = ReaderState &
   InternalState & { state: 'ACTIVE'; settings: ReaderSettings };
 
-export type PdfState = InactiveState | ActiveState;
+export type ErrorState = ReaderState &
+  InternalState & {
+    state: 'ERROR';
+    error: Error;
+    settings: ReaderSettings;
+  };
+
+export type PdfState = InactiveState | ActiveState | ErrorState;
 
 export type PdfReaderArguments =
   | ActiveReaderArguments<Uint8Array>
@@ -43,6 +50,7 @@ export type PdfReaderAction =
   | { type: 'GO_TO_HREF'; href: string }
   | { type: 'RESOURCE_FETCH_SUCCESS'; resource: { data: Uint8Array } }
   | { type: 'PDF_PARSED'; numPages: number }
+  | { type: 'PDF_LOAD_ERROR'; error: Error }
   | { type: 'SET_SCALE'; scale: number }
   | { type: 'SET_SCROLL'; isScrolling: boolean }
   | { type: 'PAGE_LOAD_SUCCESS'; height: number; width: number }

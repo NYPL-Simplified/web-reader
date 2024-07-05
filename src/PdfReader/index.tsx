@@ -251,6 +251,8 @@ export default function usePdfReader(args: PdfReaderArguments): ReaderReturn {
     };
   }
 
+  if (state.state === 'ERROR') throw state.error;
+
   // if (isFetching) {
   //   // The Reader is fetching a PDF resource
   //   return {
@@ -287,6 +289,13 @@ export default function usePdfReader(args: PdfReaderArguments): ReaderReturn {
     dispatch({
       type: 'PDF_PARSED',
       numPages: numPages,
+    });
+  };
+
+  const onDocumentLoadError = (error: Error) => {
+    dispatch({
+      type: 'PDF_LOAD_ERROR',
+      error: error,
     });
   };
 
@@ -338,7 +347,11 @@ export default function usePdfReader(args: PdfReaderArguments): ReaderReturn {
             }
           `}
         </style>
-        <Document file={state.resource} onLoadSuccess={onDocumentLoadSuccess}>
+        <Document
+          file={state.resource}
+          onLoadSuccess={onDocumentLoadSuccess}
+          onLoadError={onDocumentLoadError}
+        >
           {isParsed && state.numPages && (
             <>
               {state.settings.isScrolling &&
