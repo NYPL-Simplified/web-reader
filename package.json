@@ -32,7 +32,8 @@
     "analyze": "size-limit --why",
     "cors-proxy": "node example/cors-proxy.js",
     "release": "release-it --verbose",
-    "release:alpha": "release-it --verbose --preRelease=alpha"
+    "release:alpha": "release-it --verbose --preRelease=alpha",
+    "playwright": "npx playwright test"
   },
   "peerDependencies": {
     "@chakra-ui/react": "2.x",
