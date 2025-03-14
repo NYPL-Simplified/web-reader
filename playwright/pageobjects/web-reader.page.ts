@@ -28,12 +28,12 @@ class WebReaderPage {
 
     // header
     this.backButton = page.getByLabel('Return to Homepage');
-    this.tocButton = page.getByLabel('');
+    this.tocButton = page.getByLabel('Table of Contents');
     this.settingsButton = page.getByRole('button', {
       name: 'Settings',
       exact: true,
     });
-    this.fullScreenButton = page.getByLabel('');
+    this.fullScreenButton = page.getByRole('button', { name: 'Full screen' });
 
     // reader settings
     this.zoomInButton = page.getByLabel('Zoom In');
@@ -44,18 +44,16 @@ class WebReaderPage {
     this.sansSerifFont = page.getByLabel('Sans-Serif');
     this.dyslexiaFont = page.getByLabel('Dyslexia');
 
-    this.whiteBackground = page.getByLabel('');
-    this.sepiaBackground = page.getByLabel('');
-    this.blackBackground = page.getByLabel('');
+    this.whiteBackground = page.getByLabel('Day');
+    this.sepiaBackground = page.getByLabel('Sepia');
+    this.blackBackground = page.getByLabel('Night');
 
-    this.resetTextSize = page.getByLabel('');
-    this.decreaseTextSize = page.getByLabel('');
-    this.increaseTextSize = page.getByLabel('');
+    this.resetTextSize = page.getByLabel('Reset settings');
+    this.decreaseTextSize = page.getByLabel('Decrease font size');
+    this.increaseTextSize = page.getByLabel('Increase font size');
 
-    this.paginatedStyle = page.getByLabel('');
-    this.scrollingStyle = page.getByLabel('');
-
-    // iframe
+    this.paginatedStyle = page.getByRole('radio', { name: 'Paginated' });
+    this.scrollingStyle = page.getByRole('radio', { name: 'Scrolling' });
 
     // footer
     this.previousPage = page.getByLabel('Previous Page');
