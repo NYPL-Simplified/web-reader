@@ -20,8 +20,10 @@ class WebReaderPage {
   readonly paginatedStyle: Locator;
   readonly scrollingStyle: Locator;
   readonly fullScreenButton: Locator;
-  readonly previousPage: Locator;
-  readonly nextPage: Locator;
+  readonly previousPageButton: Locator;
+  readonly nextPageButton: Locator;
+  readonly firstChapter: Locator;
+  readonly lastChapter: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -29,6 +31,8 @@ class WebReaderPage {
     // header
     this.backButton = page.getByLabel('Return to Homepage');
     this.tocButton = page.getByLabel('Table of Contents');
+    this.firstChapter = page.getByRole('menuitem').first();
+    this.lastChapter = page.getByRole('menuitem').last();
     this.settingsButton = page.getByRole('button', {
       name: 'Settings',
       exact: true,
@@ -40,13 +44,13 @@ class WebReaderPage {
     this.zoomOutButton = page.getByLabel('Zoom Out');
 
     this.defaultFont = page.getByRole('radio', { name: 'Default' });
-    this.serifFont = page.getByLabel('Serif');
-    this.sansSerifFont = page.getByLabel('Sans-Serif');
-    this.dyslexiaFont = page.getByLabel('Dyslexia');
+    this.serifFont = page.getByRole('radio', { name: 'Serif', exact: true });
+    this.sansSerifFont = page.getByRole('radio', { name: 'Sans-Serif' });
+    this.dyslexiaFont = page.getByRole('radio', { name: 'Dyslexia' });
 
-    this.whiteBackground = page.getByLabel('Day');
-    this.sepiaBackground = page.getByLabel('Sepia');
-    this.blackBackground = page.getByLabel('Night');
+    this.whiteBackground = page.getByRole('radio', { name: 'Day' });
+    this.sepiaBackground = page.getByRole('radio', { name: 'Sepia' });
+    this.blackBackground = page.getByRole('radio', { name: 'Night' });
 
     this.resetTextSize = page.getByLabel('Reset settings');
     this.decreaseTextSize = page.getByLabel('Decrease font size');
@@ -56,8 +60,8 @@ class WebReaderPage {
     this.scrollingStyle = page.getByRole('radio', { name: 'Scrolling' });
 
     // footer
-    this.previousPage = page.getByLabel('Previous Page');
-    this.nextPage = page.getByLabel('Next Page');
+    this.previousPageButton = page.getByLabel('Previous Page');
+    this.nextPageButton = page.getByLabel('Next Page');
   }
 }
 
