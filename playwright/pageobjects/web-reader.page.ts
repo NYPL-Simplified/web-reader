@@ -20,6 +20,7 @@ class WebReaderPage {
   readonly paginatedStyle: Locator;
   readonly scrollingStyle: Locator;
   readonly fullScreenButton: Locator;
+  readonly exitFullScreenButton: Locator;
   readonly previousPageButton: Locator;
   readonly nextPageButton: Locator;
   readonly firstChapter: Locator;
@@ -37,32 +38,65 @@ class WebReaderPage {
       name: 'Settings',
       exact: true,
     });
-    this.fullScreenButton = page.getByRole('button', { name: 'Full screen' });
+    this.fullScreenButton = page.getByText('Full screen', { exact: true });
+    this.exitFullScreenButton = page.getByText('Full screen exit', {
+      exact: true,
+    });
 
     // reader settings
     this.zoomInButton = page.getByLabel('Zoom In');
     this.zoomOutButton = page.getByLabel('Zoom Out');
 
-    this.defaultFont = page.getByRole('radio', { name: 'Default' });
-    this.serifFont = page.getByRole('radio', { name: 'Serif', exact: true });
-    this.sansSerifFont = page.getByRole('radio', { name: 'Sans-Serif' });
-    this.dyslexiaFont = page.getByRole('radio', { name: 'Dyslexia' });
+    this.defaultFont = page.getByText('Default', { exact: true });
+    this.serifFont = page.getByText('Serif', { exact: true });
+    this.sansSerifFont = page.getByText('Sans-Serif', { exact: true });
+    this.dyslexiaFont = page.getByText('Dyslexia', { exact: true });
 
-    this.whiteBackground = page.getByRole('radio', { name: 'Day' });
-    this.sepiaBackground = page.getByRole('radio', { name: 'Sepia' });
-    this.blackBackground = page.getByRole('radio', { name: 'Night' });
+    this.whiteBackground = page.getByText('Day', { exact: true });
+    this.sepiaBackground = page.getByText('Sepia', { exact: true });
+    this.blackBackground = page.getByText('Night', { exact: true });
 
     this.resetTextSize = page.getByLabel('Reset settings');
     this.decreaseTextSize = page.getByLabel('Decrease font size');
     this.increaseTextSize = page.getByLabel('Increase font size');
 
-    this.paginatedStyle = page.getByRole('radio', { name: 'Paginated' });
-    this.scrollingStyle = page.getByRole('radio', { name: 'Scrolling' });
+    this.paginatedStyle = page.getByText('Paginated', { exact: true });
+    this.scrollingStyle = page.getByText('Scrolling', { exact: true });
 
     // footer
     this.previousPageButton = page.getByLabel('Previous Page');
     this.nextPageButton = page.getByLabel('Next Page');
   }
+
+  // hopefully better handles slow load time (use load or networkidle)
+  async loadPage(gotoPage: string) {
+    await this.page.goto(gotoPage, { waitUntil: 'load' });
+    return this;
+  }
+
+  async getTextSize() {
+    const htmlElement = this.page.frameLocator('#mainContent').locator('html');
+    htmlElement.evaluate((el) => {
+      return window.getComputedStyle(el).getPropertyValue('--USER__fontSize');
+    });
+  }
+
+  // pulled from cypress tests so needs reworking
+  // async pdfZoomTestHelper() {
+  //   const pdfZoomTestHelper = (
+  //     $elm: JQuery<HTMLElement>,
+  //     expectedValueX: string,
+  //     expectedValueY: string
+  //   ): void => {
+  //     this.page.window().then((win) => {
+  //       const styles = win.getComputedStyle($elm[0]);
+  //       const scaleX = styles.getPropertyValue('--chakra-scale-x');
+  //       const scaleY = styles.getPropertyValue('--chakra-scale-y');
+  //       expect(scaleX).to.eq(expectedValueX);
+  //       expect(scaleY).to.eq(expectedValueY);
+  //     });
+  //   };
+  // };
 }
 
 export { WebReaderPage };
