@@ -108,10 +108,60 @@ test.describe('Test HTML pub', () => {
     await expect(webReaderPage.paginatedStyle).toBeChecked();
   });
 
-  // maintains changed settings when exit and reenter reader
-  // reset all reader settings
-  // visit pub that doesn't retain settings html/moby-epub3-no-local-storage
   // stay on same page if change pagination
+
+  test('Maintains changed settings when exit and reenter reader', async ({
+    page,
+  }) => {
+    const webReaderPage = new WebReaderPage(page);
+    await webReaderPage.loadPage(
+      'https://nypl-web-reader.vercel.app/html/moby-epub3'
+    ); // temporary
+    await webReaderPage.changeSettings();
+    await webReaderPage.backButton.click();
+    await expect(webReaderPage.webReaderHomepage).toBeVisible();
+    await webReaderPage.loadPage(
+      'https://nypl-web-reader.vercel.app/html/moby-epub3'
+    ); // temporary
+    await webReaderPage.settingsButton.click();
+    await expect(webReaderPage.dyslexiaFont).toBeChecked();
+    await expect(webReaderPage.sepiaBackground).toBeChecked();
+    //await expect(webReaderPage.getTextSize).toBe('104%'); // fix
+    await expect(webReaderPage.scrollingStyle).toBeChecked();
+  });
+
+  test('Reset all reader settings', async ({ page }) => {
+    const webReaderPage = new WebReaderPage(page);
+    await webReaderPage.loadPage(
+      'https://nypl-web-reader.vercel.app/html/moby-epub3'
+    ); // temporary
+    await webReaderPage.changeSettings();
+    await webReaderPage.resetTextSize.click();
+    await expect(webReaderPage.defaultFont).toBeChecked();
+    await expect(webReaderPage.whiteBackground).toBeChecked();
+    //await expect(webReaderPage.getTextSize).toBe('100%'); // expect --USER__fontSize: 100%
+    await expect(webReaderPage.paginatedStyle).toBeChecked();
+  });
+
+  test('Does not maintain changed settings for specific pub when exit and reenter reader', async ({
+    page,
+  }) => {
+    const webReaderPage = new WebReaderPage(page);
+    await webReaderPage.loadPage(
+      'https://nypl-web-reader.vercel.app/html/moby-epub3-no-local-storage'
+    ); // temporary
+    await webReaderPage.changeSettings();
+    await webReaderPage.backButton.click();
+    await expect(webReaderPage.webReaderHomepage).toBeVisible();
+    await webReaderPage.loadPage(
+      'https://nypl-web-reader.vercel.app/html/moby-epub3-no-local-storage'
+    ); // temporary
+    await webReaderPage.settingsButton.click();
+    await expect(webReaderPage.dyslexiaFont).not.toBeChecked();
+    await expect(webReaderPage.sepiaBackground).not.toBeChecked();
+    //await expect(webReaderPage.getTextSize).not.toBe('104%'); // fix
+    await expect(webReaderPage.scrollingStyle).not.toBeChecked();
+  });
 
   test('Open and exit full screen', async ({ page }) => {
     const webReaderPage = new WebReaderPage(page);
@@ -123,7 +173,14 @@ test.describe('Test HTML pub', () => {
     await expect(webReaderPage.fullScreenButton).toBeVisible();
   });
 
-  // change settings in full screen
+  test('Change settings in full screen', async ({ page }) => {
+    const webReaderPage = new WebReaderPage(page);
+    await webReaderPage.loadPage(
+      'https://nypl-web-reader.vercel.app/html/moby-epub3'
+    ); // temporary
+    await webReaderPage.fullScreenButton.click();
+    await webReaderPage.changeSettings();
+  });
 });
 
 test.describe('Test PDF pub', () => {
@@ -177,16 +234,6 @@ test.describe('Test PDF pub', () => {
     await expect(webReaderPage.paginatedStyle).toBeChecked();
   });
 
-  test('Open and exit full screen', async ({ page }) => {
-    const webReaderPage = new WebReaderPage(page);
-    await webReaderPage.loadPage(
-      'https://nypl-web-reader.vercel.app/pdf/collection'
-    ); // temporary
-    await webReaderPage.fullScreenButton.click();
-    await webReaderPage.exitFullScreenButton.click();
-    await expect(webReaderPage.fullScreenButton).toBeVisible();
-  });
-
   test('Zoom in and zoom out', async ({ page }) => {
     const webReaderPage = new WebReaderPage(page);
     await webReaderPage.loadPage(
@@ -199,5 +246,24 @@ test.describe('Test PDF pub', () => {
     //await expect(webReaderPage.pdfZoomTestHelper).toBe('%');
     await webReaderPage.zoomOutButton.click();
     //await expect(webReaderPage.pdfZoomTestHelper).toBe('%');
+  });
+
+  test('Open and exit full screen', async ({ page }) => {
+    const webReaderPage = new WebReaderPage(page);
+    await webReaderPage.loadPage(
+      'https://nypl-web-reader.vercel.app/pdf/collection'
+    ); // temporary
+    await webReaderPage.fullScreenButton.click();
+    await webReaderPage.exitFullScreenButton.click();
+    await expect(webReaderPage.fullScreenButton).toBeVisible();
+  });
+
+  test('Change settings in full screen', async ({ page }) => {
+    const webReaderPage = new WebReaderPage(page);
+    await webReaderPage.loadPage(
+      'https://nypl-web-reader.vercel.app/pdf/collection'
+    ); // temporary
+    await webReaderPage.fullScreenButton.click();
+    await webReaderPage.changeSettings();
   });
 });

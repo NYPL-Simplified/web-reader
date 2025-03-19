@@ -2,6 +2,7 @@ import { Locator, Page, expect } from '@playwright/test';
 
 class WebReaderPage {
   readonly page: Page;
+  readonly webReaderHomepage: Locator;
   readonly backButton: Locator;
   readonly tocButton: Locator;
   readonly settingsButton: Locator;
@@ -28,6 +29,11 @@ class WebReaderPage {
 
   constructor(page: Page) {
     this.page = page;
+
+    // web reader homepage
+    this.webReaderHomepage = page.getByRole('heading', {
+      name: 'NYPL Web Reader',
+    });
 
     // header
     this.backButton = page.getByLabel('Return to Homepage');
@@ -69,9 +75,8 @@ class WebReaderPage {
   }
 
   // hopefully better handles slow load time (use load or networkidle)
-  async loadPage(gotoPage: string) {
+  async loadPage(gotoPage: string): Promise<void> {
     await this.page.goto(gotoPage, { waitUntil: 'load' });
-    return this;
   }
 
   async getIframe() {
@@ -107,13 +112,19 @@ class WebReaderPage {
         .frameLocator('#mainContent')
         .getByText('WHALE SONG')
         .scrollIntoViewIfNeeded();
+      console.log(
+        this.page
+          .frameLocator('#mainContent')
+          .locator('iframe')
+          .getAttribute('srcdoc')
+      );
     } else {
       console.log('Page not recognized in scrollDown()');
     }
   }
 
   // complete when scrollDown is working
-  async scrollUp() {
+  async scrollUp(): Promise<void> {
     // for pdf/collection, scroll until data-page-number="1" is visible
     // for html/moby-epub3, nav to extracts and scroll until "EXTRACTS (Supplied by a Sub-Sub-Librarian)" is visible
   }
@@ -133,6 +144,28 @@ class WebReaderPage {
     //       expect(scaleY).to.eq(expectedValueY);
     //     });
     //   };
+  }
+
+  async changeSettings(): Promise<void> {
+    const currentURL = this.page.url();
+    if (currentURL.includes('/pdf/')) {
+      await this.settingsButton.click();
+      // zoom in
+      await this.scrollingStyle.click();
+      await expect(this.scrollingStyle).toBeChecked();
+    } else if (currentURL.includes('/html/')) {
+      await this.settingsButton.click();
+      await this.dyslexiaFont.click();
+      await expect(this.dyslexiaFont).toBeChecked();
+      await this.sepiaBackground.click();
+      await expect(this.sepiaBackground).toBeChecked();
+      await this.increaseTextSize.click();
+      //await expect(this.getTextSize).toBe('104%'); // fix
+      await this.scrollingStyle.click();
+      await expect(this.scrollingStyle).toBeChecked();
+    } else {
+      console.log('Page not recognized in changeSettings()');
+    }
   }
 }
 
