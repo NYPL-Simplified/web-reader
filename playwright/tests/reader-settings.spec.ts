@@ -25,6 +25,7 @@ test.describe('Test HTML pub', () => {
     await expect(webReaderPage.increaseTextSize).toBeVisible();
     await expect(webReaderPage.paginatedStyle).toBeVisible();
     await expect(webReaderPage.scrollingStyle).toBeVisible();
+    await expect(webReaderPage.zoomInButton).not.toBeVisible();
   });
 
   test('Open and close reader settings', async ({ page }) => {
@@ -101,16 +102,16 @@ test.describe('Test HTML pub', () => {
     await webReaderPage.settingsButton.click();
     await webReaderPage.scrollingStyle.click();
     await expect(webReaderPage.scrollingStyle).toBeChecked();
-    // displays vertical and horizontal scrollbar
-    // attempt to scroll
+    await webReaderPage.scrollDown();
+    await webReaderPage.settingsButton.click();
     await webReaderPage.paginatedStyle.click();
     await expect(webReaderPage.paginatedStyle).toBeChecked();
-    // does not display vertical or horizontal scrollbar
-    // attempt to scroll
   });
 
   // maintains changed settings when exit and reenter reader
   // reset all reader settings
+  // visit pub that doesn't retain settings html/moby-epub3-no-local-storage
+  // stay on same page if change pagination
 
   test('Open and exit full screen', async ({ page }) => {
     const webReaderPage = new WebReaderPage(page);
@@ -121,6 +122,8 @@ test.describe('Test HTML pub', () => {
     await webReaderPage.exitFullScreenButton.click();
     await expect(webReaderPage.fullScreenButton).toBeVisible();
   });
+
+  // change settings in full screen
 });
 
 test.describe('Test PDF pub', () => {
@@ -135,6 +138,9 @@ test.describe('Test PDF pub', () => {
     await expect(webReaderPage.zoomOutButton).toBeVisible();
     await expect(webReaderPage.paginatedStyle).toBeVisible();
     await expect(webReaderPage.scrollingStyle).toBeVisible();
+    await expect(webReaderPage.defaultFont).not.toBeVisible();
+    await expect(webReaderPage.whiteBackground).not.toBeVisible();
+    await expect(webReaderPage.increaseTextSize).not.toBeVisible();
   });
 
   test('Open and close reader settings', async ({ page }) => {
@@ -166,12 +172,9 @@ test.describe('Test PDF pub', () => {
     await webReaderPage.settingsButton.click();
     await webReaderPage.scrollingStyle.click();
     await expect(webReaderPage.scrollingStyle).toBeChecked();
-    // displays vertical scrollbar
-    // attempt to scroll
+    await webReaderPage.scrollDown();
     await webReaderPage.paginatedStyle.click();
     await expect(webReaderPage.paginatedStyle).toBeChecked();
-    // does not display vertical or horizontal scrollbar
-    // attempt to scroll
   });
 
   test('Open and exit full screen', async ({ page }) => {
@@ -182,5 +185,19 @@ test.describe('Test PDF pub', () => {
     await webReaderPage.fullScreenButton.click();
     await webReaderPage.exitFullScreenButton.click();
     await expect(webReaderPage.fullScreenButton).toBeVisible();
+  });
+
+  test('Zoom in and zoom out', async ({ page }) => {
+    const webReaderPage = new WebReaderPage(page);
+    await webReaderPage.loadPage(
+      'https://nypl-web-reader.vercel.app/pdf/collection'
+    ); // times out on localhost
+    await webReaderPage.settingsButton.click();
+    await webReaderPage.zoomInButton.click();
+    //await expect(webReaderPage.pdfZoomTestHelper).toBe('%');
+    await webReaderPage.zoomOutButton.click(); // resets to default
+    //await expect(webReaderPage.pdfZoomTestHelper).toBe('%');
+    await webReaderPage.zoomOutButton.click();
+    //await expect(webReaderPage.pdfZoomTestHelper).toBe('%');
   });
 });

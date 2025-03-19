@@ -1,4 +1,4 @@
-import { Locator, Page } from '@playwright/test';
+import { Locator, Page, expect } from '@playwright/test';
 
 class WebReaderPage {
   readonly page: Page;
@@ -74,29 +74,66 @@ class WebReaderPage {
     return this;
   }
 
-  async getTextSize() {
+  async getIframe() {
     const htmlElement = this.page.frameLocator('#mainContent').locator('html');
-    htmlElement.evaluate((el) => {
-      return window.getComputedStyle(el).getPropertyValue('--USER__fontSize');
-    });
+    return htmlElement;
+  }
+
+  // fix
+  async getTextSize() {
+    const htmlElement = this.page
+      .frameLocator('#mainContent')
+      .locator('html')
+      .getAttribute('style');
+    console.log(htmlElement);
+    // htmlElement.evaluate((el) => {
+    //   return window.getComputedStyle(el).getPropertyValue('--USER__fontSize');
+    // });
+  }
+
+  // fix
+  async scrollDown(): Promise<void> {
+    const currentURL = this.page.url();
+    if (currentURL.includes('/pdf/collection')) {
+      await this.page
+        .locator('[data-page-number="2"]')
+        .scrollIntoViewIfNeeded();
+    } else if (currentURL.includes('/html/moby-epub3')) {
+      await this.tocButton.click();
+      await this.page
+        .getByText('EXTRACTS (Supplied by a Sub-Sub-Librarian).')
+        .click();
+      await this.page
+        .frameLocator('#mainContent')
+        .getByText('WHALE SONG')
+        .scrollIntoViewIfNeeded();
+    } else {
+      console.log('Page not recognized in scrollDown()');
+    }
+  }
+
+  // complete when scrollDown is working
+  async scrollUp() {
+    // for pdf/collection, scroll until data-page-number="1" is visible
+    // for html/moby-epub3, nav to extracts and scroll until "EXTRACTS (Supplied by a Sub-Sub-Librarian)" is visible
   }
 
   // pulled from cypress tests so needs reworking
-  // async pdfZoomTestHelper() {
-  //   const pdfZoomTestHelper = (
-  //     $elm: JQuery<HTMLElement>,
-  //     expectedValueX: string,
-  //     expectedValueY: string
-  //   ): void => {
-  //     this.page.window().then((win) => {
-  //       const styles = win.getComputedStyle($elm[0]);
-  //       const scaleX = styles.getPropertyValue('--chakra-scale-x');
-  //       const scaleY = styles.getPropertyValue('--chakra-scale-y');
-  //       expect(scaleX).to.eq(expectedValueX);
-  //       expect(scaleY).to.eq(expectedValueY);
-  //     });
-  //   };
-  // };
+  async pdfZoomTestHelper() {
+    //   const pdfZoomTestHelper = (
+    //     $elm: JQuery<HTMLElement>,
+    //     expectedValueX: string,
+    //     expectedValueY: string
+    //   ): void => {
+    //     this.page.window().then((win) => {
+    //       const styles = win.getComputedStyle($elm[0]);
+    //       const scaleX = styles.getPropertyValue('--chakra-scale-x');
+    //       const scaleY = styles.getPropertyValue('--chakra-scale-y');
+    //       expect(scaleX).to.eq(expectedValueX);
+    //       expect(scaleY).to.eq(expectedValueY);
+    //     });
+    //   };
+  }
 }
 
 export { WebReaderPage };
