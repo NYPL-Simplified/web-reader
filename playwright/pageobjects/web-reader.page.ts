@@ -30,7 +30,7 @@ class WebReaderPage {
   constructor(page: Page) {
     this.page = page;
 
-    // web reader homepage
+    // web reader examples homepage
     this.webReaderHomepage = page.getByRole('heading', {
       name: 'NYPL Web Reader',
     });
@@ -44,7 +44,9 @@ class WebReaderPage {
       name: 'Settings',
       exact: true,
     });
-    this.fullScreenButton = page.getByText('Full screen', { exact: true });
+    this.fullScreenButton = page.getByRole('button', {
+      name: 'Toggle full screen',
+    });
     this.exitFullScreenButton = page.getByText('Full screen exit', {
       exact: true,
     });
@@ -75,98 +77,110 @@ class WebReaderPage {
   }
 
   // hopefully better handles slow load time (use load or networkidle)
-  async loadPage(gotoPage: string): Promise<void> {
+  async loadPage(gotoPage: string): Promise<WebReaderPage> {
     await this.page.goto(gotoPage, { waitUntil: 'load' });
+    return new WebReaderPage(this.page);
   }
+}
 
-  async getIframe() {
+class HtmlReaderPage extends WebReaderPage {
+  async getIframe(): Promise<Locator> {
     const htmlElement = this.page.frameLocator('#mainContent').locator('html');
     return htmlElement;
   }
 
-  // fix
-  async getTextSize() {
-    const htmlElement = this.page
-      .frameLocator('#mainContent')
-      .locator('html')
-      .getAttribute('style');
-    console.log(htmlElement);
-    // htmlElement.evaluate((el) => {
-    //   return window.getComputedStyle(el).getPropertyValue('--USER__fontSize');
-    // });
-  }
-
-  // fix
-  async scrollDown(): Promise<void> {
-    const currentURL = this.page.url();
-    if (currentURL.includes('/pdf/collection')) {
-      await this.page
-        .locator('[data-page-number="2"]')
-        .scrollIntoViewIfNeeded();
-    } else if (currentURL.includes('/html/moby-epub3')) {
-      await this.tocButton.click();
-      await this.page
-        .getByText('EXTRACTS (Supplied by a Sub-Sub-Librarian).')
-        .click();
-      await this.page
-        .frameLocator('#mainContent')
-        .getByText('WHALE SONG')
-        .scrollIntoViewIfNeeded();
-      console.log(
-        this.page
-          .frameLocator('#mainContent')
-          .locator('iframe')
-          .getAttribute('srcdoc')
-      );
-    } else {
-      console.log('Page not recognized in scrollDown()');
-    }
-  }
-
-  // complete when scrollDown is working
-  async scrollUp(): Promise<void> {
-    // for pdf/collection, scroll until data-page-number="1" is visible
-    // for html/moby-epub3, nav to extracts and scroll until "EXTRACTS (Supplied by a Sub-Sub-Librarian)" is visible
-  }
-
-  // pulled from cypress tests so needs reworking
-  async pdfZoomTestHelper() {
-    //   const pdfZoomTestHelper = (
-    //     $elm: JQuery<HTMLElement>,
-    //     expectedValueX: string,
-    //     expectedValueY: string
-    //   ): void => {
-    //     this.page.window().then((win) => {
-    //       const styles = win.getComputedStyle($elm[0]);
-    //       const scaleX = styles.getPropertyValue('--chakra-scale-x');
-    //       const scaleY = styles.getPropertyValue('--chakra-scale-y');
-    //       expect(scaleX).to.eq(expectedValueX);
-    //       expect(scaleY).to.eq(expectedValueY);
-    //     });
-    //   };
+  async getTextSize(): Promise<undefined | string> {
+    return (await this.getIframe()).evaluate((el) => {
+      return window.getComputedStyle(el).getPropertyValue('--USER__fontSize');
+    });
   }
 
   async changeSettings(): Promise<void> {
-    const currentURL = this.page.url();
-    if (currentURL.includes('/pdf/')) {
-      await this.settingsButton.click();
-      // zoom in
-      await this.scrollingStyle.click();
-      await expect(this.scrollingStyle).toBeChecked();
-    } else if (currentURL.includes('/html/')) {
-      await this.settingsButton.click();
-      await this.dyslexiaFont.click();
-      await expect(this.dyslexiaFont).toBeChecked();
-      await this.sepiaBackground.click();
-      await expect(this.sepiaBackground).toBeChecked();
-      await this.increaseTextSize.click();
-      //await expect(this.getTextSize).toBe('104%'); // fix
-      await this.scrollingStyle.click();
-      await expect(this.scrollingStyle).toBeChecked();
-    } else {
-      console.log('Page not recognized in changeSettings()');
-    }
+    await this.settingsButton.click();
+    await this.dyslexiaFont.click();
+    await expect(this.dyslexiaFont).toBeChecked();
+    await this.sepiaBackground.click();
+    await expect(this.sepiaBackground).toBeChecked();
+    await this.increaseTextSize.click();
+    await expect(await this.getTextSize()).toBe('104%');
+    await this.scrollingStyle.click();
+    await expect(this.scrollingStyle).toBeChecked();
+  }
+
+  async scrollDown(): Promise<void> {
+    await this.tocButton.click();
+    await this.page
+      .getByText('EXTRACTS (Supplied by a Sub-Sub-Librarian).')
+      .click();
+    await this.page
+      .locator('iframe[title="Moby-Dick"]')
+      .contentFrame()
+      .getByText('—WHALE SONG.')
+      .scrollIntoViewIfNeeded();
+  }
+
+  async scrollUp(): Promise<void> {
+    await this.page
+      .locator('iframe[title="Moby-Dick"]')
+      .contentFrame()
+      .getByText('—WHALE SONG.')
+      .scrollIntoViewIfNeeded();
+    await this.page
+      .getByText('EXTRACTS (Supplied by a Sub-Sub-Librarian).')
+      .scrollIntoViewIfNeeded();
   }
 }
 
-export { WebReaderPage };
+class PdfReaderPage extends WebReaderPage {
+  async changeSettings(): Promise<void> {
+    await this.settingsButton.click();
+    await this.zoomInButton.click();
+    await this.scrollingStyle.click();
+    await expect(this.scrollingStyle).toBeChecked();
+  }
+
+  async getZoomValue(): Promise<number> {
+    return await this.page.locator('canvas').evaluate((el) => {
+      return Number(
+        window.getComputedStyle(el).getPropertyValue('--scale-factor')
+      );
+    });
+  }
+
+  async zoomIn(): Promise<void> {
+    const beforeScaleFactor = await this.getZoomValue();
+    console.log('before: ', beforeScaleFactor);
+    this.settingsButton.click();
+    this.zoomInButton.click();
+    const afterScaleFactor = await this.getZoomValue();
+    console.log('after: ', afterScaleFactor); // currently the same value as beforeScaleFactor
+    expect(beforeScaleFactor).toBeGreaterThan(afterScaleFactor);
+  }
+
+  async zoomOut(): Promise<void> {
+    const beforeScaleFactor = await this.getZoomValue();
+    console.log('before: ', beforeScaleFactor);
+    this.settingsButton.click();
+    this.zoomOutButton.click();
+    const afterScaleFactor = await this.getZoomValue();
+    console.log('after: ', afterScaleFactor); // currently the same value as beforeScaleFactor
+    expect(beforeScaleFactor).toBeLessThan(afterScaleFactor);
+  }
+
+  async scrollDown(): Promise<void> {
+    await this.page
+      .locator('#mainContent')
+      .locator('[data-page-number="2"]')
+      .scrollIntoViewIfNeeded();
+  }
+
+  async scrollUp(): Promise<void> {
+    await this.scrollDown();
+    await this.page
+      .locator('#mainContent')
+      .locator('[data-page-number="1"]')
+      .scrollIntoViewIfNeeded();
+  }
+}
+
+export { WebReaderPage, HtmlReaderPage, PdfReaderPage };
